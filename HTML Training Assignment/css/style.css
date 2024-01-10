@@ -1,0 +1,112 @@
+*{
+    box-sizing: border-box;
+}
+.main{
+    height: 100vh;
+    background-color: #FAFAFA;
+}
+.common{
+    width: 50%;
+    height: 100vh;
+}
+.first{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero{
+    width: 60%;
+    border-radius: 50%;
+    border: 20px solid white;
+    box-shadow: 0px 4px 31px #0000000A;
+}
+
+.flex{
+    height: 100vh;
+    width: 100%;
+    text-align: left;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+    margin: 250px auto;
+}
+.logo-img{
+    width: 272px;
+    height: 58px;
+    margin-bottom: 30px;
+}
+.tagline{
+    font: normal normal 300 40px/47px 'Roboto';
+    /* font-family: 'Roboto', sans-serif;
+    font-weight: 300; */
+    margin-bottom: 23px;
+    width: 500px;
+    height: 100px;
+    /* font-size: ; */
+}
+.red{
+    font-weight: 900;
+    color: #C8242F;
+}
+.login-text{
+    font: normal normal normal 25px/33px 'Roboto';
+    font-weight: 400;
+    margin-bottom: 25px;
+}
+.input{
+    font-family: 'Roboto', sans-serif;
+    padding: 10px;
+    display: block;
+    border: 1px solid #ADADAD;
+    border-radius: 5px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    margin-bottom: 20px;
+    width: 429px;
+    height: 49px;
+}
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 430px;
+    margin-top: 25px;
+}
+.submit-btn{
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    background: #C8242F 0% 0% no-repeat padding-box;
+    border-radius: 23px;
+    width: 138px;
+    height: 45px;
+}
+.submit-btn:hover{
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    background: #C8242F 0% 0% no-repeat padding-box;
+}
+.forgot-btn{
+    color: #ADADAD;
+    font: normal normal normal 15px/20px 'Roboto';
+    width: 121px;
+    height: 20px;
+    text-decoration: none;
+}
+.register{
+    display: inline-block;
+    color: #ADADAD;
+    text-align: left;
+    font: normal normal normal 15px/20px 'Roboto';
+    width: 40%;
+    height: 20px;
+    margin-top: 20px;
+}
+.register-btn{
+    display: inline-block;
+    color: #C8242F;
+    width: 88px;
+    height: 20px;
+    text-decoration: none;
+}
