@@ -8,34 +8,100 @@
     height: 100vh;
 }
 
-.main-text {
+.analysis-text {
+    color:#000000;
     font-family: 'Roboto', sans-serif;
-    font-size: 30px;
-    color: #000000;
     font-weight: 500;
-    margin-left: 1%;
-    height: 7vh;
+    font-size: 30px;
+    position: relative;
+    right: 10px;
+    margin-top: 0.2%;
 }
 
-.main-form {
+.main-container {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 5px;
-    width: 99%;
     height: 100vh;
 }
 
-.column-name {
-    font-family: 'Roboto', sans-serif;
-    font-size: 22px;
-    color: #3E3E3E;
-    font-weight: 500;
+.two-flex {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.8%;
 }
 
-/* .input-container {
+.second-container {
+    width: 40%;
+}
+
+.immediate-container {
+    flex-basis: 48%;
+}
+
+.three-immediate-container{
+    flex-basis: 32%;
+}
+
+.four-immediate-container{
+    flex-basis: 23%;
+}
+
+.two-column-text {
+    margin-top: 2%;
+}
+
+.two-flex {
+    display: flex;
+}
+
+.name-flex {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2%;
+    /* flex-wrap: wrap; */
+}
+
+.below-text{
+    color: #ADADAD;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.upper-container {
+    margin-top: 2%;
+    width: 96%;
+    margin-left: 2.5%;
+}
+
+#fname {
+    width: 100%;
+}
+
+.analysis-text {
+    color: #3E3E3E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin-left: 1%;
+}
+
+.text {
+    padding: 8px;
+}
+
+.input-container {
     position: relative;
-  }
+}
   
-input {
+/* Input styling */
+
+.input {
     height: 48px;
     width: 280px;
     border: 1px solid #c0c0c0;
@@ -43,6 +109,9 @@ input {
     box-sizing: border-box;
     padding: 16px;
   }
+.dotted {
+    border-style: dotted;
+}
 .label {
     position: absolute;
     top: 0;
@@ -55,16 +124,16 @@ input {
     font-size: 12px;
     color:#ADADAD;
   }
-input, .label .text {
+.input, .label .text {
     font-family: 'Segoe UI';
     font-size: 16px;
   }
-input:focus {
+.input:focus {
     outline: none;
     border: 1px solid #C8242F;
     border-radius: 5px;
 }
-input:focus + .label .text {
+.input:focus + .label .text {
     font-size: 12px;
     transform: translate(0, -50%);
     background-color: white;
@@ -75,15 +144,15 @@ input:focus + .label .text {
 .label .text {
     transition: all 0.15s ease-out;
 }
-input:focus + .label .text, :not(input[value=""]) + .label .text {
+.input:focus + .label .text, :not(.input[value=""]) + .label .text {
     font-size: 12px;
-    transform: translate(0, -150%);
+    transform: translate(0, -80%);
     background-color: white;
     padding-left: 4px;
     padding-right: 4px;
   }
   
-input:focus + .label .text {
+.input:focus + .label .text {
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
     color:#ADADAD;
@@ -93,6 +162,6 @@ input:focus + .label .text {
 .input-flex {
     display: flex;
     flex-direction: row;
-} */
+}
 
 
