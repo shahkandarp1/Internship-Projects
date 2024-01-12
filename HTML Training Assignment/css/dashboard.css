@@ -274,4 +274,41 @@
     background: #EBFFEF 0% 0% no-repeat padding-box;
 }
 
+/* add and remove class when the menu buttonis clicked so that the container goes full  */
+
+.class-change{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    width: 100%;
+}
+
+@media screen and (max-width:2000px) {
+    .main-container {
+        width: 90%;
+    }
+}
+@media screen and (max-width:1420px) {
+    .main-container {
+        margin-top: 8%;
+    }
+}
+
+@media screen and (max-width:1398px) {
+    #mySidebar {
+        width: 0px;
+    }
+
+    .main-content {
+        margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    width: 100%;
+    }
+}
+
 

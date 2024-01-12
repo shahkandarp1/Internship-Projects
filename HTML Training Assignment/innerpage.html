@@ -1,433 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Analysis</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./css/navbar.css" />
-    <link rel="stylesheet" href="./css/innerpage.css" />
-    <script src="./js/custom.js"></script>
-  </head>
 
-  <body>
-    <!-- Sidebar -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/navbar.css" />
+  <link rel="stylesheet" href="./css/innerpage.css" />
+  <script src="./js/custom.js"></script>
+  <script src="./js/radio.js"></script>
+</head>
 
-    <div id="mySidebar" class="sidebar">
-      <a href="./dashboard.html">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/dashboard-default.svg"
-            alt="Active Dashboard"
-          /><span>Dashboard</span>
-        </div>
-      </a>
-      <a href="./innerpage.html">
-        <div class="sidebar-menu active">
-          <img
-            class="dashboard-image"
-            src="./image/graph-active.svg"
-            alt="Active Dashboard"
-          /><span>Analysis</span>
-        </div>
-      </a>
-      <a href="#">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/inbox-default.svg"
-            alt="Inbox"
-          /><span>Inbox</span>
-        </div>
-      </a>
-      <a href="#">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/clock-default.svg"
-            alt="History"
-          /><span>History</span>
-        </div>
-      </a>
-      <a href="#">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/user-default.svg"
-            alt="Users"
-          /><span>Users</span>
-        </div>
-      </a>
-      <a href="#">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/maintenance-default.svg"
-            alt="Maintainence"
-          /><span>Maintainence</span>
-        </div>
-      </a>
-      <a href="#">
-        <div class="sidebar-menu">
-          <img
-            class="dashboard-image"
-            src="./image/setting-default.svg"
-            alt="Setting"
-          /><span>Setting</span>
-        </div>
-      </a>
+<body>
+  <!-- Sidebar -->
+
+  <div id="mySidebar" class="sidebar">
+    <a href="./dashboard.html">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/dashboard-default.svg" alt="Active Dashboard" /><span>Dashboard</span>
+      </div>
+    </a>
+    <a href="./innerpage.html">
+      <div class="sidebar-menu active">
+        <img class="dashboard-image" src="./image/graph-active.svg" alt="Active Dashboard" /><span>Analysis</span>
+      </div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/inbox-default.svg" alt="Inbox" /><span>Inbox</span>
+      </div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/clock-default.svg" alt="History" /><span>History</span>
+      </div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/user-default.svg" alt="Users" /><span>Users</span>
+      </div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/maintenance-default.svg"
+          alt="Maintainence" /><span>Maintainence</span>
+      </div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu">
+        <img class="dashboard-image" src="./image/setting-default.svg" alt="Setting" /><span>Setting</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Navbar -->
+
+  <nav>
+    <div class="top-left-nav">
+      <a href="#" onclick="openNav()"><img src="./image/menu-bar.svg" alt="Menu Bar" /></a>
+      <img src="./image/header-logo.svg" alt="" />
     </div>
-
-    <!-- Navbar -->
-
-    <nav>
-      <div class="top-left-nav">
-        <a href="#" onclick="openNav()"
-          ><img src="./image/menu-bar.svg" alt="Menu Bar"
-        /></a>
-        <img src="./image/header-logo.svg" alt="" />
+    <div class="search">
+      <img class="search-image" src="./image/search-icon.svg" alt="" /><input class="search-inp" type="text"
+        placeholder="Search" />
+    </div>
+    <div class="top-right-nav">
+      <img src="./image/notification-icon.svg" alt="" />
+      <div class="profile-section">
+        <img class="profile-img" src="./image/profile.png" alt="Profile Photo" />
+        <span>John Doe</span>
+        <img class="downward-img" src="./image/select-downward.svg" alt="Downwards Arrow" />
       </div>
-      <div class="search">
-        <img class="search-image" src="./image/search-icon.svg" alt="" /><input
-          class="search-inp"
-          type="text"
-          placeholder="Search"
-        />
-      </div>
-      <div class="top-right-nav">
-        <img src="./image/notification-icon.svg" alt="" />
-        <div class="profile-section">
-          <img
-            class="profile-img"
-            src="./image/profile.png"
-            alt="Profile Photo"
-          />
-          <span>John Doe</span>
-          <img
-            class="downward-img"
-            src="./image/select-downward.svg"
-            alt="Downwards Arrow"
-          />
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <!-- One Column -->
+  <div class="main-content">
+    <div class="container">
+      <div class="p-2 analysis-top-text">Analysis</div>
+      <div class="main-container p-4">
+        <div class="analysis-text">One Column</div>
+
+        <div style="display: flex; flex-direction: row">
+          <div class="input-container upper-container">
+            <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+            <label class="label" for="fname" id="label-fname">
+              <div class="text">Name</div>
+            </label>
+          </div>
         </div>
-      </div>
-    </nav>
 
-    <!-- Main Content -->
+        <div style="display: flex; flex-direction: row">
+          <div class="input-container upper-container">
+            <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+            <label class="label" for="fname" id="label-fname">
+              <div class="text">Dropdown</div>
+            </label>
+          </div>
+        </div>
 
-    <div class="main-content">
-      <div class="container">
-        <div class="p-2 analysis-text">Analysis</div>
-        <div class="main-container p-4">
-          <div class="analysis-text">One Column</div>
+        <div style="display: flex; flex-direction: row">
+          <div class="input-container upper-container">
+            <textarea type="text" class="input" id="fname" name="fname" value=""
+              aria-labelledby="label-fname"></textarea>
+            <label class="label" for="fname" id="label-fname">
+              <div class="text">Multiple Line</div>
+            </label>
+          </div>
+        </div>
 
-          <div style="display: flex; flex-direction: row">
+        <!-- Two Column -->
+
+        <div class="analysis-text two-column-text">Two-Column</div>
+
+        <div class="two-flex">
+          <div class="immediate-container" style="display: flex; flex-direction: row">
             <div class="input-container upper-container">
-              <input
-                type="text"
-                id="fname"
-                class="input"
-                name="fname"
-                value=""
-                aria-labelledby="label-fname"
-              />
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
               <label class="label" for="fname" id="label-fname">
                 <div class="text">Name</div>
               </label>
             </div>
-            <!-- </div></div> -->
           </div>
-
-          <div style="display: flex; flex-direction: row">
+          <div class="immediate-container" style="display: flex; flex-direction: row">
             <div class="input-container upper-container">
-              <input
-                type="text"
-                id="fname"
-                class="input"
-                name="fname"
-                value=""
-                aria-labelledby="label-fname"
-              />
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Username</div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-flex">
+          <div class="immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Password</div>
+              </label>
+            </div>
+          </div>
+          <div class="immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
               <label class="label" for="fname" id="label-fname">
                 <div class="text">Dropdown</div>
               </label>
             </div>
-            <!-- </div></div> -->
           </div>
+        </div>
 
-          <div style="display: flex; flex-direction: row">
+        <!-- Three Column -->
+
+        <div class="analysis-text two-column-text">Three-Column</div>
+
+        <div class="two-flex">
+          <div class="three-immediate-container" style="display: flex; flex-direction: row">
             <div class="input-container upper-container">
-              <textarea
-                type="text"
-                class="input"
-                id="fname"
-                name="fname"
-                value=""
-                aria-labelledby="label-fname"
-              ></textarea>
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
               <label class="label" for="fname" id="label-fname">
-                <div class="text">Multiple Line</div>
+                <div class="text">Focus</div>
+              </label>
+            </div>
+          </div>
+          <div class="three-immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Password</div>
+              </label>
+            </div>
+          </div>
+          <div class="three-immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="john doe" disabled
+                aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Disabled</div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Four Column -->
+
+        <div class="analysis-text two-column-text">Four-Column</div>
+        <div class="two-flex">
+          <div class="four-immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Designation</div>
+              </label>
+            </div>
+          </div>
+          <div class="four-immediate-container name-flex">
+            <div>
+              <div style="display: flex; flex-direction: row">
+                <div class="input-container upper-container">
+                  <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+                  <label class="label" for="fname" id="label-fname">
+                    <div class="text">Name</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <span class="below-text">Enter your full name as per ID</span>
+          </div>
+          <div class="four-immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <input type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname" />
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Username</div>
+              </label>
+            </div>
+          </div>
+          <div class="four-immediate-container" style="display: flex; flex-direction: row">
+            <div class="input-container upper-container">
+              <select type="text" id="fname" class="input" name="fname" value="" aria-labelledby="label-fname"></select>
+              <label class="label" for="fname" id="label-fname">
+                <div class="text">Select</div>
               </label>
             </div>
             <!-- </div></div> -->
           </div>
+        </div>
 
-          <div class="analysis-text two-column-text">Two-Column</div>
+        <!-- Other design element -->
 
-          <div class="two-flex">
-            <div
-              class="immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Name</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Username</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
+        <div class="col other-text">
+          Other design Elements
+        </div>
+
+        <!-- File Upload -->
+        <div class="col other-subelement-text">
+          File Upload
+        </div>
+
+        <div class="file-upload-flex">
+          <label class="custom-file-upload">
+            <input type="file" />
+            <img src="./image/cloud-upload-icon.svg" alt="" class="file-upload-img">
+            Upload
+          </label>
+          <span class="no-items-text">No items Selected</span>
+        </div>
+
+        <!-- Radio Button -->
+
+        <div class="col other-subelement-text radio-text">
+          Radio Button
+        </div>
+
+        <div class="radio radio-flex">
+          <label><input type="radio" name="options" value="option-1"> Option 1<span></span></label>
+          <label><input type="radio" name="options" value="option-2"> Option 2<span></span></label>
+        </div>
+
+        <!-- Checkbox -->
+
+        <div class="col other-subelement-text radio-text">
+          Checkbox
+        </div>
+
+        <div class="checkbox-flex">
+          <label class="container-checkbox"> Option 1
+            <input type="checkbox">
+            <img class="check-icon" src="./image/check-icon.svg" alt="" onclick="changeImage()">
+            <span class="checkmark"></span>
+          </label>
+
+          <label class="container-checkbox"> Option 2
+            <input type="checkbox" checked>
+            <img class="check-icon" src="./image/checked-icon.svg" alt="" onclick="changeImage()">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+
+        <!-- Snack Bar -->
+        <div class="col other-subelement-text">
+          Snack Bar
+        </div>
+
+        <div class="snack-flex">
+          <div class="snack-inner-flex error">
+            <img src="./image/error-icon.svg" alt="" class="snack-inner-img">
+            <span>This is an error message</span>
+          </div>
+          <div class="snack-inner-flex informative">
+            <img src="./image/info-icon.svg" alt="" class="snack-inner-img">
+            <span>This is an informative message!</span>
+          </div>
+        </div>
+
+        <div class="snack-flex">
+          <div class="snack-inner-flex warning">
+            <img src="./image/warning-icon.svg" alt="" class="snack-inner-img">
+            <span>This is a warning message!</span>
+          </div>
+          <div class="snack-inner-flex success">
+            <img src="./image/success-icon.svg" alt="" class="snack-inner-img">
+            <span>This is a success message!</span>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+
+        <div class="col other-subelement-text radio-text">
+          Call to action
+        </div>
+
+        <div class="btn-flex">
+          <div class="btn-wrapper-primary">
+            <a href="#" class="button-design">
+              Primary
+            </a>
+          </div>
+          <div class="btn-wrapper-secondary">
+            <a href="#" class="button-design">
+              Secondary
+            </a>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+
+        <div class="col other-subelement-text tabs-text">
+          Tabs
+        </div>
+
+        <div class="tab-main">
+          <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">Tab 1</button>
+            <button class="tablinks" onclick="openCity(event, 'Paris')">Tab 2</button>
+            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tab 3</button>
           </div>
 
-          <div class="two-flex">
-            <div
-              class="immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Password</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Dropdown</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
+          <div id="London" class="tabcontent">
+            <span>
+              This is Tab 1.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut architecto aut, animi qui
+              maxime earum inventore consectetur, corrupti exercitationem sed distinctio culpa explicabo voluptatibus
+              hic perferendis, minima laborum! Odio, magnam. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Dolor dignissimos fugiat ut cum eveniet, tempore repellat sed aperiam at, cumque labore voluptas aut.
+              Reiciendis qui sapiente consequatur quis, aut dicta?
+            </span>
           </div>
 
-          <div class="analysis-text two-column-text">Three-Column</div>
-
-          <div class="two-flex">
-            <div
-              class="three-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Focus</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="three-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Password</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="three-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value="john doe"
-                  disabled
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Disabled</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
+          <div id="Paris" class="tabcontent">
+            <span>This is Tab 2. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime asperiores dolores
+              odio ad possimus corporis dolore reiciendis fuga architecto placeat sint sequi at, cumque officia id
+              voluptatum officiis ipsa repudiandae! Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
+              repudiandae architecto soluta repellat veritatis dolorem tempore, pariatur, laborum excepturi rerum
+              dicta voluptatem fugit suscipit corporis delectus atque maxime non a! Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Quaerat nihil libero itaque eius temporibus explicabo eligendi aliquam
+              modi officia nulla natus maxime rem perspiciatis quam sint, consectetur non eaque iusto?</span>
           </div>
 
-          <div class="analysis-text two-column-text">Four-Column</div>
-          <div class="two-flex">
-            <div
-              class="four-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Designation</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div class="four-immediate-container name-flex">
-              <div>
-                <div style="display: flex; flex-direction: row">
-                  <div class="input-container upper-container">
-                    <input
-                      type="text"
-                      id="fname"
-                      class="input"
-                      name="fname"
-                      value=""
-                      aria-labelledby="label-fname"
-                    />
-                    <label class="label" for="fname" id="label-fname">
-                      <div class="text">Name</div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <span class="below-text">Enter your full name as per ID</span>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="four-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <input
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                />
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Username</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
-            <div
-              class="four-immediate-container"
-              style="display: flex; flex-direction: row"
-            >
-              <div class="input-container upper-container">
-                <select
-                  type="text"
-                  id="fname"
-                  class="input"
-                  name="fname"
-                  value=""
-                  aria-labelledby="label-fname"
-                ></select>
-                <label class="label" for="fname" id="label-fname">
-                  <div class="text">Select</div>
-                </label>
-              </div>
-              <!-- </div></div> -->
-            </div>
+          <div id="Tokyo" class="tabcontent">
+            <span>This is Tab 3. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat qui debitis
+              architecto corporis possimus reprehenderit libero omnis commodi facere, sit consequatur porro tempora.
+              Repellat placeat, assumenda voluptas maiores ex reprehenderit.</span>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+
+  <script>
+    function openCity(evt, cityName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+  </script>
+
+
+</body>
+
 </html>

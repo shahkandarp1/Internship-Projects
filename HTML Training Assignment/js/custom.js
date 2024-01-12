@@ -1,6 +1,15 @@
 var i = 0
-
+let first = 0
+if(Number(window.innerWidth) <= 1300 && first==0){
+  i=1;
+  first=1
+}
 function openNav() {
+  console.log(window.innerWidth)
+  if(Number(window.innerWidth) <= 1300 && first==0){
+    i=1;
+    first=1
+  }
   if(i==0){
     i=1;
     document.getElementById("mySidebar").style.width = "0px";

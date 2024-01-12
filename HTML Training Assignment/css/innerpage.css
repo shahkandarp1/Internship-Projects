@@ -5,7 +5,7 @@
 .main-content{
     width: 88%;
     margin: 5% 0px 0px 11%;
-    height: 100vh;
+    height: 170vh;
 }
 
 .analysis-text {
@@ -21,7 +21,7 @@
 .main-container {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 5px;
-    height: 100vh;
+    height: 165vh;
 }
 
 .two-flex {
@@ -91,6 +91,14 @@
     margin-left: 1%;
 }
 
+.analysis-top-text {
+    color: #3E3E3E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    margin-left: 1%;
+}
+
 .text {
     padding: 8px;
 }
@@ -98,7 +106,388 @@
 .input-container {
     position: relative;
 }
+
+.other-text {
+    color: #3E3E3E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin-top: 2%;
+}
+
+.other-subelement-text {
+    color: #3E3E3E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 0.7%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #C8242F;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    width: 124px;
+    height: 36px;
+    border: 1px solid #C8242F;
+    border-radius: 18px;
+    cursor: pointer;
+}
+
+.file-upload-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.file-upload-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 19%;
+    margin-top: 1%;
+}
+
+.no-items-text {
+    color: #ADADAD;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.radio-text{
+    margin-top: 1.8%;
+}
+
+.radio input[type='radio'] {
+    display: none;
+    /*removes original button*/
+  }
   
+  .radio label:before {
+    /*styles outer circle*/
+    content: " ";
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    margin: 0 5px 0 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 11px;
+    border: 1px solid #C8242F;
+    background-color: transparent;
+  }
+  
+  .radio label {
+    position: relative;
+    color: #3E3E3E;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+  }
+  
+  .radio label input[type='radio']:checked+span {
+    /*styles inside circle*/
+    border-radius: 11px;
+    width: 9px;
+    height: 9px;
+    position: absolute;
+    top: 9px;
+    left: 3px;
+    display: block;
+    background-color: #C8242F;
+  }
+  
+  .radio-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 14%;
+    margin-top: 0.5%;
+  }
+
+  /* Radio Styling */
+  .container-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 27px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #000;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .container-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid #ADADAD;
+    background-color: white;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  /* .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  } */
+  
+  /* When the checkbox is checked, add a blue background */
+  .container-checkbox input:checked ~ .checkmark {
+    background-color: #C8242F;
+    border: 1px solid #C8242F;
+  
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  /* .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  } */
+  
+  /* Show the checkmark when checked */
+  .container-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .container-checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  
+  .check-icon{
+    width: 15px;
+    height: 15px;
+    position:absolute;
+    z-index: 1;
+    top: 1px;
+    left: 1px;
+  }
+  
+  .checkbox-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 14%;
+    margin-top: 0.8%;
+  }
+  
+  .snack-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.3%;
+  }
+
+  .snack-inner-img {
+    width: 25px;
+    height: 25px;
+    margin-right: 1.3%;
+  }
+
+  .snack-inner-flex {
+    flex-basis: 48%;
+    border-radius: 5px;
+    margin-right: 1%;
+    padding: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .error {
+    border: 1px solid #FF3535;
+    color: #FF3535;
+  }
+
+  .informative {
+    border: 1px solid #00B9E1;
+    color: #00B9E1;
+  }
+
+  .warning {
+    border: 1px solid #FFA800;
+    color: #FFA800;
+  }
+
+  .success {
+    border: 1px solid #00AF27;
+    color: #00AF27;
+  }
+
+  .button-design {
+    color: #C8242F;
+    text-decoration: none;
+  }
+
+  .button-design:hover {
+    color: white
+  }
+
+  .btn-wrapper-primary:hover {
+    background: #C8242F 0% 0% no-repeat padding-box;
+    color: white;
+  }
+
+  .btn-wrapper-primary:active {
+    background: #C8242F 0% 0% no-repeat padding-box;
+    color: white;
+  }
+  .btn-wrapper-secondary:hover {
+    background: #C8242F 0% 0% no-repeat padding-box;
+    color: white;
+  }
+
+  .btn-wrapper-secondary:active {
+    background: #C8242F 0% 0% no-repeat padding-box;
+    color: white;
+  }
+
+  .btn-wrapper-primary {
+    display: inline-block;
+    width: 124px;
+    height: 44px;
+    border: 1px solid #C8242F;
+    background: #C8242F 0% 0% no-repeat padding-box;
+    border-radius: 22px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2%;
+  }
+
+  .btn-wrapper-primary a{
+    color: white;
+  }
+  .btn-wrapper-secondary {
+    display: inline-block;
+    width: 145px;
+    height: 44px;
+    border: 1px solid #C8242F;
+    border-radius: 22px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2%;
+  }
+
+  .btn-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1%;
+    margin-left: 2%;
+  }
+
+  .tabs-text{
+    margin-top: 4%;
+  }
+  
+
+/* Tabs styling */
+
+body {
+    font-family: Arial;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    /* border: 1px solid #ccc; */
+    /* background-color: #f1f1f1; */
+    border-bottom: 1px solid #ADADAD;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #ADADAD;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    color: #C8242F;
+    border-bottom: 2px solid #C8242F;
+    font-weight: 500;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    color: #C8242F;
+    border-bottom: 2px solid #C8242F;
+    font-weight: 500;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    color: #3E3E3E;
+    /* border-bottom: 1px solid #ADADAD; */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+
+    padding: 6px 12px;
+    /* border: 1px solid #ccc; */
+    border-top: none;
+}
+
+.tab-main {
+    width: 80%;
+    margin-top: 1%;
+}
+
+
 /* Input styling */
 
 .input {

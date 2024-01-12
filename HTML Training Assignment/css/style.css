@@ -1,5 +1,6 @@
 *{
     box-sizing: border-box;
+    background-color: #FAFAFA;
 }
 .main{
     height: 100vh;
@@ -109,4 +110,91 @@
     width: 50%;
     height: 20px;
     text-decoration: none;
+}
+
+.main-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media screen and (max-width:984px){
+    .hero{
+      width: 40%;
+    }
+    .first{
+      height: 24vh;
+      z-index: 1;
+    }
+    .main-flex{
+      flex-direction: column;
+    }
+    .second{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 65vh;
+    }
+    .flex{
+        justify-content: center;
+        align-items: center;
+    }
+  }
+
+@media screen and (max-width:655px){
+    .hero{
+        display: none;
+    }
+    .first{
+        height: 6vh;
+    }
+    .tagline {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .login-text{
+        font-size: 1.4rem;
+    }
+    .input {
+        width: 70%;
+    }
+    .buttons{
+        flex-direction: column;
+    }
+    .input-fields{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .register{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .forgot-btn{
+        margin-top: 11px;
+    }
+
+    .second{
+        margin-top: 15%;
+    }
+
+}
+
+@media screen and (max-width:515px) {
+    .first{
+        height: 0vh;
+    }
+    .login-text{
+        font-size: 1.0rem;
+    }
+    .register{
+        text-align: center;
+        margin-top: 40px;
+    }
 }
