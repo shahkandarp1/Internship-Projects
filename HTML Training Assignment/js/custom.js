@@ -13,11 +13,13 @@ function openNav() {
   if(i==0){
     i=1;
     document.getElementById("mySidebar").style.width = "0px";
+    document.getElementById("main-content").classList.add("class-change")
     // document.getElementById("main").style.marginLeft = "0px";
   }
   else{
     i=0
     document.getElementById("mySidebar").style.width = "200px";
+    document.getElementById("main-content").classList.remove("class-change")
     // document.getElementById("main").style.marginLeft = "200px";
     
   }
