@@ -118,6 +118,10 @@
     align-items: center;
 }
 
+.login-btn {
+    text-decoration: none;
+}
+
 
 @media screen and (max-width:984px){
     .hero{

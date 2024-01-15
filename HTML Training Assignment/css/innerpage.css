@@ -553,4 +553,17 @@ body {
     flex-direction: row;
 }
 
+.class-change{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+    width: 100%;
+}
 
+@media screen and (max-width:1398px) {
+    #mySidebar {
+        width: 0px;
+    }
+}
