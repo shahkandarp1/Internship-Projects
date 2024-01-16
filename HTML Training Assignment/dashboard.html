@@ -57,13 +57,27 @@
       <div class="sidebar-menu"><img class="dashboard-image" src="./image/setting-default.svg"
           alt="Setting"><span>Setting</span></div>
     </a>
+    <a href="#">
+      <div class="sidebar-menu" id="hidden-search"><div class="searchh">
+        <img class="search-navbar-image" src="./image/search-icon.svg" alt="" /><input class="search-navbar-inp" type="text"
+          placeholder="Search" />
+      </div></div>
+    </a>
+    <a href="#">
+      <div class="sidebar-menu" id="hidden-profile"><div class="top-right-navv">
+        <div class="profile-section navbar-profile">
+          <img class="profile-navbar-img" src="./image/profile.png" alt="Profile Photo" />
+          <span style="font-family: 'Roboto';font-size: 16px;color: #3E3E3E;">John Doe</span>
+        </div>
+      </div></div>
+    </a>
   </div>
 
   <!-- Navbar -->
 
   <nav>
     <div class="top-left-nav">
-      <a href="#" onclick="openNav()"><img src="./image/menu-bar.svg" alt="Menu Bar"></a>
+      <a href="#" onclick="openNav()"><img src="./image/menu-bar.svg" alt="Menu Bar" class="menu-bar-image"></a>
       <img src="./image/header-logo.svg" alt="">
     </div>
     <div class="search">
@@ -71,148 +85,162 @@
         placeholder="Search">
     </div>
     <div class="top-right-nav">
-      <img src="./image/notification-icon.svg" alt="">
+      <img src="./image/notification-icon.svg" alt="" class="notification-img">
       <div class="profile-section">
         <img class="profile-img" src="./image/profile.png" alt="Profile Photo">
         <span>John Doe</span>
         <img class="downward-img" src="./image/select-downward.svg" alt="Downwards Arrow">
       </div>
     </div>
+    <img src="./image/notification-icon.svg" alt="" class="hamburger-nav">
   </nav>
+
+  <div class="nav-below-div"></div>
+
 
   <!-- Main content -->
 
-  <div class="responsive-content">
-    <div class="main-content" id="main-content">
-      <div class="container-fluid main-container p-4">
-        <div class="row db-text">
-          Dashboard
-        </div>
-        <div class="row top-cards">
-          <div class="col-lg p-3 blocks">
-            <div class="outer-flex"><img class="outer-flex-img" src="./image/star.svg" alt="Star">
-              <div class="inner-flex"><span class="value">23,456</span><span class="title">New Products</span></div>
-            </div>
+  <div class="outer-most-container">
+    <div class="responsive-content">
+      <div class="main-content" id="main-content">
+        <div class="container-fluid main-container p-4">
+          <div class="row db-text">
+            Dashboard
           </div>
-          <div class="col-lg p-3 blocks">
-            <div class="outer-flex"><img class="outer-flex-img" src="./image/new-product.svg" alt="New Product">
-              <div class="inner-flex"><span class="value">2345</span><span class="title">Added Products</span></div>
-            </div>
-          </div>
-          <div class="col-lg p-3 blocks">
-            <div class="outer-flex"><img class="outer-flex-img" src="./image/total-product.svg" alt="Total Product">
-              <div class="inner-flex"><span class="value">32,456</span><span class="title">Total Products</span></div>
-            </div>
-          </div>
-          <div class="col-lg p-3 blocks">
-            <div class="outer-flex"><img class="outer-flex-img" src="./image/dollar-filled.svg"
-                alt="Dollar Filled Symbol">
-              <div class="inner-flex"><span class="value">5678</span><span class="title">Todays's Sale</span></div>
-            </div>
-          </div>
-          <div class="col-lg p-3 blocks">
-            <div class="outer-flex"><img class="outer-flex-img" src="./image/money-bag.svg" alt="Money Bag">
-              <div class="inner-flex"><span class="value">33,5342</span><span class="title">Total Sale</span></div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Middle Graph -->
-  
-        <div class="row middle-graphs">
-          <div class="graph-blocks first-block p-4">
-            <div class="nav-bar">
-              <span class="bar-heading">Sale</span>
-              <div class="bar-links">
-                <a class="bar-a" href="#"><span>Weekly</span></a>
-                <a class="bar-a" href="#"><span>Monthly</span></a>
-                <a class="bar-a curr-active" href="#"><span>Yearly</span></a>
+          <div class="row top-cards">
+            <div class="col-lg p-3 blocks">
+              <div class="outer-flex"><img class="outer-flex-img" src="./image/star.svg" alt="Star">
+                <div class="inner-flex"><span class="value">23,456</span><span class="title">New Products</span></div>
               </div>
             </div>
-            <div class="div-bar-img">
-              <img class="bar-img" src="./image/data-graph.png" alt="Bar Graph">
+            <div class="col-lg p-3 blocks">
+              <div class="outer-flex"><img class="outer-flex-img" src="./image/new-product.svg" alt="New Product">
+                <div class="inner-flex"><span class="value">2345</span><span class="title">Added Products</span></div>
+              </div>
             </div>
-          </div>
-          <div class="graph-blocks second-block p-4">
-            <div class="row pie-text">
-              Sales By Country
+            <div class="col-lg p-3 blocks">
+              <div class="outer-flex"><img class="outer-flex-img" src="./image/total-product.svg" alt="Total Product">
+                <div class="inner-flex"><span class="value">32,456</span><span class="title">Total Products</span></div>
+              </div>
             </div>
-            <div class="row pie-image-flex">
-              <img class="pie-image" src="./image/pie-chart.svg" alt="Pie Chart">
+            <div class="col-lg p-3 blocks">
+              <div class="outer-flex"><img class="outer-flex-img" src="./image/dollar-filled.svg"
+                  alt="Dollar Filled Symbol">
+                <div class="inner-flex"><span class="value">5678</span><span class="title">Todays's Sale</span></div>
+              </div>
             </div>
-            <div class="row pie-color">
-              <div class="col color-pallete">
-                <div class="color-row">
-                  <div class="color-desc">
-                    <img class="color-image" src="./image/radio-checked-icon.svg" alt="Checked Icon">
-                    <span class="color-name">United States of America</span>
-                  </div>
-                  <div class="color-desc">
-                    <img class="color-image" src="./image/radio-checked-icon 2.svg" alt="Checked Icon">
-                    <span class="color-name">Canada</span>
-                  </div>
-                </div>
-                <div class="color-row">
-                  <div class="color-desc">
-                    <img class="color-image" src="./image/radio-checked-icon 3.svg" alt="Checked Icon">
-                    <span class="color-name">Russia</span>
-                  </div>
-                  <div class="color-desc">
-                    <img class="color-image" src="./image/radio-checked-icon 4.svg" alt="Checked Icon">
-                    <span class="color-name">India</span>
-                  </div>
-                </div>
+            <div class="col-lg p-3 blocks">
+              <div class="outer-flex"><img class="outer-flex-img" src="./image/money-bag.svg" alt="Money Bag">
+                <div class="inner-flex"><span class="value">33,5342</span><span class="title">Total Sale</span></div>
               </div>
             </div>
           </div>
-        </div>
-  
-        <!-- Invoice Table -->
-  
-        <div class="row invoice-table p-4">
-          <div class="col heading-flex">
-            <span class="heading-table">Invoices</span>
-            <span class="view-all-btn">View All</span>
+
+          <!-- Middle Graph -->
+
+          <div class="row middle-graphs">
+            <div class="graph-blocks first-block p-4">
+              <div class="nav-bar">
+                <span class="bar-heading">Sale</span>
+                <div class="bar-links">
+                  <a class="bar-a" href="#"><span>Weekly</span></a>
+                  <a class="bar-a" href="#"><span>Monthly</span></a>
+                  <a class="bar-a curr-active" href="#"><span>Yearly</span></a>
+                </div>
+              </div>
+              <div class="div-bar-img">
+                <img class="bar-img" src="./image/data-graph.png" alt="Bar Graph">
+              </div>
+            </div>
+            <div class="graph-blocks second-block p-4">
+              <div class="row pie-text">
+                Sales By Country
+              </div>
+              <div class="row pie-image-flex">
+                <img class="pie-image" src="./image/pie-chart.svg" alt="Pie Chart">
+              </div>
+              <div class="row pie-color">
+                <div class="col color-pallete">
+                  <div class="color-row">
+                    <div class="color-desc">
+                      <img class="color-image" src="./image/radio-checked-icon.svg" alt="Checked Icon">
+                      <span class="color-name">United States of America</span>
+                    </div>
+                    <div class="color-desc">
+                      <img class="color-image" src="./image/radio-checked-icon 2.svg" alt="Checked Icon">
+                      <span class="color-name">Canada</span>
+                    </div>
+                  </div>
+                  <div class="color-row">
+                    <div class="color-desc">
+                      <img class="color-image" src="./image/radio-checked-icon 3.svg" alt="Checked Icon">
+                      <span class="color-name">Russia</span>
+                    </div>
+                    <div class="color-desc">
+                      <img class="color-image" src="./image/radio-checked-icon 4.svg" alt="Checked Icon">
+                      <span class="color-name">India</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">INVOICE</th>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">COMPANY NAME</th>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">EMAIL</th>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">DUE DATE</th>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">STATUS</th>
-                  <th style="color: #ADADAD;text-align: center;" class="table-heading">AMOUNT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="padding: 10px;">
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">651535</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Public Adjusting Firm</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">georgia.young@gmail.com</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">24 May, 2020</td>
-                  <td style="color: #3CDD5F;background: #EBFFEF 0% 0% no-repeat padding-box;text-align: center;" class="table-data status paid">Paid</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;47,800</td>
-                </tr>
-                <tr>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">558612</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Other</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">jessica.hanson@gmail.com</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">24 May, 2020</td>
-                  <td style="color:  #FF4545;background: #FFF5F5 0% 0% no-repeat padding-box;text-align: center;" class="table-data status failed">Failed</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;98,000</td>
-                </tr>
-                <tr>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">558612</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Vendor</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">alma.lawson@gmail.com</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">8 Sep, 2020</td>
-                  <td style="color:#BABABA;background: #F8F8F8 0% 0% no-repeat padding-box;text-align: center;width: 70px;" class="table-data status pending">Pending</td>
-                  <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;20,900</td>
-                </tr>
-              </tbody>
-            </table>
+
+          <!-- Invoice Table -->
+
+          <div class="row invoice-table p-4">
+            <div class="col heading-flex">
+              <span class="heading-table">Invoices</span>
+              <span class="view-all-btn">View All</span>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">INVOICE</th>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">COMPANY NAME</th>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">EMAIL</th>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">DUE DATE</th>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">STATUS</th>
+                    <th style="color: #ADADAD;text-align: center;" class="table-heading">AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="padding: 10px;">
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">651535</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Public Adjusting Firm
+                    </td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">
+                      georgia.young@gmail.com</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">24 May, 2020</td>
+                    <td style="color: #3CDD5F;background: #EBFFEF 0% 0% no-repeat padding-box;text-align: center;"
+                      class="table-data status paid">Paid</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;47,800</td>
+                  </tr>
+                  <tr>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">558612</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Other</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">
+                      jessica.hanson@gmail.com</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">24 May, 2020</td>
+                    <td style="color:  #FF4545;background: #FFF5F5 0% 0% no-repeat padding-box;text-align: center;"
+                      class="table-data status failed">Failed</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;98,000</td>
+                  </tr>
+                  <tr>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">558612</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">Vendor</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">alma.lawson@gmail.com
+                    </td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">8 Sep, 2020</td>
+                    <td
+                      style="color:#BABABA;background: #F8F8F8 0% 0% no-repeat padding-box;text-align: center;width: 70px;"
+                      class="table-data status pending">Pending</td>
+                    <td style="color: rgba(62, 62, 62, 1);text-align: center;" class="table-data">&#36;20,900</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

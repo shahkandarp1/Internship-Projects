@@ -12,7 +12,7 @@
 
 .main-content{
     width: 88%;
-    margin: 5% 0px 0px 11%;
+    margin: 1% 0px 0px 12%;
     height: 120vh;
 }
 
@@ -293,6 +293,7 @@
 @media screen and (max-width:2000px) {
     .main-container {
         width: 90%;
+        margin: auto 5px;
     }
     .class-change {
         margin-top: 1%;
@@ -304,7 +305,7 @@
     }
 }
 
-@media screen and (max-width:1398px) {
+@media screen and (max-width:1670px) {
     #mySidebar {
         width: 0px;
     }
@@ -332,15 +333,15 @@
 }
 
 @media screen and (max-width:1309px) {
-    .main-content{
+    /* .main-content{
         margin-top: 17vh;
-    }
+    } */
 }
 
 @media screen and (max-width:918px) {
-    .main-content{
+    /* .main-content{
         margin-top: 106%;
-    }
+    } */
     .middle-graphs{
         flex-direction: column;
     }
@@ -351,15 +352,15 @@
 }
 
 @media screen and (max-width:840px) {
-    .main-content{
+    /* .main-content{
         margin-top: 128%;
-    }
+    } */
 }
 
 @media screen and (max-width:560px) {
-    .responsive-content{
+    /* .responsive-content{
         margin-top: 28%;
-    }
+    } */
     .main-container{
         display: flex;
         justify-content: center;
@@ -373,13 +374,14 @@
 }
 
 @media screen and (max-width:465px) {
-    .responsive-content{
+    /* .responsive-content{
         margin-top: 35%;
-    }
+    } */
 }
 
 @media screen and (max-width:393px) {
-    .responsive-content{
+    /* .responsive-content{
         margin-top: 40%;
-    }
+    } */
 }
+

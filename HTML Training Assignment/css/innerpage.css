@@ -4,7 +4,7 @@
 
 .main-content{
     width: 88%;
-    margin: 5% 0px 0px 11%;
+    margin: 1% 0px 0px 11%;
     height: 170vh;
 }
 
@@ -21,7 +21,7 @@
 .main-container {
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 5px;
-    height: 165vh;
+    height: 95%;
 }
 
 .two-flex {
@@ -554,16 +554,105 @@ body {
 }
 
 .class-change{
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 7%;
-    width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media screen and (max-width:1398px) {
+.inner-class-change {
+  margin: auto 1px;
+}
+
+@media screen and (max-width:1855px) {
     #mySidebar {
         width: 0px;
     }
+    .entire-flex {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main-content{
+      margin: auto 1px;
+    }
+}
+
+@media screen and (max-width:1448px) {
+  .file-upload-flex{
+    flex-direction: column;
+    width: 40%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .custom-file-upload {
+    margin-bottom: 3%;
+  }
+  .radio-flex {
+    flex-direction: column;
+    width: 40%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .radio label {
+    margin-bottom: 2%;
+  }
+
+  .checkbox-flex {
+    flex-direction: column;
+    width: 40%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+.nav-below-div {
+  height: 10vh;
+  width: 100%;
+}
+
+@media screen and (max-width:950px) {
+  .two-flex {
+    flex-direction: column;
+  }
+  .immediate-container {
+    width: 100%;
+  }
+  .three-immediate-container{
+    width: 100%;
+  }
+  .four-immediate-container{
+    width: 100%;
+  }
+  .below-text{
+    display: none;
+  }
+  .name-flex {
+    display: block;
+  }
+
+  .snack-flex{
+    flex-direction: column;
+  }
+
+  .snack-inner-flex {
+    width: 100%;
+    margin-bottom: 2%;
+  }
+
+  .btn-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-wrapper-primary {
+    margin-bottom: 2%;
+    width: 100%;
+  }
+
+  .btn-wrapper-secondary {
+    width: 100%;
+  }
 }
