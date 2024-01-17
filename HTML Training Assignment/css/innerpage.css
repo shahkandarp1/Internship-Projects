@@ -590,6 +590,28 @@ body {
     margin-bottom: 3%;
   }
   .radio-flex {
+    width: 40%;
+  }
+
+  .radio label {
+    margin-bottom: 2%;
+  }
+
+  .checkbox-flex {
+    width: 40%;
+  }
+}
+
+.nav-below-div {
+  height: 10vh;
+  width: 100%;
+}
+
+@media screen and (max-width: 580px) {
+  .custom-file-upload {
+    margin-bottom: 3%;
+  }
+  .radio-flex {
     flex-direction: column;
     width: 40%;
     justify-content: flex-start;
@@ -606,11 +628,6 @@ body {
     justify-content: flex-start;
     align-items: flex-start;
   }
-}
-
-.nav-below-div {
-  height: 10vh;
-  width: 100%;
 }
 
 @media screen and (max-width:950px) {
@@ -647,6 +664,21 @@ body {
     align-items: flex-start;
   }
 
+  .btn-wrapper-primary {
+    margin-bottom: 2%;
+    width: 30%;
+  }
+
+  .btn-wrapper-secondary {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width:425px) {
+  
+  .tab button.active{
+    height: 50px;
+  }
   .btn-wrapper-primary {
     margin-bottom: 2%;
     width: 100%;

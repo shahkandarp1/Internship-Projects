@@ -27,7 +27,7 @@
 .blocks{
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 5px;
-    width: 219px;
+    width: auto;
     height: 116px;
     margin-bottom: 2%;
     margin-right: 2%;
@@ -234,7 +234,7 @@
 .invoice-table{
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border-radius: 5px;
-    width: 99%;
+    width: 100%;
 }
 
 .table-heading{
@@ -332,6 +332,12 @@
     }
 }
 
+@media screen and (max-width:1024px) {
+    .bar-links {
+        margin-right: 5%;
+    }
+}
+
 @media screen and (max-width:1309px) {
     /* .main-content{
         margin-top: 17vh;
@@ -357,6 +363,25 @@
     } */
 }
 
+@media screen and (max-width:425px) {
+    .blocks {
+        width: 100%;
+    }
+    .bar-a span {
+        font-size: 10px;
+    }
+    .bar-heading {
+        font-size: 18px;
+    }
+    .bar-links{
+        margin-right: 16%;
+    }
+    .invoice-table {
+        width: 108%;
+    }
+
+}
+
 @media screen and (max-width:560px) {
     /* .responsive-content{
         margin-top: 28%;
@@ -373,15 +398,8 @@
     }
 }
 
-@media screen and (max-width:465px) {
-    /* .responsive-content{
-        margin-top: 35%;
-    } */
+@media screen and (max-width:768px) and (min-width:426px){
+    .invoice-table {
+        width: 104%;
+    }
 }
-
-@media screen and (max-width:393px) {
-    /* .responsive-content{
-        margin-top: 40%;
-    } */
-}
-

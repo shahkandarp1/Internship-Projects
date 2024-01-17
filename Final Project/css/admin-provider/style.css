@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+body,
+html {
+    height: 100vh;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+}
+
+.bg-image {
+    max-width: 550px;
+    height: 100vh;
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    filter: blur(2px);
+}
+
+.main-container {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(250, 250, 250, 0.4);
+    position: relative;
+}
+
+/* Upper part(Moon) */
+
+.top-right-moon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.moon {
+    padding: 5px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bottom part */
+
+.bottom-part-flex {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #3E3E3E;
+    bottom: 18px;
+    left: 0;
+    width: 100%;
+}
+
+.bottom-part-a {
+    text-decoration: none;
+    color: #3E3E3E;
+}
+
+.right-a {
+    margin-right: 10px;
+}
+
+.left-a {
+    margin-left: 10px;
+}

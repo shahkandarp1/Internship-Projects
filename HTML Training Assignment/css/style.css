@@ -100,7 +100,7 @@
     color: #ADADAD;
     text-align: left;
     font: normal normal normal 15px/20px 'Roboto';
-    width: 60%;
+    width: 70%;
     height: 20px;
     margin-top: 20px;
 }
@@ -179,6 +179,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 100%;
     }
     .forgot-btn{
         margin-top: 11px;
@@ -201,4 +202,56 @@
         text-align: center;
         margin-top: 40px;
     }
+}
+
+@media screen and (max-width:768px) and (min-width:654px){
+    .register {
+        margin-left: 33%;
+    }
+    .register-btn {
+        margin-left: 14%;
+    }
+    
+}
+
+@media screen and (max-width:425px) {
+    .second {
+        margin-left: 9%;
+    }
+    .input {
+        width: 90%;
+    }
+    .register {
+        width: 80%;
+    }
+    .register-btn {
+        width: 80%;
+    }
+    .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width:375px) {
+    .second {
+        margin-left: 13%;
+    }
+    .register {
+        width: 100%;
+    }
+    .register-btn {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width:320px) {
+    .second {
+        margin-left: 28%;
+    }
+    .input {
+        width: 80%;
+    }
+    
 }
