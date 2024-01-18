@@ -48,11 +48,16 @@ body {
     display: none;
   }
 
+  .nav-cover {
+    width: 100%;
+    height: 96px;
+  }
+
   /* Main Content */
 
   .main-container {
     width: 100%;
-    height: 100vh;
+    height: 27vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,20 +93,20 @@ body {
 
   .submit-text {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .main-form {
     /* padding: 10px; */
     width: 100%;
-    padding: 12px;
+    padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0.1px 0.1px 18px -13px black;
   }
 
   .upper-text {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
   }
 
@@ -114,6 +119,7 @@ body {
     font-weight: 400;
     font-size: 14px;
     margin-top: 4px;
+    z-index: 0!important;
   }
 
   .form-control {
@@ -166,3 +172,72 @@ body {
     background: transparent;
     color: #0dcaf0
   }
+
+  .upload-form {
+    flex-basis: 90%;
+  }
+
+  .file-upload {
+    display: flex;
+  }
+
+  input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0dcaf0;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    flex-basis: 10%;
+    height: 36px;
+    border: 1px solid #0dcaf0;
+    border-radius: 0px 5px 5px 0px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.file-upload-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.form-floating>.upload-label {
+  top: 8px;
+  left: 1px;
+}
+
+.lower-btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.lower-custom-btn {
+  width: 83px;
+  padding: 7px 7px;
+  border: 1px solid #0dcaf0;
+  font-family: 'Roboto',sans-serif;
+  /* font-weight: 500; */
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  background-color: #0dcaf0;
+  color: white;
+  margin-right: 10px;
+}
+
+.cancel-btn {
+  background-color: white;
+  color: #0dcaf0;
+  margin-right: 10px;
+}
