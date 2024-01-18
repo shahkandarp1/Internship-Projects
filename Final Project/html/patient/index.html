@@ -24,24 +24,25 @@
     <link rel="stylesheet" href="../../css/patient/style.css" />
     <script src="../../js/patient/script.js"></script>
   </head>
-  <body>
+  <body id="body" onload="checkMode()">
     <div class="main-container">
       <span class="top-right-moon">
-        <div class="moon">
-          <img src="../../images/moon.svg" alt="" class="moon-img" />
-        </div>
+        <button class="moon" onclick="changeMode()">
+          <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+          <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+        </button>
       </span>
       <div class="flex-container">
         <div class="image-container">
-            <img src="../../images/7768657_3763028.jpg" alt="" class="bg-image">
+            <img src="../../images/11116016_415.jpg" alt="" class="bg-image">
             <div class="inner-flex">
                 <div class="logo">
                     <img src="../../images/logo1.png" alt="" class="logo-img">
                 </div>
                 <form action="" class="login-content">
                     <div class="back">
-                        <div class="back-text">&lt; Back</div>
-                        <span class="login-text">Login To Your Account</span>
+                        <a class="back-text" href="./patient-site.html" >&lt; Back</a>
+                        <span class="login-text" id="login-text">Login To Your Account</span>
                     </div>
                     <div class="form-floating mb-3 inp">
                         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -61,7 +62,7 @@
             </div>
         </div>
       </div>
-      <div class="bottom-part-flex">
+      <div class="bottom-part-flex" id="bottom-flex">
         <a href="#" class="bottom-part-a right-a">Terms of Conditions</a> |
         <a href="#" class="bottom-part-a left-a">Privacy Policy</a>
       </div>

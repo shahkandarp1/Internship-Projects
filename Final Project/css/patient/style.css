@@ -19,7 +19,7 @@ html {
   z-index: -1;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 56%;
   transform: translate(-50%, -50%);
   opacity: 0.2;
   filter: blur(2px);
@@ -41,6 +41,7 @@ html {
   width: 31px;
   justify-content: center;
   align-items: center;
+  background-color: white;
 }
 
 /* Bottom part */
@@ -81,8 +82,8 @@ html {
 }
 
 .image-container {
-  width: 60%;
-  height: 60%;
+  width: 80%;
+  height: 80%;
   position: relative;
 }
 
@@ -91,7 +92,7 @@ html {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
 }
 
@@ -100,12 +101,12 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 13%;
+  margin-bottom: 8%;
 }
 
 .logo-img {
-  width: 28%;
-  height: 14vh;
+  width: 260px;
+  height: 140px;
 }
 
 .back {
@@ -121,6 +122,7 @@ html {
     font-weight: 500;
     font-size: 16px;
     color: #0dcaf0;
+    text-decoration: none;
 }
 
 .login-text {
@@ -211,6 +213,22 @@ input[type="password"]::-ms-clear {
     font-weight: 500;
 }
 
+/* Patient Site */
+
+.custom-btn {
+  font-family: 'Roboto';
+  width: 300px;
+  border-radius: 4px;
+  font-weight: 500;
+  padding: 10px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.btn-second {
+  background-color: #0D1556;
+}
+
 @media screen and (max-width:1024px) {
     .logo {
         margin-bottom: 8%;
@@ -240,10 +258,11 @@ input[type="password"]::-ms-clear {
 }
 
 @media screen and (max-width:768px) {
-    .logo-img {
-        width: 40%;
-        height: 14vh;
-    }
+  .logo-img {
+    width: 40%;
+    height: 14vh;
+    margin-bottom: 8%;
+}
 }
 
 @media screen and (max-width:426px) {
@@ -267,11 +286,15 @@ input[type="password"]::-ms-clear {
     .back-text {
         font-size: 12px;
     }
+    .back-to-login-text {
+      font-size: 12px;
+      width: 85px;
+  }
 }
 
 @media screen and (max-width:351px) {
     .login-text {
-        font-size: 17px;
+        font-size: 19px;
     }
     .inp {
         width: 250px;
@@ -290,7 +313,7 @@ input[type="password"]::-ms-clear {
 
 @media screen and (max-width:320px) {
     .login-text {
-        font-size: 15px;
+        font-size: 19px;
     }
     .inp {
         width: 240px;
@@ -306,11 +329,16 @@ input[type="password"]::-ms-clear {
         font-size: 11px;
     }
 
-    .bg-image {
+    /* .bg-image {
         width: 250px;
-    }
+    } */
 
     .back-text {
         left: -37px;
+    }
+
+    .custom-btn {
+      width: 260px;
+      font-size: 14px;
     }
 }

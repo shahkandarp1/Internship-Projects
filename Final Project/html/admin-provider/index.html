@@ -17,24 +17,25 @@
     <script src="../../js/admin-provider/script.js"></script>
 </head>
 
-<body>
-    <img src="../../images/7768657_3763028.jpg" alt="" class="bg-image">
+<body onload="checkMode()">
+    <img src="../../images/7774236_3736765.jpg" alt="" class="bg-image">
     <div class="main-container">
         <div class="left half-container">
             <img class="left-img" src="../../images/11116016_415.jpg" alt="">
         </div>
-        <div class="right half-container">
+        <div class="right half-container" id="body">
             <span class="top-right-moon">
-                <div class="moon">
-                    <img src="../../images/moon.svg" alt="" class="moon-img">
-                </div>
+                <button class="moon" onclick="changeMode()">
+                    <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+                    <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+                </button>
             </span>
             <div class="right-flex-container">
                 <div class="logo">
                     <img src="../../images/logo1.png" alt="" class="logo-img">
                 </div>
                 <form action="" class="login-content">
-                    <span class="login-text">Login To Your Account</span>
+                    <span class="login-text" id="login-text">Login To Your Account</span>
                     <div class="form-floating mb-3 inp">
                         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                         <label for="floatingInput" class="form-label">Username</label>
@@ -51,7 +52,7 @@
                     <a href="./forgot-password.html" class="forgot-password">Forgot Password?</a>
                 </form>
             </div>
-            <div class="bottom-part-flex"><a href="#" class="bottom-part-a right-a">Terms of Conditions</a> | <a href="#" class="bottom-part-a left-a">Privacy Policy</a></div>
+            <div class="bottom-part-flex" id="bottom-flex"><a href="#" class="bottom-part-a right-a">Terms of Conditions</a> | <a href="#" class="bottom-part-a left-a">Privacy Policy</a></div>
         </div>
     </div>
 </body>

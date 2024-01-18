@@ -1,25 +1,9 @@
-
-
-const changeVisibility = () => {
-    var x = document.getElementById("floatingPassword");
-    if (x.type === "password") {
-        x.type = "text";
-        document.getElementById("open-eye").classList.add("hidden")
-        document.getElementById("closed-eye").classList.remove("hidden")
-    } else {
-        x.type = "password";
-        document.getElementById("open-eye").classList.remove("hidden")
-        document.getElementById("closed-eye").classList.add("hidden")
-    }
-}
-
 const changeMode = () => {
     try {   
         const mode = localStorage.getItem("mode")
         if(mode==null || mode=="Light"){
             localStorage.setItem("mode","Dark")
             document.getElementById("body").style.backgroundColor = "black";
-            document.getElementById("login-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "white"
@@ -28,8 +12,7 @@ const changeMode = () => {
         }
         else{
             localStorage.setItem("mode","Light")
-            document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
-            document.getElementById("login-text").style.color = "black"
+            document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 1)";
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "#3E3E3E"
@@ -47,8 +30,7 @@ const checkMode = () => {
     try {   
         if(mode=="Light" || mode==null){
             console.log("in try")
-            document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
-            document.getElementById("login-text").style.color = "black"
+            document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 1)";
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "#3E3E3E"
@@ -57,7 +39,6 @@ const checkMode = () => {
         }
         else{
             document.getElementById("body").style.backgroundColor = "black";
-            document.getElementById("login-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "white"
