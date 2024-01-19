@@ -1,0 +1,119 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto',sans-serif;
+    width: 100%;
+    height: 100vh;
+    background-color: #FAFAFA;
+}
+
+
+/* Navbar - Top */
+
+.moon {
+    padding: 5px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    background-color: white;
+  }
+
+  .logout-mob {
+    /* padding: 5px; */
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    background-color: white;
+    display: none;
+  }
+
+  .logout {
+    padding: 5px 10px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 52px;
+    justify-content: center;
+    align-items: center;
+    /* margin-right: 13px; */
+    background-color: white;
+    font-family: 'Roboto',sans-serif;
+    font-size: 10px;
+    color: #0dcaf0;
+    font-family: 400;
+    margin-right: 10px;
+  }
+  
+  .logo {
+    width: 140px;
+    height: 75px;
+    margin-left: 20px;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    /* box-shadow: 3px -8px 17px 1px black; */
+    border-bottom: 1px solid black;
+    z-index: 2;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .nav-cover {
+    width: 100%;
+    height: 96px;
+  }
+
+  .right-side-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .welcome-text {
+    font-family: 'Roboto',sans-serif;
+    font-size: 12px;
+    color: #ADADAD;
+    font-weight: 400;
+    margin-right: 10px;
+  }
+
+  .name-text {
+    font-size: 12px;
+    color: #3E3E3E;
+    font-weight: 500;
+  }
+  
+  @media screen and (max-width: 426px) {
+    .logout {
+      display: none;
+    }
+    .welcome-text {
+      display: none;
+    }
+    .logout-mob {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
