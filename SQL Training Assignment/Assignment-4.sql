@@ -16,7 +16,9 @@ AS
 
 BEGIN
    declare @average decimal(10,2)
-   exec @average = GetAverageFreightOfCustomer @CustomerID = 'VINET';
+   declare @customerid varchar(100)
+   select @customerid = CustomerID from INSERTED;
+   exec @average = GetAverageFreightOfCustomer @CustomerID = @customerid;
 
    if (select Freight from INSERTED) > @average
    BEGIN
