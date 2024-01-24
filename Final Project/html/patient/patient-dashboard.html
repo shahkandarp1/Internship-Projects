@@ -13,11 +13,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="../../css/patient/patient-dashboard.css" />
   <script src="../../js/patient/patient-dashboard.js"></script>
 </head>
 
-<body>
+<body id="body" onload="checkMode()">
   <!-- Navbar -->
   <div class="navbar-custom">
     <img src="../../images/logo1.png" alt="" class="logo" />
@@ -52,6 +53,33 @@
     </div>
   </div>
 
+  <!-- Create Request Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="exampleModalLongTitle">Create New Request</div>
+          <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+        </div>
+        <form action="">
+          <input type="hidden" name="" id="redirect-value" value="patient-form.html">
+          <div class="modal-body">
+            <span class="modal-head">Here, I want to create new request for ...</span>
+            <div class="modal-flex">
+              <div class="btn common-btn cancel-btn create-request-active" onclick="toggleButton('patient-form.html')"> Me </div>
+              <div class="btn common-btn cancel-btn"  onclick="toggleButton('family-form.html')"> Some One Else</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info continue-btn" data-bs-dismiss="modal" onclick="renderPage()">Continue</button>
+            <button type="button" class="btn cancel-btn">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Dark Background when sidebar is open -->
   <div class="overlay" onclick="sidebar_close()">
   </div>
@@ -80,11 +108,12 @@
   </nav>
 
   <div id="Dashboard" class="tabcontent">
-    <span class="main-heading">Medical History</span>
+    <span class="main-heading" id="main-heading">Medical History</span>
     <div class="main-content">
       <div class="create-request">
-        <button class="create-request-btn">Create New Request</button>
-        <a class="create-request-btn-mob" onclick="logout()">
+        <button type="button" class="create-request-btn" id="request-btn" data-bs-toggle="modal"
+          data-bs-target="#myModal">Create New Request</button>
+        <a class="create-request-btn-mob" data-bs-toggle="modal" data-bs-target="#myModal" >
           <img id="create-request" src="../../images/plus.svg" alt="" class="logout-img" />
         </a>
       </div>
@@ -137,7 +166,8 @@
             <div class="accordion-body main-flex">
               <div class="inner-flex"><img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
                 <span class="accordion-heading-inner">Provider :
-                  <span class="accordion-value-inner">-</span></span></div>
+                  <span class="accordion-value-inner">-</span></span>
+              </div>
               <div class="inner-flex">
                 <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span
                   class="accordion-heading-inner">Current
@@ -159,7 +189,8 @@
             <div class="accordion-body main-flex">
               <div class="inner-flex"><img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
                 <span class="accordion-heading-inner">Provider :
-                  <span class="accordion-value-inner">-</span></span></div>
+                  <span class="accordion-value-inner">-</span></span>
+              </div>
               <div class="inner-flex">
                 <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span
                   class="accordion-heading-inner">Current
@@ -181,7 +212,8 @@
             <div class="accordion-body main-flex">
               <div class="inner-flex"><img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
                 <span class="accordion-heading-inner">Provider :
-                  <span class="accordion-value-inner">-</span></span></div>
+                  <span class="accordion-value-inner">-</span></span>
+              </div>
               <div class="inner-flex">
                 <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span
                   class="accordion-heading-inner">Current
@@ -203,7 +235,8 @@
             <div class="accordion-body main-flex">
               <div class="inner-flex"><img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
                 <span class="accordion-heading-inner">Provider :
-                  <span class="accordion-value-inner">Dr. AGOLA</span></span></div>
+                  <span class="accordion-value-inner">Dr. AGOLA</span></span>
+              </div>
               <div class="inner-flex">
                 <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span
                   class="accordion-heading-inner">Current

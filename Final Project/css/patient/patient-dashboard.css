@@ -499,6 +499,55 @@ tr td {
   width: 100%;
 }
 
+/* Create New Request - Modal */
+.modal-header {
+  font-size: 1.0rem;
+  font-family: 'Roboto',sans-serif;
+  background-color: #0dcaf0;
+  color: white;
+}
+
+.cross-btn {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.continue-btn {
+  color: white!important;
+  font-size: 0.8rem;
+}
+
+.cancel-btn {
+  font-size: 0.8rem;
+  color: #0dcaf0!important;
+  border: 1px solid #0dcaf0;
+}
+
+.cancel-btn:hover {
+  border: 1px solid #0dcaf0;
+}
+
+.create-request-active {
+  background-color: #0dcaf0!important;
+  color: white!important;
+}
+
+.modal-head {
+  color: #3E3E3E;
+  font-size: 1.0em;
+}
+
+.modal-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.common-btn{
+  margin-left: 15px;
+}
+
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
   .sidebar {

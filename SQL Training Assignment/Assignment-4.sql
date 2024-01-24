@@ -4,10 +4,27 @@ CREATE PROCEDURE GetAverageFreightOfCustomer
 	@CustomerID varchar(100)
 AS
 BEGIN
-	select CustomerID,avg(Freight) from orders_first group by CustomerID having CustomerID = @CustomerID;
+	declare @avg decimal(10,2)
+	select @avg = avg(Freight) from orders_first group by CustomerID having CustomerID = @CustomerID;
+	return @avg
 END
 GO
-exec GetAverageFreightOfCustomer @CustomerID = 'VINET';
+
+CREATE TRIGGER AverageFreightCheck ON orders_first 
+	FOR INSERT,UPDATE
+AS 
+
+BEGIN
+   declare @average decimal(10,2)
+   exec @average = GetAverageFreightOfCustomer @CustomerID = 'VINET';
+
+   if (select Freight from INSERTED) > @average
+   BEGIN
+		print 'Your frieght should be less than average'
+		return
+	END
+END
+GO
 
 --2 write a SQL query to Create Stored procedure in the Northwind database to retrieve Employee Sales by Country
 CREATE PROCEDURE [dbo].[GetSalesByCountry]

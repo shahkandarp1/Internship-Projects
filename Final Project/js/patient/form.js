@@ -4,15 +4,6 @@ const getFileData = (myFile) => {
     document.getElementById("form-label").innerHTML = `${filename}`;
 }
 
-$(window).on('load', function () {
-    $('#myModal').modal('show');
-});
-
-$(document).ready(function () {
-    $("#closeBtn").click(function () {
-        $("#myModal").modal("hide");
-    });
-});
 
 const changeMode = () => {
     try {
@@ -23,6 +14,7 @@ const changeMode = () => {
             document.getElementById("submit-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
+            document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
         }
         else {
             localStorage.setItem("mode", "Light")
@@ -30,6 +22,7 @@ const changeMode = () => {
             document.getElementById("submit-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
+            document.getElementsByClassName("main-form")[0].style.backgroundColor = "white"
         }
     } catch (err) {
         alert("there was some issue in changing mode")
@@ -52,13 +45,14 @@ const checkMode = (e) => {
             document.getElementById("submit-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
+            document.getElementsByClassName("main-form")[0].style.backgroundColor = "white"
         }
         else {
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("submit-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
-
+            document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
         }
     } catch (err) {
         alert("there was some issue in changing mode")
@@ -68,3 +62,14 @@ const checkMode = (e) => {
 const reload = () => {
     location.reload()
 }
+
+
+$(window).on('load', function () {
+    $('#myModal').modal('show');
+});
+
+$(document).ready(function () {
+    $("#closeBtn").click(function () {
+        $("#myModal").modal("hide");
+    });
+});

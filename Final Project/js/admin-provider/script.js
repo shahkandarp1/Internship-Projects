@@ -18,7 +18,7 @@ const changeMode = () => {
       const mode = localStorage.getItem("mode")
       if(mode==null || mode=="Light"){
           localStorage.setItem("mode","Dark")
-          document.getElementById("body").style.backgroundColor = "black";
+          document.getElementById("body").style.backgroundColor = "rgba(62, 62, 62, 0.5)";
           document.getElementById("login-text").style.color = "white"
           document.getElementById("moon").classList.add("hidden")
           document.getElementById("sun").classList.remove("hidden")
