@@ -17,13 +17,14 @@ AS
 BEGIN
    declare @average decimal(10,2)
    declare @customerid varchar(100)
+   declare @f decimal(10,2)
    select @customerid = CustomerID from INSERTED;
    exec @average = GetAverageFreightOfCustomer @CustomerID = @customerid;
 
-   if (select Freight from INSERTED) > @average
+   if (select TOP 1 Freight from INSERTED order by Freight desc) > @average
    BEGIN
 		print 'Your frieght should be less than average'
-		return
+		rollback 
 	END
 END
 GO
@@ -65,7 +66,9 @@ BEGIN
 	select top 10 * from Products order by UnitPrice desc;
 END
 GO
- exec Top10ExpensiveProduct;--6 write a SQL query to Create Stored procedure in the Northwind database to insert Customer Order Details 
+ exec Top10ExpensiveProduct;
+
+--6 write a SQL query to Create Stored procedure in the Northwind database to insert Customer Order Details 
 CREATE PROCEDURE InsertCustomerOrder
 	@CustomerID varchar(200),
 	@EmployeeID int,
@@ -118,4 +121,7 @@ BEGIN
 	update orders_first set CustomerID = @CustomerID,EmployeeID = @EmployeeID,OrderDate = @OrderDate,RequiredDate = @RequiredDate,ShippedDate = @ShippedDate,ShipVia = @ShipVia,Freight = @Freight,ShipName = @ShipName,ShipAddress = @ShipAddress,ShipCity = @ShipCity,ShipRegion = @ShipRegion,ShipPostalCode = @ShipPostalCode,ShipCountry = @ShipCountry where OrderID = @OrderID;
 	update [Order Details] set ProductID = @ProductID,UnitPrice = @UnitPrice,Quantity = @Qunatity,Discount = @Discount where OrderID = @OrderID;
 END
-GOexec UpdateCustomerOrder @OrderID = 11078,@CustomerID = 'SEVES',@EmployeeID = 1,@OrderDate ='1999-01-09 00:00:00.000' ,@RequiredDate = '1999-03-09 00:00:00.000',@ShippedDate = '1999-02-09 00:00:00.000',@ShipVia = 3,@Freight = 22.34,@ShipName = 'Seven Seas Imports',@ShipAddress = '90 Wadhurst Rd.',@ShipCity = 'Surat',@ShipRegion = 'RJ',@ShipPostalCode = '395007',@ShipCountry = 'India',@ProductID = 42,@UnitPrice = 10.00,@Qunatity = 30,@Discount = 0;
+GO
+exec UpdateCustomerOrder @OrderID = 11078,@CustomerID = 'SEVES',@EmployeeID = 1,@OrderDate ='1999-01-09 00:00:00.000' ,@RequiredDate = '1999-03-09 00:00:00.000',@ShippedDate = '1999-02-09 00:00:00.000',@ShipVia = 3,@Freight = 22.34,@ShipName = 'Seven Seas Imports',@ShipAddress = '90 Wadhurst Rd.',@ShipCity = 'Surat',@ShipRegion = 'RJ',@ShipPostalCode = '395007',@ShipCountry = 'India',@ProductID = 42,@UnitPrice = 10.00,@Qunatity = 30,@Discount = 0;
+
+
