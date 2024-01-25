@@ -267,6 +267,13 @@ input[type=password]::-ms-clear
     }
 }
 
+
+@media screen and (max-width:426px){
+    .upload-text {
+        display: none;
+    }
+}
+
 @media screen and (max-width:320px){
     .inp {
         width: 250px;
