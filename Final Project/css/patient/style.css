@@ -127,10 +127,10 @@ html {
 
 .login-text {
   font-weight: 500;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: #3e3e3e;
   margin-bottom: 10px;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.3px;
 }
 
 .reset-text {
@@ -175,8 +175,13 @@ input[type="password"]::-ms-clear {
 }
 
 .form-label {
-  color: #adadad;
+  color: #7D787E;
   font-weight: 400;
+}
+
+.form-control,.form-control:focus {
+  background-color: transparent!important;
+  --bs-border-color:#D3D3D3
 }
 
 .form-control:focus {
@@ -187,12 +192,16 @@ input[type="password"]::-ms-clear {
   box-shadow: none;
 }
 
+.form-floating>.form-control-plaintext~label::after, .form-floating>.form-control:focus~label::after, .form-floating>.form-control:not(:placeholder-shown)~label::after, .form-floating>.form-select~label::after {
+  background-color: transparent!important;
+}
+
 .form-floating > .form-control-plaintext ~ label,
 .form-floating > .form-control:focus ~ label,
 .form-floating > .form-control:not(:placeholder-shown) ~ label,
 .form-floating > .form-select ~ label {
   font-family: "Roboto", sans-serif;
-  color: #0dcaf0;
+  color: #0dcaf0!important;
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 
