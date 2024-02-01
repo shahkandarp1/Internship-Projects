@@ -111,7 +111,7 @@ html {
 
 .back {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .back-text {
@@ -127,13 +127,19 @@ html {
 
 .login-text {
   font-weight: 500;
-  font-size: 23px;
+  font-size: 1.8rem;
   color: #3e3e3e;
+  margin-bottom: 10px;
+  letter-spacing: 1.5px;
+}
+
+.reset-text {
+  margin-bottom: 30px;
 }
 
 .login-content {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   height: 37vh;
@@ -193,7 +199,7 @@ input[type="password"]::-ms-clear {
 .custom-submit-btn {
   width: 340px !important;
   color: white !important;
-  margin-bottom: 1%;
+  margin-bottom: 10px;
 }
 
 .forgot-password {
@@ -272,6 +278,7 @@ input[type="password"]::-ms-clear {
 
     .login-text {
         margin-bottom: 2%;
+        letter-spacing: 0px;
     }
 
     .bg-image {

@@ -144,6 +144,7 @@ input[type=password]::-ms-clear
 .custom-submit-btn {
     width: 340px!important;
     color: white!important;
+    margin-bottom: 10px;
 }
 
 .forgot-password {
@@ -264,13 +265,6 @@ input[type=password]::-ms-clear
         font-size: 12px;
         width: 83px;
         margin-top: 8px;
-    }
-}
-
-
-@media screen and (max-width:426px){
-    .upload-text {
-        display: none;
     }
 }
 

@@ -29,7 +29,7 @@ const changeMode = () => {
         else{
             localStorage.setItem("mode","Light")
             document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
-            document.getElementById("login-text").style.color = "black"
+            document.getElementById("login-text").style.color = "#3e3e3e"
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "#3E3E3E"
@@ -48,7 +48,7 @@ const checkMode = () => {
         if(mode=="Light" || mode==null){
             console.log("in try")
             document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
-            document.getElementById("login-text").style.color = "black"
+            document.getElementById("login-text").style.color = "#3e3e3e"
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
             document.getElementById("bottom-flex").style.color = "#3E3E3E"
