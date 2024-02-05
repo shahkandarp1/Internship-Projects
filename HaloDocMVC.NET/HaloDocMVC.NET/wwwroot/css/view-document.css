@@ -1,0 +1,164 @@
+﻿
+/* Top Part */
+.upload-main-container {
+    width:100%;
+    height:80vh;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+.upload-inner-container {
+    width: 80%;
+    height:60%;
+    margin-top:10px;
+}
+
+.view-main {
+    font-size: 1.4rem !important;
+    color:#3E3E3E!important;
+}
+
+.top-part {
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.back-btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #0dcaf0;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid #0dcaf0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #0dcaf0;
+}
+
+.back-text {
+    margin-right: 3px;
+    font-size: 12px;
+}
+
+/* Middle Part */
+
+.pt-name-text {
+    color: rgb(150, 150, 150);
+    font-size: 13px;
+}
+
+.main-content {
+    padding:10px;
+}
+
+.pt-name {
+    color: #0dcaf0;
+    font-size:1.2rem;
+    margin-bottom:8px;
+}
+
+.con_num {
+    color: rgb(150, 150, 150);
+    margin-left: 2px;
+    font-size: 1rem;
+}
+
+.upload-desc {
+    color: rgb(150, 150, 150);
+    font-size: 14px;
+}
+
+/* File Upload */
+.upload-form {
+    flex-basis: 90%;
+}
+
+.file-upload {
+    display: flex;
+    margin-top:18px;
+    height:50px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0dcaf0;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    flex-basis: 10%;
+    height: 36px;
+    border: 1px solid #0dcaf0;
+    border-radius: 0px 5px 5px 0px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.file-upload-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.form-floating > .upload-label {
+    top: 8px;
+    left: 1px;
+}
+
+.symptoms-textarea {
+    margin-top: 20px;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    min-height: 0px;
+}
+
+.form-floating > .form-control, .form-floating > .form-control-plaintext, .form-floating > .form-select,.upload-form {
+    height: 50px;
+}
+
+@media screen and (max-width:769px) {
+    .custom-file-upload {
+        flex-basis: 13%;
+    }
+
+    .upload-form {
+        flex-basis: 87%;
+    }
+}
+
+@media screen and (max-width:426px) {
+    .custom-file-upload {
+        flex-basis: 20%;
+        height: 41px;
+    }
+
+    .upload-form {
+        flex-basis: 80%;
+        height:41px;
+    }
+    .upload-label{
+        top: 4px!important;
+    }
+    .form-control {
+        height:41px!important;
+    }
+    .upload-text {
+        display: none;
+    }
+}

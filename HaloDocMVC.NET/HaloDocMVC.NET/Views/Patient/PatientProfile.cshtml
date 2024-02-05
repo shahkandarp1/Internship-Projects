@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+@section Styles {
+    <link href="~/css/patient-dashboard.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/patient-dashboard.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <div class="navbar-custom">
+        <img src="../../images/logo1.png" alt="" class="logo" />
+        <div class="right-side-elements">
+            <span class="welcome-text">Welcome <span class="name-text">Tests Testing</span></span>
+            <a class="logout" asp-controller="Patient" asp-action="PatientLogin" onclick="logout()">
+                <span class="logout-text">Logout</span>
+            </a>
+            <a class="logout-mob" asp-controller="Patient" asp-action="PatientLogin">
+                <img id="logout" src="../../images/box-arrow-right.svg" alt="" class="logout-img" />
+            </a>
+            <button class="moon" onclick="changeMode()">
+                <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+                <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+
+    <div id="mySidebar" class="sidebar">
+        <div class="tab sidebar-tab">
+            <span class="mob-welcome-text">Welcome <span class="mob-name-text">Tests Testing</span></span>
+            <button class="tablinks sidebar-tablinks">
+                <a asp-controller="Patient" asp-action="PatientDashboard" class="mobile-sidebar-a">
+                    Dashboard
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks mobile-sidebar-active">
+                <a asp-controller="Patient" asp-action="PatientDashboard" class="mobile-sidebar-a">
+                    Profile
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <!-- Dark Background when sidebar is open -->
+    <div class="overlay" onclick="sidebar_close()">
+    </div>
+
+    <!-- Navbar Below Container -->
+
+    <div class="nav-below-container"></div>
+
+    <!-- Navbar - Below -->
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <button class="navbar-toggler list-border" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="sidebar_open()">
+            <img src="../../images/list.svg" alt="" class="list-img" />
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="tab">
+                <button class="tablinks">
+                    <a asp-controller="Patient" asp-action="PatientDashboard">
+                        Dashboard
+                    </a>
+                </button>
+                <button class="tablinks sidebar-active">
+                    <a asp-controller="Patient" asp-action="PatientDashboard">
+                        Profile
+                    </a>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="Profile" class="tabcontent">
+    <span>
+    This is Tab 2. Lorem ipsum dolor sit amet consectetur, adipisicing
+    elit. Maxime asperiores dolores odio ad possimus corporis dolore
+    reiciendis fuga architecto placeat sint sequi at, cumque officia id
+    voluptatum officiis ipsa repudiandae! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Qui repudiandae architecto soluta repellat
+    veritatis dolorem tempore, pariatur, laborum excepturi rerum dicta
+    voluptatem fugit suscipit corporis delectus atque maxime non a! Lorem
+    ipsum dolor sit amet consectetur adipisicing elit. Quaerat nihil libero
+    itaque eius temporibus explicabo eligendi aliquam modi officia nulla
+    natus maxime rem perspiciatis quam sint, consectetur non eaque
+    iusto?
+    </span>
+    </div>
+
+</div>

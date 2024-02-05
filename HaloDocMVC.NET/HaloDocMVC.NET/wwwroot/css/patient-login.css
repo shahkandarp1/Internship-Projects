@@ -1,0 +1,372 @@
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+body,
+html {
+  height: 100vh;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  background-color: rgba(250, 250, 250, 0.4);
+}
+
+.bg-image {
+  height: 100vh;
+  width: 100%;
+  /* min-width: 550px; */
+  z-index: -1;
+  position: absolute;
+  top: 50%;
+  left: 56%;
+  transform: translate(-50%, -50%);
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
+/* Upper part(Moon) */
+
+.top-right-moon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.moon {
+  padding: 5px;
+  border: 1px solid #0dcaf0;
+  border-radius: 5px;
+  display: flex;
+  width: 31px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+/* Bottom part */
+
+.bottom-part-flex {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  color: #3e3e3e;
+  bottom: 18px;
+  left: 0;
+  width: 100%;
+}
+
+.bottom-part-a {
+  text-decoration: none;
+  color: #3e3e3e;
+}
+
+.right-a {
+  margin-right: 10px;
+}
+
+.left-a {
+  margin-left: 10px;
+}
+
+/* Center Part */
+
+.flex-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container {
+  width: 80%;
+  height: 80%;
+  position: relative;
+}
+
+.inner-flex {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8%;
+}
+
+.logo-img {
+  width: 260px;
+  height: 140px;
+}
+
+.back {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.back-text {
+    position: absolute;
+    top: -29px;
+    left: -45px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #0dcaf0;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0dcaf0;
+}
+
+.login-text {
+  font-weight: 500;
+  font-size: 1.6rem;
+  color: #3e3e3e;
+  margin-bottom: 10px;
+  letter-spacing: 1.3px;
+}
+
+.reset-text {
+  margin-bottom: 30px;
+}
+
+.login-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  height: 37vh;
+  width: 100%;
+}
+
+.inp {
+  width: 340px;
+  position: relative;
+  margin-bottom: 2%;
+}
+
+.inp-side-picture {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  top: 21px;
+  right: 14px;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+.eye {
+  top: 22px;
+  right: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+.form-label {
+  color: #7D787E;
+  font-weight: 400;
+}
+
+.form-control,.form-control:focus {
+  background-color: transparent!important;
+  --bs-border-color:#D3D3D3
+}
+
+.form-control:focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border-color: #0dcaf0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.form-floating>.form-control-plaintext~label::after, .form-floating>.form-control:focus~label::after, .form-floating>.form-control:not(:placeholder-shown)~label::after, .form-floating>.form-select~label::after {
+  background-color: transparent!important;
+}
+
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  font-family: "Roboto", sans-serif;
+  color: #0dcaf0!important;
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.custom-submit-btn {
+  width: 340px !important;
+  color: white !important;
+  margin-bottom: 10px;
+}
+
+.btn-check:active + .btn-info:focus, .btn-check:checked + .btn-info:focus, .btn-info.active:focus, .btn-info:active:focus, .show > .btn-info.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+.btn-check:focus + .btn-info, .btn-info:focus {
+    box-shadow: none;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #0dcaf0;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+}
+
+/* Forgot Password */
+
+.back-to-login-text {
+    width: 99px;
+    color: #0dcaf0;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Patient Site */
+
+.custom-btn {
+  font-family: 'Roboto';
+  width: 300px;
+  border-radius: 4px;
+  font-weight: 500;
+  padding: 10px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.btn-second {
+  background-color: #0D1556;
+}
+
+@media screen and (max-width:1024px) {
+    .logo {
+        margin-bottom: 8%;
+    }
+
+    .login-text{
+        font-size: 20px;
+        margin-bottom: 1%;
+    }
+
+    .inp {
+        width: 270px;
+    }
+
+    .custom-submit-btn {
+        width: 270px!important;
+        font-size: 12px;
+    }
+
+    .forgot-password {
+        font-size: 12px;
+    }
+
+    .back-text {
+        left: -29px;
+    }
+}
+
+@media screen and (max-width:768px) {
+  .logo-img {
+    width: 40%;
+    height: 14vh;
+    margin-bottom: 8%;
+}
+}
+
+@media screen and (max-width:426px) {
+    .logo {
+        opacity: 0;
+    }
+
+    .login-text {
+        margin-bottom: 2%;
+        letter-spacing: 0px;
+    }
+
+    .bg-image {
+        width: 270px;
+    }
+
+    .back-to-login-text {
+        font-size: 12px;
+        width: 83px;
+    }
+
+    .back-text {
+        font-size: 12px;
+    }
+    .back-to-login-text {
+      font-size: 12px;
+      width: 85px;
+  }
+}
+
+@media screen and (max-width:351px) {
+    .login-text {
+        font-size: 19px;
+    }
+    .inp {
+        width: 250px;
+        margin-bottom: 4%;
+    }
+
+    .custom-submit-btn {
+        width: 250px!important;
+        font-size: 11px;
+    }
+
+    .forgot-password {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width:320px) {
+    .login-text {
+        font-size: 19px;
+    }
+    .inp {
+        width: 240px;
+        margin-bottom: 4%;
+    }
+
+    .custom-submit-btn {
+        width: 240px!important;
+        font-size: 11px;
+    }
+
+    .forgot-password {
+        font-size: 11px;
+    }
+
+    /* .bg-image {
+        width: 250px;
+    } */
+
+    .back-text {
+        left: -37px;
+    }
+
+    .custom-btn {
+      width: 260px;
+      font-size: 14px;
+    }
+}

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\HaloDocMVC.NET.props" />
+</Project>

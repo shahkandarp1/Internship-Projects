@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaloDocMVC.NET", "HaloDocMVC.NET\HaloDocMVC.NET.csproj", "{73B3C1B1-6A58-406C-91B8-47A28AB23093}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {556672E6-C751-4033-80E8-F24A2CFC6664}
+	EndGlobalSection
+EndGlobal

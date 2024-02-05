@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Patient Request";
+    string redirect = ViewData["redirect_page"] as string;
+}
+@section Styles {
+    <link href="~/css/form.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/form.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+
+    <partial name ="_FormNavbar" />
+
+    <!-- Main Content -->
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Submit Information</span>
+                @if (redirect == "Site")
+                {
+                    <a class="back-btn" asp-controller="Patient" asp-action="SubmitRequest">
+                        &lt; <span class="back-text">Back</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="back-btn" asp-controller="Patient" asp-action="PatientDashboard">
+                        &lt; <span class="back-text">Back</span>
+                    </a>
+                }
+            </div>
+            <form class="main-form">
+
+                <!-- Patient Information  -->
+
+                <div class="upper-text">
+                    Patient Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mb-3 inp col-sm-12">
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com"></textarea>
+                        <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="first-name" placeholder="name@example.com" required>
+                        <label for="first-name" class="form-label">First Name</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="last-name" placeholder="name@example.com" required>
+                        <label for="last-name" class="form-label">Last Name</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" required>
+                        <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                    </div>
+                </div>
+
+                <!-- Patient Contact Information -->
+
+                <div class="upper-text margin-top">
+                    Patient Contact Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                        <label for="email" class="form-label">Email</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone" id="phone" name="phone" required>
+                    </div>
+                </div>
+
+                <!-- Patient Location -->
+                <div class="upper-text margin-top">
+                    Patient Location
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="street" placeholder="name@example.com" required>
+                        <label for="street" class="form-label">Street</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="city" placeholder="name@example.com" required>
+                        <label for="city" class="form-label">City</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="state" placeholder="name@example.com" required>
+                        <label for="state" class="form-label">State</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" required>
+                        <label for="zipcode" class="form-label">Zipcode</label>
+                    </div>
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="room" placeholder="name@example.com">
+                        <label for="room" class="form-label">Room / Suite (Optional)</label>
+                    </div>
+                    <button class="location col-lg-6 col-md-6 col-sm-12" type="button">
+                        <img class="map-img" src="../../images/geo-alt.svg" alt="">
+                        <span class="map-text">Map</span>
+                    </button>
+                </div>
+
+
+                <!-- Upload Photo or Document -->
+                <div class="upper-text margin-top">
+                    Upload Photo or Document(Optional)
+                </div>
+                <div class="file-upload symptoms-textarea">
+                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
+                        <input type="text" class="form-control" id="file-upload" disabled>
+                        <label for="file-upload" class="upload-label dob-label" id="form-label">Select File</label>
+                    </div>
+                    <label class="custom-file-upload">
+                        <input type="file" onchange="getFileData(this)" />
+                        <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                        <span class="upload-text">
+                            Upload
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn">
+                    <button class="lower-custom-btn submit-btn">Submit</button>
+                    <button type="button" class="lower-custom-btn cancel-btn" onclick="reload()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Part -->
+
+    <partial name="_FormFooter" />
+</div>

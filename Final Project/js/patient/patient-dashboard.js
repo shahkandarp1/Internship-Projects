@@ -1,5 +1,6 @@
 function sidebar_open() {
-  if (document.getElementById("mySidebar").style.width == "0px") {
+  console.log(document.getElementById("mySidebar").offsetWidth)
+  if (document.getElementById("mySidebar").offsetWidth == 0) {
     document.getElementById("mySidebar").style.width = "200px";
     document.getElementsByClassName("overlay")[0].style.display = "block";
     document.getElementsByClassName("navbar")[0].style.boxShadow = "none";

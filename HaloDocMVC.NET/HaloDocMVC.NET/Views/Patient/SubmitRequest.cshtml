@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Submit Request";
+}
+@section Styles {
+    <link href="~/css/submit-request.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/submit-request.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <img src="../../images/logo1.png" alt="" class="logo">
+        <button class="moon" onclick="changeMode()">
+            <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+            <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+        </button>
+    </nav>
+
+    <!-- Middle Part -->
+
+    <div class="main-container">
+        <div class="center-container">
+            <a class="back-btn" asp-controller="Patient" asp-action="PatientSite">
+                &lt; <span class="back-text">Back</span>
+            </a>    
+            <p class="i-am-text" id="i-am-text">I am a...</p>
+            <a asp-controller="Patient" asp-action="PatientForm" class="btn custom-btn patient">PATIENT</a>
+            <a asp-controller="Patient" asp-action="FamilyForm" class="btn custom-btn family">FAMILY/FRIEND</a>
+            <a asp-controller="Patient" asp-action="ConciergeForm" class="btn custom-btn concierge">CONCIERGE</a>
+            <a asp-controller="Patient" asp-action="BusinessForm" class="btn custom-btn business">BUSINESS PARTNERS </a>
+        </div>
+    </div>
+
+
+
+    <!-- Bottom Part -->
+    <footer class="bottom-part-flex">
+        <a href="#" class="bottom-part-a right-a">Terms of Conditions</a> |
+        <a href="#" class="bottom-part-a left-a">Privacy Policy</a>
+    </footer>
+</div>
