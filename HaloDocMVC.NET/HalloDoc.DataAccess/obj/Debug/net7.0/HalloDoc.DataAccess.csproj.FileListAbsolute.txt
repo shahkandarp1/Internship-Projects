@@ -1,0 +1,15 @@
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\bin\Debug\net7.0\HalloDoc.DataAccess.deps.json
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\bin\Debug\net7.0\HalloDoc.DataAccess.dll
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\bin\Debug\net7.0\HalloDoc.DataAccess.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.csproj.AssemblyReference.cache
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.AssemblyInfoInputs.cache
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.AssemblyInfo.cs
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.dll
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\refint\HalloDoc.DataAccess.dll
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\ref\HalloDoc.DataAccess.dll
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\bin\Debug\net7.0\HalloDoc.Models.dll
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\bin\Debug\net7.0\HalloDoc.Models.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HaloDocMVC.NET\HalloDoc.DataAccess\obj\Debug\net7.0\HalloDoc.DataAccess.csproj.CopyComplete

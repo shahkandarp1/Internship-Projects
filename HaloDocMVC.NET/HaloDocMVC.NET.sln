@@ -3,7 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaloDocMVC.NET", "HaloDocMVC.NET\HaloDocMVC.NET.csproj", "{73B3C1B1-6A58-406C-91B8-47A28AB23093}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HaloDocMVC.NET", "HaloDocMVC.NET\HaloDocMVC.NET.csproj", "{73B3C1B1-6A58-406C-91B8-47A28AB23093}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6D086389-8C67-4C40-92DF-F68710257C73} = {6D086389-8C67-4C40-92DF-F68710257C73}
+		{B85BCB17-951B-4F86-AA03-100405A54C36} = {B85BCB17-951B-4F86-AA03-100405A54C36}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.DataAccess", "HalloDoc.DataAccess\HalloDoc.DataAccess.csproj", "{6D086389-8C67-4C40-92DF-F68710257C73}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B85BCB17-951B-4F86-AA03-100405A54C36} = {B85BCB17-951B-4F86-AA03-100405A54C36}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.Models", "HalloDoc.Models\HalloDoc.Models.csproj", "{B85BCB17-951B-4F86-AA03-100405A54C36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +26,14 @@ Global
 		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73B3C1B1-6A58-406C-91B8-47A28AB23093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D086389-8C67-4C40-92DF-F68710257C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D086389-8C67-4C40-92DF-F68710257C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D086389-8C67-4C40-92DF-F68710257C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D086389-8C67-4C40-92DF-F68710257C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B85BCB17-951B-4F86-AA03-100405A54C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B85BCB17-951B-4F86-AA03-100405A54C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B85BCB17-951B-4F86-AA03-100405A54C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B85BCB17-951B-4F86-AA03-100405A54C36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

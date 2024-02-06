@@ -16,7 +16,6 @@
 
 .view-main {
     font-size: 1.4rem !important;
-    color:#3E3E3E!important;
 }
 
 .top-part {
@@ -55,7 +54,9 @@ a:hover {
 }
 
 .main-content {
-    padding:10px;
+    padding: 20px;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: none;
 }
 
 .pt-name {
@@ -77,13 +78,14 @@ a:hover {
 
 /* File Upload */
 .upload-form {
-    flex-basis: 90%;
+    width: 90%;
 }
 
 .file-upload {
     display: flex;
     margin-top:18px;
     height:50px;
+    width:100%;
 }
 
 input[type="file"] {
@@ -99,7 +101,7 @@ input[type="file"] {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    flex-basis: 10%;
+    width: 10%;
     height: 36px;
     border: 1px solid #0dcaf0;
     border-radius: 0px 5px 5px 0px;
@@ -110,7 +112,6 @@ input[type="file"] {
 .file-upload-img {
     width: 20px;
     height: 20px;
-    margin-right: 8px;
 }
 
 .form-floating > .upload-label {
@@ -132,17 +133,176 @@ input[type="file"] {
     height: 50px;
 }
 
-@media screen and (max-width:769px) {
+.document-main {
+    font-size: 1.2rem !important;
+}
+
+/*Middle Part*/
+.middle-part {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.download-text{
+    margin:0px;
+}
+
+.download-mob {
+    margin:0px;
+}
+
+/* table view - Desktop */
+.desktop-table {
+    border-radius: 0px 0px 10px 10px;
+    background-color: white;
+    padding-top: 0px;
+    padding-bottom: 5px;
+}
+
+.wrapper {
+    box-shadow: 0.1px 0.1px 18px -13px black;
+}
+
+.table {
+    margin:0px;
+}
+
+td {
+    border: none;
+}
+
+th {
+    font-weight:500;
+    color:#3E3E3E!important;
+    font-size: 0.9rem;
+}
+
+th:first-child,td:first-child {
+    width:40%;
+    padding-left:28px;
+}
+
+th:last-child, td:last-child {
+    padding-right: 28px;
+}
+
+th:last-child,td:last-child {
+    text-align:right;
+}
+
+.downld-btn {
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    background-color: white;
+    text-decoration: none;
+}
+
+.outer-div {
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+}
+
+th {
+    background-color: #F0F0F0!important;
+}
+
+.first-col,.document-combo {
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+    .document-combo {
+        margin-left:25px
+    }
+
+    .document-name {
+        margin-left: 6px;
+    }
+
+/* table view - Mobile */
+
+.mob-text {
+    font-size: 12px;
+    color: rgb(150, 150, 150);
+    margin-left:3px;
+}
+
+.mob-date{
+    margin:0px;
+    margin-top:6px;
+}
+
+.mob-documents {
+    display: none;
+    border-top: 1px solid #dee2e6;
+}
+
+.mob-component {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.mob-component {
+    border-top: 1px solid #dee2e6;
+    padding:20px;
+}
+
+.mob-component:first-child {
+    border-top: none;
+}
+
+
+.mob-doc-name {
+    margin-left: 10px;
+}
+
+.mob-download {
+    margin-top: 6px;
+}
+
+
+@media screen and (max-width:1144px) {
     .custom-file-upload {
-        flex-basis: 13%;
+        width: 20%;
     }
 
     .upload-form {
-        flex-basis: 87%;
+        width: 80%;
     }
 }
 
-@media screen and (max-width:426px) {
+@media screen and (max-width:769px) {
+
+    .upload-inner-container {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:584px) {
+    .custom-file-upload {
+        width: 25%;
+    }
+
+    .upload-form {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width:505px) {
     .custom-file-upload {
         flex-basis: 20%;
         height: 41px;
@@ -160,5 +320,29 @@ input[type="file"] {
     }
     .upload-text {
         display: none;
+    }
+}
+
+@media screen and (max-width:461px) {
+    .download-text {
+        display: none;
+    }
+    .pt-name-text {
+        font-size:11px;
+    }
+    .pt-name {
+        font-size:1.0rem;
+    }
+    .con_num{
+        font-size:0.8rem;
+    }
+    .view-main {
+        font-size:1.2rem!important;
+    }
+    .document-main {
+        font-size: 1.0rem !important;
+    }
+    .mob-documents {
+        display: block;
     }
 }

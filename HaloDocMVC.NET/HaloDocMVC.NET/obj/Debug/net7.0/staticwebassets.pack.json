@@ -1,939 +1,955 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\HaloDocMVC.NET.bundle.scp.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\HaloDocMVC.NET.bundle.scp.css",
       "PackagePath": "staticwebassets\\HaloDocMVC.NET.bundle.scp.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\form.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\form.css",
       "PackagePath": "staticwebassets\\css\\form.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-dashboard.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-dashboard.css",
       "PackagePath": "staticwebassets\\css\\patient-dashboard.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-login.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-login.css",
       "PackagePath": "staticwebassets\\css\\patient-login.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-site.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\patient-site.css",
       "PackagePath": "staticwebassets\\css\\patient-site.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\submit-request.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\submit-request.css",
       "PackagePath": "staticwebassets\\css\\submit-request.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\view-document.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\css\\view-document.css",
       "PackagePath": "staticwebassets\\css\\view-document.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\favicon.ico",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\11116016_415.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\11116016_415.jpg",
       "PackagePath": "staticwebassets\\images\\11116016_415.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\7768657_3763028.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\7768657_3763028.jpg",
       "PackagePath": "staticwebassets\\images\\7768657_3763028.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\7774236_3736765.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\7774236_3736765.jpg",
       "PackagePath": "staticwebassets\\images\\7774236_3736765.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig Contact your Provider.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig Contact your Provider.jpg",
       "PackagePath": "staticwebassets\\images\\Fig Contact your Provider.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig1. Platform login page.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig1. Platform login page.jpg",
       "PackagePath": "staticwebassets\\images\\Fig1. Platform login page.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig10. View case.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig10. View case.jpg",
       "PackagePath": "staticwebassets\\images\\Fig10. View case.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig11. View Notes.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig11. View Notes.jpg",
       "PackagePath": "staticwebassets\\images\\Fig11. View Notes.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig12. Cancel Case pop-up.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig12. Cancel Case pop-up.jpg",
       "PackagePath": "staticwebassets\\images\\Fig12. Cancel Case pop-up.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig13. Assign case.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig13. Assign case.jpg",
       "PackagePath": "staticwebassets\\images\\Fig13. Assign case.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig14. Block case.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig14. Block case.jpg",
       "PackagePath": "staticwebassets\\images\\Fig14. Block case.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig15.View Uploads-PatientsConclude.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig15.View Uploads-PatientsConclude.png",
       "PackagePath": "staticwebassets\\images\\Fig15.View Uploads-PatientsConclude.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig16. Orders.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig16. Orders.jpg",
       "PackagePath": "staticwebassets\\images\\Fig16. Orders.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig17.Transfer.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig17.Transfer.jpg",
       "PackagePath": "staticwebassets\\images\\Fig17.Transfer.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig18.Clear Case.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig18.Clear Case.png",
       "PackagePath": "staticwebassets\\images\\Fig18.Clear Case.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig19.Send Agreement pop-up.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig19.Send Agreement pop-up.png",
       "PackagePath": "staticwebassets\\images\\Fig19.Send Agreement pop-up.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig2. Forgot Password.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig2. Forgot Password.jpg",
       "PackagePath": "staticwebassets\\images\\Fig2. Forgot Password.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig20.Close case.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig20.Close case.png",
       "PackagePath": "staticwebassets\\images\\Fig20.Close case.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig21. Admin My profile..jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig21. Admin My profile..jpg",
       "PackagePath": "staticwebassets\\images\\Fig21. Admin My profile..jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig22 Regions menu.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig22 Regions menu.jpg",
       "PackagePath": "staticwebassets\\images\\Fig22 Regions menu.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig23.Request Support.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig23.Request Support.png",
       "PackagePath": "staticwebassets\\images\\Fig23.Request Support.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig24. Provider Menu.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig24. Provider Menu.jpg",
       "PackagePath": "staticwebassets\\images\\Fig24. Provider Menu.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig25. Contact your Provider.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig25. Contact your Provider.jpg",
       "PackagePath": "staticwebassets\\images\\Fig25. Contact your Provider.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig26. Edit Physician Account.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig26. Edit Physician Account.png",
       "PackagePath": "staticwebassets\\images\\Fig26. Edit Physician Account.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig27. Roles.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig27. Roles.jpg",
       "PackagePath": "staticwebassets\\images\\Fig27. Roles.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig28. Create Role All.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig28. Create Role All.jpg",
       "PackagePath": "staticwebassets\\images\\Fig28. Create Role All.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig29. Create Role Admin.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig29. Create Role Admin.jpg",
       "PackagePath": "staticwebassets\\images\\Fig29. Create Role Admin.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig3. Admin Dashboard.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig3. Admin Dashboard.jpg",
       "PackagePath": "staticwebassets\\images\\Fig3. Admin Dashboard.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig30. Create Role Physician.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig30. Create Role Physician.jpg",
       "PackagePath": "staticwebassets\\images\\Fig30. Create Role Physician.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig31. 1 Create Role Patient.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig31. 1 Create Role Patient.jpg",
       "PackagePath": "staticwebassets\\images\\Fig31. 1 Create Role Patient.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig31.2 Create Role Patient UserAccess.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig31.2 Create Role Patient UserAccess.png",
       "PackagePath": "staticwebassets\\images\\Fig31.2 Create Role Patient UserAccess.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig32. Day wise Scheduling.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig32. Day wise Scheduling.jpg",
       "PackagePath": "staticwebassets\\images\\Fig32. Day wise Scheduling.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig33. Month wise Scheduling.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig33. Month wise Scheduling.jpg",
       "PackagePath": "staticwebassets\\images\\Fig33. Month wise Scheduling.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig34. Week wise Scheduling.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig34. Week wise Scheduling.jpg",
       "PackagePath": "staticwebassets\\images\\Fig34. Week wise Scheduling.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig35. Provider on call (MDs On Call).jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig35. Provider on call (MDs On Call).jpg",
       "PackagePath": "staticwebassets\\images\\Fig35. Provider on call (MDs On Call).jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig36. Requested Shift.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig36. Requested Shift.png",
       "PackagePath": "staticwebassets\\images\\Fig36. Requested Shift.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig37. Create Shift.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig37. Create Shift.jpg",
       "PackagePath": "staticwebassets\\images\\Fig37. Create Shift.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig38. View Shift.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig38. View Shift.png",
       "PackagePath": "staticwebassets\\images\\Fig38. View Shift.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig39. Provider Location.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig39. Provider Location.jpg",
       "PackagePath": "staticwebassets\\images\\Fig39. Provider Location.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig4. Admin dashboard in New state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig4. Admin dashboard in New state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig4. Admin dashboard in New state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig40. Profession menu Vendors.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig40. Profession menu Vendors.jpg",
       "PackagePath": "staticwebassets\\images\\Fig40. Profession menu Vendors.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig41.Add business page.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig41.Add business page.png",
       "PackagePath": "staticwebassets\\images\\Fig41.Add business page.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig42.Edit business page.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig42.Edit business page.png",
       "PackagePath": "staticwebassets\\images\\Fig42.Edit business page.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig43. Patient history.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig43. Patient history.jpg",
       "PackagePath": "staticwebassets\\images\\Fig43. Patient history.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig44. Patient Record Explore.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig44. Patient Record Explore.jpg",
       "PackagePath": "staticwebassets\\images\\Fig44. Patient Record Explore.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig45. Search Records.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig45. Search Records.jpg",
       "PackagePath": "staticwebassets\\images\\Fig45. Search Records.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig45.Email Logs.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig45.Email Logs.jpg",
       "PackagePath": "staticwebassets\\images\\Fig45.Email Logs.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig46. SMS Logs.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig46. SMS Logs.jpg",
       "PackagePath": "staticwebassets\\images\\Fig46. SMS Logs.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig47. Block History.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig47. Block History.jpg",
       "PackagePath": "staticwebassets\\images\\Fig47. Block History.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig48. Create Requests.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig48. Create Requests.jpg",
       "PackagePath": "staticwebassets\\images\\Fig48. Create Requests.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig49. Provider dashboard.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig49. Provider dashboard.jpg",
       "PackagePath": "staticwebassets\\images\\Fig49. Provider dashboard.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig5. Admin dashboard in pending state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig5. Admin dashboard in pending state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig5. Admin dashboard in pending state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig50.Encounter (Type Of care).png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig50.Encounter (Type Of care).png",
       "PackagePath": "staticwebassets\\images\\Fig50.Encounter (Type Of care).png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig51.Conclude State  Action  Encounter Form.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig51.Conclude State  Action  Encounter Form.png",
       "PackagePath": "staticwebassets\\images\\Fig51.Conclude State  Action  Encounter Form.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig52. Encounter Finalize popup.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig52. Encounter Finalize popup.png",
       "PackagePath": "staticwebassets\\images\\Fig52. Encounter Finalize popup.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig53. Provider transfer request pop-up.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig53. Provider transfer request pop-up.png",
       "PackagePath": "staticwebassets\\images\\Fig53. Provider transfer request pop-up.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig54. Provider My Profile.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig54. Provider My Profile.jpg",
       "PackagePath": "staticwebassets\\images\\Fig54. Provider My Profile.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig55. Provider My Profile Request to Admin.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig55. Provider My Profile Request to Admin.jpg",
       "PackagePath": "staticwebassets\\images\\Fig55. Provider My Profile Request to Admin.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig56. Patient site.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig56. Patient site.png",
       "PackagePath": "staticwebassets\\images\\Fig56. Patient site.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig57.Submit request screen.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig57.Submit request screen.jpg",
       "PackagePath": "staticwebassets\\images\\Fig57.Submit request screen.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig58. Create Patient request.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig58. Create Patient request.jpg",
       "PackagePath": "staticwebassets\\images\\Fig58. Create Patient request.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig59.1.FamilyFriend Information1.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig59.1.FamilyFriend Information1.jpg",
       "PackagePath": "staticwebassets\\images\\Fig59.1.FamilyFriend Information1.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig59.FamilyFriend Information2.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig59.FamilyFriend Information2.jpg",
       "PackagePath": "staticwebassets\\images\\Fig59.FamilyFriend Information2.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig6. Admin dashboard in Active state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig6. Admin dashboard in Active state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig6. Admin dashboard in Active state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig60.Concierge Information.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig60.Concierge Information.jpg",
       "PackagePath": "staticwebassets\\images\\Fig60.Concierge Information.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig61.Business Information.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig61.Business Information.jpg",
       "PackagePath": "staticwebassets\\images\\Fig61.Business Information.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig62.Login Patient Account Registered Patient.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig62.Login Patient Account Registered Patient.jpg",
       "PackagePath": "staticwebassets\\images\\Fig62.Login Patient Account Registered Patient.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig63.Reset Your Password Patient.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig63.Reset Your Password Patient.jpg",
       "PackagePath": "staticwebassets\\images\\Fig63.Reset Your Password Patient.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig64. Patient Dashboard ,Patient Medical History.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig64. Patient Dashboard ,Patient Medical History.jpg",
       "PackagePath": "staticwebassets\\images\\Fig64. Patient Dashboard ,Patient Medical History.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig65.Patient Create New Request.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig65.Patient Create New Request.jpg",
       "PackagePath": "staticwebassets\\images\\Fig65.Patient Create New Request.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig66.Submit Information me.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig66.Submit Information me.jpg",
       "PackagePath": "staticwebassets\\images\\Fig66.Submit Information me.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig67.Submit Information Some one else.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig67.Submit Information Some one else.jpg",
       "PackagePath": "staticwebassets\\images\\Fig67.Submit Information Some one else.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig68. View Documents.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig68. View Documents.jpg",
       "PackagePath": "staticwebassets\\images\\Fig68. View Documents.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig7. Admin dashboard in Conclude state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig7. Admin dashboard in Conclude state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig7. Admin dashboard in Conclude state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig8. Admin dashboard in To Close state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig8. Admin dashboard in To Close state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig8. Admin dashboard in To Close state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig9. Admin dashboard in Unpaid state.jpg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Fig9. Admin dashboard in Unpaid state.jpg",
       "PackagePath": "staticwebassets\\images\\Fig9. Admin dashboard in Unpaid state.jpg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Account Access\\Acocunt Access_mobile_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Account Access\\Acocunt Access_mobile_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Account Access\\Acocunt Access_mobile_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Admin_menus_mobile_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Close case\\Close case_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Close case\\Close case_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Close case\\Close case_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create Request_Admin_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create Request_Admin_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create Request_Admin_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create request_Provider_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create request_Provider_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create request - Admin - Provider\\Create request_Provider_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Admin_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Admin_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Admin_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Patient_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Patient_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Patient_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Physician_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Physician_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create Role-Physician_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create role -all_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create role -all_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Create-Update Role\\Create role -all_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_active_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_conclude_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_new_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pagination.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pagination.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pagination.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_pending_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_to-close_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Dashboard_mobile_unpaid_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Active_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Conclude_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_Pending_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Dashboard\\Physician_Dashboard_new_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Edit Physician Account\\Edit Provider_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Edit Physician Account\\Edit Provider_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Edit Physician Account\\Edit Provider_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\My profile_Provider_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\My profile_Provider_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\My profile_Provider_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\my profile_admin_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\my profile_admin_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\My Profile\\my profile_admin_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Create Business_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Create Business_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Create Business_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Edit Business_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Edit Business_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Edit Business_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Partners_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Partners_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Partners\\Partners_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Physician_menus_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Physician_menus_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Physician_menus_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider location\\Provider Location_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider location\\Provider Location_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider location\\Provider Location_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider on call\\provider on call_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider on call\\provider on call_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Provider on call\\provider on call_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Providers\\Providers_mobile_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Block history_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Block history_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Block history_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Email logs_mobile_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient History_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient History_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient History_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient Records_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient Records_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Patient Records_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_2.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_2.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\SMS Logs_mobile_2.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Search records_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Search records_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Records\\Search records_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Requested Shifts\\Requested shifts_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Requested Shifts\\Requested shifts_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Requested Shifts\\Requested shifts_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_day view_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_day view_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_day view_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_month view_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_month view_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_month view_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_week view_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_week view_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Schedulling\\Schedulling_week view_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Send Order\\Send Order_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Send Order\\Send Order_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\Send Order\\Send Order_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\User Access\\Use access_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\User Access\\Use access_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\User Access\\Use access_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Case\\View case_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Case\\View case_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Case\\View case_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Notes\\View Notes_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Notes\\View Notes_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Notes\\View Notes_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Uploads\\View Uploads_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Uploads\\View Uploads_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Admin-Provider Site\\View Uploads\\View Uploads_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Business Request_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Business Request_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Business Request_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Concirge Request_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Concirge Request_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Concirge Request_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Family-friend Request_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Family-friend Request_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Family-friend Request_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Patient Request_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Patient Request_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Create Patient Request_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Submit Request Screen-mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Submit Request Screen-mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Create Request\\Submit Request Screen-mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Dashboard\\dashboard_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Dashboard\\dashboard_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Dashboard\\dashboard_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_forget password_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_forget password_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_forget password_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_login_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_login_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_login_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_mobile.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_mobile.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\Patient site_mobile.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\View Documents\\View documents_1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\View Documents\\View documents_1.png",
       "PackagePath": "staticwebassets\\images\\Hallo Doc - Mobile - Screenshots\\Patient Site\\View Documents\\View documents_1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\LesfImage.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\LesfImage.png",
       "PackagePath": "staticwebassets\\images\\LesfImage.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\box-arrow-right.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\box-arrow-right.svg",
       "PackagePath": "staticwebassets\\images\\box-arrow-right.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\clock.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\clock.svg",
       "PackagePath": "staticwebassets\\images\\clock.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\close.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\close.svg",
       "PackagePath": "staticwebassets\\images\\close.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\cloud-upload-icon.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\cloud-arrow-down.svg",
+      "PackagePath": "staticwebassets\\images\\cloud-arrow-down.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\cloud-upload-icon.svg",
       "PackagePath": "staticwebassets\\images\\cloud-upload-icon.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\exclamation-circle-fill.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\exclamation-circle-fill.svg",
       "PackagePath": "staticwebassets\\images\\exclamation-circle-fill.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\geo-alt.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\file-earmark-pdf-fill.svg",
+      "PackagePath": "staticwebassets\\images\\file-earmark-pdf-fill.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\file-word-fill.svg",
+      "PackagePath": "staticwebassets\\images\\file-word-fill.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\file-x-fill.svg",
+      "PackagePath": "staticwebassets\\images\\file-x-fill.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\geo-alt.svg",
       "PackagePath": "staticwebassets\\images\\geo-alt.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\header-logo.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\header-logo.svg",
       "PackagePath": "staticwebassets\\images\\header-logo.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\hide.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\hide.png",
       "PackagePath": "staticwebassets\\images\\hide.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\list.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\list.svg",
       "PackagePath": "staticwebassets\\images\\list.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\logo.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\logo.png",
       "PackagePath": "staticwebassets\\images\\logo.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\logo1.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\logo1.png",
       "PackagePath": "staticwebassets\\images\\logo1.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\moon.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\moon.svg",
       "PackagePath": "staticwebassets\\images\\moon.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\person-circle.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\person-circle.svg",
       "PackagePath": "staticwebassets\\images\\person-circle.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\plus.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\plus.svg",
       "PackagePath": "staticwebassets\\images\\plus.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\success-icon.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\success-icon.svg",
       "PackagePath": "staticwebassets\\images\\success-icon.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\sun.svg",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\sun.svg",
       "PackagePath": "staticwebassets\\images\\sun.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\user.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\user.png",
       "PackagePath": "staticwebassets\\images\\user.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\view.png",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\images\\view.png",
       "PackagePath": "staticwebassets\\images\\view.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\form.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\form.js",
       "PackagePath": "staticwebassets\\js\\form.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-dashboard.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-dashboard.js",
       "PackagePath": "staticwebassets\\js\\patient-dashboard.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-login.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-login.js",
       "PackagePath": "staticwebassets\\js\\patient-login.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-site.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\patient-site.js",
       "PackagePath": "staticwebassets\\js\\patient-site.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\submit-request.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\submit-request.js",
       "PackagePath": "staticwebassets\\js\\submit-request.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\view-document.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\js\\view-document.js",
       "PackagePath": "staticwebassets\\js\\view-document.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HaloDocMVC.NET\\HaloDocMVC.NET\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
