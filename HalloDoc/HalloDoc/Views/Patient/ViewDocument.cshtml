@@ -1,0 +1,206 @@
+﻿@{
+    ViewData["Title"] = "View Document";
+}
+@section Styles {
+    <link href="~/css/patient-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-document.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/view-document.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <div class="navbar-custom">
+        <img src="../../images/logo1.png" alt="" class="logo" />
+        <div class="right-side-elements">
+            <span class="welcome-text">Welcome <span class="name-text">Tests Testing</span></span>
+            <a class="logout" asp-controller="Patient" asp-action="PatientLogin" onclick="logout()">
+                <span class="logout-text">Logout</span>
+            </a>
+            <a class="logout-mob" asp-controller="Patient" asp-action="PatientLogin">
+                <img id="logout" src="../../images/box-arrow-right.svg" alt="" class="logout-img" />
+            </a>
+            <button class="moon" onclick="changeMode()">
+                <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+                <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+
+    <div id="mySidebar" class="sidebar">
+        <div class="tab sidebar-tab">
+            <span class="mob-welcome-text">Welcome <span class="mob-name-text">Tests Testing</span></span>
+            <button class="tablinks sidebar-tablinks mobile-sidebar-active">
+                <a asp-controller="Patient" asp-action="PatientDashboard" class="mobile-sidebar-a">
+                    Dashboard
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a asp-controller="Patient" asp-action="PatientProfile" class="mobile-sidebar-a">
+                    Profile
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <!-- Dark Background when sidebar is open -->
+    <div class="overlay" onclick="sidebar_close()">
+    </div>
+
+    <!-- Navbar Below Container -->
+
+    <div class="nav-below-container"></div>
+
+    <!-- Navbar - Below -->
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <button class="navbar-toggler list-border" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="sidebar_open()">
+            <img src="../../images/list.svg" alt="" class="list-img" />
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="tab">
+                <button class="tablinks sidebar-active">
+                    <a asp-controller="Patient" asp-action="PatientDashboard">
+                        Dashboard
+                    </a>
+                </button>
+                <button class="tablinks">
+                    <a asp-controller="Patient" asp-action="PatientProfile">
+                        Profile
+                    </a>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="upload-main-container">
+        <div class="upload-inner-container">
+            <div class="top-part">
+                <span class="main-heading view-main dark-heading-text" id="main-heading">Documents</span>
+                <a class="back-btn" asp-controller="Patient" asp-action="PatientDashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="wrapper">
+                
+                <div id="Dashboard" class="main-content">
+                    <span class="pt-name-text dark-text">Patient Name</span>
+                    <div class="pt-name">Kandarp Shah<span class="con_num dark-text">(MD051023TETE0001)</span></div>
+                    <span class="upload-desc dark-text">Check here for any files that you or doctors of your subsequents requestors have attatched for you to review.</span>
+                    <div class="file-upload symptoms-textarea">
+                        <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label">Select File</label>
+                        </div>
+                        <label class="custom-file-upload">
+                            <input type="file" onchange="getFileData(this)" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+
+                    </div>
+                    <div class="middle-part">
+                        <span class="main-heading document-main dark-heading-text" id="main-heading">Documents</span>
+                        <a class="back-btn download-text" asp-controller="Patient" asp-action="PatientSite">
+                            <span class="back-text">Download All</span>
+                        </a>
+                        <a class="logout-mob download-mob" asp-controller="Patient" asp-action="PatientLogin">
+                            <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                        </a>
+                    </div>
+
+                </div>
+                <form class="desktop-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="checkbox-main" name="selectall" onchange="tickAll()"/></th>
+                                <th>Uploader</th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="first-col"><input type="checkbox" name="Mark" class="checkbox" onchange="allCheck()" /><span class="document-combo"><img src="~/images/file-earmark-pdf-fill.svg" /><span class="document-name">file(1).pdf</span></span></td>
+                                <td><span>Mark</span></td>
+                                <td>Otto</td>
+                                <td>
+                                    <div class="outer-div">
+                                        <a class="downld-btn" asp-controller="Patient" asp-action="PatientLogin">
+                                            <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first-col"><input type="checkbox" name="Mark1" class="checkbox" onchange="allCheck()" /><span class="document-combo"><img src="~/images/file-word-fill.svg" /><span class="document-name">file(2).docx</span></span></td>
+                                <td>Mark1</td>
+                                <td>Otto1</td>
+                                <td>
+                                    <div class="outer-div">
+                                        <a class="downld-btn" asp-controller="Patient" asp-action="PatientLogin">
+                                            <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first-col"><input type="checkbox" name="Mark2" class="checkbox" onchange="allCheck()" /><span class="document-combo"><img src="~/images/file-x-fill.svg" /><span class="document-name">file(3).xlsx</span></span></td>
+                                <td>Mark2</td>
+                                <td>Otto2</td>
+                                <td>
+                                    <div class="outer-div">
+                                        <a class="downld-btn" asp-controller="Patient" asp-action="PatientLogin">
+                                            <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mob-documents">
+                        <span class="mob-component">
+                            <div class="first-col">
+                                <input type="checkbox" name="Mark" onchange="allCheck()" /><span class="document-combo mob-doc-name"><img src="~/images/file-earmark-pdf-fill.svg" /><span class="document-name mob-text dark-text">file(1).pdf</span></span>
+                            </div>
+                            <span class="document-name mob-text mob-date dark-text">Mark</span>
+                            <span class="document-name mob-text mob-date dark-text">Otto</span>
+                            <a class="downld-btn mob-download" asp-controller="Patient" asp-action="PatientLogin">
+                                <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                            </a>
+                        </span>
+                        <span class="mob-component">
+                            <div class="first-col">
+                                <input type="checkbox" name="Mark1" onchange="allCheck()" /><span class="document-combo mob-doc-name"><img src="~/images/file-word-fill.svg" /><span class="document-name mob-text dark-text">file(2).docx</span></span>
+                            </div>
+                            <span class="document-name mob-text mob-date dark-text">Mark1</span>
+                            <span class="document-name mob-text mob-date dark-text">Otto1</span>
+                            <a class="downld-btn mob-download" asp-controller="Patient" asp-action="PatientLogin">
+                                <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                            </a>
+                        </span>
+                        <span class="mob-component">
+                            <div class="first-col">
+                                <input type="checkbox" name="Mark2" onchange="allCheck()" /><span class="document-combo mob-doc-name dark-text"><img src="~/images/file-x-fill.svg" /><span class="document-name mob-text">file(3).xlsx</span></span>
+                            </div>
+                            <span class="document-name mob-text mob-date dark-text">Mark2</span>
+                            <span class="document-name mob-text mob-date dark-text">Otto2</span>
+                            <a class="downld-btn mob-download" asp-controller="Patient" asp-action="PatientLogin">
+                                <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                            </a>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>
+

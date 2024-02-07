@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\HaloDocMVC.NET.props" />
-</Project>
