@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HalloDoc;
 
+[Index("Email", Name = "AspNetUsers_Email_key", IsUnique = true)]
 public partial class AspNetUser
 {
     [Key]

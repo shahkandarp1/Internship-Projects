@@ -273,6 +273,18 @@ input[type="file"] {
   margin-right: 10px;
 }
 
+.inp-side-picture {
+    width: 17px;
+    height: 17px;
+    position: absolute;
+    top: 18px;
+    right: 22px;
+}
+
+.hidden-pass{
+    display:none;
+}
+
 /* Bottom part */
 
 .bottom-part-flex {
@@ -367,6 +379,23 @@ padding: 10px 20px
   align-items: center;
   border: 4px solid #F2AF00;
   border-radius: 50%;
+}
+
+.custom-msg {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 9px;
+    font-size: 1.2rem;
+}
+
+.hidden-span {
+    display:none;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
 }
 
 

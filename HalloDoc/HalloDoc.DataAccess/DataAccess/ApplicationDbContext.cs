@@ -33,6 +33,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
+    public virtual DbSet<Family> Families { get; set; }
+
     public virtual DbSet<HealthProfessional> HealthProfessionals { get; set; }
 
     public virtual DbSet<HealthProfessionalType> HealthProfessionalTypes { get; set; }
@@ -60,6 +62,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<RequestClosed> RequestCloseds { get; set; }
 
     public virtual DbSet<RequestConcierge> RequestConcierges { get; set; }
+
+    public virtual DbSet<RequestFamily> RequestFamilies { get; set; }
 
     public virtual DbSet<RequestNote> RequestNotes { get; set; }
 
@@ -177,6 +181,11 @@ public partial class ApplicationDbContext : DbContext
             entity.HasKey(e => e.EmailLogId).HasName("EmailLog_pkey");
         });
 
+        modelBuilder.Entity<Family>(entity =>
+        {
+            entity.HasKey(e => e.Familyid).HasName("Family_pkey");
+        });
+
         modelBuilder.Entity<HealthProfessional>(entity =>
         {
             entity.HasKey(e => e.VendorId).HasName("HealthProfessionals_pkey");
@@ -248,6 +257,10 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.Physician).WithMany(p => p.Requests).HasConstraintName("Request_PhysicianId_fkey");
 
+            entity.HasOne(d => d.RequestClient).WithMany(p => p.Requests)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_request_requestclient");
+
             entity.HasOne(d => d.User).WithMany(p => p.Requests).HasConstraintName("Request_UserId_fkey");
         });
 
@@ -269,10 +282,6 @@ public partial class ApplicationDbContext : DbContext
             entity.HasKey(e => e.RequestClientId).HasName("RequestClient_pkey");
 
             entity.HasOne(d => d.Region).WithMany(p => p.RequestClients).HasConstraintName("RequestClient_RegionId_fkey");
-
-            entity.HasOne(d => d.Request).WithMany(p => p.RequestClients)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("RequestClient_RequestId_fkey");
         });
 
         modelBuilder.Entity<RequestClosed>(entity =>
@@ -299,6 +308,15 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.Request).WithMany(p => p.RequestConcierges)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("RequestConcierge_RequestId_fkey");
+        });
+
+        modelBuilder.Entity<RequestFamily>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("RequestFamily_pkey");
+
+            entity.HasOne(d => d.Family).WithMany(p => p.RequestFamilies).HasConstraintName("RequestFamily_familyid_fkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.RequestFamilies).HasConstraintName("RequestFamily_requestid_fkey");
         });
 
         modelBuilder.Entity<RequestNote>(entity =>

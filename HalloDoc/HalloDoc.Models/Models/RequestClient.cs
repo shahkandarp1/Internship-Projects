@@ -13,8 +13,6 @@ public partial class RequestClient
     [Key]
     public int RequestClientId { get; set; }
 
-    public int RequestId { get; set; }
-
     [StringLength(100)]
     public string FirstName { get; set; } = null!;
 
@@ -93,7 +91,6 @@ public partial class RequestClient
     [InverseProperty("RequestClients")]
     public virtual Region? Region { get; set; }
 
-    [ForeignKey("RequestId")]
-    [InverseProperty("RequestClients")]
-    public virtual Request Request { get; set; } = null!;
+    [InverseProperty("RequestClient")]
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

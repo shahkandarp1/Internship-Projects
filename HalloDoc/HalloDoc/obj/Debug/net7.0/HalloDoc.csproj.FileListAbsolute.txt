@@ -44,3 +44,9 @@ C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Ha
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Models.dll
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.DataAccess.pdb
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Models.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Microsoft.Extensions.Options.dll

@@ -44,30 +44,35 @@ $(document).ready(function () {
     });
 });
 
-window.onload = (e) => {
-    const phoneInputField = document.getElementsByClassName("phone");
-    for (let i = 0; i < phoneInputField.length; ++i) {
-        const phoneInput = window.intlTelInput(phoneInputField[i], {
-            utilsScript:
-                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        });
-    }
 
-    
-        const mode = localStorage.getItem("mode")
-        if (mode == "Light" || mode == null) {
-            document.getElementById("body").style.backgroundColor = "#FAFAFA";
-            document.getElementById("submit-text").style.color = "black"
-            document.getElementById("sun").classList.add("hidden")
-            document.getElementById("moon").classList.remove("hidden")
-            document.getElementsByClassName("main-form")[0].style.backgroundColor = "white"
+const changeVisibility = () => {
+    var x = document.getElementById("floatingPassword");
+    const openeye = document.getElementsByClassName("open-eye")
+    const closeeye = document.getElementsByClassName("close-eye")
+    if (x.type === "password") {
+        x.type = "text";
+        for (let i = 0; i < openeye.length; ++i) {
+            openeye[i].classList.add("hidden")
+            closeeye[i].classList.remove("hidden")
         }
-        else {
-            document.getElementById("body").style.backgroundColor = "black";
-            document.getElementById("submit-text").style.color = "white"
-            document.getElementById("moon").classList.add("hidden")
-            document.getElementById("sun").classList.remove("hidden")
-            document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
+    } else {
+        x.type = "password";
+        for (let i = 0; i < openeye.length; ++i) {
+            openeye[i].classList.remove("hidden")
+            closeeye[i].classList.add("hidden")
         }
-    
+    }
+}
+
+const changeVisibility1 = () => {
+    var x = document.getElementById("floatingConfirmPassword");
+    if (x.type === "password") {
+        x.type = "text";
+        document.getElementById("open-eye").classList.add("hidden")
+        document.getElementById("closed-eye").classList.remove("hidden")
+    } else {
+        x.type = "password";
+        document.getElementById("open-eye").classList.remove("hidden")
+        document.getElementById("closed-eye").classList.add("hidden")
+    }
 }

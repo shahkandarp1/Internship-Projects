@@ -89,6 +89,8 @@ public partial class Request
 
     public int? CreatedUserId { get; set; }
 
+    public int RequestClientId { get; set; }
+
     [ForeignKey("PhysicianId")]
     [InverseProperty("Requests")]
     public virtual Physician? Physician { get; set; }
@@ -96,14 +98,18 @@ public partial class Request
     [InverseProperty("Request")]
     public virtual ICollection<RequestBusiness> RequestBusinesses { get; set; } = new List<RequestBusiness>();
 
-    [InverseProperty("Request")]
-    public virtual ICollection<RequestClient> RequestClients { get; set; } = new List<RequestClient>();
+    [ForeignKey("RequestClientId")]
+    [InverseProperty("Requests")]
+    public virtual RequestClient RequestClient { get; set; } = null!;
 
     [InverseProperty("Request")]
     public virtual ICollection<RequestClosed> RequestCloseds { get; set; } = new List<RequestClosed>();
 
     [InverseProperty("Request")]
     public virtual ICollection<RequestConcierge> RequestConcierges { get; set; } = new List<RequestConcierge>();
+
+    [InverseProperty("Request")]
+    public virtual ICollection<RequestFamily> RequestFamilies { get; set; } = new List<RequestFamily>();
 
     [InverseProperty("Request")]
     public virtual ICollection<RequestNote> RequestNotes { get; set; } = new List<RequestNote>();
