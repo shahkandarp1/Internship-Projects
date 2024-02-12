@@ -201,7 +201,6 @@ input[type="password"]::-ms-clear {
 
 .form-floating > .form-control-plaintext ~ label,
 .form-floating > .form-control:focus ~ label,
-.form-floating > .form-control:not(:placeholder-shown) ~ label,
 .form-floating > .form-select ~ label {
   font-family: "Roboto", sans-serif;
   color: #0dcaf0!important;

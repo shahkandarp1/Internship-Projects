@@ -150,20 +150,23 @@ a:hover {
 
 .form-floating>.form-control-plaintext~label,
 .form-floating>.form-control:focus~label,
-.form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.form-select~label {
   font-family: "Roboto", sans-serif;
   color: #0dcaf0;
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 
-.dob:focus .form-floating>.form-control-plaintext~.dob-label,
-.form-floating>.form-control:focus~.dob-label,
-.form-floating>.form-control:not(:placeholder-shown)~.dob-label,
-.form-floating>.form-select~.dob-label {
-  font-family: "Roboto", sans-serif;
-  color: #adadad;
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label{
+    font-weight:400;
+}
+
+.dob:focus .form-floating > .form-control-plaintext ~ .dob-label,
+.form-floating > .form-control:focus ~ .dob-label,
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label,
+.form-floating > .form-select ~ .dob-label {
+    font-family: "Roboto", sans-serif;
+    color: #adadad;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 
 

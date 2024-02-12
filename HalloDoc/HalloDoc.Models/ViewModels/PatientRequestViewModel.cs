@@ -42,8 +42,10 @@ namespace HalloDoc.ViewModels
 
         public string ?Room { get; set; }
 
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
+        [Compare("ConfirmPassword", ErrorMessage = "Password and Confirm Password should be same")]
+        public string ?Password { get; set; }
+
+        public string ?ConfirmPassword { get; set; }
 
         public IFormFile ?ImageContent { get; set; }
     }

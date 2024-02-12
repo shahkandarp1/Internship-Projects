@@ -5,6 +5,10 @@ using HalloDoc.ViewModels;
 using HalloDoc;
 using System.Collections;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore;
 
 namespace HaloDocMVC.NET.Controllers
 {
@@ -12,11 +16,13 @@ namespace HaloDocMVC.NET.Controllers
     {
         private readonly ILogger<PatientController> _logger;
         private readonly ApplicationDbContext _db;
+        private readonly IHttpContextAccessor _context;
 
-        public PatientController(ILogger<PatientController> logger, ApplicationDbContext db)
+        public PatientController(ILogger<PatientController> logger, ApplicationDbContext db,IHttpContextAccessor context)
         {
             _logger = logger;
             _db = db;
+            _context = context;
         }
 
         public IActionResult PatientSite()
@@ -45,6 +51,15 @@ namespace HaloDocMVC.NET.Controllers
                 {
                     if (model.Password == user.PasswordHash)
                     {
+                        var role = _db.AspNetUserRoles.FirstOrDefault(u=>u.UserId == user.Id);
+                        if(role.RoleId != 1)
+                        {
+                            ModelState.AddModelError("Password", "You are not having rights of patient site");
+                            return View();
+                        }
+                        var curr_user = _db.Users.FirstOrDefault(u=>u.AspNetUserId == user.Id);
+                        _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
+                        _context.HttpContext.Session.SetInt32("UserId", curr_user.UserId);
                         return RedirectToAction("PatientDashboard");
                     }
                     else
@@ -213,6 +228,15 @@ namespace HaloDocMVC.NET.Controllers
                     _db.Users.Add(us);
                     _db.SaveChanges();
 
+                    AspNetUserRole aspnr = new AspNetUserRole
+                    {
+                        UserId = aspuser.Id,
+                        RoleId = 1
+                    };
+
+                    _db.AspNetUserRoles.Add(aspnr);
+                    _db.SaveChanges();
+
                     RequestClient rc = new RequestClient
                     {
                         FirstName = modal.FirstName,
@@ -317,6 +341,13 @@ namespace HaloDocMVC.NET.Controllers
             return Json(new { isPasswordValid = isPasswordSame });
         }
 
+        public IActionResult Logout()
+        {
+
+            _context.HttpContext.Session.Clear();
+            return Json(new { isLogout = true});
+        }
+
         public IActionResult BusinessForm()
         {
             return View();
@@ -327,12 +358,337 @@ namespace HaloDocMVC.NET.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FamilyForm(FamilyRequestViewModel modal)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await modal.ImageContent.CopyToAsync(stream);
+                    }
+                }
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+                if(user != null)
+                {
+                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                    if (block != null)
+                    {
+                        ModelState.AddModelError("ImageContent", "This request is blocked");
+                        return View(modal);
+                    }
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.State,
+                        Street = modal.Street,
+                        City = modal.City,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ZipCode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.FamilyFirstName,
+                        LastName = modal.FamilyLastName,
+                        PhoneNumber = modal.FamilyPhoneNumber,
+                        Email = modal.FamilyEmail,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 3,
+                        UserId = curr_user.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+                        RelationName = modal.FamilyRelation,
+
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+
+                    if (modal.ImageContent != null)
+                    {
+                        RequestWiseFile rfile = new RequestWiseFile
+                        {
+                            RequestId = req.RequestId,
+                            FileName = modal.ImageContent.FileName,
+                            CreatedDate = DateTime.Now.Date
+                        };
+                        _db.RequestWiseFiles.Add(rfile);
+                        _db.SaveChanges();
+                    }
+
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("PatientSite");
+                }
+                else
+                {
+
+                }
+            }
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> ConciergeForm(ConciergeRequestViewModel modal)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.ConciergeState.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("Room", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+                if (user != null)
+                {
+                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                    if (block != null)
+                    {
+                        ModelState.AddModelError("Room", "This request is blocked");
+                        return View(modal);
+                    }
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.ConciergeState,
+                        Street = modal.ConciergeStreet,
+                        City = modal.ConciergeCity,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ConciergeZipcode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.ConciergeFirstName,
+                        LastName = modal.ConciergeLastName,
+                        PhoneNumber = modal.ConciergePhoneNumber,
+                        Email = modal.ConciergeEmail,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 4,
+                        UserId = curr_user.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    Concierge concierge = new Concierge
+                    {
+                        ConciergeName = string.Concat(modal.ConciergeFirstName,' ',modal.ConciergeLastName),
+                        RegionId = region.RegionId,
+                        CreatedDate = DateTime.Now.Date,
+                        Street = modal.ConciergeStreet,
+                        City = modal.ConciergeCity,
+                        State = modal.ConciergeState,
+                        ZipCode = modal.ConciergeZipcode
+                    };
+
+                    _db.Concierges.Add(concierge); 
+                    _db.SaveChanges();
+
+                    RequestConcierge requestconcierge = new RequestConcierge
+                    {
+                        ConciergeId = concierge.ConciergeId,
+                        RequestId = req.RequestId
+                    };
+
+                    _db.RequestConcierges.Add(requestconcierge);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("PatientSite");
+                }
+                else
+                {
+
+                }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> BusinessForm(BusinessRequestViewModel modal)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("Room", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+                if(user!=null)
+                {
+                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                    if (block != null)
+                    {
+                        ModelState.AddModelError("Room", "This request is blocked");
+                        return View(modal);
+                    }
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.State,
+                        Street = modal.Street,
+                        City = modal.City,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ZipCode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.BusinessFirstName,
+                        LastName = modal.BusinessLastName,
+                        PhoneNumber = modal.BusinessPhoneNumber,
+                        Email = modal.BusinessEmail,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 1,
+                        UserId = curr_user.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+                        CaseNumber = modal.BusinessCaseNumber
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    Business business = new Business
+                    {
+                        Name = modal.BusinessPropertyName,
+                        CreatedDate = DateTime.Now.Date,
+                        RegionId = region.RegionId,
+
+                    };
+
+                    _db.Businesses.Add(business);
+                    _db.SaveChanges();
+
+                    RequestBusiness requestbusiness = new RequestBusiness
+                    {
+                        RequestId = req.RequestId,
+                        BusinessId = business.BusinessId
+                    };
+
+                    _db.RequestBusinesses.Add(requestbusiness);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("PatientSite");
+                }
+                else
+                {
+
+                }
+            }
+
+            return View();
+        }
+
         public IActionResult ConciergeForm()
         {
             return View();
         }
 
-        public IActionResult PatientDashboard()
+        public async Task<IActionResult> PatientDashboard()
         {
             return View();
         }

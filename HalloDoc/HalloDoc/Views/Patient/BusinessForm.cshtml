@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BusinessRequestViewModel
+@{
     ViewData["Title"] = "Business Request";
 }
 @section Styles {
@@ -42,7 +43,7 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form">
+            <form class="main-form" asp-action="BusinessForm" method="post" enctype="multipart/form-data">
 
                 <!-- Family/Friend Information  -->
 
@@ -50,31 +51,34 @@
                     Business Information
                 </div>
                 <div class="row family-info-row">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="business-first-name" placeholder="name@example.com"
-                               required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="business-first-name" placeholder="name@example.com" asp-for="BusinessFirstName">
                         <label for="business-first-name" class="form-label">Your First Name</label>
+                        <span asp-validation-for="BusinessFirstName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="business-last-name" placeholder="name@example.com"
-                               required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="business-last-name" placeholder="name@example.com" asp-for="BusinessLastName">
                         <label for="business-last-name" class="form-label">Your Last Name</label>
+                        <span asp-validation-for="BusinessLastName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="tel" class="form-control phone" id="business-phone" name="phone" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone" id="business-phone" asp-for="BusinessPhoneNumber">
+                        <span asp-validation-for="BusinessPhoneNumber" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="business-email" placeholder="name@example.com"
-                               required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="business-email" placeholder="name@example.com" asp-for="BusinessEmail">
                         <label for="business-email" class="form-label">Your email</label>
+                        <span asp-validation-for="BusinessEmail" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com" asp-for="BusinessPropertyName">
                         <label for="property-name" class="form-label">Business/Property Name</label>
+                        <span asp-validation-for="BusinessPropertyName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com" asp-for="BusinessCaseNumber">
                         <label for="property-name" class="form-label">Case Number(Optional)</label>
+                        <span asp-validation-for="BusinessCaseNumber" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -84,24 +88,27 @@
                     Patient Information
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-sm-12">
-                        <textarea class="form-control text-area" id="floatingInput"
-                                  placeholder="name@example.com"></textarea>
+                    <div class="form-floating mt-3 inp col-sm-12">
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Symptoms"></textarea>
                         <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
+                        <span asp-validation-for="Symptoms" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="first-name" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="first-name" placeholder="name@example.com" asp-for="FirstName">
                         <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="last-name" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="last-name" placeholder="name@example.com" asp-for="LastName">
                         <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth">
                         <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -111,12 +118,14 @@
                     Patient Contact Information
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" asp-for="Email">
                         <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="tel" class="form-control phone" id="phone" name="phone" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone" id="phone" asp-for="Phone">
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -125,26 +134,31 @@
                     Patient Location
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="street" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="street" placeholder="name@example.com" asp-for="Street">
                         <label for="street" class="form-label">Street</label>
+                        <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="city" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="city" placeholder="name@example.com" asp-for="City">
                         <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="state" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="state" placeholder="name@example.com" asp-for="State">
                         <label for="state" class="form-label">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" asp-for="ZipCode">
                         <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="room" placeholder="name@example.com">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="room" placeholder="name@example.com" asp-for="Room">
                         <label for="room" class="form-label">Room / Suite (Optional)</label>
                     </div>
+                    <span asp-validation-for="Room" class="text-danger custom-msg"></span>
                 </div>
 
                 <!-- Submit / Clear -->

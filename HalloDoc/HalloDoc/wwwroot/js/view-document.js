@@ -18,6 +18,18 @@ function sidebar_open() {
 
 }
 
+$(document).ready(function () {
+    var logElements = document.querySelectorAll('.log');
+    logElements.forEach(function (element) {
+        element.addEventListener('click', function () {
+
+            $.get('/Patient/Logout', function (response) {
+                console.log(response)
+            });
+        });
+    });
+});
+
 function sidebar_close() {
     document.getElementById("mySidebar").style.width = "0px";
     document.getElementsByClassName("overlay")[0].style.display = "none";
