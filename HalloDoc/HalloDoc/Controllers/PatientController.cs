@@ -9,6 +9,9 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using System.IO.Compression;
+using System.IO;
 
 namespace HaloDocMVC.NET.Controllers
 {
@@ -690,7 +693,18 @@ namespace HaloDocMVC.NET.Controllers
 
         public async Task<IActionResult> PatientDashboard()
         {
-            return View();
+            var id = _context.HttpContext.Session.GetInt32("UserId");
+            var data = _db.RequestViewModels.FromSqlRaw(
+    $"SELECT * FROM PatientDashboardData({id})"
+).ToList();
+            var curr_user = _db.Users.FirstOrDefault(u=>u.UserId == id);
+            DashboardViewModel dashboardViewModel = new DashboardViewModel
+            {
+                requests = data,
+                name = string.Concat(curr_user.FirstName,' ',curr_user.LastName)
+            };
+
+            return View(dashboardViewModel);
         }
 
         public IActionResult SubmitSomeoneElse()
@@ -708,9 +722,72 @@ namespace HaloDocMVC.NET.Controllers
             return View();
         }
 
-        public IActionResult ViewDocument()
+        [HttpGet]
+        public IActionResult ViewDocument(int id)
         {
-            return View();
+            var user_id = _context.HttpContext.Session.GetInt32("UserId");
+            var request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(u=>u.RequestId == id);
+            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u=>u.RequestId == id).ToList();
+            var user = _db.Users.FirstOrDefault(u=>u.UserId == user_id);
+            ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
+            {
+                patient_name = string.Concat(request.RequestClient.FirstName,' ', request.RequestClient.LastName),
+                name = string.Concat(user.FirstName, ' ', user.LastName),
+                confirmation_number = request.ConfirmationNumber,
+                requestWiseFiles = documents,
+                uploader_name = string.Concat(request.FirstName, ' ', request.LastName)
+            };
+            return View(viewDocumentModal);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FileUpload([FromForm]IFormFile file, [FromForm] int id)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+            RequestWiseFile requestWiseFile = new RequestWiseFile
+            {
+                RequestId = id,
+                FileName = file.FileName,
+                CreatedDate = DateTime.Now.Date,
+
+            };
+            _db.RequestWiseFiles.Add(requestWiseFile);
+            _db.SaveChanges();
+            return Json(new { isFileUploaded = true });
+        }
+
+        public IActionResult DownloadAll(string filename)
+        {
+            var zipName = $"TestFiles-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
+            string[] filenames = filename.Split(',') ;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                //required: using System.IO.Compression;
+                using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true))
+                {
+                    //QUery the Products table and get all image content
+
+                    for(var i=0;i< filenames.Length - 1; ++i)
+                    {
+                        var entry = zip.CreateEntry(filenames[i]);
+                        byte[] bytes = File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", filenames[i]));
+                        using (MemoryStream fileStream = new MemoryStream(bytes))
+                        using (var entryStream = entry.Open())
+                        {
+                            fileStream.CopyTo(entryStream);
+                        }
+                    }
+                }
+                return File(ms.ToArray(), "application/zip", zipName);
+            }
+            return Json(new { isDownloaded = true });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

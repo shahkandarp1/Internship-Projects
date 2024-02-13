@@ -621,6 +621,10 @@
       "PackagePath": "staticwebassets\\images\\box-arrow-right.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\card-image.svg",
+      "PackagePath": "staticwebassets\\images\\card-image.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\clock.svg",
       "PackagePath": "staticwebassets\\images\\clock.svg"
     },
@@ -963,6 +967,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\HalloDoc - DB.xlsx",
       "PackagePath": "staticwebassets\\uploads\\HalloDoc - DB.xlsx"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (2).png",
+      "PackagePath": "staticwebassets\\uploads\\Screenshot (2).png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\file-earmark-pdf-fill.svg",

@@ -154,6 +154,7 @@ input[type="file"] {
     margin:0px;
 }
 
+
 /* table view - Desktop */
 .desktop-table {
     border-radius: 0px 0px 10px 10px;
@@ -221,6 +222,10 @@ th {
     display:flex;
     justify-content:flex-start;
     align-items:center;
+}
+
+td.first-col {
+    width:100%;
 }
 
     .document-combo {

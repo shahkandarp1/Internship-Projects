@@ -9,14 +9,10 @@ namespace HalloDoc.ViewModels
 {
     public class RequestViewModel
     {
-        public string Name { get; set; }
-
-        public int count { get; set; }
-
+        public int RequestId { get; set; }
         public DateTime CreatedDate { get; set; }
-
-        public int Status { get; set; }
-
-        public string status_name { get; set; }
+        public short Status { get; set; }
+        public string Name { get; set; }
+        public long? Count { get; set; }
     }
 }

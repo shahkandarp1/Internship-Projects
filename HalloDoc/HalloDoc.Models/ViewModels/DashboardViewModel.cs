@@ -11,6 +11,8 @@ namespace HalloDoc.ViewModels
     {
         public string name { get; set; }
 
-        public List<RequestViewModel> requests { get; set; } 
+        public List<RequestViewModel> requests { get; set; }
+       
     }
+
 }
