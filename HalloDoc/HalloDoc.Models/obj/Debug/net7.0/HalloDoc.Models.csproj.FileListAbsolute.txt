@@ -10,3 +10,16 @@ C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\ne
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\refint\HalloDoc.Models.dll
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.pdb
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\ref\HalloDoc.Models.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\bin\Debug\net7.0\HalloDoc.Models.deps.json
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\bin\Debug\net7.0\HalloDoc.Models.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\bin\Debug\net7.0\HalloDoc.Models.pdb
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.csproj.AssemblyReference.cache
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.AssemblyInfoInputs.cache
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.AssemblyInfo.cs
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.csproj.CoreCompileInputs.cache
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.sourcelink.json
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\refint\HalloDoc.Models.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\HalloDoc.Models.pdb
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Models\obj\Debug\net7.0\ref\HalloDoc.Models.dll
