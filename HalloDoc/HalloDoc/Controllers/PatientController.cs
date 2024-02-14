@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.IO.Compression;
 using System.IO;
+using System.Reflection;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace HaloDocMVC.NET.Controllers
 {
@@ -694,9 +696,7 @@ namespace HaloDocMVC.NET.Controllers
         public async Task<IActionResult> PatientDashboard()
         {
             var id = _context.HttpContext.Session.GetInt32("UserId");
-            var data = _db.RequestViewModels.FromSqlRaw(
-    $"SELECT * FROM PatientDashboardData({id})"
-).ToList();
+            var data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({id})").ToList();
             var curr_user = _db.Users.FirstOrDefault(u=>u.UserId == id);
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
@@ -709,12 +709,247 @@ namespace HaloDocMVC.NET.Controllers
 
         public IActionResult SubmitSomeoneElse()
         {
-            return View();
+
+            var id = _context.HttpContext.Session.GetInt32("UserId");
+            var session_user = _db.Users.FirstOrDefault(u => u.UserId == id);
+            FamilyRequestViewModel familyRequestViewModel = new FamilyRequestViewModel()
+            {
+                FamilyFirstName = session_user.FirstName,
+                FamilyLastName = session_user.LastName,
+                FamilyEmail = session_user.Email,
+                FamilyPhoneNumber = session_user.Mobile,
+            };
+            return View(familyRequestViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitSomeoneElse(FamilyRequestViewModel modal)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await modal.ImageContent.CopyToAsync(stream);
+                    }
+                }
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+                if (user != null)
+                {
+                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                    if (block != null)
+                    {
+                        ModelState.AddModelError("ImageContent", "This request is blocked");
+                        return View(modal);
+                    }
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.State,
+                        Street = modal.Street,
+                        City = modal.City,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ZipCode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.FamilyFirstName,
+                        LastName = modal.FamilyLastName,
+                        PhoneNumber = modal.FamilyPhoneNumber,
+                        Email = modal.FamilyEmail,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 3,
+                        UserId = curr_user.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+                        RelationName = modal.FamilyRelation,
+
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+
+                    if (modal.ImageContent != null)
+                    {
+                        RequestWiseFile rfile = new RequestWiseFile
+                        {
+                            RequestId = req.RequestId,
+                            FileName = modal.ImageContent.FileName,
+                            CreatedDate = DateTime.Now.Date
+                        };
+                        _db.RequestWiseFiles.Add(rfile);
+                        _db.SaveChanges();
+                    }
+
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now.Date
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    return RedirectToAction("PatientDashboard");
+                }
+                else
+                {
+
+                }
+            }
+            
+            return View(modal);
         }
 
         public IActionResult SubmitForMe()
         {
-            return View();
+            var id = _context.HttpContext.Session.GetInt32("UserId");
+            var user = _db.Users.FirstOrDefault(u=>u.UserId == id);
+            PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Mobile,
+                DateOfBirth = DateTime.Parse($"{user.IntYear}-{user.StrMonth}-{user.IntDate}")
+
+            };
+
+            return View(patientRequestViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitForMe(PatientRequestViewModel modal)
+        {
+            if (ModelState.IsValid)
+            {
+                var id = _context.HttpContext.Session.GetInt32("AspNetUserId");
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
+                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await modal.ImageContent.CopyToAsync(stream);
+                    }
+                }
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+
+                var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+                var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                if (block != null)
+                {
+                    ModelState.AddModelError("ImageContent", "This request is blocked");
+                    return View(modal);
+                }
+
+                RequestClient rc = new RequestClient
+                {
+                    FirstName = modal.FirstName,
+                    LastName = modal.LastName,
+                    PhoneNumber = modal.Phone,
+                    Email = modal.Email,
+                    State = modal.State,
+                    Street = modal.Street,
+                    City = modal.City,
+                    RegionId = region.RegionId,
+                    ZipCode = modal.ZipCode,
+                    Notes = modal.Symptoms,
+                    NotiEmail = modal.Email,
+                    NotiMobile = modal.Phone,
+                    StrMonth = modal.DateOfBirth.Month.ToString(),
+                    IntYear = modal.DateOfBirth.Year,
+                    IntDate = modal.DateOfBirth.Day
+                };
+
+                _db.RequestClients.Add(rc);
+                _db.SaveChanges();
+
+                int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+
+                Request req = new Request
+                {
+                    FirstName = modal.FirstName,
+                    LastName = modal.LastName,
+                    PhoneNumber = modal.Phone,
+                    Email = modal.Email,
+                    RequestClientId = rc.RequestClientId,
+                    RequestTypeId = 2,
+                    UserId = curr_user.UserId,
+                    Status = 1,
+                    CreatedDate = DateTime.Now.Date,
+                    IsUrgentEmailSent = new BitArray(1),
+                    ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+
+                };
+
+                _db.Requests.Add(req);
+                _db.SaveChanges();
+
+                if (modal.ImageContent != null)
+                {
+                    RequestWiseFile rfile = new RequestWiseFile
+                    {
+                        RequestId = req.RequestId,
+                        FileName = modal.ImageContent.FileName,
+                        CreatedDate = DateTime.Now.Date
+                    };
+                    _db.RequestWiseFiles.Add(rfile);
+                    _db.SaveChanges();
+                }
+
+
+                RequestStatusLog rst = new RequestStatusLog
+                {
+                    RequestId = req.RequestId,
+                    Status = 1,
+                    CreatedDate = DateTime.Now.Date
+                };
+
+                _db.RequestStatusLogs.Add(rst);
+                _db.SaveChanges();
+
+                return RedirectToAction("PatientDashboard");
+
+            }
+            return View(modal);
         }
 
         public IActionResult PatientProfile()
@@ -763,10 +998,18 @@ namespace HaloDocMVC.NET.Controllers
             return Json(new { isFileUploaded = true });
         }
 
-        public IActionResult DownloadAll(string filename)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ViewDocument(ViewDocumentModal modal)
         {
-            var zipName = $"TestFiles-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
-            string[] filenames = filename.Split(',') ;
+            if(modal.filename == null)
+            {
+                return View(modal);
+            }
+            var id = _context.HttpContext.Session.GetInt32("UserId");
+            var user = _db.Users.FirstOrDefault(u=>u.UserId == id);
+            var zipName = $"{user.FirstName}-{user.LastName}-documents.zip";
+            string[] filenames = modal.filename.Split(',') ;
             using (MemoryStream ms = new MemoryStream())
             {
                 //required: using System.IO.Compression;
@@ -777,16 +1020,20 @@ namespace HaloDocMVC.NET.Controllers
                     for(var i=0;i< filenames.Length - 1; ++i)
                     {
                         var entry = zip.CreateEntry(filenames[i]);
-                        byte[] bytes = File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", filenames[i]));
-                        using (MemoryStream fileStream = new MemoryStream(bytes))
+                        HttpClient client = new HttpClient();
+                        byte[] imageBytes = await client.GetByteArrayAsync($"https://localhost:7088/uploads/{filenames[i]}");
+                        using (MemoryStream fileStream = new MemoryStream(imageBytes))
                         using (var entryStream = entry.Open())
                         {
                             fileStream.CopyTo(entryStream);
                         }
                     }
                 }
+                Response.ContentType = "application/zip";
+                Response.Headers.Add("Content-Disposition", $"attachment; filename={zipName}");
                 return File(ms.ToArray(), "application/zip", zipName);
             }
+            
             return Json(new { isDownloaded = true });
         }
 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PatientRequestViewModel
+@{
     ViewData["Title"] = "Request For me";
 }
 @section Styles {
@@ -12,6 +13,19 @@
 
     <partial name="_FormNavbar" />
 
+    <!--Location Modal -->
+
+    <div class="modal" id="myModal1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body location-modal">
+                    <div id="map" style="width: 100%; height: 80%;"></div>
+                    <button class="btn btn-info ok-btn" id="closeBtn1">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
 
     <div class="main-container">
@@ -22,7 +36,7 @@
                         &lt; <span class="back-text">Back</span>
                     </a>
             </div>
-            <form class="main-form">
+            <form class="main-form" method="post" asp-action="SubmitForMe" enctype="multipart/form-data">
 
                 <!-- Patient Information  -->
 
@@ -30,23 +44,27 @@
                     Patient Information
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-sm-12">
-                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com"></textarea>
+                    <div class="form-floating mt-3 inp col-sm-12">
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Symptoms"></textarea>
                         <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
+                        <span asp-validation-for="Symptoms" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="first-name" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="first-name" placeholder="name@example.com" asp-for="FirstName" >
                         <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="last-name" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="last-name" placeholder="name@example.com" asp-for="LastName" >
                         <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" >
                         <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -56,12 +74,14 @@
                     Patient Contact Information
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" asp-for="Email">
                         <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="tel" class="form-control phone" id="phone" name="phone" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone" id="phone" asp-for="Phone" >
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -70,27 +90,32 @@
                     Patient Location
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="street" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="street" placeholder="name@example.com" asp-for="Street">
                         <label for="street" class="form-label">Street</label>
+                        <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="city" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="city" placeholder="name@example.com" asp-for="City">
                         <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="state" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="state" placeholder="name@example.com" asp-for="State">
                         <label for="state" class="form-label">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" required>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" asp-for="ZipCode">
                         <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="room" placeholder="name@example.com">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="room" placeholder="name@example.com" asp-for="Room">
                         <label for="room" class="form-label">Room / Suite (Optional)</label>
+                        <span asp-validation-for="Room" class="text-danger"></span>
                     </div>
-                    <button class="location col-lg-6 col-md-6 col-sm-12" type="button">
+                    <button class="location col-lg-6 col-md-6 col-sm-12 mt-3" type="button" id="openBtn" onclick="getLocation(@($"{Model.Street},{Model.City},{Model.State} {Model.ZipCode}"))">
                         <img class="map-img" src="../../images/geo-alt.svg" alt="">
                         <span class="map-text">Map</span>
                     </button>
@@ -102,22 +127,24 @@
                     Upload Photo or Document(Optional)
                 </div>
                 <div class="file-upload symptoms-textarea">
-                    <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
                         <input type="text" class="form-control" id="file-upload" disabled>
                         <label for="file-upload" class="upload-label dob-label" id="form-label">Select File</label>
+                        
                     </div>
-                    <label class="custom-file-upload">
-                        <input type="file" onchange="getFileData(this)" />
+                    <label class="custom-file-upload mt-3">
+                        <input type="file" onchange="getFileData(this)" asp-for="ImageContent"/>
                         <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
                         <span class="upload-text">
                             Upload
                         </span>
                     </label>
                 </div>
+                <span asp-validation-for="ImageContent" class="text-danger custom-msg"></span>
 
                 <!-- Submit / Clear -->
                 <div class="lower-btn">
-                    <button class="lower-custom-btn submit-btn">Submit</button>
+                    <button class="lower-custom-btn submit-btn" type="submit">Submit</button>
                     <button type="button" class="lower-custom-btn cancel-btn" onclick="reload()">Cancel</button>
                 </div>
             </form>

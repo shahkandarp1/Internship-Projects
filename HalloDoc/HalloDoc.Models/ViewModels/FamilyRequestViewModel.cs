@@ -46,16 +46,16 @@ namespace HalloDoc.ViewModels
         public IFormFile? ImageContent { get; set; }
 
         [Required(ErrorMessage = "First Name is required")]
-        public string FamilyFirstName { get; set; }
+        public string? FamilyFirstName { get; set; }
         [Required(ErrorMessage = "Last Name is required")]
-        public string FamilyLastName { get; set; }
+        public string? FamilyLastName { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        public string FamilyEmail { get; set; }
+        public string? FamilyEmail { get; set; }
 
         [Required(ErrorMessage = "Please enter phone number")]
         [Phone(ErrorMessage = "Please enter phone number")]
-        public string FamilyPhoneNumber { get; set; }
+        public string? FamilyPhoneNumber { get; set; }
         [Required(ErrorMessage = "Relation is required")]
-        public string FamilyRelation { get; set; }
+        public string ?FamilyRelation { get; set; }
     }
 }

@@ -334,6 +334,10 @@ input[type="file"] {
   height: 400px;
 }
 
+.location-modal {
+    padding: 0px!important;
+}
+
 .modal-body {
   width: 95%!important;
   height: 85%!important;

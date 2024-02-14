@@ -109,13 +109,14 @@
                         <a class="back-btn download-text" id="download-all">
                             <span class="back-text">Download All</span>
                         </a>
-                        <a class="logout-mob download-mob" asp-controller="Patient" asp-action="PatientLogin">
+                        <a class="logout-mob download-mob" id="download-all-mob">
                             <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
                         </a>
                     </div>
 
                 </div>
-                <form class="desktop-table">
+                <form class="desktop-table" asp-action="ViewDocument">
+                    <input type="text" style="opacity:0;height:1px;width:1px;" id="filename" asp-for="filename"/>
                     <table class="table">
                         <thead>
                             <tr>
@@ -225,6 +226,7 @@
                             </span>
                         }
                     </div>
+                    <button class="d-none" type="submit" id="submit-btn"></button>
                 </form>
             </div>
         </div>
@@ -260,22 +262,43 @@
         });
     });
 
-    $(document).ready(function () {
-        $('#download-all').on('click', function () {
-            
+        $(document).ready(function () {
+            $('#download-all').on('click', function () {
             const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+                    let filename = ''
+                    for (let i = 0; i < checkbox.length;++i){
+                        if(checkbox[i].checked){
+                            filename += checkbox[i].value
+                            filename+= ','
+                            flag = 1
+                        }
+                    }
+                    if(flag==1)
+                    {
+                        document.getElementById("filename").value = filename
+                        document.getElementById("submit-btn").click();
+                    }
+            });
+        });
+
+    $(document).ready(function () {
+        $('#download-all-mob').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
             let filename = ''
-            for (let i = 0; i < checkbox.length;++i){
-                if(checkbox[i].checked){
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
                     filename += checkbox[i].value
-                    filename+= ','
+                    filename += ','
+                    flag = 1
                 }
             }
-            
-            $.post('/Patient/DownloadAll', { filename: filename }, function (response) {
-                console.log(response.isDownloaded)
-            });
-            
+            if (flag == 1) {
+                document.getElementById("filename").value = filename
+                document.getElementById("submit-btn").click();
+            }
+
         });
     });
 </script>

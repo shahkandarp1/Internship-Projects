@@ -33,7 +33,6 @@ const reload = () => {
     location.reload()
 }
 
-
 $(window).on('load', function () {
     $('#myModal').modal('show');
 });
@@ -41,6 +40,37 @@ $(window).on('load', function () {
 $(document).ready(function () {
     $("#closeBtn").click(function () {
         $("#myModal").modal("hide");
+    });
+});
+
+$(document).ready(function () {
+$("#openBtn").click(function () {
+    $("#myModal1").modal("show");
+    var geocoder = new google.maps.Geocoder();
+    var address = `${document.getElementById("street").value}, ${document.getElementById("city").value},${document.getElementById("state").value} ${document.getElementById("zipcode").value}`
+    geocoder.geocode({ address: address }, function (results, status) {
+        if (status == "OK") {
+            var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
+            console.log("Latitude: " + latitude);
+            console.log("Longitude: " + longitude);
+            var map = L.map('map').setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+            var marker = L.marker([latitude, longitude]).addTo(map);
+            marker.bindPopup("This is Your Location").openPopup();
+        } else {
+            console.log("Geocoding failed: " + status);
+        }
+    });
+});
+});
+
+$(document).ready(function () {
+    $("#closeBtn1").click(function () {
+        $("#myModal1").modal("hide");
     });
 });
 
