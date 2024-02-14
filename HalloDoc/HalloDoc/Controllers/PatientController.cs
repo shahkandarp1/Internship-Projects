@@ -957,6 +957,13 @@ namespace HaloDocMVC.NET.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult PatientProfile(User modal)
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult ViewDocument(int id)
         {
