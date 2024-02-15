@@ -208,6 +208,22 @@ input[type="file"] {
     align-items: center;
 }
 
+.location:hover,.back-btn:hover {
+    color: #0dcaf0;
+}
+.gmap_canvas {
+    overflow: hidden;
+    background: none !important;
+    height: 500px;
+    width: 600px;
+}
+.mapouter {
+    position: relative;
+    text-align: right;
+    height: 500px;
+    width: 600px;
+}
+
 .lower-custom-btn {
     width: 83px;
     padding: 7px 7px;

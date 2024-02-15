@@ -2,14 +2,7 @@ const getFileData = (myFile) => {
     var file = myFile.files[0];
     var filename = file.name;
     document.getElementById("form-label").innerHTML = `${filename}`;
-
-    var map = L.map('map').setView([51.505, -0.09], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-        maxZoom: 18
-    }).addTo(map);
 }
-
 
 const changeMode = () => {
     try {
@@ -52,27 +45,12 @@ $(document).ready(function () {
 $(document).ready(function () {
 $("#openBtn").click(function () {
     $("#myModal1").modal("show");
-    var geocoder = new google.maps.Geocoder();
-    var address = `${document.getElementById("street").value}, ${document.getElementById("city").value},${document.getElementById("state").value} ${document.getElementById("zipcode").value}`
-    console.log(address)
-    geocoder.geocode({ address: address }, function (results, status) {
-        if (status == "OK") {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-            console.log("Latitude: " + latitude);
-            console.log("Longitude: " + longitude);
-            var map = L.map('map').setView([latitude, longitude], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                maxZoom: 18
-            }).addTo(map);
-            var marker = L.marker([latitude, longitude]).addTo(map);
-            marker.bindPopup("This is Your Location").openPopup();
-            map.setView([latitude, longitude], 16);
-        } else {
-            console.log("Geocoding failed: " + status);
-        }
-    });
+    var Street = $("#street").val();
+    var City = $("#city").val();
+    var State = $("#state").val();
+    var ZipCode = $("#zipcode").val();
+    var address = "https://maps.google.com/maps?q=" + Street + City + State + ZipCode + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
+    $("#gmap_canvas").attr("src", address);
 });
 });
 
@@ -81,6 +59,8 @@ $(document).ready(function () {
         $("#myModal1").modal("hide");
     });
 });
+
+
 
 
 const changeVisibility = () => {

@@ -202,7 +202,7 @@ namespace HaloDocMVC.NET.Controllers
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
                         CreatedDate = DateTime.Now.Date,
-                        PasswordHash = modal.Password  ,
+                        PasswordHash = modal.Password,
                     };
 
 
@@ -954,14 +954,80 @@ namespace HaloDocMVC.NET.Controllers
 
         public IActionResult PatientProfile()
         {
-            return View();
+            var id = _context.HttpContext.Session.GetInt32("UserId");
+            var curr_user = _db.Users.FirstOrDefault(u=>u.UserId == id);
+            PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel
+            {
+                FirstName = curr_user.FirstName,
+                LastName = curr_user.LastName,
+                Email = curr_user.Email,
+                Phone = curr_user.Mobile,
+                DateOfBirth = DateTime.Parse($"{curr_user.IntYear}-{curr_user.StrMonth}-{curr_user.IntDate}"),
+                Street = curr_user.Street,
+                State = curr_user.State,
+                City = curr_user.City,
+                ZipCode = curr_user.ZipCode
+            };
+            return View(patientRequestViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult PatientProfile(User modal)
+        public IActionResult PatientProfile(PatientRequestViewModel modal)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (region == null)
+                {
+                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    return View(modal);
+                }
+                
+                var aspnetid = _context.HttpContext.Session.GetInt32("AspNetUserId");
+                var userid = _context.HttpContext.Session.GetInt32("UserId");
+
+                User user = _db.Users.FirstOrDefault(u=>u.UserId == userid);
+
+                if(user.Email != modal.Email)
+                {
+                    var check_user_count = _db.AspNetUsers.Where(u => u.Email == modal.Email).Count();
+                    if (check_user_count == 1)
+                    {
+                        ModelState.AddModelError("ImageContent", "This Email already exists");
+                        return View(modal);
+                    }
+                }
+
+                user.FirstName = modal.FirstName;
+                user.LastName = modal.LastName;
+                user.Email = modal.Email;
+                user.Mobile = modal.Phone;
+                user.Street = modal.Street;
+                user.City = modal.City;
+                user.State = modal.State;
+                user.RegionId = region.RegionId;
+                user.ZipCode = modal.ZipCode;
+                user.StrMonth = modal.DateOfBirth.Month.ToString();
+                user.IntYear = modal.DateOfBirth.Year;
+                user.IntDate = modal.DateOfBirth.Day;
+                user.ModifiedBy = aspnetid;
+                user.ModifiedDate = DateTime.Now.Date;
+
+                _db.Users.Update(user);
+
+                AspNetUser aspuser = _db.AspNetUsers.FirstOrDefault(u=>u.Id == aspnetid);
+                aspuser.Email = modal.Email;
+                aspuser.PhoneNumber = modal.Phone;
+                aspuser.UserName = modal.Email;
+
+                _db.AspNetUsers.Update(aspuser);
+                _db.SaveChanges();
+
+                return RedirectToAction("PatientDashboard");
+
+            }
+            return View(modal);
         }
 
         [HttpGet]

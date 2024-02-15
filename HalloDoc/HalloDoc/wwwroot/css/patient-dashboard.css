@@ -585,6 +585,13 @@ tr td {
 .common-btn{
   margin-left: 15px;
 }
+a:hover
+{
+    color:inherit;
+}
+.document:hover, .document-mob:hover, .logout:hover {
+    color: #0dcaf0;
+}
 
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */

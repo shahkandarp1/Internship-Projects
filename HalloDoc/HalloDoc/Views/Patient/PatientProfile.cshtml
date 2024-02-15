@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+﻿@model PatientRequestViewModel
+@{
+    ViewData["Title"] = "Patient Profile";
 }
 @section Styles {
     <link href="~/css/patient-dashboard.css" rel="stylesheet" type="text/css" />
@@ -14,10 +15,32 @@
     <div class="modal" id="myModal1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body location-modal">
-                    <div id="map" style="width: 100%; height: 80%;"></div>
-                    <button class="btn btn-info ok-btn" id="closeBtn1">Ok</button>
-                </div>
+                <section>
+                    <div class="mapouter">
+                        <div class="gmap_canvas">
+                            <iframe width="600" height="500" id="gmap_canvas" src="" frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+
+                                <!-- </iframe><a href="https://123movies-to.org">123 movies</a><br> -->
+                                <style>
+                                    .mapouter {
+                                        position: relative;
+                                        text-align: right;
+                                        height: 500px;
+                                        width: 600px;
+                                    }</style>
+                                <!-- <a href="https://www.embedgooglemap.net">embedgooglemap.net</a> -->
+                                <style>
+                                    .gmap_canvas {
+                                        overflow: hidden;
+                                        background: none !important;
+                                        height: 500px;
+                                        width: 600px;
+                                    }
+                                </style>
+                                </iframe>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
@@ -26,7 +49,7 @@
     <div class="navbar-custom">
         <img src="../../images/logo1.png" alt="" class="logo" />
         <div class="right-side-elements">
-            <span class="welcome-text">Welcome <span class="name-text">Tests Testing</span></span>
+            <span class="welcome-text">Welcome <span class="name-text">@(string.Concat(Model.FirstName,' ',Model.LastName))</span></span>
             <a class="logout log" asp-controller="Patient" asp-action="PatientLogin" onclick="logout()">
                 <span class="logout-text">Logout</span>
             </a>
@@ -100,22 +123,24 @@
             <form class="main-form" asp-action="PatientProfile" method="post">
 
                 <!-- General Information  -->
-
                 <div class="upper-text">
                     General Information
                 </div>
                 <div class="row">
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control editable" id="first-name" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="first-name" placeholder="name@example.com" asp-for="FirstName" disabled>
                         <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control editable" id="last-name" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="last-name" placeholder="name@example.com" asp-for="LastName" disabled>
                         <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="date" class="form-control dob editable" id="dob" placeholder="name@example.com" disabled>
+                        <input type="date" class="form-control dob editable" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" disabled>
                         <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -126,19 +151,21 @@
                 </div>
                 <div class="row symptoms-textarea">
                     <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
-                        <select class="form-control select editable" id="emailInput" placeholder="name@example.com" disabled>
+                        <select class="form-control select editable" id="Select" placeholder="name@example.com" disabled>
                             <option selected>Mobile</option>
                             <option>Work</option>
                             <option>Home</option>
                         </select>
-                        <label for="emailInput" class="form-label">Type</label>
+                        <label for="Select" class="form-label">Type</label>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-8 col-8">
-                        <input type="tel" class="form-control phone editable" id="phone" disabled>
+                        <input type="tel" class="form-control phone editable" id="phone" asp-for="Phone" disabled>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="email" class="form-control editable" id="emailInput" placeholder="name@example.com" disabled>
+                        <input type="email" class="form-control editable" id="emailInput" placeholder="name@example.com" asp-for="Email" disabled>
                         <label for="emailInput" class="form-label">Email</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     
                 </div>
@@ -149,26 +176,31 @@
                 </div>
                 <div class="row symptoms-textarea">
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control editable" id="street" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="street" placeholder="name@example.com" asp-for="Street" disabled>
                         <label for="street" class="form-label">Street</label>
+                        <span asp-validation-for="Street" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control editable" id="city" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="city" placeholder="name@example.com" asp-for="City" disabled>
                         <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control editable" id="state" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="state" placeholder="name@example.com" asp-for="State" disabled>
                         <label for="state" class="form-label">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-8">
-                        <input type="text" class="form-control editable" id="zipcode" placeholder="name@example.com" disabled>
+                        <input type="text" class="form-control editable" id="zipcode" placeholder="name@example.com" asp-for="ZipCode" disabled>
                         <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
-                    <button class="location col-lg-2 col-md-2 col-sm-4 mt-3" type="button" id="openBtn">
+                    <a class="location col-lg-2 col-md-2 col-sm-4 mt-3" id="openBtn">
                         <img class="map-img" src="../../images/geo-alt.svg" alt="">
                         <span class="map-text">Map</span>
-                    </button>
+                    </a>
                 </div>
+                <span asp-validation-for="ImageContent" class="text-danger custom-msg"></span>
 
                 <!-- Submit / Clear -->
                 <div class="lower-btn">
@@ -179,4 +211,4 @@
             </form>
         </div>
     </div>
-<div/>
+</div>

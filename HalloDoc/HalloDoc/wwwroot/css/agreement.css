@@ -1,0 +1,170 @@
+﻿#body{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Roboto',sans-serif;
+}
+
+.main-agreement-container{
+    width:50%;
+    height:100vh;
+    margin-top:150px;
+}
+
+
+.buttons {
+    margin-top:25px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+/* Main Content */
+
+.main-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.flex-container {
+    width: 90%;
+    height: 70%;
+}
+
+.back-btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #0dcaf0;
+    padding: 5px 10px;
+    border-radius: 2px;
+    border: 1px solid #0dcaf0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.back-text {
+    margin-right: 3px;
+    font-size: 13px;
+}
+
+a:hover {
+    color: #0dcaf0;
+}
+
+.top-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.submit-text {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.main-form {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0.1px 0.1px 18px -13px black;
+}
+
+.upper-text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.symptoms-textarea {
+    margin-top: 10px;
+}
+
+.form-label {
+    color: #adadad;
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 4px;
+    z-index: 0 !important;
+}
+
+.form-control {
+    height: 50px !important;
+}
+
+    .form-control:focus {
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        border-color: #0dcaf0;
+        outline: 0;
+        box-shadow: none;
+    }
+
+.form-floating > label {
+    top: -6px;
+    left: 2px;
+}
+
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-select ~ label {
+    font-family: "Roboto", sans-serif;
+    color: #0dcaf0;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label {
+    font-weight: 400;
+}
+
+.dob:focus .form-floating > .form-control-plaintext ~ .dob-label,
+.form-floating > .form-control:focus ~ .dob-label,
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label,
+.form-floating > .form-select ~ .dob-label {
+    font-family: "Roboto", sans-serif;
+    color: #adadad;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    min-height: 0px;
+}
+
+.text-area {
+    height: 100px !important;
+}
+
+.lower-btn{
+    margin-top:17px;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+}
+
+.continue-btn {
+    margin-right:10px;
+}
+
+.modal-head {
+    color:black!important;
+}
+
+#message{
+    width:100%;
+    text-align:center;
+    margin-top:20px;
+    font-weight:500;
+}

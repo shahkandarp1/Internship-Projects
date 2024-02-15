@@ -1,0 +1,75 @@
+﻿@model Request
+@{
+    ViewData["Title"] = "Agreement";
+}
+@section Styles {
+    <link href="~/css/agreement.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/agreement.js"></script>
+    <link href="~/css/patient-dashboard.css" rel="stylesheet" type="text/css" />
+}
+
+<!-- Create Request Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="exampleModalLongTitle">Create New Request</div>
+                <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+            </div> 
+                <div class="modal-body">
+                <span class="modal-head">@(string.Concat(Model.RequestClient.FirstName, ' ', Model.RequestClient.LastName)),</span>
+                    <div class="form-floating mt-3 inp col-sm-12">
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" required></textarea>
+                        <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
+                    </div>
+                    <div class="lower-btn">
+                        <button class="btn btn-info continue-btn" data-bs-dismiss="modal" id="Confirm">Confirm</button>
+                        <a type="button" class="btn cancel-btn">Cancel</a>
+                    </div>
+                </div> 
+        </div>
+    </div>
+</div>
+
+
+<div id="body">
+    <div class="main-agreement-container">
+        To provide best medical service, we cannot determine the cost right away. If you agree to our service, so we will provide care and follow-up until all care is completed. So with this points, if you like us to provide care to you click on "Agree" and we'll get started immediately, if you do not agree simply click "Cancel".
+        <div class="buttons">
+            <button class="btn btn-success" id="agree">I Agree</button>
+            <button class="btn btn-danger" id="openBtn" data-bs-toggle="modal"
+                    data-bs-target="#myModal">
+                Cancel
+            </button>
+        </div>
+        <div id="message" class="text-success"></div>
+    </div>
+    
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#agree').on('click', function () {
+            var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+            $.get('/Agreement/Agree', { id:id }, function (response) {
+                document.getElementById("message").innerHTML = "Request Agreed Succefully !!!"
+                console.log(response)
+            });
+        });
+    });
+    $(document).ready(function () {
+        $('#Confirm').on('click', function () {
+            var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+            var notes = document.getElementById("floatingInput").value;
+            $.get('/Agreement/Disagree', { id: id ,notes:notes }, function (response) {
+                $("#myModal").modal("hide");
+                document.getElementById("message").innerHTML = "Request Declined !!!"
+                document.getElementById("message").classList.remove("text-success");
+                document.getElementById("message").classList.add("text-danger");
+                console.log(response)
+            });
+        });
+    });
+</script>
