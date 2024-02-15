@@ -2,6 +2,12 @@ const getFileData = (myFile) => {
     var file = myFile.files[0];
     var filename = file.name;
     document.getElementById("form-label").innerHTML = `${filename}`;
+
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18
+    }).addTo(map);
 }
 
 
@@ -48,6 +54,7 @@ $("#openBtn").click(function () {
     $("#myModal1").modal("show");
     var geocoder = new google.maps.Geocoder();
     var address = `${document.getElementById("street").value}, ${document.getElementById("city").value},${document.getElementById("state").value} ${document.getElementById("zipcode").value}`
+    console.log(address)
     geocoder.geocode({ address: address }, function (results, status) {
         if (status == "OK") {
             var latitude = results[0].geometry.location.lat();
@@ -61,6 +68,7 @@ $("#openBtn").click(function () {
             }).addTo(map);
             var marker = L.marker([latitude, longitude]).addTo(map);
             marker.bindPopup("This is Your Location").openPopup();
+            map.setView([latitude, longitude], 16);
         } else {
             console.log("Geocoding failed: " + status);
         }
