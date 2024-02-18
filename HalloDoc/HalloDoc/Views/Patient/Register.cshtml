@@ -1,0 +1,86 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Patient Register";
+}
+@section Styles {
+    <link href="~/css/patient-login.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/patient-login.js"></script>
+}
+  
+
+<div id="body" onload="checkMode()">
+    <div class="main-container">
+      <span class="top-right-moon">
+        <button class="moon" onclick="changeMode()">
+          <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+          <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
+        </button>
+      </span>
+      <div class="flex-container">
+        <div class="image-container">
+            <img src="../../images/11116016_415.jpg" alt="" class="bg-image">
+            <div class="inner-flex">
+                <div class="logo">
+                    <img src="../../images/logo1.png" alt="" class="logo-img">
+                </div>
+                <form asp-action="Register" method="post" class="login-content">
+                    <input type="hidden" asp-for="Id"/>
+                    <div class="back">
+                        <!-- <a class="back-text" href="./patient-site.html" >&lt; Back</a> -->
+                        <span class="login-text" id="login-text">Create Account</span>
+                    </div>
+                    <div class="form-floating mt-3 inp">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="Username">
+                        <label for="floatingInput" class="form-label">Username</label>
+                        <img src="../../images/user.png" alt="" class="inp-side-picture">
+                    </div>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    <div class="form-floating mt-3 inp">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" asp-for="Password">
+                        <label for="floatingPassword" class="form-label">Password</label>
+                        <a href="#" onclick="changeVisibility()" style="cursor: pointer;"><img src="../../images/view.png" alt="" class="inp-side-picture eye open-eye"></a>
+                        <a href="#" onclick="changeVisibility()" style="cursor: pointer;"><img src="../../images/hide.png" alt="" class="inp-side-picture eye hidden close-eye"></a>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="form-floating mt-3 inp">
+                        <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="Password" asp-for="ConfirmPassword">
+                        <label for="floatingConfirmPassword" class="form-label">Confirm Password</label>
+                        <a href="#" onclick="changeVisibility1()" style="cursor: pointer;"><img id="open-eye" src="../../images/view.png" alt="" class="inp-side-picture eye"></a>
+                        <a href="#" onclick="changeVisibility1()" style="cursor: pointer;"><img id="closed-eye" src="../../images/hide.png" alt="" class="inp-side-picture eye hidden"></a>
+                    </div>
+                        <span id="passwordcheck" class="text-danger hidden-span">Password and Confirm Password should be same</span>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        @if (ViewData["Message"] as string != null)
+                        {
+                            <span class="text-success">@ViewData["Message"]</span>
+                        }
+                        <button type="submit" class="btn btn-info custom-submit-btn mt-3">Create</button>
+                </form>
+            </div>
+        </div>
+      </div>
+      <div class="bottom-part-flex" id="bottom-flex">
+        <a href="#" class="bottom-part-a right-a">Terms of Conditions</a> |
+        <a href="#" class="bottom-part-a left-a">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+    $(document).ready(function () {
+        $('#floatingConfirmPassword').on('blur', function () {
+            var confirmPassword = $('#floatingConfirmPassword').val();
+            var password = $('#floatingPassword').val();
+            console.log(password)
+
+            $.get('/Patient/PaswordCheck', { password: password, confirmpassword: confirmPassword }, function (response) {
+                if (response.isPasswordValid == false) {
+                    document.getElementById("passwordcheck").style.display = "block";
+                }
+                else {
+                    document.getElementById("passwordcheck").style.display = "none";
+                }
+            });
+        });
+    });
+</script>
