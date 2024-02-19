@@ -83,6 +83,10 @@ const changeMode = () => {
 
 window.onload = function () {
 
+    const inputDate = document.getElementById('dob');
+    const today = new Date().toISOString().split('T')[0];
+    inputDate.setAttribute('max', today);
+
     const phoneInputField = document.getElementsByClassName("phone");
     for (let i = 0; i < phoneInputField.length; ++i) {
         const phoneInput = window.intlTelInput(phoneInputField[i], {
@@ -107,4 +111,3 @@ window.onload = function () {
         document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
     }
 }
-

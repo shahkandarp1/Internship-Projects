@@ -1,4 +1,6 @@
 using HalloDoc;
+using HalloDoc.Repository.Interface;
+using HalloDoc.Repository.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(720); // Set session timeout
 });
+builder.Services.AddScoped<IAdmin, HalloDoc.Repository.Repository.Admin>();
 
 
 var app = builder.Build();

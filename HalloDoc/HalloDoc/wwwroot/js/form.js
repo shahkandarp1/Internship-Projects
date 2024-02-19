@@ -62,7 +62,6 @@ $(document).ready(function () {
 
 
 
-
 const changeVisibility = () => {
     var x = document.getElementById("floatingPassword");
     const openeye = document.getElementsByClassName("open-eye")
@@ -96,6 +95,10 @@ const changeVisibility1 = () => {
 }
 
 window.onload = function () { 
+
+    const inputDate = document.getElementById('dob');
+    const today = new Date().toISOString().split('T')[0];
+    inputDate.setAttribute('max', today);
 
     const phoneInputField = document.getElementsByClassName("phone");
     for (let i = 0; i < phoneInputField.length; ++i) {

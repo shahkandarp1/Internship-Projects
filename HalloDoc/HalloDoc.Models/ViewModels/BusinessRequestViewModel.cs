@@ -21,7 +21,8 @@ namespace HalloDoc.ViewModels
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's email address")]
-        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            ErrorMessage = "Please enter valid Email")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
@@ -47,6 +48,8 @@ namespace HalloDoc.ViewModels
         [Required(ErrorMessage = "Your Last Name is required")]
         public string BusinessLastName { get; set; }
         [Required(ErrorMessage = "Your Email is required")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            ErrorMessage = "Please enter valid Email")]
         public string BusinessEmail { get; set; }
         [Required(ErrorMessage = "Phone Number is required")]
         public string BusinessPhoneNumber { get; set; }

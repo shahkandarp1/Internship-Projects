@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v7.0": {
       "HalloDoc/1.0.0": {
         "dependencies": {
-          "HalloDoc.DataAccess": "1.0.0",
           "HalloDoc.Models": "1.0.0",
+          "HalloDoc.Repository": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.15",
           "Microsoft.EntityFrameworkCore.Design": "7.0.15",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.15",
@@ -44,6 +44,12 @@
             "assemblyVersion": "7.0.0.0",
             "fileVersion": "7.0.1523.60110"
           }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "System.Text.Encodings.Web": "7.0.0"
         }
       },
       "Microsoft.AspNetCore.Http.Features/5.0.17": {
@@ -255,16 +261,6 @@
           "System.Text.Encodings.Web": "7.0.0"
         }
       },
-      "HalloDoc.DataAccess/1.0.0": {
-        "dependencies": {
-          "HalloDoc.Models": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "7.0.15",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11"
-        },
-        "runtime": {
-          "HalloDoc.DataAccess.dll": {}
-        }
-      },
       "HalloDoc.Models/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Http.Features": "5.0.17",
@@ -273,6 +269,17 @@
         },
         "runtime": {
           "HalloDoc.Models.dll": {}
+        }
+      },
+      "HalloDoc.Repository/1.0.0": {
+        "dependencies": {
+          "HalloDoc.Models": "1.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.EntityFrameworkCore": "7.0.15",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11"
+        },
+        "runtime": {
+          "HalloDoc.Repository.dll": {}
         }
       }
     }
@@ -303,6 +310,13 @@
       "sha512": "sha512-t++Mtu5lgYwtYF0hDfyD8HEcrgnZAKFwgM/AIz04DV1Z0jFLe51Bh+2OTpJARWs1ADY48HYAFcptOJaZTmfxiA==",
       "path": "microsoft.aspnetcore.cryptography.keyderivation/7.0.15",
       "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.7.0.15.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Http.Features/5.0.17": {
       "type": "package",
@@ -493,12 +507,12 @@
       "path": "system.text.json/7.0.0",
       "hashPath": "system.text.json.7.0.0.nupkg.sha512"
     },
-    "HalloDoc.DataAccess/1.0.0": {
+    "HalloDoc.Models/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "HalloDoc.Models/1.0.0": {
+    "HalloDoc.Repository/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -155,6 +155,15 @@ input[type=password]::-ms-clear
     margin-top: 8px;
 }
 
+.form-control,.form-control:focus {
+    background: inherit;
+}
+
+.form-floating>.form-control-plaintext~label::after, .form-floating>.form-control:focus~label::after, .form-floating>.form-control:not(:placeholder-shown)~label::after, .form-floating>.form-select~label::after {
+    background-color: inherit;
+
+}
+
 /* Bottom part of right side */
 
 .bottom-part-flex {

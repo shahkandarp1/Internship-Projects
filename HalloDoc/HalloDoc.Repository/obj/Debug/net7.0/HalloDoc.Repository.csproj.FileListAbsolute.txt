@@ -1,0 +1,15 @@
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Repository.deps.json
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Repository.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Repository.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.csproj.AssemblyReference.cache
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.AssemblyInfoInputs.cache
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.AssemblyInfo.cs
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.csproj.CoreCompileInputs.cache
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\refint\HalloDoc.Repository.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\ref\HalloDoc.Repository.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Models.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Models.pdb
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.csproj.CopyComplete

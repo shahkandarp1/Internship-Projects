@@ -16,6 +16,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Hosting.Server;
 using System.Net.Mail;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HaloDocMVC.NET.Controllers
 {
@@ -53,7 +54,7 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.UserName == model.Username);
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == model.Email);
                 if (user != null)
                 {
                     if (model.Password == user.PasswordHash)
@@ -87,22 +88,41 @@ namespace HaloDocMVC.NET.Controllers
             return View();
         }
 
-        public IActionResult ResetPassword(int id)
+        public IActionResult ResetPassword(string Token)
         {
+            PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u => u.Token == Token);
+            if(passwordReset == null)
+            {
+                return NotFound();
+            }
+            if(passwordReset.IsUpdated == true)
+            {
+                return NotFound();
+            }
+            TimeSpan difference = DateTime.Now.Subtract(passwordReset.CreatedDate);
+            double hours = difference.TotalHours;
+            if (hours > 24)
+            {
+                return NotFound();
+            }
             ResetPasswordViewModel resetPasswordViewModel = new ResetPasswordViewModel();
-            resetPasswordViewModel.Id = id;
+            resetPasswordViewModel.Token = Token;
             return View(resetPasswordViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ResetPassword(ResetPasswordViewModel modal)
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel modal)
         {
             if(ModelState.IsValid)
             {
-                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == modal.Id);
+                PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u=>u.Token == modal.Token); 
+                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Email == passwordReset.Email);
                 aspNetUser.PasswordHash = modal.Password;
                 _db.AspNetUsers.Update(aspNetUser);
+                _db.SaveChanges();
+                passwordReset.IsUpdated = true;
+                _db.PasswordResets.Update(passwordReset);
                 _db.SaveChanges();
                 ViewData["Message"] = "Password Reseted successfully!!!";
                 return View();
@@ -117,27 +137,40 @@ namespace HaloDocMVC.NET.Controllers
             {
                 return Json(new { isValid = false });
             }
-            var platformEmail = "tp7972846@gmail.com";
-            var platformTitle = "HalloDoc";
-            var platformPassword = "wgou swvd eofp yhxo";
-            var inviteLink = Url.Action("ResetPassword", "Patient", new { id = user.Id }, Request.Scheme);
-            var fromAddress = new MailAddress(platformEmail, platformTitle);
-            var toAddress = new MailAddress(email);
+            string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+            string senderPassword = "shahkandarp2430";
+            string platformTitle = "HalloDoc";
+            string Token = Guid.NewGuid().ToString();
+            PasswordReset passwordReset = new PasswordReset
+            {
+                Token = Token,
+                Email = email,
+                CreatedDate = DateTime.Now
+            };
+            _db.PasswordResets.Add(passwordReset);
+            _db.SaveChanges();
+            var inviteLink = Url.Action("ResetPassword", "Patient", new { token= Token }, Request.Scheme);
             var subject = "Reset Password - HalloDoc";
             var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-            var msg = new MailMessage(fromAddress, toAddress)
+            MailMessage mailMessage = new MailMessage
             {
+                From = new MailAddress(senderEmail, "HalloDoc"),
                 Subject = subject,
-                Body = body,
-                IsBodyHtml = true
+                IsBodyHtml = true,
+                Body = body
             };
 
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            SmtpClient client = new SmtpClient("smtp.office365.com")
             {
-                Credentials = new NetworkCredential(platformEmail, platformPassword),
+                Port = 587,
+                Credentials = new NetworkCredential(senderEmail, senderPassword),
                 EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false
             };
-            smtpClient.Send(msg);
+            mailMessage.To.Add(email);
+
+            client.SendMailAsync(mailMessage);
 
             return Json(new { isValid = true });
         }
@@ -145,7 +178,6 @@ namespace HaloDocMVC.NET.Controllers
         [HttpGet]
         public IActionResult PatientForm()
         {
-            ViewData["isRegistered"] = true;
             return View();
         }
 
@@ -389,20 +421,6 @@ namespace HaloDocMVC.NET.Controllers
             return Json(new { isValid = isValidEmail });
         }
 
-        public IActionResult PaswordCheck(string password,string confirmpassword)
-        {
-            bool isPasswordSame;
-            if(password == confirmpassword)
-            {
-                isPasswordSame = true;
-            }
-            else
-            {
-                isPasswordSame = false;
-            }
-            return Json(new { isPasswordValid = isPasswordSame });
-        }
-
         public IActionResult Logout()
         {
 
@@ -634,27 +652,32 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    var platformEmail = "tp7972846@gmail.com";
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var platformPassword = "wgou swvd eofp yhxo";
                     var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var fromAddress = new MailAddress(platformEmail, platformTitle);
-                    var toAddress = new MailAddress(modal.Email);
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-                    var msg = new MailMessage(fromAddress, toAddress)
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
                     {
-                        Subject = subject,
-                        Body = body,
-                        IsBodyHtml = true
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Set up your Account",
+                        IsBodyHtml = true,
+                        Body = body
                     };
 
-                    var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                    {
-                        Credentials = new NetworkCredential(platformEmail, platformPassword),
-                        EnableSsl = true,
-                    };
-                    smtpClient.Send(msg);
+                    mailMessage.To.Add(modal.Email);
+
+                    client.SendMailAsync(mailMessage);
 
                     return RedirectToAction("PatientSite");
 
@@ -667,7 +690,9 @@ namespace HaloDocMVC.NET.Controllers
         public IActionResult Register(int id)
         {
             RegisterViewModel modal = new RegisterViewModel();
+            AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
             modal.Id = id;
+            modal.Email = aspNetUser.Email;
             return View(modal);
         }
 
@@ -678,7 +703,8 @@ namespace HaloDocMVC.NET.Controllers
             if (ModelState.IsValid)
             {
                 AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == modal.Id);
-                aspNetUser.UserName = modal.Username;
+                aspNetUser.Email = modal.Email;
+                aspNetUser.UserName = modal.Email;
                 aspNetUser.PasswordHash = modal.Password;
                 _db.AspNetUsers.Update(aspNetUser);
                 _db.SaveChanges();
@@ -914,27 +940,32 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestConcierges.Add(requestconcierge);
                     _db.SaveChanges();
 
-                    var platformEmail = "tp7972846@gmail.com";
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var platformPassword = "wgou swvd eofp yhxo";
                     var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var fromAddress = new MailAddress(platformEmail, platformTitle);
-                    var toAddress = new MailAddress(modal.Email);
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-                    var msg = new MailMessage(fromAddress, toAddress)
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
                     {
-                        Subject = subject,
-                        Body = body,
-                        IsBodyHtml = true
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Set up your Account",
+                        IsBodyHtml = true,
+                        Body = body
                     };
 
-                    var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                    {
-                        Credentials = new NetworkCredential(platformEmail, platformPassword),
-                        EnableSsl = true,
-                    };
-                    smtpClient.Send(msg);
+                    mailMessage.To.Add(modal.Email);
+
+                    client.SendMailAsync(mailMessage);
 
                     return RedirectToAction("PatientSite");
                 }
@@ -1161,27 +1192,32 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestBusinesses.Add(requestbusiness);
                     _db.SaveChanges();
 
-                    var platformEmail = "tp7972846@gmail.com";
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var platformPassword = "wgou swvd eofp yhxo";
                     var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var fromAddress = new MailAddress(platformEmail, platformTitle);
-                    var toAddress = new MailAddress(modal.Email);
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-                    var msg = new MailMessage(fromAddress, toAddress)
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
                     {
-                        Subject = subject,
-                        Body = body,
-                        IsBodyHtml = true
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Set up your Account",
+                        IsBodyHtml = true,
+                        Body = body
                     };
 
-                    var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                    {
-                        Credentials = new NetworkCredential(platformEmail, platformPassword),
-                        EnableSsl = true,
-                    };
-                    smtpClient.Send(msg);
+                    mailMessage.To.Add(modal.Email);
+
+                    client.SendMailAsync(mailMessage);
 
                     return RedirectToAction("PatientSite");
                 }
@@ -1438,27 +1474,32 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    var platformEmail = "tp7972846@gmail.com";
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var platformPassword = "wgou swvd eofp yhxo";
                     var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var fromAddress = new MailAddress(platformEmail, platformTitle);
-                    var toAddress = new MailAddress(modal.Email);
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-                    var msg = new MailMessage(fromAddress, toAddress)
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
                     {
-                        Subject = subject,
-                        Body = body,
-                        IsBodyHtml = true
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Set up your Account",
+                        IsBodyHtml = true,
+                        Body = body
                     };
 
-                    var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                    {
-                        Credentials = new NetworkCredential(platformEmail, platformPassword),
-                        EnableSsl = true,
-                    };
-                    smtpClient.Send(msg);
+                    mailMessage.To.Add(modal.Email);
+
+                    client.SendMailAsync(mailMessage);
 
                     return RedirectToAction("PatientDashboard");
                 }

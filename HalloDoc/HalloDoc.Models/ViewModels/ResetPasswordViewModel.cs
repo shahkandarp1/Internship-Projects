@@ -9,13 +9,17 @@ namespace HalloDoc.ViewModels
 {
     public class ResetPasswordViewModel
     {
-        public int? Id { get; set; }
+        public string? Token { get; set; }
 
         [Required]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
+            ErrorMessage = "Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string Password { get; set; }
 
         [Required]
         [Compare("Password", ErrorMessage = "Password and Confirm Password should be same")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
+            ErrorMessage = "Confirm Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string ConfirmPassword { get; set; }
     }
 }

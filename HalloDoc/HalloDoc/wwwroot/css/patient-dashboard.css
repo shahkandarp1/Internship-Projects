@@ -310,7 +310,6 @@ a {
 .tabcontent {
   height: 80vh;
   margin-top: 40px;
-  margin-left: 20px;
 }
 
 .main-heading {
@@ -602,13 +601,6 @@ a:hover
 
   .sidebar a {
     font-size: 18px;
-  }
-}
-
-
-@media screen and (max-width:769px) {
-  .tabcontent {
-    margin-left: 0;
   }
 }
 

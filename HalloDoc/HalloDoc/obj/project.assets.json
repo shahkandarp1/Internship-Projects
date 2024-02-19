@@ -44,6 +44,23 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.2.0",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Http.Features/5.0.17": {
         "type": "package",
         "dependencies": {
@@ -474,7 +491,7 @@
       "System.Text.Encodings.Web/7.0.0": {
         "type": "package",
         "compile": {
-          "lib/net7.0/_._": {
+          "lib/net7.0/System.Text.Encodings.Web.dll": {
             "related": ".xml"
           }
         },
@@ -512,21 +529,6 @@
           "buildTransitive/net6.0/System.Text.Json.targets": {}
         }
       },
-      "HalloDoc.DataAccess/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
-        "dependencies": {
-          "HalloDoc.Models": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "7.0.15",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11"
-        },
-        "compile": {
-          "bin/placeholder/HalloDoc.DataAccess.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HalloDoc.DataAccess.dll": {}
-        }
-      },
       "HalloDoc.Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -540,6 +542,22 @@
         },
         "runtime": {
           "bin/placeholder/HalloDoc.Models.dll": {}
+        }
+      },
+      "HalloDoc.Repository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "HalloDoc.Models": "1.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.EntityFrameworkCore": "7.0.15",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11"
+        },
+        "compile": {
+          "bin/placeholder/HalloDoc.Repository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HalloDoc.Repository.dll": {}
         }
       }
     }
@@ -599,6 +617,19 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.xml",
         "microsoft.aspnetcore.cryptography.keyderivation.7.0.15.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.keyderivation.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+      "sha512": "Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.xml",
+        "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.abstractions.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Http.Features/5.0.17": {
@@ -1296,21 +1327,21 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "HalloDoc.DataAccess/1.0.0": {
-      "type": "project",
-      "path": "../HalloDoc.DataAccess/HalloDoc.DataAccess.csproj",
-      "msbuildProject": "../HalloDoc.DataAccess/HalloDoc.DataAccess.csproj"
-    },
     "HalloDoc.Models/1.0.0": {
       "type": "project",
       "path": "../HalloDoc.Models/HalloDoc.Models.csproj",
       "msbuildProject": "../HalloDoc.Models/HalloDoc.Models.csproj"
+    },
+    "HalloDoc.Repository/1.0.0": {
+      "type": "project",
+      "path": "../HalloDoc.Repository/HalloDoc.Repository.csproj",
+      "msbuildProject": "../HalloDoc.Repository/HalloDoc.Repository.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "HalloDoc.DataAccess >= 1.0.0",
       "HalloDoc.Models >= 1.0.0",
+      "HalloDoc.Repository >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.15",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.15",
@@ -1318,19 +1349,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Prashant\\.nuget\\packages\\": {}
+    "C:\\Users\\pci41\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\HalloDoc.csproj",
+      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\HalloDoc.csproj",
       "projectName": "HalloDoc",
-      "projectPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\HalloDoc.csproj",
-      "packagesPath": "C:\\Users\\Prashant\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\obj\\",
+      "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\HalloDoc.csproj",
+      "packagesPath": "C:\\Users\\pci41\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Prashant\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pci41\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1338,17 +1369,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.DataAccess\\HalloDoc.DataAccess.csproj": {
-              "projectPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.DataAccess\\HalloDoc.DataAccess.csproj"
+            "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj": {
+              "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj"
             },
-            "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj": {
-              "projectPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj"
+            "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\HalloDoc.Repository.csproj": {
+              "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\HalloDoc.Repository.csproj"
             }
           }
         }
@@ -1357,11 +1389,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1400,24 +1427,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[7.0.16, 7.0.16]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.16, 7.0.16]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -1426,7 +1435,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

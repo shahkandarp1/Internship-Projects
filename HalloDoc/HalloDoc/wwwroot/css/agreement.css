@@ -168,3 +168,9 @@ a:hover {
     margin-top:20px;
     font-weight:500;
 }
+
+@media screen and (max-width:425px){
+    .main-agreement-container{
+        width:80%;
+    }
+}

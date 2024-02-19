@@ -49,7 +49,7 @@
                     <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth">
+                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" >
                         <label for="dob" class="form-label dob-label">Date Of Birth</label>
                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
@@ -148,27 +148,18 @@
         </div>
     </div>
 
+    @section Scripts{
+        @{
+            <partial name="_ValidationScriptsPartial" />
+        }
+    }
+
     <!-- Bottom Part -->
 
     <partial name="_FormFooter" />
 </div>
 <script>
-    $(document).ready(function () {
-        $('#floatingConfirmPassword').on('blur', function () {
-            var confirmPassword = $('#floatingConfirmPassword').val();
-            var password = $('#floatingPassword').val();
 
-            
-            $.get('/Patient/PaswordCheck', { password: password, confirmpassword: confirmPassword }, function (response) {
-                if (response.isPasswordValid == false) {
-                    document.getElementById("passwordcheck").style.display = "block";
-                }
-                else {
-                    document.getElementById("passwordcheck").style.display = "none";
-                }
-            });
-        });
-    });
     $(document).ready(function () {
         $('#emailInput').on('blur', function () {
             var inputValue = $('#emailInput').val();
@@ -191,6 +182,11 @@
         });
     });
     window.onload = function () {
+
+        const inputDate = document.getElementById('dob');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('max', today);
+
         var inputValue = $('#emailInput').val();
 
         $.get('/Patient/PatientCheck', { email: inputValue }, function (response) {

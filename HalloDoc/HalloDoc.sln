@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc", "HalloDoc\HalloD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc.Models", "HalloDoc.Models\HalloDoc.Models.csproj", "{263F9B35-21D5-4601-A0EB-1D167D949AD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.DataAccess", "HalloDoc.DataAccess\HalloDoc.DataAccess.csproj", "{5B923CFD-4AB9-4164-8D8D-6167D05FCE17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.Repository", "HalloDoc.Repository\HalloDoc.Repository.csproj", "{676841FB-3021-41F4-A18F-77BE62D567BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{263F9B35-21D5-4601-A0EB-1D167D949AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{263F9B35-21D5-4601-A0EB-1D167D949AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{263F9B35-21D5-4601-A0EB-1D167D949AD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B923CFD-4AB9-4164-8D8D-6167D05FCE17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B923CFD-4AB9-4164-8D8D-6167D05FCE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B923CFD-4AB9-4164-8D8D-6167D05FCE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B923CFD-4AB9-4164-8D8D-6167D05FCE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676841FB-3021-41F4-A18F-77BE62D567BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676841FB-3021-41F4-A18F-77BE62D567BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676841FB-3021-41F4-A18F-77BE62D567BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676841FB-3021-41F4-A18F-77BE62D567BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

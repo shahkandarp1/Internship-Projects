@@ -21,7 +21,8 @@ namespace HalloDoc.ViewModels
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's email address")]
-        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            ErrorMessage = "Please enter valid Email")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
@@ -43,8 +44,12 @@ namespace HalloDoc.ViewModels
         public string ?Room { get; set; }
 
         [Compare("ConfirmPassword", ErrorMessage = "Password and Confirm Password should be same")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
+            ErrorMessage = "Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string ?Password { get; set; }
 
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
+            ErrorMessage = "Confirm Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string ?ConfirmPassword { get; set; }
 
         public IFormFile ?ImageContent { get; set; }

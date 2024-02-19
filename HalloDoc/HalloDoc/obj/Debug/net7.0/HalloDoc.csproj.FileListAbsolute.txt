@@ -22,9 +22,7 @@ C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Mo
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Npgsql.dll
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\System.CodeDom.dll
-C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.DataAccess.dll
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Models.dll
-C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.DataAccess.pdb
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Models.pdb
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.csproj.AssemblyReference.cache
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.GeneratedMSBuildEditorConfig.editorconfig
@@ -103,3 +101,5 @@ C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.pdb
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.genruntimeconfig.cache
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\ref\HalloDoc.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Repository.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.Repository.pdb
