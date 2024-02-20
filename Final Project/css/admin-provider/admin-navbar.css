@@ -83,7 +83,7 @@ body {
     width: 100%;
     /* box-shadow: 3px -8px 17px 1px black; */
     border-bottom: 1px solid #dee2e6;
-    z-index: 5;
+    z-index: 6;
 }
 
 .navbar-toggler {
@@ -192,7 +192,7 @@ body {
     transition: 0.1s;
     /* 0.5 second transition effect to slide in the sidebar */
     font-family: 'Roboto', sans-serif;
-    z-index: 4;
+    z-index: 5;
 }
 
     /* The sidebar links */
@@ -386,7 +386,7 @@ a {
     }
 
     .overlay {
-        z-index: 2;
+        z-index: 4;
     }
 
     .nav-below-container{
