@@ -212,6 +212,7 @@ h4 {
 th{
     background-color: #F0F0F0!important;
     border-bottom: none!important;
+    font-weight: 500!important;
 }
 
 td{
@@ -268,6 +269,162 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     border: 1px solid white!important;
     border-radius: 5px;
 }
+
+/* Accordion */
+
+.accordion-button::after {
+    width: 0px;
+  }
+  
+  .accordion {
+    --bs-accordion-bg: #EBFAFD;
+    --bs-accordion-active-bg: #DAE8EB;
+    --bs-accordion-active-color: black;
+    box-shadow: none;
+    display: none;
+    z-index: -1;
+  }
+
+  .accordion-collapse{
+    position: relative;
+  }
+  
+  .collapse {
+    background-color: var(--bs-accordion-active-bg);
+  }
+  
+  .accordion-button:focus {
+    box-shadow: none;
+  }
+  
+  .accordion-item {
+    border-bottom: 1px solid #D7DCDD;
+    background-color: #EBFAFD;
+    z-index: -1;
+  }
+  
+  .accordion-button:not(.collapsed) {
+    box-shadow: none;
+    border-bottom: 1px solid #D5DEE0;
+  }
+  
+  .accordion-body {
+    background-color: var(--bs-accordion-active-bg);
+  }
+  
+  .accordion-heading {
+    color: #3E3E3E;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .accordion-value {
+    font-weight: 400;
+  }
+  
+  .accordion-img {
+    margin-right: 5px;
+  }
+  
+  .accordion-heading-inner {
+    color: #3E3E3E;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .accordion-value-inner {
+    font-weight: 400;
+  }
+  
+  .accordion-img-inner {
+    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .accordion-top-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .accordion-top-flex:last-child{
+    margin-top: 10px;
+  }
+
+  .accordion-requestor{
+    margin-right: 5px;
+  }
+
+  .accordion-button{
+    flex-direction: column;
+  }
+
+  .mob-address{
+    width: 40%;
+  }
+
+  .req-accordion-filter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .map-btn{
+    color: #00ADEF;
+    border: 1px solid #00ADEF;
+    padding: 10px 20px;
+    border-radius: 20px;
+  }
+
+  .outer-img-circle{
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #00ADEF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+  }
+
+  .inner-img{
+    width: 9px;
+    height: 9px;
+  }
+
+  .inner-flex{
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .view-case-btn{
+    position: absolute;
+    top: -25px;
+    right: 19px;
+    z-index: 3;
+    background-color: #EFEEF4;
+    color: #9966CD;
+    border: 1px solid #9966CD;
+  }
+
+  .action-mob-btn{
+    
+    background-color: #228C20;
+    color: white;
+    border: 1px solid #228C20;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 15px;
+  }
+
+
 @media screen and (max-width:1155px) {
     .row-card-img{
         width: 15px;
@@ -292,6 +449,18 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     }
 }
 
+@media screen and (max-width:1060px) {
+    #dtBasicExample{
+        display: none;
+    }
+    #dtBasicExample_paginate{
+        display: none;
+    }
+    .accordion{
+        display: block;
+    }
+}
+
 @media screen and (max-width:550px) {
     .search-flex{
         flex-direction: column;
@@ -299,11 +468,31 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     .search{
         width: 100%;
     }
+    .search:first-child{
+        margin-bottom: 10px;
+    }
     .patient-text-btn{
         padding: 5px 8px;
     }
     .request-filter{
         width: 100%;
+    }
+    .req-filter{
+        flex-direction: column;
+        padding: 5px;
+    }
+    .req-filter:first-child{
+        display: none;
+    }
+    .requestor-type{
+        font-size: 14px;
+    }
+    .accordion-value{
+        font-size: 14px;
+    }
+    .map-btn{
+        font-size: 14px;
+        padding: 8px 16px;
     }
 }
 
