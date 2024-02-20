@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +10,31 @@
     <title>Admin Dashboard</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"></script>
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/admin-provider/admin-navbar.css" />
+    <script src="../../js/admin-provider/admin-navbar.js"></script>
     <link rel="stylesheet" href="../../css/admin-provider/admin-dashboard.css" />
     <script src="../../js/admin-provider/admin-dashboard.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 </head>
+
 <body id="body">
     <!-- Navbar -->
     <div class="navbar-custom">
+        <button class="nav-btn list-border" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="sidebar_open()">
+            <img src="../../images/list.svg" alt="" class="list-img" />
+        </button>
         <img src="../../images/logo1.png" alt="" class="logo" />
         <div class="right-side-elements">
             <span class="welcome-text">Welcome <span class="name-text">Kandarp Shah</span></span>
@@ -50,7 +63,32 @@
             </button>
             <button class="tablinks sidebar-tablinks">
                 <a class="mobile-sidebar-a">
-                    Profile
+                    Provider Location
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a class="mobile-sidebar-a">
+                    My Profile
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a class="mobile-sidebar-a">
+                    Providers
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a class="mobile-sidebar-a">
+                    Partners
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a class="mobile-sidebar-a">
+                    Access
+                </a>
+            </button>
+            <button class="tablinks sidebar-tablinks">
+                <a class="mobile-sidebar-a">
+                    Records
                 </a>
             </button>
         </div>
@@ -66,53 +104,295 @@
 
     <!-- Navbar - Below -->
 
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <button class="navbar-toggler list-border" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="sidebar_open()">
-            <img src="../../images/list.svg" alt="" class="list-img" />
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="tab">
-                <button class="tablinks sidebar-active">
-                    <a>
-                        Dashboard
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Provider Location
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        My Profile
-                    </a>
-                </button>
-                <div class="dropdown-self">
-                    <button class="dropbtn">Dropdown</button>
-                    <div class="dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
+    <div class="bottom-navbar" id="">
+        <div class="tab">
+            <button class="tablinks sidebar-active">
+                <a>
+                    Dashboard
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    Provider Location
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    My Profile
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    Providers
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    Partners
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    Access
+                </a>
+            </button>
+            <button class="tablinks">
+                <a>
+                    Records
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="inner-main-container">
+
+            <!-- Status Cards -->
+
+            <div class="row status-row">
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards new new-active" id="card1" onclick="changeStatus(this)">
+                        <div class="inner-row-cards">
+                            <img src="../../images/new.svg" alt="" class="row-card-img hidden" id="new">
+                            <img src="../../images/new_active.png" alt="" class="row-card-img" id="new-active">
+                            <span class="row-card-text">NEW</span>
+                        </div>
+                        <h4 class="type_no_txt">1449</h4>
+                        <div id="new-img" class="absolutivity">
+                            <img src="../../images/caret-down-fill.svg" alt="" class="arrow-width">
+                        </div>
                     </div>
                 </div>
-                <button class="tablinks">
-                    <a>
-                        Partners
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Access
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Records
-                    </a>
-                </button>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards pending" id="card2" onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/pending.svg" alt="" class="row-card-img" id="pending">
+                            <img src="../../images/pending_active.png" alt="" class="row-card-img hidden"
+                                id="pending-active">
+                            <span class="row-card-text">PENDING</span>
+                        </div>
+                        <h4 class="type_no_txt">271</h4>
+                        <div id="pending-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill1.svg" alt="" class="arrow-width">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards active" id="card3" onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/active.svg" alt="" class="row-card-img" id="active">
+                            <img src="../../images/active_active.png" alt="" class="row-card-img hidden"
+                                id="active-active">
+                            <span class="row-card-text">ACTIVE</span>
+                        </div>
+                        <h4 class="type_no_txt">22</h4>
+                        <div id="active-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill2.svg" alt="" class="arrow-width">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards conclude" id="card4" onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/conclude.svg" alt="" class="row-card-img" id="conclude">
+                            <img src="../../images/conclude_active.png" alt="" class="row-card-img hidden"
+                                id="conclude-active">
+                            <span class="row-card-text">CONCLUDE</span>
+                        </div>
+                        <h4 class="type_no_txt">1079</h4>
+                        <div id="conclude-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fil3.svg" alt="" class="arrow-width">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards to-close" id="card5" onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/toclose.svg" alt="" class="row-card-img" id="to-close">
+                            <img src="../../images/toclose_active.png" alt="" class="row-card-img hidden"
+                                id="to-close-active">
+                            <span class="row-card-text">TO CLOSE</span>
+                        </div>
+                        <h4 class="type_no_txt">1452</h4>
+                        <div id="to-close-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill4.svg" alt="" class="arrow-width">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards unpaid" id="card6" onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/unpaid.svg" alt="" class="row-card-img" id="unpaid">
+                            <img src="../../images/unpaid_active.png" alt="" class="row-card-img hidden"
+                                id="unpaid-active">
+                            <span class="row-card-text">UNPAID</span>
+                        </div>
+                        <h4 class="type_no_txt">1452</h4>
+                        <div id="unpaid-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill5.svg" alt="" class="arrow-width">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient text and buttons -->
+
+            </div>
+            <div class="row mt-3">
+                <div class="inner-pt-container">
+                    <span class="patients-text">Patients<span class="status-text" id="status-text">(New)</span></span>
+                    <div class="links">
+                        <div class="btn btn-info text-white patient-text-btn">
+                            <i class="bi bi-send"></i>
+                            <span class="d-none d-lg-inline-flex">Send Link</span>
+                        </div>
+                        <div class="btn btn-info text-white patient-text-btn">
+                            <i class="bi bi-pencil-square"></i>
+                            <span class="d-none d-lg-inline-flex">Create Request</span>
+                        </div>
+                        <div class="btn btn-info text-white patient-text-btn">
+                            <i class="bi bi-arrow-90deg-right"></i>
+                            <span class="d-none d-lg-inline-flex">Export</span>
+                        </div>
+                        <div class="btn btn-info text-white patient-text-btn">
+                            <i class="bi bi-arrow-90deg-right"></i>
+                            <span class="d-none d-lg-inline-flex">Export All</span>
+                        </div>
+                        <div class="btn btn-info text-white patient-text-btn">
+                            <i class="bi bi-person-fill"></i>
+                            <span class="d-none d-lg-inline-flex">Request DIY Support</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="bottom-main-container mt-3">
+
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="search-flex">
+                            <span class="search">
+                                <img class="search-image" src="../../images/search.svg" alt="">
+                                <input class="search-inp" type="text" placeholder="Search Patients">
+                            </span>
+                            <span class="search">
+                                <img class="search-image" src="../../images/search.svg" alt="">
+                                <select name="" id="" class="search-inp">
+                                    <option value="">All Regions</option>
+                                    <option value="">Gujarat</option>
+                                    <option value="">Maharastra</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="request-filter">
+                            <a class="req-filter All filter-active" onclick="changeRequestor(this)">All</a>
+                            <a class="req-filter Patient" onclick="changeRequestor(this)"><span
+                                    class="color patient-color"></span><span class="requestor-type">Patient</span></a>
+                            <a class="req-filter Family" onclick="changeRequestor(this)"><span
+                                    class="color family-color"></span><span
+                                    class="requestor-type">Family/Friend</span></a>
+                            <a class="req-filter Business" onclick="changeRequestor(this)"><span
+                                    class="color business-color"></span><span class="requestor-type">Business</span></a>
+                            <a class="req-filter Concierge" onclick="changeRequestor(this)"><span
+                                    class="color concierge-color"></span><span
+                                    class="requestor-type">Concierge</span></a>
+                        </div>
+                    </div>
+                </div>
+                <table id="dtBasicExample" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th></th>
+                            <th>
+                                Date Of Birth
+                            </th>
+                            <th>
+                                Requestor
+                            </th>
+                            <th>
+                                Physician Name
+                            </th>
+                            <th>
+                                Date Of Service
+                            </th>
+                            <th>
+                                Phone
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Notes
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="background-color: #5FBC61;">
+                                Kandarp,Shah
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                <span class="img-container"><img src="../../images/envelope.svg" alt=""></span>
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Sept 30,2002(21)
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Patient Kandarp,Shah
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Dr. Agola
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Oct 11,2023
+                                07:48 AM
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                <span class="phone-container"><img src="../../images/telephone.svg" class=""
+                                        alt=""><span class="phone-number">+917016763640</span></span><br />
+                                (Patient)
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Address
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                Admin transferred to Dr. AGOLA on 10\10\2023 at 4:11:38 AM : test
+                            </td>
+                            <td style="background-color: #5FBC61;">
+                                <div class="dropdown show">
+                                    <button class="btn action-btn" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
             </div>
         </div>
-    </nav>
+    </div>
+    <script>
+        //data table initiate
+        $(document).ready(function () {
+            $('#dtBasicExample').DataTable();
+        });
+    </script>
 </body>
+
 </html>

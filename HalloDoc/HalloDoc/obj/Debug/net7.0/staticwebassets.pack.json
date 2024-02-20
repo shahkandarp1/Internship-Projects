@@ -633,6 +633,14 @@
       "PackagePath": "staticwebassets\\images\\LesfImage.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\active.svg",
+      "PackagePath": "staticwebassets\\images\\active.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\active_active.png",
+      "PackagePath": "staticwebassets\\images\\active_active.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\box-arrow-right.svg",
       "PackagePath": "staticwebassets\\images\\box-arrow-right.svg"
     },
@@ -655,6 +663,14 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\cloud-upload-icon.svg",
       "PackagePath": "staticwebassets\\images\\cloud-upload-icon.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\conclude.svg",
+      "PackagePath": "staticwebassets\\images\\conclude.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\conclude_active.png",
+      "PackagePath": "staticwebassets\\images\\conclude_active.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\exclamation-circle-fill.svg",
@@ -701,6 +717,22 @@
       "PackagePath": "staticwebassets\\images\\moon.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\new.svg",
+      "PackagePath": "staticwebassets\\images\\new.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\new_active.png",
+      "PackagePath": "staticwebassets\\images\\new_active.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\pending.svg",
+      "PackagePath": "staticwebassets\\images\\pending.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\pending_active.png",
+      "PackagePath": "staticwebassets\\images\\pending_active.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\person-circle.svg",
       "PackagePath": "staticwebassets\\images\\person-circle.svg"
     },
@@ -715,6 +747,22 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\sun.svg",
       "PackagePath": "staticwebassets\\images\\sun.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose.svg",
+      "PackagePath": "staticwebassets\\images\\toclose.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose_active.png",
+      "PackagePath": "staticwebassets\\images\\toclose_active.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\unpaid.svg",
+      "PackagePath": "staticwebassets\\images\\unpaid.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\unpaid_active.png",
+      "PackagePath": "staticwebassets\\images\\unpaid_active.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user.png",
