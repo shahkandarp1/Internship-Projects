@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\css\\admin-login.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-navbar.css",
+      "PackagePath": "staticwebassets\\css\\admin-navbar.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\agreement.css",
       "PackagePath": "staticwebassets\\css\\agreement.css"
     },
@@ -633,6 +637,10 @@
       "PackagePath": "staticwebassets\\images\\LesfImage.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\active.png",
+      "PackagePath": "staticwebassets\\images\\active.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\active.svg",
       "PackagePath": "staticwebassets\\images\\active.svg"
     },
@@ -641,12 +649,44 @@
       "PackagePath": "staticwebassets\\images\\active_active.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\blocked.png",
+      "PackagePath": "staticwebassets\\images\\blocked.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\box-arrow-right.svg",
       "PackagePath": "staticwebassets\\images\\box-arrow-right.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\calendar.svg",
+      "PackagePath": "staticwebassets\\images\\calendar.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\card-image.svg",
       "PackagePath": "staticwebassets\\images\\card-image.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fil3.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fil3.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fill.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fill.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fill1.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fill1.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fill2.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fill2.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fill4.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fill4.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\caret-down-fill5.svg",
+      "PackagePath": "staticwebassets\\images\\caret-down-fill5.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\clock.svg",
@@ -665,12 +705,32 @@
       "PackagePath": "staticwebassets\\images\\cloud-upload-icon.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\conclude.png",
+      "PackagePath": "staticwebassets\\images\\conclude.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\conclude.svg",
       "PackagePath": "staticwebassets\\images\\conclude.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\conclude_active.png",
       "PackagePath": "staticwebassets\\images\\conclude_active.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\document-symbol-with-text-lines.png",
+      "PackagePath": "staticwebassets\\images\\document-symbol-with-text-lines.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\document.png",
+      "PackagePath": "staticwebassets\\images\\document.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\envelope-black.svg",
+      "PackagePath": "staticwebassets\\images\\envelope-black.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\envelope.svg",
+      "PackagePath": "staticwebassets\\images\\envelope.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\exclamation-circle-fill.svg",
@@ -681,6 +741,10 @@
       "PackagePath": "staticwebassets\\images\\file-earmark-pdf-fill.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\file-earmark-text.svg",
+      "PackagePath": "staticwebassets\\images\\file-earmark-text.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\file-word-fill.svg",
       "PackagePath": "staticwebassets\\images\\file-word-fill.svg"
     },
@@ -689,8 +753,16 @@
       "PackagePath": "staticwebassets\\images\\file-x-fill.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\file.png",
+      "PackagePath": "staticwebassets\\images\\file.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\geo-alt.svg",
       "PackagePath": "staticwebassets\\images\\geo-alt.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\google-docs.png",
+      "PackagePath": "staticwebassets\\images\\google-docs.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\header-logo.svg",
@@ -699,6 +771,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\hide.png",
       "PackagePath": "staticwebassets\\images\\hide.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\list.png",
+      "PackagePath": "staticwebassets\\images\\list.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\list.svg",
@@ -717,12 +793,24 @@
       "PackagePath": "staticwebassets\\images\\moon.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\new.png",
+      "PackagePath": "staticwebassets\\images\\new.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\new.svg",
       "PackagePath": "staticwebassets\\images\\new.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\new_active.png",
       "PackagePath": "staticwebassets\\images\\new_active.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\paper.png",
+      "PackagePath": "staticwebassets\\images\\paper.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\pending.png",
+      "PackagePath": "staticwebassets\\images\\pending.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\pending.svg",
@@ -737,8 +825,20 @@
       "PackagePath": "staticwebassets\\images\\person-circle.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\person.svg",
+      "PackagePath": "staticwebassets\\images\\person.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\plus.svg",
       "PackagePath": "staticwebassets\\images\\plus.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\search-icon.svg",
+      "PackagePath": "staticwebassets\\images\\search-icon.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\search.svg",
+      "PackagePath": "staticwebassets\\images\\search.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\success-icon.svg",
@@ -749,12 +849,28 @@
       "PackagePath": "staticwebassets\\images\\sun.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\telephone-black.svg",
+      "PackagePath": "staticwebassets\\images\\telephone-black.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\telephone.svg",
+      "PackagePath": "staticwebassets\\images\\telephone.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose.png",
+      "PackagePath": "staticwebassets\\images\\toclose.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose.svg",
       "PackagePath": "staticwebassets\\images\\toclose.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose_active.png",
       "PackagePath": "staticwebassets\\images\\toclose_active.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\unpaid.png",
+      "PackagePath": "staticwebassets\\images\\unpaid.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\unpaid.svg",
@@ -765,6 +881,10 @@
       "PackagePath": "staticwebassets\\images\\unpaid_active.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\upload.png",
+      "PackagePath": "staticwebassets\\images\\upload.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user.png",
       "PackagePath": "staticwebassets\\images\\user.png"
     },
@@ -773,12 +893,20 @@
       "PackagePath": "staticwebassets\\images\\view.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\x-mark.png",
+      "PackagePath": "staticwebassets\\images\\x-mark.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-dashboard.js",
       "PackagePath": "staticwebassets\\js\\admin-dashboard.js"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-login.js",
       "PackagePath": "staticwebassets\\js\\admin-login.js"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-navbar.js",
+      "PackagePath": "staticwebassets\\js\\admin-navbar.js"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\agreement.js",

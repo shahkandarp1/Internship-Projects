@@ -1,0 +1,96 @@
+﻿<div class="navbar-custom">
+    <button class="nav-btn list-border"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            onclick="sidebar_open()">
+        <img src="../../images/list.svg" alt="" class="list-img" />
+    </button>
+    <img src="../../images/logo1.png" alt="" class="logo" />
+    <div class="right-side-elements">
+        <span class="welcome-text">Welcome <span class="name-text">Kandarp Shah</span></span>
+        <a class="logout log" asp-controller="Admin" asp-action="Dashboard">
+            <span class="logout-text">Logout</span>
+        </a>
+        <a class="logout-mob log" asp-controller="Admin" asp-action="Dashboard">
+            <img id="logout"
+                 src="../../images/box-arrow-right.svg"
+                 alt=""
+                 class="logout-img" />
+        </a>
+        <button class="moon" onclick="changeMode()">
+            <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
+            <img id="sun"
+                 src="../../images/sun.svg"
+                 alt=""
+                 class="moon-img hidden" />
+        </button>
+    </div>
+</div>
+
+<!-- Sidebar -->
+
+<div id="mySidebar" class="sidebar">
+    <div class="tab sidebar-tab">
+        <span class="mob-welcome-text">Welcome <span class="mob-name-text">Kandarp Shah</span></span>
+        <button class="tablinks sidebar-tablinks mobile-sidebar-active">
+            <a class="mobile-sidebar-a"> Dashboard </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> Provider Location </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> My Profile </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> Providers </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> Partners </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> Access </a>
+        </button>
+        <button class="tablinks sidebar-tablinks">
+            <a class="mobile-sidebar-a"> Records </a>
+        </button>
+    </div>
+</div>
+
+<!-- Dark Background when sidebar is open -->
+<div class="overlay" onclick="sidebar_close()"></div>
+
+<!-- Navbar Below Container -->
+
+<div class="nav-below-container"></div>
+
+<!-- Navbar - Below -->
+
+<div class="bottom-navbar" id="">
+    <div class="tab">
+        <button class="tablinks sidebar-active">
+            <a> Dashboard </a>
+        </button>
+        <button class="tablinks">
+            <a> Provider Location </a>
+        </button>
+        <button class="tablinks">
+            <a> My Profile </a>
+        </button>
+        <button class="tablinks">
+            <a> Providers </a>
+        </button>
+        <button class="tablinks">
+            <a> Partners </a>
+        </button>
+        <button class="tablinks">
+            <a> Access </a>
+        </button>
+        <button class="tablinks">
+            <a> Records </a>
+        </button>
+    </div>
+</div>

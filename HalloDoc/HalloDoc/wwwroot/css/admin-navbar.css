@@ -1,0 +1,435 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif!important;
+    width: 100%;
+    height: 100vh;
+    background-color: #FAFAFA;
+}
+
+.nav-below-container {
+    width: 100%;
+    height: 76px;
+}
+
+#body {
+    height: 100%;
+}
+
+/* Navbar - Top */
+
+.moon {
+    padding: 5px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    background-color: white;
+}
+
+.logout-mob {
+    /* padding: 5px; */
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    background-color: white;
+    display: none;
+    text-decoration: none;
+}
+
+.logout {
+    padding: 5px 10px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 52px;
+    justify-content: center;
+    align-items: center;
+    /* margin-right: 13px; */
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+    color: #0dcaf0;
+    font-weight: 500;
+    margin-right: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.logo {
+    width: 140px;
+    height: 75px;
+    margin-left: 20px;
+}
+
+.navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    /* box-shadow: 3px -8px 17px 1px black; */
+    border-bottom: 1px solid #dee2e6;
+    z-index: 6;
+}
+
+.navbar-toggler {
+    z-index: 5;
+}
+
+.hidden {
+    display: none;
+}
+
+.nav-cover {
+    width: 100%;
+    height: 96px;
+}
+
+.right-side-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #ADADAD;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.mob-welcome-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #ADADAD;
+    font-weight: 400;
+    margin-right: 10px;
+    margin-bottom: 18px;
+}
+
+.name-text {
+    font-size: 17px;
+    color: #3E3E3E;
+    font-weight: 500;
+}
+
+.mob-name-text {
+    font-size: 16px;
+    color: #3E3E3E;
+    font-weight: 500;
+}
+
+.logout-text {
+    font-size: 12px;
+}
+
+/* Hidden Sidebar */
+
+.sidebar-tab {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 0px !important;
+}
+
+.sidebar-tablinks {
+    width: 100%;
+    text-align: left;
+    color: #3E3E3E;
+}
+
+.mobile-sidebar-active {
+    font-weight: 500;
+    background-color: #E5F8FD !important;
+    border-radius: 5px;
+}
+
+.mobile-sidebar-a {
+    padding: 0px 8px 0px 2px !important;
+}
+
+.close-btn {
+    position: absolute;
+    top: 4px;
+    right: 12px;
+    color: #0dcaf0;
+    cursor: pointer;
+}
+
+.sidebar {
+    height: 100%;
+    /* 100% Full-height */
+    width: 0px;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 4;
+    /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: white;
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 72px;
+    /* Place content 60px from the top */
+    transition: 0.1s;
+    /* 0.5 second transition effect to slide in the sidebar */
+    font-family: 'Roboto', sans-serif;
+    z-index: 5;
+}
+
+    /* The sidebar links */
+    .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 16px;
+        color: #3E3E3E;
+        display: block;
+        transition: 0.3s;
+    }
+
+    /* Position and style the close button (top right corner) */
+    .sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    /* If you want a transition effect */
+    padding: 20px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+
+/* Navbar - Below */
+
+
+.navbar {
+    padding: 0px;
+    background-color: white !important;
+    box-shadow: 3px -8px 17px 1px black;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.list-border {
+    width: 31px;
+    height: 30px;
+    border: 1px solid #0dcaf0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 9px;
+    left: 10px;
+    z-index: 5;
+}
+
+.tab {
+    overflow: hidden;
+    margin-left: 20px;
+    border-bottom: 1px solid #ADADAD;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #ADADAD;
+    border: 0px !important;
+}
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        transition: 0.3s;
+        font-size: 15px;
+    }
+
+.sidebar-active {
+    color: #0dcaf0 !important;
+    border-bottom: 2px solid #0dcaf0 !important;
+    font-weight: 500 !important;
+}
+
+.tabcontent {
+    color: #3E3E3E !important;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 6px 12px;
+    border-top: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.tab-main {
+    width: 80%;
+    margin-top: 1%;
+}
+
+/* Dropdown */
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-self {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+.dropdown-self:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-self:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.bottom-navbar {
+    background-color: white;
+    box-shadow: 3px -8px 17px 1px black;
+}
+
+.nav-btn {
+    display: none;
+    border-radius: 5px;
+    background-color: white;
+}
+
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+
+        .sidebar a {
+            font-size: 18px;
+        }
+}
+
+
+@media screen and (max-width:769px) {
+    .tabcontent {
+        margin-left: 0;
+    }
+
+    .tab button {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width:590px) {
+    .logo {
+        margin-left: 43px;
+        height: 65px;
+    }
+
+    .overlay {
+        z-index: 4;
+    }
+
+    .nav-below-container {
+        height: 66px;
+    }
+
+    .bottom-navbar {
+        display: none;
+    }
+
+    .nav-btn {
+        display: block;
+    }
+}
+
+
+@media screen and (max-width: 460px) {
+    .logout {
+        display: none;
+    }
+
+    .welcome-text {
+        display: none;
+    }
+
+    .logout-mob {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo {
+        width: 102px;
+        height: 53px;
+        margin-left: 45px;
+    }
+
+    .nav-below-container {
+        height: 54px;
+    }
+
+    .navbar-custom {
+        border-bottom: 0px;
+    }
+}

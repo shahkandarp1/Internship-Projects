@@ -18,7 +18,7 @@ namespace HalloDoc.Controllers
         }
         public IActionResult Index(int id)
         {
-            var request_status = _db.RequestStatusLogs.FirstOrDefault(u=>u.RequestId == id);
+            var request_status = _db.Requests.FirstOrDefault(u=>u.RequestId == id);
             if(request_status.Status != 2)
             {
                 return NotFound();
@@ -31,19 +31,35 @@ namespace HalloDoc.Controllers
 
         public IActionResult Agree(int id)
         {
-            var request_status = _db.RequestStatusLogs.FirstOrDefault(u => u.RequestId == id);
-            request_status.Status = 3;
-            _db.RequestStatusLogs.Update(request_status);
+            var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
+            request.Status = 3;
+            _db.Requests.Update(request);
+
+            RequestStatusLog requestStatusLog = new RequestStatusLog
+            {
+                Status = 3,
+                RequestId = id,
+                CreatedDate = DateTime.Now,
+            };
+            _db.RequestStatusLogs.Add(requestStatusLog);
             _db.SaveChanges();
             return Json(new { isAgreed = true });
         }
 
         public IActionResult Disagree(int id,string notes)
         {
-            var request_status = _db.RequestStatusLogs.FirstOrDefault(u => u.RequestId == id);
-            request_status.Status = 5;
-            request_status.Notes = notes;
-            _db.RequestStatusLogs.Update(request_status);
+            var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
+            request.Status = 5;
+            _db.Requests.Update(request);
+
+            RequestStatusLog requestStatusLog = new RequestStatusLog
+            {
+                Status = 5,
+                RequestId = id,
+                CreatedDate = DateTime.Now,
+                Notes = notes
+            };
+            _db.RequestStatusLogs.Add(requestStatusLog);
             _db.SaveChanges();
             return Json(new { isAgreed = true });
         }

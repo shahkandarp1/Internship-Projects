@@ -1,0 +1,444 @@
+﻿@model AdminDashboardViewModel
+
+<table id="dtBasicExample" class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th></th>
+            @if (Model.status != "Unpaid")
+            {
+                <th>Date Of Birth</th>
+            }
+            @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
+            {
+                <th>Requestor</th>
+            }
+            @if (Model.status != "New")
+            {
+                <th>Physician Name</th>
+                <th>Date Of Service</th>
+            }
+            @if (Model.status == "New")
+            {
+                <th>Requested Date</th>
+            }
+            @if (Model.status != "ToClose")
+            {
+                <th style="min-width: 175px;">Phone</th>
+            }
+            <th>Address</th>
+            @if (Model.status != "Conclude" || Model.status != "Unpaid")
+            {
+                <th>Notes</th>
+            }
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.requests)
+        {
+
+
+            var statusClass = "";
+            var dos = "";
+            var notes = "";
+            @if (item.RequestTypeId == 1)
+            {
+                statusClass = "business";
+            }
+            else if (item.RequestTypeId == 2)
+            {
+                statusClass = "patient";
+            }
+            else if (item.RequestTypeId == 3)
+            {
+                statusClass = "family";
+            }
+            else
+            {
+                statusClass = "concierge";
+            }
+            foreach (var stat in item.RequestStatusLogs)
+            {
+                if (stat.Status == 2)
+                {
+                    dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
+                    notes = stat.Notes ?? "";
+                }
+            }
+            <tr class="@statusClass">
+                <td>@(string.Concat(item.RequestClient.FirstName, ',', item.RequestClient.LastName))</td>
+                <td>
+                    <span class="img-container">
+                        <img src="../../images/envelope.svg" alt="" />
+                    </span>
+                </td>
+                @if (Model.status != "Unpaid")
+                {
+
+                    DateTime now = DateTime.Today;
+                    int age = now.Year - DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").Year;
+                    if (DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}") > now.AddYears(-age))
+                        age--;
+
+                    <td>@(DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</td>
+                }
+                @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
+                {
+                    <td>@(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(item.FirstName, ',', item.LastName))</td>
+                }
+                @if (Model.status != "New")
+                {
+                    <td>Dr. @(item.Physician == null ? "" : item.Physician.FirstName)</td>
+                }
+                @if (Model.status == "New")
+                {
+                        
+                    int hoursDifference = (int)(DateTime.Now - item.CreatedDate).TotalHours;
+                    int minutesDifference = (DateTime.Now - item.CreatedDate).Minutes;
+
+                    <td><span>@(item.CreatedDate.ToString("MMMM dd,yyyy"))</span><br /><span>@hoursDifference</span>h <span>@minutesDifference</span>m</td>
+                }
+                @if (Model.status != "New")
+                {
+                    <td>@dos</td>
+                }
+                @if (Model.status != "ToClose")
+                {
+                    <td>
+                        <span class="phone-container">
+                            <img src="../../images/telephone.svg"
+                                 class=""
+                                 alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
+                        </span><br />
+                        (Patient)<br />
+                        @if (item.RequestTypeId != 2)
+                        {
+                            <span class="phone-container mt-2">
+                                <img src="../../images/telephone.svg"
+                                     class=""
+                                     alt="" /><span class="phone-number">@item.PhoneNumber</span>
+                            </span>
+
+                            <br />
+                            @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")
+                        }
+
+                    </td>
+                }
+                <td>@(item.RequestClient.Address == null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
+                @if (Model.status != "Conclude" || Model.status != "Unpaid")
+                {
+                    <td>
+                        Admin transferred to Dr. AGOLA on 10\10\2023 at 4:11:38 AM :
+                        test
+                    </td>
+                }
+                <td>
+                    <div class="dropdown show">
+                        <button class="btn action-btn"
+                                role="button"
+                                id="dropdownMenuLink"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu"
+                             aria-labelledby="dropdownMenuLink">
+                            @if (Model.status == "New")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
+                            }
+                            @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/file.png" alt="" class="action-img"><span>View Case</span></div></a>
+                            }
+                            @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/paper.png" alt="" class="action-img"><span>View Notes</span></div></a>
+                            }
+                            @if (Model.status == "New")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
+                            }
+                            @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/upload.png" alt="" class="action-img"><span>View Uploads</span></div></a>
+                            }
+                            @if (Model.status == "Pending")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
+                            }
+                            @if (Model.status == "Pending" || Model.status == "ToClose")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
+                            }
+                            @if (Model.status == "Pending")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Send Agreement</span></div></a>
+                            }
+                            @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Doctor Note</span></div></a>
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
+                            }
+                            @if (Model.status == "ToClose")
+                            {
+                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Close Case</span></div></a>
+                            }
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@for(var i=0;i<Model.requests.Count;++i)
+{
+    var statusClass = "";
+    var dos = "";
+    var notes = "";
+    @if (Model.requests[i].RequestTypeId == 1)
+    {
+        statusClass = "business";
+    }
+    else if (Model.requests[i].RequestTypeId == 2)
+    {
+        statusClass = "patient";
+    }
+    else if (Model.requests[i].RequestTypeId == 3)
+    {
+        statusClass = "family";
+    }
+    else
+    {
+        statusClass = "concierge";
+    }
+    foreach (var stat in Model.requests[i].RequestStatusLogs)
+    {
+        if (stat.Status == 2)
+        {
+            dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
+            notes = stat.Notes ?? "";
+        }
+    }
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-heading@(i)">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapse@(i)"
+                        aria-expanded="false"
+                        aria-controls="flush-collapse@(i)">
+                    <div class="accordion-top-flex">
+                        <span class="accordion-value"> @(string.Concat(Model.requests[i].RequestClient.FirstName, ',', Model.requests[i].RequestClient.LastName)) </span>
+                        @if(Model.requests[i].RequestTypeId == 2)
+                        {
+                            <div class="req-accordion-filter Patient">
+                                <span class="requestor-type accordion-requestor">Patient</span>
+                                <span class="color patient-color"></span>
+                            </div>
+                        }
+                        else if (Model.requests[i].RequestTypeId == 1)
+                        {
+                            <div class="req-accordion-filter Patient">
+                                <span class="requestor-type accordion-requestor">Business</span>
+                                <span class="color business-color"></span>
+                            </div>
+                        }
+                        else if(Model.requests[i].RequestTypeId == 3)
+                        {
+                            <div class="req-accordion-filter Patient">
+                                <span class="requestor-type accordion-requestor">Family</span>
+                                <span class="color family-color"></span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="req-accordion-filter Patient">
+                                <span class="requestor-type accordion-requestor">Concierge</span>
+                                <span class="color concierge-color"></span>
+                            </div>
+                        }
+                    </div>
+                    <div class="accordion-top-flex">
+                        <div class="accordion-value mob-address">@(Model.requests[i].RequestClient.Address == null ? string.Concat(Model.requests[i].RequestClient.Address, ',', Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode) : string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))</div>
+                        <a class="map-btn">Map Location</a>
+                    </div>
+                    @if(Model.status == "New")
+                    {
+                        <div class="mt-1">
+                            <img src="../../images/clock.svg" alt="" class="accordion-img"> <span class="accordion-value">
+                                Created
+                                Date: <span class="accordion-value">@Model.requests[i].CreatedDate.ToString("MMMM dd,yyyy")</span>
+                            </span>
+                        </div>
+                    }
+                </button>
+            </h2>
+            <div id="flush-collapse@(i)"
+                 class="accordion-collapse collapse"
+                 aria-labelledby="flush-heading@(i)"
+                 data-bs-parent="#accordionFlushExample">
+                <a class="map-btn view-case-btn">View Case</a>
+                <div class="accordion-body main-flex">
+                    @if(Model.status != "Unpaid")
+                    {
+                        DateTime now = DateTime.Today;
+                        int age = now.Year - DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").Year;
+                        if (DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}") > now.AddYears(-age))
+                            age--;
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/calendar.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Date Of Birth :
+                                <span class="accordion-value-inner">@(DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</span>
+                            </span>
+                        </div>
+                    }
+                    <div class="inner-flex">
+                        <div class="outer-img-circle">
+                            <img src="../../images/envelope-black.svg" alt="" class="inner-img">
+                        </div>
+                        <span class="accordion-heading-inner">
+                            Email :
+                            <span class="accordion-value-inner">@Model.requests[i].Email</span>
+                        </span>
+                    </div>
+                    @if (Model.status != "ToClose")
+                    {
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/telephone-black.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Patient :
+                                <span class="accordion-value-inner">@Model.requests[i].PhoneNumber</span>
+                            </span>
+                        </div>
+                    }
+
+                    @if (Model.status != "ToClose" || Model.status != "Conclude" || Model.status != "Unpaid")
+                    {
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/person.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Requestor :
+                                <span class="accordion-value-inner">
+                                    @(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(Model.requests[i].FirstName, ',', Model.requests[i].LastName))
+                                </span>
+                            </span>
+                        </div>
+                    }
+
+                    @if (Model.status != "New" || Model.status != "Conclude" || Model.status != "Unpaid")
+                    {
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/file-earmark-text.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Transfer Notes :
+                                <span class="accordion-value-inner">
+                                    Admin transferred to Dr. AGOLA on 10\10\2023 at 4:11:38 AM :
+                                    test
+                                </span>
+                            </span>
+                        </div>
+                    }
+
+                    @if (Model.status != "New")
+                    {
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/calendar.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Date Of Service :
+                                <span class="accordion-value-inner">
+                                    @dos
+                                </span>
+                            </span>
+                        </div>
+                        <div class="inner-flex">
+                            <div class="outer-img-circle">
+                                <img src="../../images/person.svg" alt="" class="inner-img">
+                            </div>
+                            <span class="accordion-heading-inner">
+                                Physician :
+                                <span class="accordion-value-inner">
+                                    Dr. @(Model.requests[i].Physician == null ? "" : Model.requests[i].Physician.FirstName)
+                                </span>
+                            </span>
+                        </div>
+
+                    }
+
+                    
+                    <div class="row">
+                        @if (Model.status == "New")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Assign Case</div></a>
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Cancel Case</div></a>
+                        }
+                        @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View Notes</div></a>
+                        }
+                        @if (Model.status == "New")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Block Patient</div></a>
+                        }
+                        @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View Uploads</div></a>
+                        }
+                        @if (Model.status == "Pending")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Transfer</div></a>
+                        }
+                        @if (Model.status == "Pending" || Model.status == "ToClose")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Clear Case</div></a>
+                        }
+                        @if (Model.status == "Pending")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Send Agreement</div></a>
+                        }
+                        @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Doctor Note</div></a>
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Encounter</div></a>
+                        }
+                        @if (Model.status == "Conclude" || Model.status == "Active")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Orders</div></a>
+                        }
+                        @if (Model.status == "ToClose")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Close Case</div></a>
+                        }
+                        <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#dtBasicExample").DataTable();
+    });
+</script>

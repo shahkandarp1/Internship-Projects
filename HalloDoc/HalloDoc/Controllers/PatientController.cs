@@ -222,6 +222,7 @@ namespace HaloDocMVC.NET.Controllers
                         State = modal.State,
                         Street = modal.Street,
                         City = modal.City,
+                        Address = modal.Room,
                         RegionId = region.RegionId,
                         ZipCode = modal.ZipCode,
                         Notes = modal.Symptoms,
@@ -235,7 +236,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -247,7 +248,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 2,
                         UserId = curr_user.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
@@ -262,7 +263,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -273,7 +274,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -290,7 +291,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserName = modal.Email,
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         PasswordHash = modal.Password,
                     };
 
@@ -315,7 +316,7 @@ namespace HaloDocMVC.NET.Controllers
                         IntYear = modal.DateOfBirth.Year,
                         IntDate = modal.DateOfBirth.Day,
                         CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
 
                     };
 
@@ -341,6 +342,7 @@ namespace HaloDocMVC.NET.Controllers
                         Street = modal.Street,
                         City = modal.City,
                         RegionId = region.RegionId,
+                        Address = modal.Room,
                         ZipCode = modal.ZipCode,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
@@ -353,7 +355,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -365,7 +367,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 2,
                         UserId = us.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
@@ -379,7 +381,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -389,7 +391,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -479,6 +481,7 @@ namespace HaloDocMVC.NET.Controllers
                         Street = modal.Street,
                         City = modal.City,
                         RegionId = region.RegionId,
+                        Address = modal.Room,
                         ZipCode = modal.ZipCode,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
@@ -491,7 +494,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -503,7 +506,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 3,
                         UserId = curr_user.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
@@ -519,7 +522,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -530,7 +533,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -545,7 +548,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserName = modal.Email,
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -569,7 +572,7 @@ namespace HaloDocMVC.NET.Controllers
                         IntYear = modal.DateOfBirth.Year,
                         IntDate = modal.DateOfBirth.Day,
                         CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
 
                     };
 
@@ -595,6 +598,7 @@ namespace HaloDocMVC.NET.Controllers
                         Street = modal.Street,
                         City = modal.City,
                         RegionId = region.RegionId,
+                        Address = modal.Room,
                         ZipCode = modal.ZipCode,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
@@ -607,7 +611,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -619,7 +623,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 3,
                         UserId = us.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
@@ -635,7 +639,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -646,7 +650,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -750,6 +754,7 @@ namespace HaloDocMVC.NET.Controllers
                         City = modal.ConciergeCity,
                         RegionId = region.RegionId,
                         ZipCode = modal.ConciergeZipcode,
+                        Address = modal.Room,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
                         NotiMobile = modal.Phone,
@@ -761,7 +766,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -773,7 +778,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 4,
                         UserId = curr_user.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
@@ -786,7 +791,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -796,7 +801,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         ConciergeName = string.Concat(modal.ConciergeFirstName,' ',modal.ConciergeLastName),
                         RegionId = region.RegionId,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         Street = modal.ConciergeStreet,
                         City = modal.ConciergeCity,
                         State = modal.ConciergeState,
@@ -824,7 +829,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserName = modal.Email,
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -848,7 +853,7 @@ namespace HaloDocMVC.NET.Controllers
                         IntYear = modal.DateOfBirth.Year,
                         IntDate = modal.DateOfBirth.Day,
                         CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
 
                     };
 
@@ -875,6 +880,7 @@ namespace HaloDocMVC.NET.Controllers
                         City = modal.ConciergeCity,
                         RegionId = region.RegionId,
                         ZipCode = modal.ConciergeZipcode,
+                        Address = modal.Room,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
                         NotiMobile = modal.Phone,
@@ -886,7 +892,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -898,7 +904,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 4,
                         UserId = us.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
@@ -911,7 +917,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -921,7 +927,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         ConciergeName = string.Concat(modal.ConciergeFirstName, ' ', modal.ConciergeLastName),
                         RegionId = region.RegionId,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         Street = modal.ConciergeStreet,
                         City = modal.ConciergeCity,
                         State = modal.ConciergeState,
@@ -1008,6 +1014,7 @@ namespace HaloDocMVC.NET.Controllers
                         City = modal.City,
                         RegionId = region.RegionId,
                         ZipCode = modal.ZipCode,
+                        Address = modal.Room,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
                         NotiMobile = modal.Phone,
@@ -1019,7 +1026,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -1031,7 +1038,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 1,
                         UserId = curr_user.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         CaseNumber = modal.BusinessCaseNumber
@@ -1044,7 +1051,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -1053,7 +1060,7 @@ namespace HaloDocMVC.NET.Controllers
                     Business business = new Business
                     {
                         Name = modal.BusinessPropertyName,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         RegionId = region.RegionId,
 
                     };
@@ -1079,7 +1086,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserName = modal.Email,
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -1103,7 +1110,7 @@ namespace HaloDocMVC.NET.Controllers
                         IntYear = modal.DateOfBirth.Year,
                         IntDate = modal.DateOfBirth.Day,
                         CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
 
                     };
 
@@ -1130,6 +1137,7 @@ namespace HaloDocMVC.NET.Controllers
                         City = modal.City,
                         RegionId = region.RegionId,
                         ZipCode = modal.ZipCode,
+                        Address = modal.Room,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
                         NotiMobile = modal.Phone,
@@ -1141,7 +1149,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -1153,7 +1161,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 1,
                         UserId = us.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         CaseNumber = modal.BusinessCaseNumber
@@ -1166,7 +1174,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -1175,7 +1183,7 @@ namespace HaloDocMVC.NET.Controllers
                     Business business = new Business
                     {
                         Name = modal.BusinessPropertyName,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         RegionId = region.RegionId,
 
                     };
@@ -1302,6 +1310,7 @@ namespace HaloDocMVC.NET.Controllers
                         City = modal.City,
                         RegionId = region.RegionId,
                         ZipCode = modal.ZipCode,
+                        Address = modal.Room,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
                         NotiMobile = modal.Phone,
@@ -1313,7 +1322,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -1325,7 +1334,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 3,
                         UserId = curr_user.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
@@ -1341,7 +1350,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -1352,7 +1361,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -1367,7 +1376,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserName = modal.Email,
                         Email = modal.Email,
                         PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -1391,7 +1400,7 @@ namespace HaloDocMVC.NET.Controllers
                         IntYear = modal.DateOfBirth.Year,
                         IntDate = modal.DateOfBirth.Day,
                         CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
 
                     };
 
@@ -1420,6 +1429,7 @@ namespace HaloDocMVC.NET.Controllers
                         ZipCode = modal.ZipCode,
                         Notes = modal.Symptoms,
                         NotiEmail = modal.Email,
+                        Address = modal.Room,
                         NotiMobile = modal.Phone,
                         StrMonth = modal.DateOfBirth.Month.ToString(),
                         IntYear = modal.DateOfBirth.Year,
@@ -1429,7 +1439,7 @@ namespace HaloDocMVC.NET.Controllers
                     _db.RequestClients.Add(rc);
                     _db.SaveChanges();
 
-                    int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                     Request req = new Request
                     {
@@ -1441,7 +1451,7 @@ namespace HaloDocMVC.NET.Controllers
                         RequestTypeId = 3,
                         UserId = us.UserId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date,
+                        CreatedDate = DateTime.Now,
                         IsUrgentEmailSent = new BitArray(1),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
@@ -1457,7 +1467,7 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now.Date
+                            CreatedDate = DateTime.Now
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -1468,7 +1478,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         Status = 1,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
 
                     _db.RequestStatusLogs.Add(rst);
@@ -1568,6 +1578,7 @@ namespace HaloDocMVC.NET.Controllers
                     City = modal.City,
                     RegionId = region.RegionId,
                     ZipCode = modal.ZipCode,
+                    Address = modal.Room,
                     Notes = modal.Symptoms,
                     NotiEmail = modal.Email,
                     NotiMobile = modal.Phone,
@@ -1579,7 +1590,7 @@ namespace HaloDocMVC.NET.Controllers
                 _db.RequestClients.Add(rc);
                 _db.SaveChanges();
 
-                int requests = _db.Requests.Where(u => u.CreatedDate == DateTime.Now.Date).Count();
+                int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
 
                 Request req = new Request
                 {
@@ -1591,7 +1602,7 @@ namespace HaloDocMVC.NET.Controllers
                     RequestTypeId = 2,
                     UserId = curr_user.UserId,
                     Status = 1,
-                    CreatedDate = DateTime.Now.Date,
+                    CreatedDate = DateTime.Now,
                     IsUrgentEmailSent = new BitArray(1),
                     ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
@@ -1606,7 +1617,7 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         FileName = modal.ImageContent.FileName,
-                        CreatedDate = DateTime.Now.Date
+                        CreatedDate = DateTime.Now
                     };
                     _db.RequestWiseFiles.Add(rfile);
                     _db.SaveChanges();
@@ -1617,7 +1628,7 @@ namespace HaloDocMVC.NET.Controllers
                 {
                     RequestId = req.RequestId,
                     Status = 1,
-                    CreatedDate = DateTime.Now.Date
+                    CreatedDate = DateTime.Now
                 };
 
                 _db.RequestStatusLogs.Add(rst);
@@ -1689,7 +1700,7 @@ namespace HaloDocMVC.NET.Controllers
                 user.IntYear = modal.DateOfBirth.Year;
                 user.IntDate = modal.DateOfBirth.Day;
                 user.ModifiedBy = aspnetid;
-                user.ModifiedDate = DateTime.Now.Date;
+                user.ModifiedDate = DateTime.Now;
 
                 _db.Users.Update(user);
 
@@ -1740,7 +1751,7 @@ namespace HaloDocMVC.NET.Controllers
             {
                 RequestId = id,
                 FileName = file.FileName,
-                CreatedDate = DateTime.Now.Date,
+                CreatedDate = DateTime.Now,
 
             };
             _db.RequestWiseFiles.Add(requestWiseFile);

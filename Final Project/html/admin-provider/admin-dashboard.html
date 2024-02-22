@@ -446,14 +446,14 @@
           </div>
           <table id="dtBasicExample" class="table">
             <thead class="thead-dark">
-              <tr>
+              <tr class="check">
                 <th>Name</th>
                 <th></th>
                 <th>Date Of Birth</th>
                 <th>Requestor</th>
                 <th>Physician Name</th>
                 <th>Date Of Service</th>
-                <th>Phone</th>
+                <th style="min-width: 175px;">Phone</th>
                 <th>Address</th>
                 <th>Notes</th>
                 <th>Actions</th>
@@ -502,9 +502,18 @@
                       class="dropdown-menu"
                       aria-labelledby="dropdownMenuLink"
                     >
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/file.png" alt="" class="action-img"><span>View Case</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/paper.png" alt="" class="action-img"><span>View Notes</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/upload.png" alt="" class="action-img"><span>View Uploads</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Send Agreement</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Doctor Note</span></div></a>
+                      <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                     </div>
                   </div>
                 </td>
@@ -612,12 +621,12 @@
                     >
                   </div>
                   <div class="row">
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">View Notes</a>
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">Doctors Note</a>
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">View Uploads</a>
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">Encounter</a>
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">Orders</a>
-                    <a class="action-mob-btn col-md-3 col-sm-6 col-6">Email</a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View abc</div></a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Doctors Note</div></a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View Uploads</div></a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Encounter</div></a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Orders</div></a>
+                    <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
                   </div>
                 </div>
               </div>

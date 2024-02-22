@@ -1,103 +1,333 @@
-﻿@{
+﻿@model AdminDashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
+    Layout = "_AdminLayout";
 }
 @section Styles {
     <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+
     <script src="~/js/admin-dashboard.js"></script>
+    <script src="~/js/admin-navbar.js"></script>
+
 }
 <div id="body">
+   
     <!-- Navbar -->
-    <div class="navbar-custom">
-        <img src="../../images/logo1.png" alt="" class="logo" />
-        <div class="right-side-elements">
-            <span class="welcome-text">Welcome <span class="name-text">Kandarp Shah</span></span>
-            <a class="logout log" asp-controller="Admin" asp-action="Dashboard">
-                <span class="logout-text">Logout</span>
-            </a>
-            <a class="logout-mob log" asp-controller="Admin" asp-action="Dashboard">
-                <img id="logout" src="../../images/box-arrow-right.svg" alt="" class="logout-img" />
-            </a>
-            <button class="moon" onclick="changeMode()">
-                <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
-                <img id="sun" src="../../images/sun.svg" alt="" class="moon-img hidden" />
-            </button>
-        </div>
-    </div>
 
-    <!-- Sidebar -->
+    <partial name="_AdminNavbar" />
 
-    <div id="mySidebar" class="sidebar">
-        <div class="tab sidebar-tab">
-            <span class="mob-welcome-text">Welcome <span class="mob-name-text">Kandarp Shah</span></span>
-            <button class="tablinks sidebar-tablinks mobile-sidebar-active">
-                <a class="mobile-sidebar-a">
-                    Dashboard
-                </a>
-            </button>
-            <button class="tablinks sidebar-tablinks">
-                <a class="mobile-sidebar-a">
-                    Profile
-                </a>
-            </button>
-        </div>
-    </div>
-
-    <!-- Dark Background when sidebar is open -->
-    <div class="overlay" onclick="sidebar_close()">
-    </div>
-
-    <!-- Navbar Below Container -->
-
-    <div class="nav-below-container"></div>
-
-    <!-- Navbar - Below -->
-
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <button class="navbar-toggler list-border" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="sidebar_open()">
-            <img src="../../images/list.svg" alt="" class="list-img" />
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="tab">
-                <button class="tablinks sidebar-active">
-                    <a>
-                        Dashboard
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Provider Location
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        My Profile
-                    </a>
-                </button>
-                <div class="dropdown-self">
-                    <button class="dropbtn">Dropdown</button>
-                    <div class="dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
+    <div class="main-container">
+      <div class="inner-main-container">
+        <!-- Status Cards -->
+        
+            <div class="row status-row">
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards new new-active"
+                         id="card1"
+                         onclick="changeStatus(this)">
+                        <div class="inner-row-cards">
+                            <img src="../../images/new.svg"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="new" />
+                            <img src="../../images/new_active.png"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="new-active" />
+                            <span class="row-card-text">NEW</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.new_count</h4>
+                        <div id="new-img" class="absolutivity">
+                            <img src="../../images/caret-down-fill.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
                     </div>
                 </div>
-                <button class="tablinks">
-                    <a>
-                        Partners
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Access
-                    </a>
-                </button>
-                <button class="tablinks">
-                    <a>
-                        Records
-                    </a>
-                </button>
-            </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards pending"
+                         id="card2"
+                         onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/pending.svg"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="pending" />
+                            <img src="../../images/pending_active.png"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="pending-active" />
+                            <span class="row-card-text">PENDING</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.pending_count</h4>
+                        <div id="pending-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill1.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards active"
+                         id="card3"
+                         onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/active.svg"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="active" />
+                            <img src="../../images/active_active.png"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="active-active" />
+                            <span class="row-card-text">ACTIVE</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.active_count</h4>
+                        <div id="active-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill2.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards conclude"
+                         id="card4"
+                         onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/conclude.svg"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="conclude" />
+                            <img src="../../images/conclude_active.png"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="conclude-active" />
+                            <span class="row-card-text">CONCLUDE</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.conclude_count</h4>
+                        <div id="conclude-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fil3.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards to-close"
+                         id="card5"
+                         onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/toclose.svg"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="to-close" />
+                            <img src="../../images/toclose_active.png"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="to-close-active" />
+                            <span class="row-card-text">TO CLOSE</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.toclose_count</h4>
+                        <div id="to-close-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill4.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                    <div class="row-cards unpaid"
+                         id="card6"
+                         onclick="changeStatus(this)">
+                        <div>
+                            <img src="../../images/unpaid.svg"
+                                 alt=""
+                                 class="row-card-img"
+                                 id="unpaid" />
+                            <img src="../../images/unpaid_active.png"
+                                 alt=""
+                                 class="row-card-img hidden"
+                                 id="unpaid-active" />
+                            <span class="row-card-text">UNPAID</span>
+                        </div>
+                        <h4 class="type_no_txt">@Model.unpaid_count</h4>
+                        <div id="unpaid-img" class="absolutivity hidden">
+                            <img src="../../images/caret-down-fill5.svg"
+                                 alt=""
+                                 class="arrow-width" />
+                        </div>
+                    </div>
+                </div>
+
+          <!-- Patient text and buttons -->
         </div>
-    </nav>
+        <div class="row mt-3">
+          <div class="inner-pt-container">
+            <span class="patients-text"
+              >Patients<span class="status-text" id="status-text"
+                >(New)</span
+              ></span
+            >
+            <div class="links">
+              <div class="btn btn-info text-white patient-text-btn">
+                <i class="bi bi-send"></i>
+                <span class="d-none d-lg-inline-flex">Send Link</span>
+              </div>
+              <div class="btn btn-info text-white patient-text-btn">
+                <i class="bi bi-pencil-square"></i>
+                <span class="d-none d-lg-inline-flex">Create Request</span>
+              </div>
+              <div class="btn btn-info text-white patient-text-btn">
+                <i class="bi bi-arrow-90deg-right"></i>
+                <span class="d-none d-lg-inline-flex">Export</span>
+              </div>
+              <div class="btn btn-info text-white patient-text-btn">
+                <i class="bi bi-arrow-90deg-right"></i>
+                <span class="d-none d-lg-inline-flex">Export All</span>
+              </div>
+              <div class="btn btn-info text-white patient-text-btn">
+                <i class="bi bi-person-fill"></i>
+                <span class="d-none d-lg-inline-flex">Request DIY Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-main-container mt-3">
+          <!-- Filter Section -->
+
+          <div class="filter-section">
+            <div class="inner-filter-flex">
+              <div class="search-flex">
+                <span class="search">
+                  <img
+                    class="search-image"
+                    src="../../images/search.svg"
+                    alt=""
+                  />
+                  <input
+                    class="search-inp"
+                    id="search"
+                    type="text"
+                    placeholder="Search Patients"
+                    onchange="searchFilter(this)"
+                  />
+                </span>
+                <span class="search">
+                  <img
+                    class="search-image"
+                    src="../../images/search.svg"
+                    alt=""
+                  />
+                  <select name="" id="region" class="search-inp" onchange="regionFetch(this)">
+                    <option value="-1">All Regions</option>
+                    @foreach(var item in Model.regions){
+                        <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
+                    }
+                  </select>
+                </span>
+              </div>
+              <div class="request-filter">
+                <a
+                  class="req-filter All filter-active"
+                  onclick="changeRequestor(this)"
+                  >All</a
+                >
+                <a class="req-filter Patient" onclick="changeRequestor(this)"
+                  ><span class="color patient-color"></span
+                  ><span class="requestor-type">Patient</span></a
+                >
+                <a class="req-filter Family" onclick="changeRequestor(this)"
+                  ><span class="color family-color"></span
+                  ><span class="requestor-type">Family/Friend</span></a
+                >
+                <a class="req-filter Business" onclick="changeRequestor(this)"
+                  ><span class="color business-color"></span
+                  ><span class="requestor-type">Business</span></a
+                >
+                <a class="req-filter Concierge" onclick="changeRequestor(this)"
+                  ><span class="color concierge-color"></span
+                  ><span class="requestor-type">Concierge</span></a
+                >
+              </div>
+            </div>
+          </div>
+
+          @*Dynamic Content*@
+
+          <div id="partial-container"></div>
+          
+        </div>
+      </div>
+    </div>
+
+
 </div>
+<script>
+    const searchFilter = (search) => {
+        const states = document.getElementsByClassName("req-filter")
+        for(let i=0;i<states.length;++i)
+        {
+            if(states[i].classList.length == 3)
+            {
+                $.ajax({
+                    url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
+                    type: 'POST',
+                    dataType: 'html',
+                    data: { search: search.value, region: document.getElementById("region").value, requestor: states[i].classList[1] },
+                    // Pass your data here
+                    success: function (response) {
+                        $("#partial-container").html(response)
+                    },
+                    error: function () {
+                        alert('An error occurred.');
+                    }
+                });
+            }
+        }
+    }
+
+    const regionFetch = (region) => {
+        const states = document.getElementsByClassName("req-filter")
+        for (let i = 0; i < states.length; ++i) {
+            if (states[i].classList.length == 3) {
+                $.ajax({
+                    url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
+                    type: 'POST',
+                    dataType: 'html',
+                    data: { region: region.value, search: document.getElementById("search").value, requestor: states[i].classList[1] },
+                    // Pass your data here
+                    success: function (response) {
+                        $("#partial-container").html(response)
+                    },
+                    error: function () {
+                        alert('An error occurred.');
+                    }
+                });
+            }
+        }
+        
+    }
+
+    window.onload = () => {
+        $.ajax({
+            url: `/Admin/New`,
+            type: 'POST',
+            dataType: 'html',
+            // Pass your data here
+            success: function (response) {
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+</script>

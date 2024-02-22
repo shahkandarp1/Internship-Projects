@@ -222,13 +222,6 @@ td{
     font-weight: 300;
 }
 
-td .img-container{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting_asc:before,table.dataTable thead>tr>th.sorting:after,table.dataTable thead>tr>th.sorting_asc:after{
     display: none!important;
 }
@@ -268,6 +261,22 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     padding: 5px;
     border: 1px solid white!important;
     border-radius: 5px;
+}
+
+.action-item{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.action-img{
+    margin-right: 10px;
+    width: 15px;
+    height: 15px;
+  }
+
+.dropdown-item:hover{
+    background-color: #E0E0E0!important;
 }
 
 /* Accordion */
@@ -363,6 +372,7 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
 
   .mob-address{
     width: 40%;
+    overflow: hidden; word-wrap: break-word; text-overflow: ellipsis;
   }
 
   .req-accordion-filter{
@@ -417,14 +427,13 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     background-color: #228C20;
     color: white;
     border: 1px solid #228C20;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 20px;
     text-align: center;
     margin-bottom: 10px;
-    padding: 15px;
+    width: 100%;
+    min-width: 55px;
   }
-
-
 @media screen and (max-width:1155px) {
     .row-card-img{
         width: 15px;
@@ -449,7 +458,7 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     }
 }
 
-@media screen and (max-width:1060px) {
+@media screen and (max-width:1180px) {
     #dtBasicExample{
         display: none;
     }
@@ -499,7 +508,7 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
 
 @media screen and (max-width:425px) {
     .patient-text-btn{
-        padding: 5px 8px;
+        padding: 4px;
     }
 }
 
@@ -529,5 +538,8 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
 @media screen and (max-width:345px){
     .row-card-text{
         font-size: 10px;
+    }
+    .action-mob-btn{
+        font-size: 14px;
     }
 }
