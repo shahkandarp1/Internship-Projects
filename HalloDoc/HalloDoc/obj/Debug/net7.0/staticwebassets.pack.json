@@ -49,6 +49,10 @@
       "PackagePath": "staticwebassets\\css\\submit-request.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-case.css",
+      "PackagePath": "staticwebassets\\css\\view-case.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-document.css",
       "PackagePath": "staticwebassets\\css\\view-document.css"
     },
@@ -853,6 +857,10 @@
       "PackagePath": "staticwebassets\\images\\telephone-black.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\telephone-blue.svg",
+      "PackagePath": "staticwebassets\\images\\telephone-blue.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\telephone.svg",
       "PackagePath": "staticwebassets\\images\\telephone.svg"
     },
@@ -939,6 +947,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\submit-request.js",
       "PackagePath": "staticwebassets\\js\\submit-request.js"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-case.js",
+      "PackagePath": "staticwebassets\\js\\view-case.js"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-document.js",

@@ -1,5 +1,40 @@
 ﻿@model AdminDashboardViewModel
 
+<form asp-action="Dashboard" asp-controller="Admin" method="post">
+    @Html.HiddenFor(m => m.status)
+    @for (int i = 0; i < Model.regions.Count; i++)
+    {
+        @Html.HiddenFor(m => m.regions[i].Name)
+        @Html.HiddenFor(m => m.regions[i].RegionId)
+    }
+    @for (int i = 0; i < Model.requests.Count; i++)
+    {
+        @Html.HiddenFor(m => m.requests[i].FirstName)
+        @Html.HiddenFor(m => m.requests[i].LastName)
+        @Html.HiddenFor(m => m.requests[i].PhoneNumber)
+        @Html.HiddenFor(m => m.requests[i].RequestTypeId)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.FirstName)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.LastName)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.PhoneNumber)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.Street)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.Address)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.ZipCode)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.State)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.City)
+        @Html.HiddenFor(m => m.requests[i].CreatedDate)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.IntYear)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.StrMonth)
+        @Html.HiddenFor(m => m.requests[i].RequestClient.IntDate)
+        @Html.HiddenFor(m => m.requests[i].Physician.FirstName)
+        for(int j=0;j<Model.requests[i].RequestStatusLogs.ToList().Count;++j)
+        {
+            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].Status)
+            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].CreatedDate)
+            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].Notes)
+            
+        }
+    }
+<button class="d-none" id="submit-btn"></button>
 <table id="dtBasicExample" class="table">
     <thead class="thead-dark">
         <tr>
@@ -126,7 +161,7 @@
 
                     </td>
                 }
-                <td>@(item.RequestClient.Address == null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
+                <td>@(item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
                 @if (Model.status != "Conclude" || Model.status != "Unpaid")
                 {
                     <td>
@@ -153,7 +188,7 @@
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/file.png" alt="" class="action-img"><span>View Case</span></div></a>
+                                <a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@(item.RequestId)"><div class="action-item"><img src="../../images/file.png" alt="" class="action-img"><span>View Case</span></div></a>
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -268,8 +303,8 @@
                         }
                     </div>
                     <div class="accordion-top-flex">
-                        <div class="accordion-value mob-address">@(Model.requests[i].RequestClient.Address == null ? string.Concat(Model.requests[i].RequestClient.Address, ',', Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode) : string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))</div>
-                        <a class="map-btn">Map Location</a>
+                        <div class="accordion-value mob-address">@(Model.requests[i].RequestClient.Address != null ? string.Concat(Model.requests[i].RequestClient.Address, ',', Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode) : string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))</div>
+                            <div class="map-btn" onclick="openMap(" @(string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))")">Map Location</div>
                     </div>
                     @if(Model.status == "New")
                     {
@@ -286,7 +321,7 @@
                  class="accordion-collapse collapse"
                  aria-labelledby="flush-heading@(i)"
                  data-bs-parent="#accordionFlushExample">
-                <a class="map-btn view-case-btn">View Case</a>
+                    <a class="map-btn view-case-btn" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@(Model.requests[i].RequestId)">View Case</a>
                 <div class="accordion-body main-flex">
                     @if(Model.status != "Unpaid")
                     {
@@ -435,10 +470,21 @@
         </div>
     </div>
 }
-
-
+</form>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
     $(document).ready(function () {
         $("#dtBasicExample").DataTable();
     });
+    
+        function openMap(address) {
+            $("#myModal1").modal("show");
+            var Street = address.split(",")[0]
+            var City = address.split(",")[1]
+            var State = address.split(",")[2]
+            var ZipCode = address.split(",")[3]
+            var address = "https://maps.google.com/maps?q=" + Street + City + State + ZipCode + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
+            $("#gmap_canvas").attr("src", address);
+        }
+    
 </script>

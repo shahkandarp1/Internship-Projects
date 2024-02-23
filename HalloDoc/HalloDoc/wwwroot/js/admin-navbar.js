@@ -2,12 +2,12 @@
     if (document.getElementById("mySidebar").offsetWidth == 0) {
         document.getElementById("mySidebar").style.width = "200px";
         document.getElementsByClassName("overlay")[0].style.display = "block";
-        document.getElementsByClassName("navbar")[0].style.boxShadow = "none";
+        /*document.getElementsByClassName("navbar")[0].style.boxShadow = "none";*/
     }
     else {
         document.getElementById("mySidebar").style.width = "0px";
         document.getElementsByClassName("overlay")[0].style.display = "none";
-        document.getElementsByClassName("navbar")[0].style.boxShadow = "3px -8px 17px 1px black";
+        /*document.getElementsByClassName("navbar")[0].style.boxShadow = "3px -8px 17px 1px black";*/
     }
 
 }

@@ -337,6 +337,10 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
 .dropdown-item:hover {
     background-color: #E0E0E0 !important;
 }
+.dropdown-item:active {
+    color:black;
+    background-color:white;
+}
 
 /* Accordion */
 

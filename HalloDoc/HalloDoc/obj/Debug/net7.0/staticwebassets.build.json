@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Bbd8S98u4pAR/qrmnxDExRzXYrXZZ32c4Tcnmebs3/Q=",
+  "Hash": "YSsi1BbmqpMpkYe3RyBVhUul/RH8p05jNhAoaYmrZbo=",
   "Source": "HalloDoc",
   "BasePath": "_content/HalloDoc",
   "Mode": "Default",
@@ -236,6 +236,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\submit-request.css"
+    },
+    {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-case.css",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "css/view-case.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\view-case.css"
     },
     {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-document.css",
@@ -3672,6 +3689,23 @@
       "OriginalItemSpec": "wwwroot\\images\\telephone-black.svg"
     },
     {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\telephone-blue.svg",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "images/telephone-blue.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\telephone-blue.svg"
+    },
+    {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\toclose.png",
       "SourceId": "HalloDoc",
       "SourceType": "Discovered",
@@ -4027,6 +4061,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\submit-request.js"
+    },
+    {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-case.js",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "js/view-case.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\view-case.js"
     },
     {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-document.js",
