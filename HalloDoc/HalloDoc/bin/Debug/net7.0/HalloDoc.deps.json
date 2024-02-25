@@ -1020,6 +1020,7 @@
       },
       "HalloDoc.Repository/1.0.0": {
         "dependencies": {
+          "ClosedXML": "0.102.2",
           "HalloDoc.Models": "1.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
           "Microsoft.EntityFrameworkCore": "7.0.15",
