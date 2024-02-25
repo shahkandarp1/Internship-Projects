@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HalloDoc.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,13 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IAdmin
     {
+        public AdminDashboardViewModel adminDashboardContent(string? status, string? search, string? requestor, int? region);
+
+        public MemoryStream exportAll();
+
+        public MemoryStream export(AdminDashboardViewModel adminDashboardViewModel);
+
+        public ViewCaseViewModel viewCase(int id);
+
     }
 }

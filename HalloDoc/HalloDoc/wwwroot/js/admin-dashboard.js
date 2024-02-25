@@ -30,13 +30,16 @@
     document.getElementById("search").value = ""
 
     document.getElementById("region").value = -1
-
+    document.getElementsByClassName("loader-container")[0].style.display = "flex";
+    document.getElementById("partial-container").style.display = "none";
     $.ajax({
         url: `/Admin/${name.charAt(0).toUpperCase() + name.slice(1)}`,
         type: 'POST',
         dataType: 'html',
         // Pass your data here
         success: function (response) {
+            document.getElementsByClassName("loader-container")[0].style.display = "none";
+            document.getElementById("partial-container").style.display = "block";
             $("#partial-container").html(response)
         },
         error: function () {
@@ -60,7 +63,7 @@ const changeRequestor = (element) => {
             states[i].classList.remove(`filter-active`)
         }
     }
-
+    document.getElementsByClassName("loader-container")[0].style.display = "flex";
     $.ajax({
         url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
         type: 'POST',
@@ -68,6 +71,7 @@ const changeRequestor = (element) => {
         data: { requestor: current_state, search: document.getElementById("search").value, region: document.getElementById("region").value },
         // Pass your data here
         success: function (response) {
+            document.getElementsByClassName("loader-container")[0].style.display = "none";
             $("#partial-container").html(response)
         },
         error: function () {

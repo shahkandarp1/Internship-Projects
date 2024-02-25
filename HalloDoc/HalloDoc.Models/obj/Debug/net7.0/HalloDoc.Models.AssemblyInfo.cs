@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HalloDoc.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+914051880abef9c553be441f0fbfbd7bcdb2c490")]
 [assembly: System.Reflection.AssemblyProductAttribute("HalloDoc.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HalloDoc.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

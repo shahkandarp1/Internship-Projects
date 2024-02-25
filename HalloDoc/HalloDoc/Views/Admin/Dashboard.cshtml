@@ -300,9 +300,15 @@
             </div>
           </div>
 
-          @*Dynamic Content*@
+          <!-- Dynamic Content -->
 
           <div id="partial-container"></div>
+
+          <!--Loader-->
+
+          <div class="loader-container">
+                    <div class="loader"></div>
+          </div>
           
         </div>
       </div>
@@ -315,6 +321,7 @@
         {
             if(states[i].classList.length == 3)
             {
+                document.getElementsByClassName("loader-container")[0].style.display = "flex";
                 $.ajax({
                     url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
                     type: 'POST',
@@ -322,6 +329,7 @@
                     data: { search: search.value, region: document.getElementById("region").value, requestor: states[i].classList[1] },
                     // Pass your data here
                     success: function (response) {
+                        document.getElementsByClassName("loader-container")[0].style.display = "none";
                         $("#partial-container").html(response)
                     },
                     error: function () {
@@ -339,6 +347,7 @@
     const regionFetch = (region) => {
         const states = document.getElementsByClassName("req-filter")
         for (let i = 0; i < states.length; ++i) {
+            document.getElementsByClassName("loader-container")[0].style.display = "flex";
             if (states[i].classList.length == 3) {
                 $.ajax({
                     url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
@@ -347,6 +356,7 @@
                     data: { region: region.value, search: document.getElementById("search").value, requestor: states[i].classList[1] },
                     // Pass your data here
                     success: function (response) {
+                        document.getElementsByClassName("loader-container")[0].style.display = "none";
                         $("#partial-container").html(response)
                     },
                     error: function () {
@@ -365,6 +375,7 @@
             dataType: 'html',
             // Pass your data here
             success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
                 $("#partial-container").html(response)
             },
             error: function () {
