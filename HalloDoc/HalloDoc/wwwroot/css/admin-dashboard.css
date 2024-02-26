@@ -534,6 +534,193 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
     animation: spin 2s linear infinite;
 }
 
+/* Cancellation - Modal */
+.modal-header {
+    font-size: 1.0rem;
+    font-family: 'Roboto',sans-serif;
+    background-color: #0dcaf0;
+    color: white;
+    width: 100%;
+}
+
+.cross-btn {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.continue-btn {
+    color: white !important;
+    font-size: 0.8rem;
+}
+
+.cancel-btn {
+    font-size: 0.8rem;
+    color: #0dcaf0 !important;
+    border: 1px solid #0dcaf0;
+}
+
+.btn-check:active + .btn-info:focus, .btn-check:checked + .btn-info:focus, .btn-info.active:focus, .btn-info:active:focus, .show > .btn-info.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+.btn-check:focus + .btn, .btn:focus {
+    box-shadow: none;
+}
+
+.cancel-btn:hover {
+    border: 1px solid #0dcaf0;
+}
+
+.create-request-active {
+    background-color: #0dcaf0 !important;
+    color: white !important;
+}
+
+.modal-head {
+    color: #3E3E3E;
+    font-size: 1.0em;
+}
+
+.modal-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.common-btn {
+    margin-left: 15px;
+}
+
+a:hover {
+    color: inherit;
+}
+
+.document:hover, .document-mob:hover, .logout:hover {
+    color: #0dcaf0;
+}
+
+.lower-btn {
+    margin-top: 17px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.continue-btn {
+    margin-right: 10px;
+}
+
+.modal-head {
+    color: black !important;
+}
+
+.pt-name {
+    color: #0dcaf0;
+}
+
+.option-modal {
+    color: #adadad;
+}
+
+.select {
+    color: #adadad;
+    font-size: 14px;
+}
+
+.modal-body .form-floating > .form-control:not(:placeholder-shown) {
+    padding-top: 0.625rem;
+}
+
+.symptoms-textarea {
+    margin-top: 10px;
+}
+
+.form-label {
+    color: #adadad;
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 4px;
+    z-index: 0 !important;
+}
+
+.form-control {
+    height: 50px !important;
+}
+
+    .form-control:focus {
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        border-color: #0dcaf0;
+        outline: 0;
+        box-shadow: none;
+    }
+
+.form-floating > label {
+    top: -5px;
+    left: 13px;
+}
+
+.modal-body .form-floating > label {
+    left: 0px;
+}
+
+.modal-body .form-floating {
+    width: 100%;
+}
+
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-select ~ label {
+    font-family: "Roboto", sans-serif;
+    color: #0dcaf0;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label {
+    font-weight: 400;
+}
+
+.dob:focus .form-floating > .form-control-plaintext ~ .dob-label,
+.form-floating > .form-control:focus ~ .dob-label,
+.form-floating > .form-control:not(:placeholder-shown) ~ .dob-label,
+.form-floating > .form-select ~ .dob-label {
+    font-family: "Roboto", sans-serif;
+    color: #adadad;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.form-floating > .select:not(:placeholder-shown) {
+    padding-top: 1.45rem;
+}
+
+
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    min-height: 0px;
+}
+
+.text-area {
+    height: 100px !important;
+    margin-bottom: 10px;
+}
+
+input[type="date" i] {
+    font-family: 'Roboto', sans-serif;
+}
+
+.iti {
+    width: 100%;
+    z-index: 1;
+}
+
+.notes-text > .form-control:not(:placeholder-shown) {
+    padding-top: 1.625rem !important;
+}
+
+
 /* Safari */
 @-webkit-keyframes spin {
     0% {

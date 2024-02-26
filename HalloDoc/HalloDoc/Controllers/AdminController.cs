@@ -11,12 +11,10 @@ namespace HalloDoc.Controllers
     public class AdminController : Controller
     {
         private readonly IAdmin _admin;
-        private readonly ApplicationDbContext _db;
 
-        public AdminController(IAdmin admin,ApplicationDbContext db)
+        public AdminController(IAdmin admin)
         {
             _admin = admin;
-            _db = db;
         }
 
         public IActionResult Login()
@@ -92,6 +90,37 @@ namespace HalloDoc.Controllers
             ViewCaseViewModel viewCaseViewModel= _admin.viewCase(id);
             return View(viewCaseViewModel);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ViewCase(ViewCaseViewModel model)
+        {
+            bool status = _admin.viewCase(model);
+            if(status)
+            {
+                TempData["success"] = "Data Editted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Data could not be editted!!";
+            }
+            return View(model);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CancelRequest(ViewCaseViewModel viewCaseViewModel)
+        {
+            bool isUpdated = _admin.cancelRequest(viewCaseViewModel.RequestId,viewCaseViewModel.Admin_notes,viewCaseViewModel.CaseTag);
+            if (isUpdated)
+            {
+                TempData["success"] = "Request Cancelled Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be Cancelled!!";
+            }
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard",adminDashboardViewModel);
+        }
     }
 }

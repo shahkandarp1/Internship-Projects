@@ -52,6 +52,7 @@
 const changeRequestor = (element) => {
     const states = document.getElementsByClassName("req-filter")
     const current_state = element.classList[1]
+
     for (let i = 0; i < states.length; ++i) {
         if (states[i].classList.length == 3 && states[i].classList[1] == current_state) {
             break;
@@ -63,6 +64,7 @@ const changeRequestor = (element) => {
             states[i].classList.remove(`filter-active`)
         }
     }
+    document.getElementById("partial-container").style.display = "none";
     document.getElementsByClassName("loader-container")[0].style.display = "flex";
     $.ajax({
         url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
@@ -72,6 +74,7 @@ const changeRequestor = (element) => {
         // Pass your data here
         success: function (response) {
             document.getElementsByClassName("loader-container")[0].style.display = "none";
+            document.getElementById("partial-container").style.display = "block";
             $("#partial-container").html(response)
         },
         error: function () {

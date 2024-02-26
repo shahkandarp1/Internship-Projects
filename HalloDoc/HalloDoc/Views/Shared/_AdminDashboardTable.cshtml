@@ -136,7 +136,7 @@
                 }
                 @if (Model.status != "New")
                 {
-                    <td>@dos</td>
+                        <td>@item.AcceptedDate?.ToString("MMMM dd,yyyy")</td>
                 }
                 @if (Model.status != "ToClose")
                 {
@@ -184,7 +184,7 @@
                             @if (Model.status == "New")
                             {
                                 <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
+                                    <a class="dropdown-item cancel-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -304,7 +304,7 @@
                     </div>
                     <div class="accordion-top-flex">
                         <div class="accordion-value mob-address">@(Model.requests[i].RequestClient.Address != null ? string.Concat(Model.requests[i].RequestClient.Address, ',', Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode) : string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))</div>
-                            <div class="map-btn" onclick="openMap(" @(string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))")">Map Location</div>
+                            <div class="map-btn">Map Location</div>
                     </div>
                     @if(Model.status == "New")
                     {
@@ -401,7 +401,7 @@
                             <span class="accordion-heading-inner">
                                 Date Of Service :
                                 <span class="accordion-value-inner">
-                                    @dos
+                                        @Model.requests[i].AcceptedDate?.ToString("MMMM dd,yyyy")
                                 </span>
                             </span>
                         </div>
@@ -424,7 +424,7 @@
                         @if (Model.status == "New")
                         {
                             <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Assign Case</div></a>
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Cancel Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 cancel-case" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Cancel Case</div></a>
                         }
                         @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
@@ -471,20 +471,22 @@
     </div>
 }
 </form>
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        $("#dtBasicExample").DataTable();
-    });
-    
-        function openMap(address) {
-            $("#myModal1").modal("show");
-            var Street = address.split(",")[0]
-            var City = address.split(",")[1]
-            var State = address.split(",")[2]
-            var ZipCode = address.split(",")[3]
-            var address = "https://maps.google.com/maps?q=" + Street + City + State + ZipCode + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
-            $("#gmap_canvas").attr("src", address);
-        }
-    
+    var divs = document.getElementsByClassName("cancel-case")
+
+    for(let i=0;i<divs.length;++i)
+    {
+        divs[i].onclick = function () {
+            var id = divs[i].getAttribute("data-id");
+            var name = divs[i].getAttribute("data-name");
+            openCancel(id, name);
+        };
+    }
+
+    const openCancel = (id,name) => {
+        document.getElementById("pt-name").innerHTML = name
+        document.getElementById("req-id").value = id
+        $("#myModal").modal("show");
+    }
 </script>

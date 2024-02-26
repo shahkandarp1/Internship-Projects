@@ -1,4 +1,25 @@
-﻿
+﻿const Edit = () => {
+    const editable = document.getElementsByClassName('editable')
+    for (let i = 0; i < editable.length; ++i) {
+        editable[i].disabled = false;
+    }
+    const btn = document.getElementsByClassName('lower-custom-btn')
+    for (let i = 0; i < btn.length; ++i) {
+        if (btn[i].classList.length == 3) {
+            btn[i].classList.remove("hidden");
+        }
+        else {
+            btn[i].classList.add("hidden");
+        }
+    }
+}
+
+const Cancel = () => {
+    location.reload()
+}
+
+
+
 window.onload = function () {
 
     const inputDate = document.getElementById('dob');

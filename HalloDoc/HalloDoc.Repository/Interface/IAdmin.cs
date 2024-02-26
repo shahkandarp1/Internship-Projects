@@ -17,5 +17,8 @@ namespace HalloDoc.Repository.Interface
 
         public ViewCaseViewModel viewCase(int id);
 
+        public bool viewCase(ViewCaseViewModel model);
+
+        public bool cancelRequest(int id, string notes, string select);
     }
 }

@@ -49,12 +49,12 @@ namespace HalloDoc.Controllers
         public IActionResult Disagree(int id,string notes)
         {
             var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
-            request.Status = 5;
+            request.Status = 7;
             _db.Requests.Update(request);
 
             RequestStatusLog requestStatusLog = new RequestStatusLog
             {
-                Status = 5,
+                Status = 7,
                 RequestId = id,
                 CreatedDate = DateTime.Now,
                 Notes = notes

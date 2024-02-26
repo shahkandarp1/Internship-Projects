@@ -18,6 +18,49 @@
     <partial name="_AdminNavbar" />
 
 
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <!-- Cancellation Modal -->
+    <form asp-action="CancelRequest" asp-controller="Admin" method="post" onsubmit="checkSelect()">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Confirm Cancellation</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-id"/>
+                        <span class="modal-head"><label for="floatingInput" class="form-label">Patient Name:</label><span class="pt-name" id="pt-name"></span></span>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-cancel" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
+                                <option class="option-modal" value="-1">Reason For Cancellation</option>
+                                @foreach (var items in Model.caseTags)
+                                {
+                                    <option class="option-modal" value="@items.Name">@items.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <span id="warning" class="text-danger hidden">Please select Case Tag</span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" required asp-for="Admin_notes"></textarea>
+                            <label for="admin_notes" class="form-label">Provide Additional Notes</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
     <!--Location Modal -->
 
     <div class="modal" id="myModal1">
@@ -314,6 +357,7 @@
       </div>
     </div>
 </div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
     const searchFilter = (search) => {
         const states = document.getElementsByClassName("req-filter")
@@ -340,8 +384,28 @@
         }
     }
 
+    $(document).ready(function () {
+        $("#cancel").click(function () {
+            $("#myModal").modal("hide");
+        });
+    });
+
     const submit = () => {
         document.getElementById("submit-btn").click();
+    }
+
+    const selectChange = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning").style.display = "none";
+        }
+    }
+
+    const checkSelect = () => {
+        const select = document.getElementById("Select-cancel")
+        if (select.value == -1) {
+            document.getElementById("warning").style.display = "block";
+            return false;
+        }
     }
 
     const regionFetch = (region) => {

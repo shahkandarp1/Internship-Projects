@@ -31,8 +31,24 @@ namespace HalloDoc.ViewModels
 
         public string Address { get; set; }
 
-        public Request requests { get; set; }
+        public int RequestId { get; set; }
 
+        public int RequestClientId { get; set; }
 
+        public int Status { get; set;}
+
+        public int RequestTypeId { get; set; }
+
+        public string ConfirmationNumber { get; set; }
+
+        public string? Notes { get; set; }
+
+        public string? Room { get; set; }
+
+        public List<CaseTag> caseTags { get; set; }
+
+        public string? CaseTag { get; set; }
+
+        public string? Admin_notes { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.VariantTypes;
 using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -60,6 +61,7 @@ namespace HalloDoc.Repository.Repository
             var count_conclude = _db.Requests.Count(r => r.Status == 5);
             var count_toclose = _db.Requests.Count(r => r.Status == 6 || r.Status == 7 || r.Status == 8);
             var count_unpaid = _db.Requests.Count(r => r.Status == 9);
+            var casetag = _db.CaseTags.ToList();
 
             if (search != null)
             {
@@ -101,6 +103,7 @@ namespace HalloDoc.Repository.Repository
                 requests = _query.ToList(),
                 regions = _db.Regions.ToList(),
                 status = status,
+                caseTags = casetag,
             };
             return adminDashboardViewModel;
         }
@@ -158,9 +161,9 @@ namespace HalloDoc.Repository.Repository
                     worksheet.Cell(row, 1).Value = string.Concat(item.RequestClient.FirstName + ',' + item.RequestClient.LastName);
                     worksheet.Cell(row, 2).Value = DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").ToString("MMMM dd,yyyy");
                     worksheet.Cell(row, 3).Value = statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower() + " " + item.FirstName + item.LastName;
-                    worksheet.Cell(row, 4).Value = ("Dr." + item?.Physician == null ? "" : item?.Physician?.FirstName);
+                    worksheet.Cell(row, 4).Value = "Dr." + item?.Physician == null ? "" : item?.Physician?.FirstName;
                     worksheet.Cell(row, 5).Value = item.CreatedDate.ToString("MMMM dd,yyyy");
-                    worksheet.Cell(row, 6).Value = dos;
+                    worksheet.Cell(row, 6).Value = item.AcceptedDate?.ToString("MMMM dd,yyyy");
                     worksheet.Cell(row, 7).Value = item.RequestClient.PhoneNumber + "(Patient)" + (item.RequestTypeId != 2 ? item.PhoneNumber + "(" + statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower() + ")" : "");
                     worksheet.Cell(row, 8).Value = (item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode));
                     worksheet.Cell(row, 9).Value = notes;
@@ -279,7 +282,7 @@ namespace HalloDoc.Repository.Repository
                     }
                     if (model.status != "New")
                     {
-                        worksheet.Cell(row, count++).Value = dos;
+                        worksheet.Cell(row, count++).Value = item.AcceptedDate?.ToString("MMMM dd,yyyy"); 
                     }
                     if (model.status != "ToClose")
                     {
@@ -311,6 +314,7 @@ namespace HalloDoc.Repository.Repository
         {
             var req = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == id);
             var region = _db.Regions.FirstOrDefault(r => r.RegionId == req.RequestClient.RegionId);
+            var caseTags = _db.CaseTags.ToList();
             ViewCaseViewModel viewCaseViewModel = new ViewCaseViewModel()
             {
                 id = id,
@@ -321,9 +325,66 @@ namespace HalloDoc.Repository.Repository
                 Email = req.RequestClient.Email,
                 Region = region.Name,
                 Address = string.Concat(req.RequestClient.Street, ',', req.RequestClient.City, ',', req.RequestClient.State, ',', req.RequestClient.ZipCode),
-                requests = req
+                RequestId = req.RequestId,
+                RequestClientId = req.RequestClientId,
+                Status = req.Status,
+                RequestTypeId = req.RequestTypeId,
+                ConfirmationNumber = req.ConfirmationNumber,
+                Notes = req.RequestClient.Notes,
+                Room = req.RequestClient.Address,
+                caseTags = caseTags
             };
             return viewCaseViewModel;
+        }
+
+        public bool viewCase(ViewCaseViewModel model)
+        {
+            
+            try
+            {
+                RequestClient requestClient = _db.RequestClients.FirstOrDefault(r=>r.RequestClientId == model.RequestClientId);
+                requestClient.FirstName = model.FirstName;
+                requestClient.LastName = model.LastName;
+                requestClient.PhoneNumber = model.PhoneNumber;
+                requestClient.Email = model.Email;
+                requestClient.StrMonth = model.DateOfBirth.Month.ToString();
+                requestClient.IntYear = model.DateOfBirth.Year;
+                requestClient.IntDate = model.DateOfBirth.Day;
+                _db.RequestClients.Update(requestClient);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+         bool IAdmin.cancelRequest(int id,string notes,string request)
+        {
+            try
+            {
+                Request req = _db.Requests.FirstOrDefault(r => r.RequestId == id);
+                req.CaseTag = request;
+                req.Status = 6;
+                _db.Requests.Update(req);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog()
+                {
+                    RequestId = id,
+                    Status = 6,
+                    Notes = notes,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
         }
 
     }

@@ -19,5 +19,11 @@ namespace HalloDoc.ViewModels
         public List<Request> requests { get; set; } = new List<Request>();
         public List<Region> regions { get; set; } = new List<Region>();
         public string status { get; set; }
+
+        //Cancel Request
+        public List<CaseTag> caseTags { get; set; }
+        public int ?RequestId { get; set; }
+        public string? CaseTag { get; set; }
+        public string? Admin_notes { get; set; }
     }
 }

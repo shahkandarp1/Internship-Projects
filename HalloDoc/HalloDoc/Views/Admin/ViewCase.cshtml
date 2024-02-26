@@ -16,6 +16,47 @@
     <!-- Navbar -->
     <partial name="_AdminNavbar" />
 
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <!-- Cancellation Modal -->
+    <form asp-action="CancelRequest" asp-controller="Admin" method="post" onsubmit="checkSelect()">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="exampleModalLongTitle">Confirm Cancellation</div>
+                    <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                </div>
+                
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId"/>
+                        <span class="modal-head"><label for="floatingInput" class="form-label">Patient Name:</label><span class="pt-name">@(string.Concat(Model.FirstName, ' ', Model.LastName))</span></span>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
+                                <option class="option-modal" value="-1">Reason For Cancellation</option>
+                                @foreach (var item in Model.caseTags)
+                                {
+                                    <option class="option-modal" value="@item.Name">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <span id="warning" class="text-danger hidden">Please select Case Tag</span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" required asp-for="Admin_notes"></textarea>
+                            <label for="admin_notes" class="form-label">Provide Additional Notes</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        </div>
+        </form>
     <!--Location Modal -->
 
     <div class="modal" id="myModal1">
@@ -55,7 +96,7 @@
         <div class="flex-container">
             <div class="top-text">
                 <div class="view-text">
-                    @if (Model.requests.Status == 1)
+                    @if (Model.Status == 1)
                     {
                         <span class="submit-text" id="submit-text">New Request</span>
                     }
@@ -63,15 +104,15 @@
                     {
                         <span class="submit-text" id="submit-text">View Reservation</span>
                     }
-                    @if(Model.requests.RequestTypeId == 1)
+                    @if(Model.RequestTypeId == 1)
                     {
                         <span class="requestor-btn business-color">Business</span>
                     }
-                    else if (Model.requests.RequestTypeId == 2)
+                    else if (Model.RequestTypeId == 2)
                     {
                         <span class="requestor-btn patient-color">Patient</span>
                     }
-                    else if (Model.requests.RequestTypeId == 3)
+                    else if (Model.RequestTypeId == 3)
                     {
                         <span class="requestor-btn family-color">Family</span>
                     }
@@ -85,19 +126,25 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form" asp-action="PatientProfile" method="post">
+            <form class="main-form" asp-action="ViewCase" method="post" onsubmit="beforeSubmit()">
 
+                <input type="hidden" asp-for="RequestClientId" />
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="RequestId" />
+                <input type="hidden" asp-for="RequestTypeId" />
+                <input type="hidden" asp-for="ConfirmationNumber" />
+                <input type="hidden" asp-for="RequestTypeId" />
                 <!-- General Information  -->
                 <div class="upper-text">
                     Patient Information
                 </div>
                 <div class="cont-con-num mb-2">
                     <label for="dob" class="form-label con-label">Confirmation Number</label>
-                    <span class="con-num">@Model.requests.ConfirmationNumber</span>
+                    <span class="con-num">@Model.ConfirmationNumber</span>
                 </div>
                 <div class="row">
                     <div class="form-floating inp col-sm-12">
-                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="requests.RequestClient.Notes" disabled></textarea>
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Notes" disabled></textarea>
                         <label for="floatingInput" class="form-label">Patient Notes</label>
                     </div>
 
@@ -130,6 +177,16 @@
                         <label for="emailInput" class="form-label">Email</label>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
+                    @if(Model.Status != 1)
+                    {
+                        <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                            <a class="lower-custom-btn cancel-btn" onclick="Edit()">Edit</a>
+                            <div class="lower-edit-btn">
+                                <button class="lower-custom-btn cancel-btn hidden" type="submit">Save</button>
+                                <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <!-- Patient Location -->
@@ -151,7 +208,7 @@
                         <img class="map-img" src="../../images/geo-alt.svg" alt="">
                     </a>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="room" placeholder="name@example.com" asp-for="requests.RequestClient.Address" disabled>
+                        <input type="text" class="form-control" id="room" placeholder="name@example.com" asp-for="Room" disabled>
                         <label for="zipcode" class="form-label">Room</label>
                     </div>
                     
@@ -160,18 +217,69 @@
 
                 <!-- Submit / Clear -->
                 <div class="lower-btn">
-                    @if(Model.requests.Status == 1)
+                    @if(Model.Status == 1)
                     {
                         <a class="btn btn-info">Assign</a>
                     }
                     <a class="btn btn-info">View Notes</a>
-                    <a class="btn btn-danger">Cancel</a>
+                    <a class="btn btn-danger" id="openBtnC">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script>
+
+        const selectChange = (text) => {
+            if(text.value!=-1)
+            {
+                document.getElementById("warning").style.display = "none";
+            }
+        }
+
+        const checkSelect = () => {
+            const select = document.getElementById("Select")
+            if (select.value == -1) {
+                document.getElementById("warning").style.display = "block";
+                return false;
+            }
+        }
+
+        const beforeSubmit = () => {
+            const inputs = document.getElementsByClassName("form-control")
+            for(let i=0;i<inputs.length;++i)
+            {
+                inputs[i].disabled = false;
+            }
+        }
+
+        $(document).ready(function () {
+            $('#confirm-btn').on('click', function () {
+                console.log("Hello")
+                const select = document.getElementById("Select")
+                if (select.value == -1) {
+                    document.getElementById("warning").style.display = "block";
+                    return false;
+                }
+                else{
+                    document.getElementById("warning").style.display = "none";
+                }
+        });
+
+        });
+
+                $(document).ready(function () {
+                    $("#openBtnC").click(function () {
+                        $("#myModal").modal("show");
+                    });
+                });
+
+        $(document).ready(function () {
+            $("#cancel").click(function () {
+                $("#myModal").modal("hide");
+            });
+        });
+
         $(document).ready(function () {
             $("#openBtn").click(function () {
                 $("#myModal1").modal("show");
@@ -187,3 +295,9 @@
     </script>
 
 </div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    }

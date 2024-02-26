@@ -14,14 +14,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="exampleModalLongTitle">Create New Request</div>
+                <div class="modal-title" id="exampleModalLongTitle">Cancel Confirmation</div>
                 <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
             </div> 
                 <div class="modal-body">
                 <span class="modal-head">@(string.Concat(Model.RequestClient.FirstName, ' ', Model.RequestClient.LastName)),</span>
                     <div class="form-floating mt-3 inp col-sm-12">
                         <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" required></textarea>
-                        <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
+                        <label for="floatingInput" class="form-label">Please Provide a brief explanation for your cancellation</label>
                     </div>
                     <div class="lower-btn">
                         <button class="btn btn-info continue-btn" data-bs-dismiss="modal" id="Confirm">Confirm</button>
