@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace HalloDoc.Controllers
 {
@@ -121,6 +123,104 @@ namespace HalloDoc.Controllers
             }
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
             return View("Dashboard",adminDashboardViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SendLink(AdminDashboardViewModel dashboardViewModel)
+        {
+            bool isSent = _admin.sendLink(dashboardViewModel);
+            if (isSent)
+            {
+                TempData["success"] = "Link Sent Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Link could not be Sent!!";
+            }
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", adminDashboardViewModel);
+        }
+
+        public IActionResult CreateRequest()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateRequest(PatientRequestViewModel? patientRequestViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                bool isVerified = _admin.verifyRegion(patientRequestViewModel.State);
+                if(!isVerified)
+                {
+                    TempData["error"] = "We are currently not serving this region!!!";
+                    return View(patientRequestViewModel);
+                }
+
+                bool isBlocked = _admin.verifyBlock(patientRequestViewModel.Email);
+                if (isBlocked)
+                {
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(patientRequestViewModel);
+                }
+
+                bool requestCreated = _admin.createRequest(patientRequestViewModel);
+                if(requestCreated)
+                {
+                    TempData["success"] = "Request created Successfully!!";
+                    return RedirectToAction("Dashboard");
+                }
+                else
+                {
+                    TempData["error"] = "Request Could not be created!!";
+                    return View(patientRequestViewModel);
+                }
+            }
+            return View(patientRequestViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult VerifyRegion(string region)
+        {
+            if(region == null)
+            {
+                return Json(new { isVerified=2 });
+            }
+            bool isVerified = _admin.verifyRegion(region);
+            if (isVerified)
+            {
+                return Json(new { isVerified = 1 });
+            }
+            else
+            {
+                return Json(new { isVerified = 3 });
+            }
+        }
+
+        public IActionResult ViewNotes(int id)
+        {
+            ViewNotesViewModel viewNotesViewModel = _admin.viewNotes(id);
+            return View(viewNotesViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ViewNotes(ViewNotesViewModel viewNotesViewModel)
+        {
+            bool isUpdated = _admin.updateAdminNotes(viewNotesViewModel);
+            if(isUpdated)
+            {
+                TempData["success"] = "Admin Note Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Admin Note Could not be updated!!";
+            }
+            ViewNotesViewModel viewNoteViewModel = _admin.viewNotes(viewNotesViewModel.RequestId);
+            return View(viewNoteViewModel);
         }
     }
 }

@@ -25,5 +25,11 @@ namespace HalloDoc.ViewModels
         public int ?RequestId { get; set; }
         public string? CaseTag { get; set; }
         public string? Admin_notes { get; set; }
+
+        //Send Link
+        public string ?Mail_FirstName { get; set; }
+        public string? Mail_LastName { get; set; }
+        public string? Mail_PhoneNumber {  get; set; }
+        public string? Mail_Email { get; set; }
     }
 }
