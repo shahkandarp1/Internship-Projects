@@ -184,7 +184,7 @@
                             @if (Model.status == "New")
                             {
                                 <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
-                                    <a class="dropdown-item cancel-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
+                                <a class="dropdown-item cancel-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -192,7 +192,7 @@
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/paper.png" alt="" class="action-img"><span>View Notes</span></div></a>
+                                    <a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/paper.png" alt="" class="action-img"><span>View Notes</span></div></a>
                             }
                             @if (Model.status == "New")
                             {
@@ -428,7 +428,7 @@
                         }
                         @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View Notes</div></a>
+                                <a class="col-md-3 col-sm-6 col-6" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">View Notes</div></a>
                         }
                         @if (Model.status == "New")
                         {

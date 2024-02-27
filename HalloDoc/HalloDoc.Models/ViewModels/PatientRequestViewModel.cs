@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,5 +54,8 @@ namespace HalloDoc.ViewModels
         public string ?ConfirmPassword { get; set; }
 
         public IFormFile ?ImageContent { get; set; }
+
+        //Create Request Admin Page
+        public string? Admin_notes {  get; set; }
     }
 }

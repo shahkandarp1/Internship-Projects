@@ -8,9 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Collections;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -379,6 +385,363 @@ namespace HalloDoc.Repository.Repository
                 _db.RequestStatusLogs.Add(requestStatusLog);
                 _db.SaveChanges();
 
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.sendLink(AdminDashboardViewModel dashboardViewModel)
+        {
+            try
+            {
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430";
+                var platformTitle = "HalloDoc";
+                var inviteLink = "https://localhost:7088/Patient/SubmitRequest";
+                var subject = "Register - HalloDoc";
+                var body = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},<br />Click the following link to create new request in our portal,<br /><br /><a href='{inviteLink}'>Create Request</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+
+                SmtpClient client = new SmtpClient("smtp.office365.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(senderEmail, senderPassword),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false
+                };
+                MailMessage mailMessage = new MailMessage
+                {
+                    From = new MailAddress(senderEmail, "HalloDoc"),
+                    Subject = "Create New Request",
+                    IsBodyHtml = true,
+                    Body = body
+                };
+
+                mailMessage.To.Add(dashboardViewModel.Mail_Email);
+
+                client.SendMailAsync(mailMessage);
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.verifyRegion(string region)
+        {
+            var region_check = _db.Regions.FirstOrDefault(u => u.Name == region.Trim().ToLower().Replace(" ", ""));
+            if(region_check != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.verifyBlock(string Email)
+        {
+            var user = _db.AspNetUsers.FirstOrDefault(u=>u.Email == Email); 
+            if(user != null)
+            {
+                var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
+                if(block != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool IAdmin.createRequest(PatientRequestViewModel modal)
+        {
+            try
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+
+                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
+                if (user != null)
+                {
+                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
+
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.State,
+                        Street = modal.Street,
+                        City = modal.City,
+                        Address = modal.Room,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ZipCode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 2,
+                        UserId = curr_user.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    RequestNote requestNote = new RequestNote
+                    {
+                        RequestId = req.RequestId,
+                        AdminNotes = modal.Admin_notes,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = 2,
+                    };
+
+                    _db.RequestNotes.Add(requestNote);
+                    _db.SaveChanges();
+
+                    return true;
+
+                }
+                else
+                {
+
+                    AspNetUser aspuser = new AspNetUser
+                    {
+                        UserName = modal.Email,
+                        Email = modal.Email,
+                        PhoneNumber = modal.Phone,
+                        CreatedDate = DateTime.Now
+                    };
+
+
+                    _db.AspNetUsers.Add(aspuser);
+                    _db.SaveChanges();
+
+
+                    User us = new User
+                    {
+                        AspNetUserId = aspuser.Id,
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        Email = modal.Email,
+                        Mobile = modal.Phone,
+                        Street = modal.Street,
+                        City = modal.City,
+                        State = modal.State,
+                        RegionId = region.RegionId,
+                        ZipCode = modal.ZipCode,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day,
+                        CreatedBy = aspuser.Id,
+                        CreatedDate = DateTime.Now,
+
+                    };
+
+                    _db.Users.Add(us);
+                    _db.SaveChanges();
+
+                    AspNetUserRole aspnr = new AspNetUserRole
+                    {
+                        UserId = aspuser.Id,
+                        RoleId = 1
+                    };
+
+                    _db.AspNetUserRoles.Add(aspnr);
+                    _db.SaveChanges();
+
+                    RequestClient rc = new RequestClient
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        State = modal.State,
+                        Street = modal.Street,
+                        City = modal.City,
+                        RegionId = region.RegionId,
+                        Address = modal.Room,
+                        ZipCode = modal.ZipCode,
+                        Notes = modal.Symptoms,
+                        NotiEmail = modal.Email,
+                        NotiMobile = modal.Phone,
+                        StrMonth = modal.DateOfBirth.Month.ToString(),
+                        IntYear = modal.DateOfBirth.Year,
+                        IntDate = modal.DateOfBirth.Day
+                    };
+
+                    _db.RequestClients.Add(rc);
+                    _db.SaveChanges();
+
+                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
+
+                    Request req = new Request
+                    {
+                        FirstName = modal.FirstName,
+                        LastName = modal.LastName,
+                        PhoneNumber = modal.Phone,
+                        Email = modal.Email,
+                        RequestClientId = rc.RequestClientId,
+                        RequestTypeId = 2,
+                        UserId = us.UserId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now,
+                        IsUrgentEmailSent = new BitArray(1),
+                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
+
+                    };
+
+                    _db.Requests.Add(req);
+                    _db.SaveChanges();
+                    if (modal.ImageContent != null)
+                    {
+                        RequestWiseFile rfile = new RequestWiseFile
+                        {
+                            RequestId = req.RequestId,
+                            FileName = modal.ImageContent.FileName,
+                            CreatedDate = DateTime.Now
+                        };
+                        _db.RequestWiseFiles.Add(rfile);
+                        _db.SaveChanges();
+                    }
+
+                    RequestStatusLog rst = new RequestStatusLog
+                    {
+                        RequestId = req.RequestId,
+                        Status = 1,
+                        CreatedDate = DateTime.Now
+                    };
+
+                    _db.RequestStatusLogs.Add(rst);
+                    _db.SaveChanges();
+
+                    RequestNote requestNote = new RequestNote
+                    {
+                        RequestId = req.RequestId,
+                        AdminNotes = modal.Admin_notes,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = 2,
+                    };
+
+                    _db.RequestNotes.Add(requestNote);
+                    _db.SaveChanges();
+
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430";
+                    var platformTitle = "HalloDoc";
+                    var inviteLink = $"https://localhost:7088/Patient/Register/{aspuser.Id}";
+                    var subject = "Register - HalloDoc";
+                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Set up your Account",
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(modal.Email);
+
+                    client.SendMailAsync(mailMessage);
+
+                    return true;
+
+                }
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        ViewNotesViewModel IAdmin.viewNotes(int id)
+        {
+            RequestStatusLog patientcancel = _db.RequestStatusLogs.FirstOrDefault(r=>r.RequestId == id && r.Status == 7);
+            RequestStatusLog admincancel = _db.RequestStatusLogs.FirstOrDefault(r => r.RequestId == id && r.Status == 6);
+            List<RequestStatusLog> transfernotes = _db.RequestStatusLogs.Where(r => r.RequestId == id && r.Status == 2).ToList();
+            RequestNote requestNotes = _db.RequestNotes.FirstOrDefault(r=>r.RequestId == id);
+            ViewNotesViewModel viewNotesViewModel = new ViewNotesViewModel
+            {
+                RequestId = id,
+                Admin_Note = requestNotes?.AdminNotes ?? "-",
+                Physician_Note = requestNotes?.PhysicianNotes ?? "-",
+                Admin_Cancellation_Note = admincancel?.Notes,
+                Cancellation_Note = patientcancel?.Notes,
+                Transfer_Notes = transfernotes
+            };
+            return viewNotesViewModel;
+        }
+
+        bool IAdmin.updateAdminNotes(ViewNotesViewModel viewNotesViewModel)
+        {
+            try
+            {
+                RequestNote requestNote = _db.RequestNotes.FirstOrDefault(r => r.RequestId == viewNotesViewModel.RequestId);
+                if (requestNote != null)
+                {
+                    requestNote.AdminNotes = viewNotesViewModel.Admin_Note;
+                    requestNote.ModifiedDate = DateTime.Now;
+                    _db.RequestNotes.Update(requestNote);
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    RequestNote newRequestNote = new RequestNote
+                    {
+                        RequestId = viewNotesViewModel.RequestId,
+                        AdminNotes = viewNotesViewModel.Admin_Note,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = 2,
+                    };
+
+                    _db.RequestNotes.Add(newRequestNote);
+                    _db.SaveChanges();
+                }
                 return true;
             }
             catch(Exception exp)

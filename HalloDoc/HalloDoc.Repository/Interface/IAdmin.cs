@@ -20,5 +20,17 @@ namespace HalloDoc.Repository.Interface
         public bool viewCase(ViewCaseViewModel model);
 
         public bool cancelRequest(int id, string notes, string select);
+
+        public bool sendLink(AdminDashboardViewModel dashboardViewModel);
+
+        public bool verifyRegion(string region);
+
+        public bool verifyBlock(string Email);
+
+        public bool createRequest(PatientRequestViewModel model);
+
+        public ViewNotesViewModel viewNotes(int id);
+
+        public bool updateAdminNotes(ViewNotesViewModel viewNotesViewModel);
     }
 }

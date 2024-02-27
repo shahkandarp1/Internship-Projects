@@ -1,0 +1,180 @@
+﻿@model ViewNotesViewModel
+@{
+    ViewData["Title"] = "View Notes";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-case.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-notes.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/admin-navbar.js"></script>
+}
+
+<div id="body">
+
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <div class="view-text">
+                        <span class="submit-text" id="submit-text">Notes</span>
+
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            </div>
+            <form asp-action="ViewNotes" asp-controller="Admin" method="post">
+                <input type="hidden" asp-for="RequestId" />
+                <div class="row">
+                    <div class="mb-3 inp col-lg-6 col-md-6 col-sm-12 main-note-card">
+                        <div class="notes-cards">
+                            <img src="~/images/transfer.png" class="notes-img"></img>
+                            <div class="notes-text">
+                                <div class="notes-heading">Transfer Notes</div>
+                                @if(Model.Transfer_Notes.Count>0)
+                                {
+                                    @foreach(var item in Model.Transfer_Notes)
+                                        {
+                                            <div class="notes-content">@item.Notes</div>
+                                        }
+                                }
+                                else{
+                                    <div class="notes-content">-</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 inp col-lg-6 col-md-6 col-sm-12 main-note-card">
+                        <div class="notes-cards">
+                            <img src="~/images/physician-helthcare.png" class="notes-img"></img>
+                            <div class="notes-text">
+                                <div class="notes-heading">Physician Notes</div>
+                                <div class="notes-content">@Model.Physician_Note</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 inp col-lg-6 col-md-6 col-sm-12 main-note-card">
+                        <div class="notes-cards">
+                            <img src="~/images/software-engineer.png" class="notes-img"></img>
+                            <div class="notes-text">
+                                <div class="notes-heading">Admin Notes</div>
+                                <div class="notes-content">@Model.Admin_Note</div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.Admin_Cancellation_Note!=null)
+                    {
+                        <div class="mb-3 inp col-lg-6 col-md-6 col-sm-12 main-note-card">
+                            <div class="notes-cards">
+                                <img src="~/images/x-mark.png" class="notes-img"></img>
+                                <div class="notes-text">
+                                    <div class="notes-heading">Admin Cancellation Notes</div>
+                                    <div class="notes-content">@Model.Admin_Cancellation_Note</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if(Model.Cancellation_Note!=null)
+                    {
+                        <div class="mb-3 inp col-lg-6 col-md-6 col-sm-12 main-note-card">
+                            <div class="notes-cards">
+                                <img src="~/images/x-mark.png" class="notes-img"></img>
+                                <div class="notes-text">
+                                    <div class="notes-heading">Patient Cancellation Notes</div>
+                                    <div class="notes-content">@Model.Cancellation_Note</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="save-changes">
+                    <div class="form-floating inp col-sm-12 notes-text">
+                        <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" asp-for="Admin_Note"></textarea>
+                        <label for="admin_notes" class="form-label">Admin Notes</label>
+                    </div>
+                    <div class="bottom-save-btn mt-3">
+                        <button type="submit" class="btn btn-info">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+
+        const selectChange = (text) => {
+            if (text.value != -1) {
+                document.getElementById("warning").style.display = "none";
+            }
+        }
+
+        const checkSelect = () => {
+            const select = document.getElementById("Select")
+            if (select.value == -1) {
+                document.getElementById("warning").style.display = "block";
+                return false;
+            }
+        }
+
+        const beforeSubmit = () => {
+            const inputs = document.getElementsByClassName("form-control")
+            for (let i = 0; i < inputs.length; ++i) {
+                inputs[i].disabled = false;
+            }
+        }
+
+        $(document).ready(function () {
+            $('#confirm-btn').on('click', function () {
+                console.log("Hello")
+                const select = document.getElementById("Select")
+                if (select.value == -1) {
+                    document.getElementById("warning").style.display = "block";
+                    return false;
+                }
+                else {
+                    document.getElementById("warning").style.display = "none";
+                }
+            });
+
+        });
+
+        $(document).ready(function () {
+            $("#openBtnC").click(function () {
+                $("#myModal").modal("show");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#cancel").click(function () {
+                $("#myModal").modal("hide");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#openBtn").click(function () {
+                $("#myModal1").modal("show");
+                var address = $("#address").val();
+                var Street = address.split(",")[0]
+                var City = address.split(",")[1]
+                var State = address.split(",")[2]
+                var ZipCode = address.split(",")[3]
+                var address = "https://maps.google.com/maps?q=" + Street + City + State + ZipCode + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
+                $("#gmap_canvas").attr("src", address);
+            });
+        });
+    </script>
+
+</div>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

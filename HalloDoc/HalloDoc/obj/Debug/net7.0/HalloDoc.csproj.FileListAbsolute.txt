@@ -117,3 +117,4 @@ C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.pdb
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.genruntimeconfig.cache
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\ref\HalloDoc.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.MvcApplicationPartsAssemblyInfo.cs

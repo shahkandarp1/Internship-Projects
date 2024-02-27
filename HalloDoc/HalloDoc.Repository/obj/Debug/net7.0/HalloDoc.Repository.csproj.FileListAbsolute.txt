@@ -29,3 +29,5 @@ C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\D
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\refint\HalloDoc.Repository.dll
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.pdb
 C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\ref\HalloDoc.Repository.dll
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\bin\Debug\net7.0\HalloDoc.Repository.runtimeconfig.json
+C:\Users\Prashant\Desktop\Internship-Projects\HalloDoc\HalloDoc.Repository\obj\Debug\net7.0\HalloDoc.Repository.genruntimeconfig.cache
