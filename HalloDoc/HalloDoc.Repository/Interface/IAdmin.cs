@@ -52,6 +52,10 @@ namespace HalloDoc.Repository.Interface
 
         public int deleteAllFile(string filename);
 
-        public bool sendDocumentsMail(string filename);
+        public Task<bool> sendDocumentsMail(string filename);
+
+        public PasswordReset getPasswordReset(string token);
+
+        public bool resetPassword(ResetPasswordViewModel resetPasswordViewModel);
     }
 }
