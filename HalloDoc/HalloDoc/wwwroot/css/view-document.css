@@ -57,6 +57,7 @@ a:hover {
     padding: 20px;
     border-radius: 10px 10px 0px 0px;
     box-shadow: none;
+    background-color:white;
 }
 
 .pt-name {
@@ -146,14 +147,26 @@ input[type="file"] {
     margin-top: 20px;
 }
 
-.download-text{
-    margin:0px;
+.down-text{
+    margin:0px!important;
 }
 
 .download-mob {
     margin:0px;
 }
 
+.action-flex{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.margin-right{
+    margin-right:7px;
+}
+
+.all-btn-flex{
+    display:flex;
+}
 
 /* table view - Desktop */
 .desktop-table {
@@ -207,11 +220,28 @@ th:last-child,td:last-child {
     text-decoration: none;
 }
 
+.trash-btn {
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    display: flex;
+    width: 31px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    text-decoration: none;
+}
+
 .outer-div {
     width:100%;
     display:flex;
     justify-content:flex-end;
     align-items:center;
+}
+
+.outer-div {
+    display: flex;
+    align-items: center;
 }
 
 th {
@@ -277,6 +307,10 @@ td.first-col {
 
 .mob-download {
     margin-top: 6px;
+}
+
+.mob-action-flex{
+    display:flex;
 }
 
 
@@ -349,5 +383,8 @@ td.first-col {
     }
     .mob-documents {
         display: block;
+    }
+    .table{
+        display:none;
     }
 }

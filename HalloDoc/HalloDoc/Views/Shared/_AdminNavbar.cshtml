@@ -1,4 +1,9 @@
-﻿<div class="navbar-custom">
+﻿@model AdminNavbarViewModel
+
+@Html.HiddenFor(m => m.Name)
+@Html.HiddenFor(m => m.curr_active)
+
+<div class="navbar-custom">
     <button class="nav-btn list-border"
             type="button"
             data-toggle="collapse"
@@ -11,7 +16,7 @@
     </button>
     <img src="../../images/logo1.png" alt="" class="logo" />
     <div class="right-side-elements">
-        <span class="welcome-text">Welcome <span class="name-text">Kandarp Shah</span></span>
+        <span class="welcome-text">Welcome <span class="name-text">@Model.Name</span></span>
         <a class="logout log" asp-controller="Admin" asp-action="Login">
             <span class="logout-text">Logout</span>
         </a>

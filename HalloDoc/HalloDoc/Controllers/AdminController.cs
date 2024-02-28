@@ -7,12 +7,18 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 using System.Collections.Generic;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Presentation;
+using System.Collections;
 
 namespace HalloDoc.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IAdmin _admin;
+        
 
         public AdminController(IAdmin admin)
         {
@@ -24,9 +30,67 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginViewModel loginViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                int result = _admin.login(loginViewModel);
+                if(result == 1)
+                {
+                    TempData["error"] = "Username is incorrect!!";
+                }
+                else if(result == 2)
+                {
+                    TempData["error"] = "Password is incorrect!!";
+                }
+                else if(result == 3)
+                {
+                    TempData["error"] = "You dont have rights to login into this website!!";
+                }
+                else
+                {
+                    TempData["success"] = "Loged In Successfully!!";
+                    return RedirectToAction("Dashboard");
+                }
+            }
+            return View(loginViewModel);
+        }
+
         public IActionResult ForgotPassword()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                int result = _admin.forgotPassword(forgotPasswordViewModel);
+                if(result == 1)
+                {
+                    TempData["error"] = "This email does not exists!!";
+                }
+                else if(result == 2)
+                {
+                    TempData["error"] = "Email could not be sent!!";
+                }
+                else
+                {
+                    TempData["success"] = "Email sent successfully!!";
+                }
+            }
+            return View(forgotPasswordViewModel);
+        }
+
+        public IActionResult Logout()
+        {
+
+            bool isLogout = _admin.logout();
+            return Json(new { isLogout = isLogout });
         }
 
         public IActionResult Dashboard()
@@ -144,7 +208,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult CreateRequest()
         {
-            return View();
+            PatientRequestViewModel patientRequestViewModel = _admin.createRequest();
+            return View(patientRequestViewModel);
         }
 
         [HttpPost]
@@ -221,6 +286,48 @@ namespace HalloDoc.Controllers
             }
             ViewNotesViewModel viewNoteViewModel = _admin.viewNotes(viewNotesViewModel.RequestId);
             return View(viewNoteViewModel);
+        }
+
+        public IActionResult ViewUploads(int id)
+        {
+            ViewDocumentModal viewDocumentModal = _admin.viewUploads(id);
+            return View(viewDocumentModal);
+        }
+
+        [HttpPost]
+        public IActionResult FileUpload([FromForm] IFormFile file, [FromForm] int id)
+        {
+            Task<bool> isFileUploaded = _admin.fileUpload(file,id);
+            return Json(new { isFileUploaded = isFileUploaded });
+        }
+
+        public IActionResult DeleteSingle(int id)
+        {
+            int requestid = _admin.deleteSingleFile(id);
+            ViewDocumentModal viewDocumentModal = _admin.viewUploads(requestid);
+            return View("ViewUploads",viewDocumentModal);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ViewUploads(ViewDocumentModal viewDocumentModal)
+        {
+            var result = _admin.downloadMultipleFiles(viewDocumentModal);
+            await result;
+            Response.ContentType = "application/zip";
+            Response.Headers.Add("Content-Disposition", $"attachment; filename={result.Result.Item2}");
+            return File(result.Result.Item1.ToArray(), "application/zip", result.Result.Item2);
+        }
+
+        public IActionResult DeleteAll([FromForm]string filename)
+        {
+            int requestid = _admin.deleteAllFile(filename);
+            return Json(new { isDeleted = true });
+        }
+
+        public IActionResult SendMailDocuments([FromForm] string filename)
+        {
+            bool sentMail = _admin.sendDocumentsMail(filename);
+            return Json(new { isSent = sentMail });
         }
     }
 }

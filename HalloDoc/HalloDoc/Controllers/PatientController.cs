@@ -249,7 +249,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
@@ -263,7 +263,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -368,7 +369,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
@@ -381,7 +382,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -507,7 +509,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
 
@@ -522,7 +524,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -624,7 +627,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
 
@@ -639,7 +642,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -779,7 +783,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
@@ -905,7 +909,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
@@ -1039,7 +1043,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         CaseNumber = modal.BusinessCaseNumber
                     };
@@ -1162,7 +1166,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         CaseNumber = modal.BusinessCaseNumber
                     };
@@ -1335,7 +1339,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
 
@@ -1350,7 +1354,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -1452,7 +1457,7 @@ namespace HaloDocMVC.NET.Controllers
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
                         RelationName = modal.FamilyRelation,
 
@@ -1467,7 +1472,8 @@ namespace HaloDocMVC.NET.Controllers
                         {
                             RequestId = req.RequestId,
                             FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
+                            CreatedDate = DateTime.Now,
+                            IsDeleted = new BitArray(new[] { false })
                         };
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
@@ -1603,7 +1609,7 @@ namespace HaloDocMVC.NET.Controllers
                     UserId = curr_user.UserId,
                     Status = 1,
                     CreatedDate = DateTime.Now,
-                    IsUrgentEmailSent = new BitArray(1),
+                    IsUrgentEmailSent = new BitArray(new[] { false }),
                     ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                 };
@@ -1617,7 +1623,8 @@ namespace HaloDocMVC.NET.Controllers
                     {
                         RequestId = req.RequestId,
                         FileName = modal.ImageContent.FileName,
-                        CreatedDate = DateTime.Now
+                        CreatedDate = DateTime.Now,
+                        IsDeleted = new BitArray(new[] { false })
                     };
                     _db.RequestWiseFiles.Add(rfile);
                     _db.SaveChanges();
@@ -1723,7 +1730,7 @@ namespace HaloDocMVC.NET.Controllers
         {
             var user_id = _context.HttpContext.Session.GetInt32("UserId");
             var request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(u=>u.RequestId == id);
-            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u=>u.RequestId == id).ToList();
+            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u=>u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
             var user = _db.Users.FirstOrDefault(u=>u.UserId == user_id);
             ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
             {
@@ -1752,7 +1759,7 @@ namespace HaloDocMVC.NET.Controllers
                 RequestId = id,
                 FileName = file.FileName,
                 CreatedDate = DateTime.Now,
-
+                IsDeleted = new BitArray(new[] { false })
             };
             _db.RequestWiseFiles.Add(requestWiseFile);
             _db.SaveChanges();

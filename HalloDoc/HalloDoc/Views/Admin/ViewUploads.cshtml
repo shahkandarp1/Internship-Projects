@@ -1,0 +1,342 @@
+﻿@model ViewDocumentModal
+@{
+    ViewData["Title"] = "View Uploads";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-document.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/view-document.js"></script>
+    <script src="~/js/admin-navbar.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel"/>
+
+    <div class="upload-main-container">
+        <div class="upload-inner-container">
+            <div class="top-part">
+                <span class="main-heading view-main dark-heading-text" id="main-heading">Documents</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="wrapper">
+
+                <div id="Dashboard" class="main-content">
+                    <span class="pt-name-text dark-text">Patient Name</span>
+                    <div class="pt-name">@Model.patient_name<span class="con_num dark-text">(@Model.confirmation_number)</span></div>
+                    <span class="upload-desc dark-text">Check here for any files that you or doctors of your subsequents requestors have attatched for you to review.</span>
+                    <div class="file-upload symptoms-textarea">
+                        <div class="form-floating mb-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label">Select File</label>
+                        </div>
+                        <label class="custom-file-upload">
+                            <input id="FileUpload" type="file" onchange="getFileData(this)" name="file" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+
+                    </div>
+                    <div class="middle-part">
+                        <span class="main-heading document-main dark-heading-text" id="main-heading">Documents</span>
+                        <div class="all-btn-flex">
+                            <a class="back-btn download-text margin-right" id="download-all">
+                                <span class="back-text down-text">Download All</span>
+                            </a>
+                            <a class="logout-mob download-mob margin-right" id="download-all-mob">
+                                <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                            </a>
+                            <a class="back-btn download-text margin-right" id="delete-all">
+                                <span class="back-text down-text">Delete All</span>
+                            </a>
+                            <a class="logout-mob download-mob margin-right" id="delete-all-mob">
+                                <img id="logout" src="~/images/trash.svg" alt="" class="logout-img" />
+                            </a>
+                            <a class="back-btn download-text margin-right" id="send-mail">
+                                <span class="back-text down-text">Send Mail</span>
+                            </a>
+                            <a class="logout-mob download-mob margin-right" id="send-mail-mob">
+                                <img id="logout" src="~/images/envelope-blue.svg" alt="" class="logout-img" />
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <form class="desktop-table" asp-action="ViewUploads">
+                    <input type="hidden" asp-for="patient_name"/>
+                    <input type="hidden" style="opacity:0;height:1px;width:1px;" id="filename" asp-for="filename" />
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="checkbox-main" name="selectall" onchange="tickAll()" /></th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.requestWiseFiles)
+                            {
+                                <tr>
+                                    <td class="first-col">
+                                        <input type="checkbox" name="Mark" value="@(string.Concat(row.FileName,",",row.RequestWiseFileId))" class="checkbox check" onchange="allCheck()" />
+                                        <span class="document-combo">
+                                            @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                            {
+                                                <img src="~/images/file-x-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                            {
+                                                <img src="~/images/file-earmark-pdf-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                            {
+                                                <img src="~/images/file-word-fill.svg" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/images/card-image.svg" />
+                                            }
+
+                                            <span class="document-name">@row.FileName</span>
+                                        </span>
+                                    </td>
+                                    <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
+                                    <td>
+                                        <div class="action-flex">
+                                            <div class="outerr-div">
+                                                <a class="downld-btn" download href="~/uploads/@(row.FileName)">
+                                                    <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                                </a>
+                                            </div>
+                                            <div class="outerr-div">
+                                                <a class="trash-btn" asp-action="DeleteSingle" asp-controller="Admin" asp-route-id="@row.RequestWiseFileId">
+                                                    <img id="logout" src="~/images/trash.svg" alt="" class="logout-img" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="mob-documents">
+                        @foreach (var row in Model.requestWiseFiles)
+                        {
+                            <span class="mob-component">
+                                <div class="first-col">
+                                    <input type="checkbox" class="check" name="Mark" value="@(string.Concat(row.FileName,",",row.RequestWiseFileId))" onchange="allCheck()" />
+                                    <span class="document-combo mob-doc-name">
+                                        @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                        {
+                                            <img src="~/images/file-x-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                        {
+                                            <img src="~/images/file-earmark-pdf-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                        {
+                                            <img src="~/images/file-word-fill.svg" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/card-image.svg" />
+                                        }
+                                        <span class="document-name mob-text dark-text">@row.FileName</span>
+                                    </span>
+                                </div>
+                                <span class="document-name mob-text mob-date dark-text">@row.CreatedDate.ToString("MMMM dd,yyyy")</span>
+                                <div class="mob-action-flex">
+                                    <a class="downld-btn mob-download margin-right" download href="~/uploads/@(row.FileName)">
+                                        <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                    </a>
+                                    <a class="downld-btn mob-download" asp-action="DeleteSingle" asp-controller="Admin" asp-route-id="@row.RequestWiseFileId">
+                                        <img id="logout" src="~/images/trash.svg" alt="" class="logout-img" />
+                                    </a>
+                                </div>
+                            </span>
+                        }
+                    </div>
+                    <button class="d-none" type="submit" id="submit-btn"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#FileUpload').on('change', function () {
+            var inputValue = document.getElementById('FileUpload');
+            var file = inputValue.files[0];
+            var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("id", id);
+
+            $.ajax(
+                {
+                    url: "/Admin/FileUpload",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        location.reload();
+                    }
+                }
+            );
+        });
+    });
+
+    $(document).ready(function () {
+        $('#download-all').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[0]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            if (flag == 1) {
+                document.getElementById("filename").value = filename
+                document.getElementById("submit-btn").click();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#delete-all').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[1]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            var formData = new FormData();
+            formData.append("filename", filename);
+            console.log(filename)
+            if (flag == 1) {
+                $.ajax(
+                    {
+                        url: "/Admin/DeleteAll",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            location.reload();
+                        }
+                    }
+                );
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#send-mail').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[1]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            var formData = new FormData();
+            formData.append("filename", filename);
+            console.log(filename)
+            if (flag == 1) {
+                $.ajax(
+                    {
+                        url: "/Admin/SendMailDocuments",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            toastr.success("Mail Sent Successfully!!")
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            toastr.error("Failed to send email!!"); 
+                        }
+                    }
+                );
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#delete-all-mob').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[1]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            var formData = new FormData();
+            formData.append("filename", filename);
+            console.log(filename)
+            if (flag == 1) {
+                $.ajax(
+                    {
+                        url: "/Admin/DeleteAll",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            location.reload();
+                        }
+                    }
+                );
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#download-all-mob').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[0]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            if (flag == 1) {
+                document.getElementById("filename").value = filename
+                document.getElementById("submit-btn").click();
+            }
+
+        });
+    });
+</script>

@@ -15,7 +15,7 @@
    
     <!-- Navbar -->
 
-    <partial name="_AdminNavbar" />
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
 
 
     <!-- Toaster -->
@@ -475,6 +475,21 @@
         }
         
     }
+
+
+    $(document).ready(function () {
+        var logElements = document.querySelectorAll('.log');
+        console.log(logElements)
+        logElements.forEach(function (element) {
+            element.addEventListener('click', function () {
+
+
+                $.get('/Admin/Logout', function (response) {
+                    console.log(response)
+                });
+            });
+        });
+    });
 
     window.onload = () => {
 

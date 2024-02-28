@@ -1,4 +1,5 @@
 ﻿using HalloDoc.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,30 @@ namespace HalloDoc.Repository.Interface
 
         public bool verifyBlock(string Email);
 
+        public PatientRequestViewModel createRequest();
+
         public bool createRequest(PatientRequestViewModel model);
 
         public ViewNotesViewModel viewNotes(int id);
 
         public bool updateAdminNotes(ViewNotesViewModel viewNotesViewModel);
+
+        public int login(LoginViewModel loginViewModel);
+
+        public int forgotPassword(ForgotPasswordViewModel forgotPasswordViewModel);
+
+        public bool logout();
+
+        public ViewDocumentModal viewUploads(int id);
+
+        public Task<bool> fileUpload(IFormFile file,int id);
+
+        public int deleteSingleFile(int id);
+
+        public Task<Tuple<MemoryStream, string>> downloadMultipleFiles(ViewDocumentModal viewDocumentModal);
+
+        public int deleteAllFile(string filename);
+
+        public bool sendDocumentsMail(string filename);
     }
 }

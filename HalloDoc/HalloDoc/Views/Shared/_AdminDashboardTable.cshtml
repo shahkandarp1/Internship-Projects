@@ -76,7 +76,7 @@
 
             var statusClass = "";
             var dos = "";
-            var notes = "";
+            List<string> notes = new List<string>();
             @if (item.RequestTypeId == 1)
             {
                 statusClass = "business";
@@ -98,7 +98,7 @@
                 if (stat.Status == 2)
                 {
                     dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
-                    notes = stat.Notes ?? "";
+                        notes.Add(stat.Notes);
                 }
             }
             <tr class="@statusClass">
@@ -165,9 +165,11 @@
                 @if (Model.status != "Conclude" || Model.status != "Unpaid")
                 {
                     <td>
-                        Admin transferred to Dr. AGOLA on 10\10\2023 at 4:11:38 AM :
-                        test
-                    </td>
+                        @for(var j=0;j<notes.Count;++j)
+                            {
+                                <div>@notes[j]</div>
+                            }
+                        </td>
                 }
                 <td>
                     <div class="dropdown show">
@@ -200,7 +202,7 @@
                             }
                             @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/upload.png" alt="" class="action-img"><span>View Uploads</span></div></a>
+                                <a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/upload.png" alt="" class="action-img"><span>View Uploads</span></div></a>
                             }
                             @if (Model.status == "Pending")
                             {
@@ -237,7 +239,7 @@
 {
     var statusClass = "";
     var dos = "";
-    var notes = "";
+    List<string> notes = new List<string>();
     @if (Model.requests[i].RequestTypeId == 1)
     {
         statusClass = "business";
@@ -259,7 +261,7 @@
         if (stat.Status == 2)
         {
             dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
-            notes = stat.Notes ?? "";
+                notes.Add(stat.Notes);
         }
     }
     <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -385,8 +387,10 @@
                             <span class="accordion-heading-inner">
                                 Transfer Notes :
                                 <span class="accordion-value-inner">
-                                    Admin transferred to Dr. AGOLA on 10\10\2023 at 4:11:38 AM :
-                                    test
+                                        @for (var k = 0; k < notes.Count; ++k)
+                                        {
+                                            <div>@notes[k]</div>
+                                        }
                                 </span>
                             </span>
                         </div>
@@ -436,7 +440,7 @@
                         }
                         @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">View Uploads</div></a>
+                            <a class="col-md-3 col-sm-6 col-6" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">View Uploads</div></a>
                         }
                         @if (Model.status == "Pending")
                         {
