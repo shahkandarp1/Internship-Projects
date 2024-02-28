@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Presentation;
 using System.Collections;
+using Irony.Parsing;
 
 namespace HalloDoc.Controllers
 {
@@ -326,8 +327,49 @@ namespace HalloDoc.Controllers
 
         public IActionResult SendMailDocuments([FromForm] string filename)
         {
-            bool sentMail = _admin.sendDocumentsMail(filename);
+            Task<bool> sentMail = _admin.sendDocumentsMail(filename);
             return Json(new { isSent = sentMail });
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            PasswordReset passwordReset = _admin.getPasswordReset(token);
+            if (passwordReset == null)
+            {
+                return NotFound();
+            }
+            if (passwordReset.IsUpdated == true)
+            {
+                return NotFound();
+            }
+            TimeSpan difference = DateTime.Now.Subtract(passwordReset.CreatedDate);
+            double hours = difference.TotalHours;
+            if (hours > 24)
+            {
+                return NotFound();
+            }
+            ResetPasswordViewModel resetPasswordViewModel = new ResetPasswordViewModel();
+            resetPasswordViewModel.Token = token;
+            return View(resetPasswordViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResetPassword(ResetPasswordViewModel modal)
+        {
+            if(ModelState.IsValid)
+            {
+                bool isReseted = _admin.resetPassword(modal);
+                if(isReseted)
+                {
+                    TempData["success"] = "Password reseted Successfully!!";
+                }
+                else
+                {
+                    TempData["error"] = "Password could not be reseted!!";
+                }
+            }
+            return View(modal);
         }
     }
 }

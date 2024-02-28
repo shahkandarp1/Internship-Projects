@@ -2,6 +2,25 @@
 
 const changeVisibility = () => {
     var x = document.getElementById("floatingPassword");
+    const openeye = document.getElementsByClassName("open-eye")
+    const closeeye = document.getElementsByClassName("close-eye")
+    if (x.type === "password") {
+        x.type = "text";
+        for(let i=0;i<openeye.length;++i){
+            openeye[i].classList.add("hidden")
+            closeeye[i].classList.remove("hidden")
+        }
+    } else {
+        x.type = "password";
+        for(let i=0;i<openeye.length;++i){
+            openeye[i].classList.remove("hidden")
+            closeeye[i].classList.add("hidden")
+        }
+    }
+}
+
+const changeVisibility1 = () => {
+    var x = document.getElementById("floatingConfirmPassword");
     if (x.type === "password") {
         x.type = "text";
         document.getElementById("open-eye").classList.add("hidden")

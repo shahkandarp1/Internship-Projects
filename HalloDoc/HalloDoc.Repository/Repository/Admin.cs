@@ -1013,11 +1013,11 @@ namespace HalloDoc.Repository.Repository
             return requestid;
         }
 
-        bool IAdmin.sendDocumentsMail(string filename)
+        async Task<bool> IAdmin.sendDocumentsMail(string filename)
         {
             string[] documentid = filename.Split(",");
             var document = _db.RequestWiseFiles.Include(r=>r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
-            var user = _db.Users.FirstOrDefault(u=>u.UserId == document.Request.UserId);
+            var user = _db.RequestClients.FirstOrDefault(u=>u.RequestClientId == document.Request.RequestClientId);
             string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
             string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
             var platformTitle = "HalloDoc";
@@ -1045,19 +1045,49 @@ namespace HalloDoc.Repository.Repository
 
             try
             {
-               for(var i=0;i<documentid.Length;++i)
+               for(var i=0;i<documentid.Length-1;++i)
                 {
-                    var doc = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
-                    string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", doc.FileName); 
-                    using (var attachment = new Attachment(filePath))
+                    var doc = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[i]));
+                    string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", doc.FileName);
+                    var fileInfo = new FileInfo(filePath);
+                    var memoryStream = new MemoryStream();
+                    using (var stream = fileInfo.OpenRead())
                     {
-                        mailMessage.Attachments.Add(attachment);
+                        stream.CopyTo(memoryStream);
                     }
+                    memoryStream.Position = 0;
+                    string fileName = fileInfo.Name;
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, fileName));
                 }
-                client.SendMailAsync(mailMessage);
+                await client.SendMailAsync(mailMessage);
                 return true;
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        PasswordReset IAdmin.getPasswordReset(string token)
+        {
+            return _db.PasswordResets.FirstOrDefault(u => u.Token == token); 
+        }
+
+        bool IAdmin.resetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            try
+            {
+                PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u => u.Token == resetPasswordViewModel.Token);
+                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Email == passwordReset.Email);
+                aspNetUser.PasswordHash = resetPasswordViewModel.Password;
+                _db.AspNetUsers.Update(aspNetUser);
+                _db.SaveChanges();
+                passwordReset.IsUpdated = true;
+                _db.PasswordResets.Update(passwordReset);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
             {
                 return false;
             }
