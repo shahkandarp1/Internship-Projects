@@ -33,6 +33,7 @@ namespace HalloDoc.Controllers
         {
             var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
             request.Status = 3;
+            request.ModifiedDate = DateTime.Now;
             _db.Requests.Update(request);
 
             RequestStatusLog requestStatusLog = new RequestStatusLog
@@ -50,6 +51,7 @@ namespace HalloDoc.Controllers
         {
             var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
             request.Status = 7;
+            request.ModifiedDate = DateTime.Now;
             _db.Requests.Update(request);
 
             RequestStatusLog requestStatusLog = new RequestStatusLog

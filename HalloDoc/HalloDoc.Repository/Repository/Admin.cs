@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using System.IO.Compression;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -99,6 +103,15 @@ namespace HalloDoc.Repository.Repository
 
             }
 
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a=>a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ",admin.LastName),
+                curr_active = "Dashboard"
+            };
+
             AdminDashboardViewModel adminDashboardViewModel = new AdminDashboardViewModel
             {
                 new_count = count_new,
@@ -110,6 +123,7 @@ namespace HalloDoc.Repository.Repository
                 regions = _db.Regions.ToList(),
                 status = status,
                 caseTags = casetag,
+                adminNavbarViewModel = adminNavbarViewModel,
             };
             return adminDashboardViewModel;
         }
@@ -321,6 +335,15 @@ namespace HalloDoc.Repository.Repository
             var req = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == id);
             var region = _db.Regions.FirstOrDefault(r => r.RegionId == req.RequestClient.RegionId);
             var caseTags = _db.CaseTags.ToList();
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Dashboard"
+            };
+
             ViewCaseViewModel viewCaseViewModel = new ViewCaseViewModel()
             {
                 id = id,
@@ -338,7 +361,8 @@ namespace HalloDoc.Repository.Repository
                 ConfirmationNumber = req.ConfirmationNumber,
                 Notes = req.RequestClient.Notes,
                 Room = req.RequestClient.Address,
-                caseTags = caseTags
+                caseTags = caseTags,
+                adminNavbarViewModel = adminNavbarViewModel
             };
             return viewCaseViewModel;
         }
@@ -373,6 +397,7 @@ namespace HalloDoc.Repository.Repository
                 Request req = _db.Requests.FirstOrDefault(r => r.RequestId == id);
                 req.CaseTag = request;
                 req.Status = 6;
+                req.ModifiedDate = DateTime.Now;
                 _db.Requests.Update(req);
 
                 RequestStatusLog requestStatusLog = new RequestStatusLog()
@@ -458,11 +483,30 @@ namespace HalloDoc.Repository.Repository
             return false;
         }
 
+        PatientRequestViewModel IAdmin.createRequest()
+        {
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Dashboard"
+            };
+
+            PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
+            {
+                adminNavbarViewModel = adminNavbarViewModel
+            };
+            return patientRequestViewModel;
+        }
+
         bool IAdmin.createRequest(PatientRequestViewModel modal)
         {
             try
             {
                 var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
+                int aspnetuserid = (int)_context.HttpContext.Session.GetInt32("AspNetUserId");
 
                 var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
                 if (user != null)
@@ -529,7 +573,7 @@ namespace HalloDoc.Repository.Repository
                         RequestId = req.RequestId,
                         AdminNotes = modal.Admin_notes,
                         CreatedDate = DateTime.Now,
-                        CreatedBy = 2,
+                        CreatedBy = aspnetuserid,
                     };
 
                     _db.RequestNotes.Add(requestNote);
@@ -656,7 +700,7 @@ namespace HalloDoc.Repository.Repository
                         RequestId = req.RequestId,
                         AdminNotes = modal.Admin_notes,
                         CreatedDate = DateTime.Now,
-                        CreatedBy = 2,
+                        CreatedBy = aspnetuserid,
                     };
 
                     _db.RequestNotes.Add(requestNote);
@@ -705,6 +749,16 @@ namespace HalloDoc.Repository.Repository
             RequestStatusLog admincancel = _db.RequestStatusLogs.FirstOrDefault(r => r.RequestId == id && r.Status == 6);
             List<RequestStatusLog> transfernotes = _db.RequestStatusLogs.Where(r => r.RequestId == id && r.Status == 2).ToList();
             RequestNote requestNotes = _db.RequestNotes.FirstOrDefault(r=>r.RequestId == id);
+
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Dashboard"
+            };
+
             ViewNotesViewModel viewNotesViewModel = new ViewNotesViewModel
             {
                 RequestId = id,
@@ -712,13 +766,15 @@ namespace HalloDoc.Repository.Repository
                 Physician_Note = requestNotes?.PhysicianNotes ?? "-",
                 Admin_Cancellation_Note = admincancel?.Notes,
                 Cancellation_Note = patientcancel?.Notes,
-                Transfer_Notes = transfernotes
+                Transfer_Notes = transfernotes,
+                adminNavbarViewModel = adminNavbarViewModel
             };
             return viewNotesViewModel;
         }
 
         bool IAdmin.updateAdminNotes(ViewNotesViewModel viewNotesViewModel)
         {
+            int aspnetuserid = (int)_context.HttpContext.Session.GetInt32("AspNetUserId");
             try
             {
                 RequestNote requestNote = _db.RequestNotes.FirstOrDefault(r => r.RequestId == viewNotesViewModel.RequestId);
@@ -736,7 +792,7 @@ namespace HalloDoc.Repository.Repository
                         RequestId = viewNotesViewModel.RequestId,
                         AdminNotes = viewNotesViewModel.Admin_Note,
                         CreatedDate = DateTime.Now,
-                        CreatedBy = 2,
+                        CreatedBy = aspnetuserid,
                     };
 
                     _db.RequestNotes.Add(newRequestNote);
@@ -750,5 +806,261 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        int IAdmin.login(LoginViewModel loginViewModel)
+        {
+            AspNetUser user = _db.AspNetUsers.FirstOrDefault(a=>a.Email == loginViewModel.Email);
+            if (user == null)
+            {
+                return 1;
+            }
+            else
+            {
+                if(loginViewModel.Password == user.PasswordHash)
+                {
+                    var role = _db.AspNetUserRoles.FirstOrDefault(u => u.UserId == user.Id);
+                    if(role.RoleId == 1)
+                    {
+                        return 3;
+                    }
+                    var admin = _db.Admins.FirstOrDefault(a => a.AspNetUserId == user.Id);
+                    _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
+                    _context.HttpContext.Session.SetInt32("AdminId", admin.AdminId);
+                    return 4;
+
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+        }
+
+        int IAdmin.forgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+        {
+            var admin = _db.AspNetUsers.FirstOrDefault(a=>a.Email == forgotPasswordViewModel.email);
+            if(admin == null)
+            {
+                return 1;
+            }
+
+            var role = _db.AspNetUserRoles.FirstOrDefault(a=>a.UserId == admin.Id);
+            if(role.RoleId == 1)
+            {
+                return 1;
+            }
+
+            try
+            {
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430";
+                string platformTitle = "HalloDoc";
+                string Token = Guid.NewGuid().ToString();
+                PasswordReset passwordReset = new PasswordReset
+                {
+                    Token = Token,
+                    Email = forgotPasswordViewModel.email,
+                    CreatedDate = DateTime.Now
+                };
+                _db.PasswordResets.Add(passwordReset);
+                _db.SaveChanges();
+                var inviteLink = $"https://localhost:7088/Admin/ResetPassword/?token={Token}";
+                var subject = "Reset Password - HalloDoc";
+                var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                MailMessage mailMessage = new MailMessage
+                {
+                    From = new MailAddress(senderEmail, "HalloDoc"),
+                    Subject = subject,
+                    IsBodyHtml = true,
+                    Body = body
+                };
+
+                SmtpClient client = new SmtpClient("smtp.office365.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(senderEmail, senderPassword),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false
+                };
+                mailMessage.To.Add(forgotPasswordViewModel.email);
+
+                client.SendMailAsync(mailMessage);
+                return 3;
+            }
+            catch(Exception ex)
+            {
+                return 2;
+            }
+        }
+
+        bool IAdmin.logout()
+        {
+            try
+            {
+                _context.HttpContext.Session.Clear();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        ViewDocumentModal IAdmin.viewUploads(int id)
+        {
+            var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
+            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Dashboard"
+            };
+
+            ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
+            {
+                patient_name = string.Concat(request.RequestClient.FirstName, ' ', request.RequestClient.LastName),
+                confirmation_number = request.ConfirmationNumber,
+                requestWiseFiles = documents,
+                uploader_name = string.Concat(request.FirstName, ' ', request.LastName),
+                adminNavbarViewModel = adminNavbarViewModel,
+            };
+            return viewDocumentModal;
+        }
+
+        async Task<bool> IAdmin.fileUpload(IFormFile file, int id)
+        {
+            try
+            {
+                var adminId = _context.HttpContext.Session.GetInt32("AdminId");
+                if (file != null && file.Length > 0)
+                {
+                    var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+                RequestWiseFile requestWiseFile = new RequestWiseFile
+                {
+                    RequestId = id,
+                    FileName = file.FileName,
+                    CreatedDate = DateTime.Now,
+                    IsDeleted = new BitArray(new[] { false }),
+                    AdminId = adminId,
+                };
+                _db.RequestWiseFiles.Add(requestWiseFile);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        int IAdmin.deleteSingleFile(int id)
+        {
+            RequestWiseFile requestWiseFile = _db.RequestWiseFiles.FirstOrDefault(r=>r.RequestWiseFileId == id);
+            requestWiseFile.IsDeleted = new BitArray(new[] { true });
+            _db.RequestWiseFiles.Update(requestWiseFile);
+            _db.SaveChanges();
+            return requestWiseFile.RequestId;
+        }
+
+        async Task<Tuple<MemoryStream, string>> IAdmin.downloadMultipleFiles(ViewDocumentModal viewDocumentModal)
+        {
+            var zipName = $"{viewDocumentModal.patient_name}-documents.zip";
+            string[] filenames = viewDocumentModal.filename.Split(',');
+            using (MemoryStream ms = new MemoryStream())
+            {
+                //required: using System.IO.Compression;
+                using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true))
+                {
+                    //QUery the Products table and get all image content
+
+                    for (var i = 0; i < filenames.Length - 1; ++i)
+                    {
+                        var entry = zip.CreateEntry(filenames[i]);
+                        HttpClient client = new HttpClient();
+                        byte[] imageBytes = await client.GetByteArrayAsync($"https://localhost:7088/uploads/{filenames[i]}");
+                        using (MemoryStream fileStream = new MemoryStream(imageBytes))
+                        using (var entryStream = entry.Open())
+                        {
+                            fileStream.CopyTo(entryStream);
+                        }
+                    }
+                    var result = System.Tuple.Create(ms, zipName);
+                    return result;
+                }
+            }
+        }
+
+        int IAdmin.deleteAllFile(string filename)
+        {
+            string[] documentid = filename.Split(",");
+            int requestid = 0;
+            for(int i=0;i<documentid.Length-1;++i)
+            {
+                var document = _db.RequestWiseFiles.FirstOrDefault(r=>r.RequestWiseFileId == int.Parse(documentid[i]));
+                document.IsDeleted = new BitArray(new[] { true });
+                _db.RequestWiseFiles.Update(document);
+                _db.SaveChanges();
+                requestid = document.RequestId;
+            }
+            return requestid;
+        }
+
+        bool IAdmin.sendDocumentsMail(string filename)
+        {
+            string[] documentid = filename.Split(",");
+            var document = _db.RequestWiseFiles.Include(r=>r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
+            var user = _db.Users.FirstOrDefault(u=>u.UserId == document.Request.UserId);
+            string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+            string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+            var platformTitle = "HalloDoc";
+            var subject = "Register - HalloDoc";
+            var body = $"Hello {user.FirstName} {user.LastName},<br />We have attached few important documents in order to update about the progress of your request.<br /><br />Regards,<br/>{platformTitle}<br/>";
+
+            SmtpClient client = new SmtpClient("smtp.office365.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false
+            };
+
+            MailMessage mailMessage = new MailMessage
+            {
+                From = new MailAddress(senderEmail, "HalloDoc"),
+                Subject = subject,
+                IsBodyHtml = true,
+                Body = body
+            };
+
+            mailMessage.To.Add(user.Email);
+
+            try
+            {
+               for(var i=0;i<documentid.Length;++i)
+                {
+                    var doc = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
+                    string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", doc.FileName); 
+                    using (var attachment = new Attachment(filePath))
+                    {
+                        mailMessage.Attachments.Add(attachment);
+                    }
+                }
+                client.SendMailAsync(mailMessage);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

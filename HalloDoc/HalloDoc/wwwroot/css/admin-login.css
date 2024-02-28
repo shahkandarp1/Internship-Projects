@@ -87,7 +87,6 @@ body, html {
 
 .login-content {
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
     height: 37vh;
@@ -135,14 +134,34 @@ input[type=password]::-ms-clear {
     box-shadow: none;
 }
 
-a:hover {
-    color: #0dcaf0;
+.form-label {
+    color: #7D787E;
+    font-weight: 400;
 }
 
-.form-floating > .form-control-plaintext ~ label, .form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
-    font-family: 'Roboto', sans-serif;
-    color: #0dcaf0;
-    transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+.form-control, .form-control:focus {
+    background-color: transparent !important;
+    --bs-border-color: #D3D3D3
+}
+
+    .form-control:focus {
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        border-color: #0dcaf0;
+        outline: 0;
+        box-shadow: none;
+    }
+
+.form-floating > .form-control-plaintext ~ label::after, .form-floating > .form-control:focus ~ label::after, .form-floating > .form-control:not(:placeholder-shown) ~ label::after, .form-floating > .form-select ~ label::after {
+    background-color: transparent !important;
+}
+
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-select ~ label {
+    font-family: "Roboto", sans-serif;
+    color: #0dcaf0 !important;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 
 .custom-submit-btn {
@@ -157,14 +176,6 @@ a:hover {
     font-family: 'Roboto',sans-serif;
     font-size: 16px;
     margin-top: 8px;
-}
-
-.form-control, .form-control:focus {
-    background: inherit;
-}
-
-.form-floating > .form-control-plaintext ~ label::after, .form-floating > .form-control:focus ~ label::after, .form-floating > .form-control:not(:placeholder-shown) ~ label::after, .form-floating > .form-select ~ label::after {
-    background-color: inherit;
 }
 
 /* Bottom part of right side */

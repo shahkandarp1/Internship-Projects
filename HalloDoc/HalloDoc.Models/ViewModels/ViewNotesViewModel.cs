@@ -14,5 +14,6 @@ namespace HalloDoc.ViewModels
         public List<RequestStatusLog>? Transfer_Notes { get; set; }
         public string? Admin_Cancellation_Note { get; set; }
         public string? Cancellation_Note { get; set; }
+        public AdminNavbarViewModel adminNavbarViewModel { get; set; }
     }
 }

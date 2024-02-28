@@ -10,7 +10,7 @@ namespace HalloDoc.ViewModels
 {
     public class ViewDocumentModal
     {
-        public string name { get; set; }
+        public string? name { get; set; }
 
         public string patient_name { get; set; }
 
@@ -21,5 +21,10 @@ namespace HalloDoc.ViewModels
         public List<RequestWiseFile> requestWiseFiles { get; set; }
 
         public string? filename { get; set; }
+
+        //View Uploads - Admin
+
+        public AdminNavbarViewModel? adminNavbarViewModel { get; set; }
+
     }
 }

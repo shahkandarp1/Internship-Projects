@@ -57,5 +57,7 @@ namespace HalloDoc.ViewModels
 
         //Create Request Admin Page
         public string? Admin_notes {  get; set; }
+
+        public AdminNavbarViewModel? adminNavbarViewModel { get; set; }
     }
 }

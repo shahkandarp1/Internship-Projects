@@ -50,5 +50,7 @@ namespace HalloDoc.ViewModels
         public string? CaseTag { get; set; }
 
         public string? Admin_notes { get; set; }
+
+        public AdminNavbarViewModel adminNavbarViewModel { get; set; }
     }
 }
