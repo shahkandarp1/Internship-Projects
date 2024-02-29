@@ -514,6 +514,16 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
     cursor: pointer;
 }
 
+.map-abs-btn {
+    position: absolute;
+    bottom: 34px;
+    right: 17px;
+}
+
+.accordion-button{
+    position:relative;
+}
+
 /*Loader*/
 
 .loader-container{
@@ -748,6 +758,13 @@ input[type="date" i] {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width:602px)
+{
+    .map-abs-btn{
+        bottom:66px;
     }
 }
 

@@ -1,0 +1,17 @@
+﻿.gmap_canvas {
+    overflow: hidden;
+    background: none !important;
+    height: 100%;
+    width: 100%;
+}
+
+#gmap_canvas {
+    height: 100%;
+    width: 100%;
+}
+
+.modal-content {
+    height: 400px;
+}
+
+
