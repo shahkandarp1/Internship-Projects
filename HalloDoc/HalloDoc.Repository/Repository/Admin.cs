@@ -21,6 +21,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.IO.Compression;
+using DocumentFormat.OpenXml.Office2010.Word;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -42,7 +43,7 @@ namespace HalloDoc.Repository.Repository
             {
                 exp = r => r.Status == 1;
             }
-            else if(status=="Penidng")
+            else if(status=="Pending")
             {
                 exp = r => r.Status == 2;
             }
@@ -549,7 +550,7 @@ namespace HalloDoc.Repository.Repository
                         UserId = curr_user.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
@@ -568,16 +569,19 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    RequestNote requestNote = new RequestNote
+                    if(modal.Admin_notes != null)
                     {
-                        RequestId = req.RequestId,
-                        AdminNotes = modal.Admin_notes,
-                        CreatedDate = DateTime.Now,
-                        CreatedBy = aspnetuserid,
-                    };
+                        RequestNote requestNote = new RequestNote
+                        {
+                            RequestId = req.RequestId,
+                            AdminNotes = modal.Admin_notes,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = aspnetuserid,
+                        };
 
-                    _db.RequestNotes.Add(requestNote);
-                    _db.SaveChanges();
+                        _db.RequestNotes.Add(requestNote);
+                        _db.SaveChanges();
+                    }
 
                     return true;
 
@@ -666,24 +670,13 @@ namespace HalloDoc.Repository.Repository
                         UserId = us.UserId,
                         Status = 1,
                         CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(1),
+                        IsUrgentEmailSent = new BitArray(new[] { false }),
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
 
                     _db.Requests.Add(req);
                     _db.SaveChanges();
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
 
                     RequestStatusLog rst = new RequestStatusLog
                     {
@@ -695,16 +688,19 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    RequestNote requestNote = new RequestNote
+                    if (modal.Admin_notes != null)
                     {
-                        RequestId = req.RequestId,
-                        AdminNotes = modal.Admin_notes,
-                        CreatedDate = DateTime.Now,
-                        CreatedBy = aspnetuserid,
-                    };
+                        RequestNote requestNote = new RequestNote
+                        {
+                            RequestId = req.RequestId,
+                            AdminNotes = modal.Admin_notes,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = aspnetuserid,
+                        };
 
-                    _db.RequestNotes.Add(requestNote);
-                    _db.SaveChanges();
+                        _db.RequestNotes.Add(requestNote);
+                        _db.SaveChanges();
+                    }
 
                     string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                     string senderPassword = "shahkandarp2430";
@@ -1015,57 +1011,121 @@ namespace HalloDoc.Repository.Repository
 
         async Task<bool> IAdmin.sendDocumentsMail(string filename)
         {
-            string[] documentid = filename.Split(",");
-            var document = _db.RequestWiseFiles.Include(r=>r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
-            var user = _db.RequestClients.FirstOrDefault(u=>u.RequestClientId == document.Request.RequestClientId);
-            string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-            string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
-            var platformTitle = "HalloDoc";
-            var subject = "Register - HalloDoc";
-            var body = $"Hello {user.FirstName} {user.LastName},<br />We have attached few important documents in order to update about the progress of your request.<br /><br />Regards,<br/>{platformTitle}<br/>";
 
-            SmtpClient client = new SmtpClient("smtp.office365.com")
+            int retryCount = 1;
+            bool success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
             {
-                Port = 587,
-                Credentials = new NetworkCredential(senderEmail, senderPassword),
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false
-            };
-
-            MailMessage mailMessage = new MailMessage
-            {
-                From = new MailAddress(senderEmail, "HalloDoc"),
-                Subject = subject,
-                IsBodyHtml = true,
-                Body = body
-            };
-
-            mailMessage.To.Add(user.Email);
-
-            try
-            {
-               for(var i=0;i<documentid.Length-1;++i)
+                string[] documentid = filename.Split(",");
+                var document = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[0]));
+                var user = _db.RequestClients.FirstOrDefault(u => u.RequestClientId == document.Request.RequestClientId);
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                var platformTitle = "HalloDoc";
+                var subject = "Documents - HalloDoc";
+                var body = $"Hello {user.FirstName} {user.FirstName},<br />We have attached few important documents in order to update about you with the progress of your request.<br /><br />Regards,<br/>{platformTitle}<br/>";
+                int adminid = (int)_context.HttpContext.Session.GetInt32("AdminId");
+                try
                 {
-                    var doc = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[i]));
-                    string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", doc.FileName);
-                    var fileInfo = new FileInfo(filePath);
-                    var memoryStream = new MemoryStream();
-                    using (var stream = fileInfo.OpenRead())
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
                     {
-                        stream.CopyTo(memoryStream);
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = subject,
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(user.Email);
+
+                    for (var i = 0; i < documentid.Length - 1; ++i)
+                    {
+                        var doc = _db.RequestWiseFiles.Include(r => r.Request).FirstOrDefault(r => r.RequestWiseFileId == int.Parse(documentid[i]));
+                        string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", doc.FileName);
+                        var fileInfo = new FileInfo(filePath);
+                        var memoryStream = new MemoryStream();
+                        using (var stream = fileInfo.OpenRead())
+                        {
+                            stream.CopyTo(memoryStream);
+                        }
+                        memoryStream.Position = 0;
+                        string fileName = fileInfo.Name;
+                        mailMessage.Attachments.Add(new Attachment(memoryStream, fileName));
                     }
-                    memoryStream.Position = 0;
-                    string fileName = fileInfo.Name;
-                    mailMessage.Attachments.Add(new Attachment(memoryStream, fileName));
+                    await client.SendMailAsync(mailMessage);
+
+                    
+                    success = true;
+                    await LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, adminid, -1, true, retryCount);
+                    break;
                 }
-                await client.SendMailAsync(mailMessage);
-                return true;
+                catch (Exception ex)
+                {
+                    retryCount++;
+
+                    if (retryCount >= 3) 
+                    {
+                        await LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId,adminid,-1, false, retryCount);
+                    }
+                }
             }
-            catch (Exception ex)
+
+            return success;
+            
+        }
+
+        private async Task LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount)
+        {
+            if(request_id!=-1)
             {
-                return false;
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    RequestId = request_id,
+                    AdminId = admin_id,
+                    IsEmailSent = new BitArray(new[] { success }) ,
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = 1
+
+                };
+                await _db.EmailLogs.AddAsync(emailLog);
+                await _db.SaveChangesAsync();
             }
+            else
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    PhysicianId = physician_id,
+                    AdminId = admin_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = 3
+
+                };
+                await _db.EmailLogs.AddAsync(emailLog);
+                await _db.SaveChangesAsync();
+            }
+
+            
         }
 
         PasswordReset IAdmin.getPasswordReset(string token)
@@ -1088,6 +1148,140 @@ namespace HalloDoc.Repository.Repository
                 return true;
             }
             catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        List<Physician> IAdmin.getPhysician(int regionid)
+        {
+            return _db.Physicians.Where(p=>p.RegionId == regionid).ToList();
+        }
+
+        bool IAdmin.assignCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == adminDashboardViewModel.RequestId);
+                request.Status = 2;
+                request.ModifiedDate = DateTime.Now;
+                request.PhysicianId = adminDashboardViewModel.PhysicianId;
+                request.AcceptedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == adminDashboardViewModel.PhysicianId);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    RequestId = (int)adminDashboardViewModel.RequestId,
+                    Status = 2,
+                    Notes = $"Admin transferred to Dr. {physician.FirstName} on {DateTime.Now.ToString("MMMM dd,yyyy")} at {string.Format("{0:hh:mm:ss tt}", DateTime.Now)} : {adminDashboardViewModel.Description}",
+                    CreatedDate = DateTime.Now,
+                    TransToPhysicianId = adminDashboardViewModel.PhysicianId,
+                    PhysicianId = adminDashboardViewModel.PhysicianId,
+                    AdminId = (int)_context.HttpContext.Session.GetInt32("AdminId")
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        async Task<bool> IAdmin.sendAgreement(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            int retryCount = 1;
+            bool success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
+            {
+                
+                var user = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(u => u.RequestClientId == adminDashboardViewModel.RequestId);
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                var platformTitle = "HalloDoc";
+                var subject = "Agreement - HalloDoc";
+                var inviteLink = $"https://localhost:7088/Agreement/Index/{adminDashboardViewModel.RequestId}";
+                var body = $"Hello {user.RequestClient.FirstName} {user.RequestClient.FirstName},<br />Please review agreement and accept it so that we can start your treatment,<br /><br /><a href='{inviteLink}'>Review Agreement</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                int adminid = (int)_context.HttpContext.Session.GetInt32("AdminId");
+                try
+                {
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = subject,
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(adminDashboardViewModel.Mail_Email);
+
+                    
+                    await client.SendMailAsync(mailMessage);
+
+
+                    success = true;
+                    await LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, adminid, -1, true, retryCount);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    retryCount++;
+
+                    if (retryCount >= 3)
+                    {
+                        await LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, adminid, -1, false, retryCount);
+                    }
+                }
+            }
+
+            return success;
+        }
+
+        bool IAdmin.blockCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(b=>b.RequestId == adminDashboardViewModel.RequestId);
+                request.Status = 11;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog()
+                {
+                    RequestId = (int)adminDashboardViewModel.RequestId,
+                    Status = 11,
+                    CreatedDate = DateTime.Now
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+
+                BlockRequest blockRequest = new BlockRequest()
+                {
+                    PhoneNumber = request.PhoneNumber,
+                    Email = request.Email,
+                    Reason = adminDashboardViewModel.BlockReason,
+                    CreatedDate = DateTime.Now,
+                    RequestId = adminDashboardViewModel.RequestId.ToString(),
+                };
+                _db.BlockRequests.Add(blockRequest);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception ex)
             {
                 return false;
             }

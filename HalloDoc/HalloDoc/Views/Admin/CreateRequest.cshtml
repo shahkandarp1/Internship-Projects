@@ -66,6 +66,9 @@
             </div>
             <form class="main-form" method="post" asp-action="CreateRequest" asp-controller="Admin" enctype="multipart/form-data">
 
+                <input type="hidden" asp-for="adminNavbarViewModel.Name"/>
+                <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+
                 <!-- Patient -->
 
                 <div class="upper-text">

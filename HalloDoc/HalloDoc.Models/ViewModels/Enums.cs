@@ -10,7 +10,7 @@ namespace HalloDoc.ViewModels
     {
         public enum Status
         {
-            Unassigned = 1, Accepted = 2, MDEnRoute = 3, MDOnSite = 4, Conclude = 5, Cancelled = 6, CancelledByPatient = 7,Closed = 8,Unpaid = 9,Clear = 10
+            Unassigned = 1, Accepted = 2, MDEnRoute = 3, MDOnSite = 4, Conclude = 5, Cancelled = 6, CancelledByPatient = 7,Closed = 8,Unpaid = 9,Clear = 10,Blocked = 11
         }
     }
 }

@@ -57,5 +57,13 @@ namespace HalloDoc.Repository.Interface
         public PasswordReset getPasswordReset(string token);
 
         public bool resetPassword(ResetPasswordViewModel resetPasswordViewModel);
+
+        public List<Physician> getPhysician(int regionid);
+
+        public bool assignCase(AdminDashboardViewModel adminDashboardViewModel);
+
+        public Task<bool> sendAgreement(AdminDashboardViewModel adminDashboardViewModel);
+
+        public bool blockCase(AdminDashboardViewModel adminDashboardViewModel);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace HalloDoc.ViewModels
 
         //Cancel Request
         public List<CaseTag> caseTags { get; set; }
+        //also used in assign case 
         public int ?RequestId { get; set; }
         public string? CaseTag { get; set; }
         public string? Admin_notes { get; set; }
@@ -29,7 +31,19 @@ namespace HalloDoc.ViewModels
         //Send Link
         public string ?Mail_FirstName { get; set; }
         public string? Mail_LastName { get; set; }
+        [Phone(ErrorMessage = "Please enter a valid phone number")]
         public string? Mail_PhoneNumber {  get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            ErrorMessage = "Please enter valid Email")]
         public string? Mail_Email { get; set; }
+
+        //Assign case
+        public int? RegionId { get; set; }
+        public int? PhysicianId { get; set; } 
+        public string? Description { get; set; }
+
+        //Block Case
+
+        public string BlockReason { get; set; }
     }
 }

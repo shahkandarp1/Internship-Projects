@@ -185,7 +185,7 @@
                              aria-labelledby="dropdownMenuLink">
                             @if (Model.status == "New")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
+                                    <a class="dropdown-item assign-case" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
                                 <a class="dropdown-item cancel-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
@@ -198,7 +198,7 @@
                             }
                             @if (Model.status == "New")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
+                                    <a class="dropdown-item block-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
                             }
                             @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -214,7 +214,7 @@
                             }
                             @if (Model.status == "Pending")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Send Agreement</span></div></a>
+                                    <a class="dropdown-item send-agreement" href="#" data-id="@item.RequestId" data-type-id="@item.RequestTypeId" data-email="@item.RequestClient.Email" data-phonenumber="@item.RequestClient.PhoneNumber"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Send Agreement</span></div></a>
                             }
                             @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                             {
@@ -427,7 +427,7 @@
                     <div class="row">
                         @if (Model.status == "New")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Assign Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 assign-case" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Assign Case</div></a>
                                 <a class="col-md-3 col-sm-6 col-6 cancel-case" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Cancel Case</div></a>
                         }
                         @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
@@ -436,7 +436,7 @@
                         }
                         @if (Model.status == "New")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Block Patient</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 block-case" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Block Patient</div></a>
                         }
                         @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
@@ -452,7 +452,7 @@
                         }
                         @if (Model.status == "Pending")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Send Agreement</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 send-agreement" data-id="@Model.requests[i].RequestId" data-type-id="@Model.requests[i].RequestTypeId" data-email="@Model.requests[i].RequestClient.Email" data-phonenumber="@Model.requests[i].RequestClient.PhoneNumber"><div class="action-mob-btn">Send Agreement</div></a>
                         }
                         @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                         {
@@ -488,9 +488,93 @@
         };
     }
 
+    var assign = document.getElementsByClassName("assign-case")
+    for (let i = 0; i < assign.length; ++i) {
+        assign[i].onclick = function () {
+            var id = assign[i].getAttribute("data-id");
+            var regionid = assign[i].getAttribute("data-region-id");
+            openAssign(id, regionid);
+        };
+    }
+
+    var send_agreement = document.getElementsByClassName("send-agreement")
+    for (let i = 0; i < send_agreement.length; ++i) {
+        send_agreement[i].onclick = function () {
+            var id = send_agreement[i].getAttribute("data-id");
+            var typeid = send_agreement[i].getAttribute("data-type-id");
+            var email = send_agreement[i].getAttribute("data-email");
+            var phonenumber = send_agreement[i].getAttribute("data-phonenumber");
+            openAgreement(id, typeid,email,phonenumber);
+        };
+    }
+
+    var block = document.getElementsByClassName("block-case")
+    for (let i = 0; i < block.length; ++i) {
+        block[i].onclick = function () {
+            var id = block[i].getAttribute("data-id");
+            var name = block[i].getAttribute("data-name");
+            openBlock(id, name);
+        };
+    }
+
+
     const openCancel = (id,name) => {
         document.getElementById("pt-name").innerHTML = name
         document.getElementById("req-id").value = id
         $("#myModal").modal("show");
+    }
+
+    const openBlock = (id, name) => {
+        document.getElementById("pt-block-name").innerHTML = name
+        document.getElementById("req-block-id").value = id
+        $("#myModalBlock").modal("show");
+    }
+
+    const openAgreement = (id, typeid,email,phonenumber) => {
+        if(typeid == 1)
+        {
+            document.getElementById("business-agreement").style.display = "block";
+        }
+        else if(typeid == 2)
+        {
+            document.getElementById("patient-agreement").style.display = "block";
+        }
+        else if (typeid == 3) {
+            document.getElementById("family-agreement").style.display = "block";
+        }
+        else{
+            document.getElementById("concierge-agreement").style.display = "block";
+        }
+        document.getElementById("req-agreement-id").value = id
+        document.getElementById("agreement-phone").value = phonenumber
+        document.getElementById("agreement-email").value = email
+        $("#myModalAgreement").modal("show");
+    }
+
+    const openAssign = (id,regionid) => {
+        console.log(id)
+        console.log(regionid)
+        const selectElement = document.getElementById("Select-region");
+        for (const option of selectElement.options) {
+            if (option.value == regionid) {
+                option.selected = true;
+                break;
+            }
+        }
+        const selectphysician = document.getElementById("Select-physician");
+        for (let i = 1; i < selectphysician.options.length; ++i) {
+            selectphysician.removeChild(selectphysician.options[i]);
+        }
+        $.get('/Admin/GetPhysician', { regionid:regionid  }, function (response) {
+            for(let i=0;i<response.data.length;++i)
+            {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+        document.getElementById("req-assign-id").value = id
+        $("#myModalAssign").modal("show");
     }
 </script>

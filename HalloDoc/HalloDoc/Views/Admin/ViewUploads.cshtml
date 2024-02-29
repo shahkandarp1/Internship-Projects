@@ -288,6 +288,43 @@
         });
     });
 
+    
+
+    $(document).ready(function () {
+        $('#send-mail-mob').on('click', function () {
+            const checkbox = document.getElementsByClassName("check")
+            let flag = 0
+            let filename = ''
+            for (let i = 0; i < checkbox.length; ++i) {
+                if (checkbox[i].checked) {
+                    filename += checkbox[i].value.split(",")[1]
+                    filename += ','
+                    flag = 1
+                }
+            }
+            var formData = new FormData();
+            formData.append("filename", filename);
+            console.log(filename)
+            if (flag == 1) {
+                $.ajax(
+                    {
+                        url: "/Admin/SendMailDocuments",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            toastr.success("Mail Sent Successfully!!")
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            toastr.error("Failed to send email!!");
+                        }
+                    }
+                );
+            }
+        });
+    });
+
     $(document).ready(function () {
         $('#delete-all-mob').on('click', function () {
             const checkbox = document.getElementsByClassName("check")

@@ -23,7 +23,7 @@
 
 
     <!-- Cancellation Modal -->
-    <form asp-action="CancelRequest" asp-controller="Admin" method="post" onsubmit="checkSelect()">
+    <form asp-action="CancelRequest" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkSelect()")">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -45,7 +45,7 @@
                                 }
                             </select>
                         </div>
-                        <span id="warning" class="text-danger hidden">Please select Case Tag</span>
+                        <span id="warning-cancel" class="text-danger hidden">Please select Case Tag</span>
                         <div class="form-floating mt-3 inp col-sm-12 notes-text">
                             <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" required asp-for="Admin_notes"></textarea>
                             <label for="admin_notes" class="form-label">Provide Additional Notes</label>
@@ -53,6 +53,77 @@
                         <div class="lower-btn">
                             <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
                             <a id="cancel" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Block Case Modal -->
+    <form asp-action="BlockCase" asp-controller="Admin" method="post">
+        <div class="modal fade" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Confirm Block</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-block-id" />
+                        <span class="modal-head"><label for="floatingInput" class="form-label">Patient Name:</label><span class="pt-name" id="pt-block-name"></span></span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="block-reason" placeholder="name@example.com" required asp-for="BlockReason"></textarea>
+                            <label for="admin_notes" class="form-label">Reason for Block Request</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel-block" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Assign Case Modal -->
+    <form asp-action="AssignCase" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssign()")">
+        <div class="modal fade" id="myModalAssign" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Assign Request</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-assign-id" />
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
+                                @foreach (var items in Model.regions)
+                                {
+                                    <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-physician" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssign(this)">
+                                <option class="option-modal" value="-1">Select Physician</option>
+                            </select>
+                        </div>
+                        <span id="warning-assign" class="text-danger hidden">Please Select Physician</span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="transfer-notes" placeholder="name@example.com" required asp-for="Description"></textarea>
+                            <label for="admin_notes" class="form-label">Description</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel-assign" class="btn cancel-btn">Cancel</a>
                         </div>
                     </div>
 
@@ -74,23 +145,78 @@
 
                     <div class="modal-body">
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="text" class="form-control" id="business-first-name" placeholder="name@example.com" asp-for="Mail_FirstName">
+                            <input type="text" class="form-control" id="business-first-name" placeholder="name@example.com" asp-for="Mail_FirstName" required>
                             <label for="business-first-name" class="form-label">First Name</label>
                         </div>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="text" class="form-control" id="business-last-name" placeholder="name@example.com" asp-for="Mail_LastName">
+                            <input type="text" class="form-control" id="business-last-name" placeholder="name@example.com" asp-for="Mail_LastName" required>
                             <label for="business-last-name" class="form-label">Last Name</label>
                         </div>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="tel" class="form-control phone" id="business-phone" asp-for="Mail_PhoneNumber">
+                            <input type="tel" class="form-control phone" id="business-phone" asp-for="Mail_PhoneNumber" required>
                         </div>
+                        <span class="text-danger" asp-validation-for="Mail_PhoneNumber"></span>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="text" class="form-control" id="business-email" placeholder="name@example.com" asp-for="Mail_Email">
+                            <input type="email" class="form-control" id="business-email" placeholder="name@example.com" asp-for="Mail_Email" required>
                             <label for="business-email" class="form-label">Your email</label>
                         </div>
+                        <span class="text-danger" asp-validation-for="Mail_Email"></span>
                         <div class="lower-btn">
                             <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
-                            <a id="cancel" class="btn cancel-btn">Cancel</a>
+                            <a id="cancel-link" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Send Agreement Modal -->
+    <form asp-action="SendAgreement" asp-controller="Admin" method="post">
+        <div class="modal fade" id="myModalAgreement" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Send Agreement</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">  
+                        <input type="hidden" asp-for="RequestId" id="req-agreement-id" />
+                        <div class="req-accordion-filter Patient hidden" id="patient-agreement">
+                            <span class="color patient-color"></span>
+                            <span class="requestor-type accordion-requestor agreement-type-font">Patient</span>
+                        </div>
+
+                        <div class="req-accordion-filter Patient hidden" id="business-agreement">
+                            <span class="color business-color"></span>
+                            <span class="requestor-type accordion-requestor agreement-type-font">Business</span>
+                        </div>
+
+                        <div class="req-accordion-filter Patient hidden" id="family-agreement">
+                            <span class="color family-color"></span>
+                            <span class="requestor-type accordion-requestor agreement-type-font">Family</span>
+                        </div>
+                        <div class="req-accordion-filter Patient hidden" id="concierge-agreement">
+                            <span class="color concierge-color"></span>
+                            <span class="requestor-type accordion-requestor agreement-type-font">Concierge</span>
+                        </div>
+
+                        <div class="disclaimer-agreement-font">To send agreement please make sure you are updating the correct contact information below for the responsible party</div>
+                        <div class="form-floating mt-3 col-12 notes-text">
+                            <input type="tel" class="form-control phone" id="agreement-phone" asp-for="Mail_PhoneNumber" required>
+                        </div>
+                        <span class="text-danger" asp-validation-for="Mail_PhoneNumber"></span>
+                        <div class="form-floating mt-3 col-12 notes-text">
+                            <input type="email" class="form-control" id="agreement-email" placeholder="name@example.com" asp-for="Mail_Email" required>
+                            <label for="agreement-email" class="form-label">Your email</label>
+                        </div>
+                        <span class="text-danger" asp-validation-for="Mail_Email"></span>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
+                            <a id="cancel-agreement" class="btn cancel-btn">Cancel</a>
                         </div>
                     </div>
 
@@ -434,20 +560,58 @@
         });
     });
 
+    $(document).ready(function () {
+        $("#cancel-agreement").click(function () {
+            $("#myModalAgreement").modal("hide");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-assign").click(function () {
+            $("#myModalAssign").modal("hide");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-link").click(function () {
+            $("#myModalLink").modal("hide");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-block").click(function () {
+            $("#myModalBlock").modal("hide");
+        });
+    });
+
     const submit = () => {
         document.getElementById("submit-btn").click();
     }
 
     const selectChange = (text) => {
         if (text.value != -1) {
-            document.getElementById("warning").style.display = "none";
+            document.getElementById("warning-cancel").style.display = "none";
+        }
+    }
+
+    const selectAssign = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assign").style.display = "none";
         }
     }
 
     const checkSelect = () => {
         const select = document.getElementById("Select-cancel")
         if (select.value == -1) {
-            document.getElementById("warning").style.display = "block";
+            document.getElementById("warning-cancel").style.display = "block";
+            return false;
+        }
+    }
+
+    const checkAssign = () => {
+        const select = document.getElementById("Select-physician")
+        if (select.value == -1) {
+            document.getElementById("warning-assign").style.display = "block";
             return false;
         }
     }
@@ -474,6 +638,21 @@
             }
         }
         
+    }
+
+    const changePhysician = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physician");
+            for (let i = 1; i < selectphysician.options.length; ++i) {
+                selectphysician.removeChild(selectphysician.options[i]);
+            }
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
     }
 
 
@@ -516,3 +695,9 @@
         });
     }
 </script>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    }

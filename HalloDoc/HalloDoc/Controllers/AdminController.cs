@@ -371,5 +371,56 @@ namespace HalloDoc.Controllers
             }
             return View(modal);
         }
+
+        public IActionResult GetPhysician(int regionid)
+        {
+            List<Physician> physician = _admin.getPhysician(regionid);
+            return Json(new { data=physician});
+        }
+
+        public IActionResult AssignCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            bool isAssigned = _admin.assignCase(adminDashboardViewModel);
+            if(isAssigned)
+            {
+                TempData["success"] = "Request Assigned Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be assigned!!";
+            }
+            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", newAdminDashboardViewModel);
+        }
+
+        public IActionResult SendAgreement(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            Task<bool> isSent = _admin.sendAgreement(adminDashboardViewModel);
+            if (isSent.Result)
+            {
+                TempData["success"] = "Agreement Sent Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Agreement could not be sent!!";
+            }
+            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", newAdminDashboardViewModel);
+        }
+
+        public IActionResult BlockCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            bool isBlocked = _admin.blockCase(adminDashboardViewModel);
+            if (isBlocked)
+            {
+                TempData["success"] = "Request Blocked Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be Blocked!!";
+            }
+            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", newAdminDashboardViewModel);
+        }
     }
 }
