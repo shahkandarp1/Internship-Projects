@@ -100,7 +100,7 @@ namespace HalloDoc.Controllers
             return View(adminDashboardViewModel);
         }
 
-        public async Task<IActionResult> New(string? search,string ?requestor,int? region)
+        public IActionResult New(string? search,string ?requestor,int? region)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", search, requestor, region);
             return PartialView("_AdminDashboardTable",adminDashboardViewModel);
@@ -393,6 +393,21 @@ namespace HalloDoc.Controllers
             return View("Dashboard", newAdminDashboardViewModel);
         }
 
+        public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            bool isTransfered = _admin.transferCase(adminDashboardViewModel);
+            if (isTransfered)
+            {
+                TempData["success"] = "Request Transferred Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be transferred!!";
+            }
+            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", newAdminDashboardViewModel);
+        }
+
         public IActionResult SendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
             Task<bool> isSent = _admin.sendAgreement(adminDashboardViewModel);
@@ -421,6 +436,66 @@ namespace HalloDoc.Controllers
             }
             AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
             return View("Dashboard", newAdminDashboardViewModel);
+        }
+
+        public IActionResult ClearCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            bool isCleared = _admin.clearCase(adminDashboardViewModel);
+            if (isCleared)
+            {
+                TempData["success"] = "Request Cleared Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be Cleared!!";
+            }
+            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
+            return View("Dashboard", newAdminDashboardViewModel);
+        }
+
+        public IActionResult Orders(int id)
+        {
+            OrdersViewModel ordersViewModel = _admin.orders(id);
+            return View(ordersViewModel);
+        }
+
+        public IActionResult GetBusiness(int professionid)
+        {
+            var business = _admin.getBusiness(professionid);
+            return Json(new { data=business });
+        }
+        
+        public IActionResult GetBusinessData(int businessid)
+        {
+            var business = _admin.getBusinessData(businessid);
+            return Json(new { data=business });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Orders(OrdersViewModel ordersViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+
+                if(ordersViewModel.business_id == -1)
+                {
+                    ModelState.AddModelError("business_id", "Please select Vendor!!");
+                    return View(ordersViewModel);
+                }
+
+                bool isOrdered = _admin.placeOrder(ordersViewModel);
+                if(isOrdered)
+                {
+                    TempData["success"] = "Order Placed Successfully!!";
+                    return RedirectToAction("Dashboard");
+                }
+                else
+                {
+                    TempData["error"] = "Order could not be placed!!";
+                }
+            }
+            return View(ordersViewModel);
         }
     }
 }

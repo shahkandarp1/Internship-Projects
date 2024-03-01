@@ -1,4 +1,5 @@
-﻿using HalloDoc.ViewModels;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -62,8 +63,20 @@ namespace HalloDoc.Repository.Interface
 
         public bool assignCase(AdminDashboardViewModel adminDashboardViewModel);
 
+        public bool transferCase(AdminDashboardViewModel adminDashboardViewModel);
+
         public Task<bool> sendAgreement(AdminDashboardViewModel adminDashboardViewModel);
 
         public bool blockCase(AdminDashboardViewModel adminDashboardViewModel);
+
+        public bool clearCase(AdminDashboardViewModel adminDashboardViewModel);
+
+        public OrdersViewModel orders(int id);
+
+        public List<HealthProfessional> getBusiness(int professionid);
+
+        public HealthProfessional getBusinessData(int businessid);
+
+        public bool placeOrder(OrdersViewModel ordersViewModel);
     }
 }

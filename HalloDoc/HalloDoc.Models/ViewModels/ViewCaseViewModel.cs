@@ -51,6 +51,13 @@ namespace HalloDoc.ViewModels
 
         public string? Admin_notes { get; set; }
 
+        public List<Region>? regions { get; set; } = new List<Region>();
+
         public AdminNavbarViewModel adminNavbarViewModel { get; set; }
+
+        //Assign case
+        public int? RegionId { get; set; }
+        public int? PhysicianId { get; set; }
+        public string? Description { get; set; }
     }
 }

@@ -1,0 +1,157 @@
+﻿@model OrdersViewModel
+@{
+    ViewData["Title"] = "Orders";
+}
+@section Styles {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/js/orders.js"></script>
+    <link href="~/css/orders.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/admin-navbar.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Send Order</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form" asp-action="Orders" asp-controller="Admin" method="post">
+
+                <!-- General Information  -->
+                <div class="row">
+                    <input type="hidden" asp-for="RequestId"/>
+                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+
+                    @for (int i = 0; i < Model.healthProfessionalTypes.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.healthProfessionalTypes[i].HealthProfessionalId)
+                        @Html.HiddenFor(m => m.healthProfessionalTypes[i].ProfessionName)
+                    }
+
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select-order editable" id="Select-profession" placeholder="name@example.com" asp-for="profession_id" onchange="getBusiness(this)">
+                            <option value="-1">Select Profession</option>
+                            @for(var i=0;i<Model.healthProfessionalTypes.Count;++i)
+                            {
+                                <option value="@Model.healthProfessionalTypes[i].HealthProfessionalId">@Model.healthProfessionalTypes[i].ProfessionName</option>
+                            } 
+                        </select>
+                        <span asp-validation-for="profession_id" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select-order editable" id="Select-business" placeholder="name@example.com" asp-for="business_id" onchange="getBusinessData(this)">
+                            <option value="-1">Business</option>
+                        </select>
+                        <span asp-validation-for="business_id" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="contact" placeholder="name@example.com" asp-for="Business_contact">
+                        <label for="contact" class="form-label">Business Contact</label>
+                        <span asp-validation-for="Business_contact" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable" id="email" placeholder="name@example.com" asp-for="Business_email">
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Business_email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="fax-number" placeholder="name@example.com" asp-for="Business_fax">
+                        <label for="fax-number" class="form-label">Fax Number</label>
+                        <span asp-validation-for="Business_fax" class="text-danger"></span>
+                    </div>
+                    <div class="row symptoms-textarea">
+                        <div class="form-floating select-refill-form mt-3 inp col-sm-12 col-12">
+                            <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="prescription"></textarea>
+                            <label for="floatingInput" class="form-label">Prescription or Order Details</label>
+                        </div>
+                        <span asp-validation-for="prescription" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select select-refill editable" id="Select-refill" placeholder="name@example.com" asp-for="numberOfRefills">
+                            <option selected value="-1">Not Required</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <label for="Select-refill" class="form-label">Number of Refill</label>
+                        <span asp-validation-for="numberOfRefills" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn">
+                    <button class="lower-custom-btn submit-btn" type="submit">Submit</button>
+                    <a class="lower-custom-btn cancel-btn" onclick="Cancel()">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    const getBusiness = (element) => {
+        document.getElementById("contact").value = ""
+        document.getElementById("email").value = ""
+        document.getElementById("fax-number").value = ""
+        const selectbusiness = document.getElementById("Select-business");
+        if(element.value == -1) {
+            selectbusiness.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Business"
+            firstoption.value = -1
+            selectbusiness.append(firstoption);
+            return false;
+        }
+
+        $.get('/Admin/GetBusiness', { professionid: element.value }, function (response) {
+            selectbusiness.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Business"
+            firstoption.value = -1
+            selectbusiness.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].vendorName
+                newOption.value = response.data[i].vendorId
+                selectbusiness.append(newOption);
+            }
+        });
+    }
+
+    const getBusinessData = (element) => {
+        if(element.value == -1)
+        {
+            document.getElementById("contact").value = ""
+            document.getElementById("email").value = ""
+            document.getElementById("fax-number").value = ""
+            return false;
+        }
+        $.get('/Admin/GetBusinessData', { businessid: element.value }, function (response) {
+            document.getElementById("contact").value = response.data.businessContact
+            document.getElementById("email").value = response.data.email
+            document.getElementById("fax-number").value = response.data.faxNumber
+        });
+    } 
+
+</script>
+

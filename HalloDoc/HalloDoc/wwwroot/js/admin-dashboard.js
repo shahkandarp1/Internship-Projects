@@ -64,22 +64,7 @@ const changeRequestor = (element) => {
             states[i].classList.remove(`filter-active`)
         }
     }
-    document.getElementById("partial-container").style.display = "none";
-    document.getElementsByClassName("loader-container")[0].style.display = "flex";
-    $.ajax({
-        url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
-        type: 'POST',
-        dataType: 'html',
-        data: { requestor: current_state, search: document.getElementById("search").value, region: document.getElementById("region").value },
-        // Pass your data here
-        success: function (response) {
-            document.getElementsByClassName("loader-container")[0].style.display = "none";
-            document.getElementById("partial-container").style.display = "block";
-            $("#partial-container").html(response)
-        },
-        error: function () {
-            alert('An error occurred.');
-        }
-    });
+
+    filter()
 
 }

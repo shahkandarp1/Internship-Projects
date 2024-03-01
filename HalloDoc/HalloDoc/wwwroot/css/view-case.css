@@ -188,7 +188,7 @@ a {
 }
 
 .form-floating > .select:not(:placeholder-shown) {
-    padding-top: 1.45rem;
+    padding-top: 1.45rem!important;
 }
 
 
@@ -382,8 +382,6 @@ input[type="file"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 450px;
-    height: 400px;
 }
 
 .location-modal {
@@ -391,8 +389,8 @@ input[type="file"] {
 }
 
 .modal-body {
-    width: 95% !important;
-    height: 85% !important;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;

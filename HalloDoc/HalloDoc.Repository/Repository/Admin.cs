@@ -338,6 +338,7 @@ namespace HalloDoc.Repository.Repository
             var caseTags = _db.CaseTags.ToList();
             var adminid = _context.HttpContext.Session.GetInt32("AdminId");
             var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+            var regions = _db.Regions.ToList();
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
@@ -363,7 +364,9 @@ namespace HalloDoc.Repository.Repository
                 Notes = req.RequestClient.Notes,
                 Room = req.RequestClient.Address,
                 caseTags = caseTags,
-                adminNavbarViewModel = adminNavbarViewModel
+                adminNavbarViewModel = adminNavbarViewModel,
+                regions = regions,
+                RegionId = region.RegionId
             };
             return viewCaseViewModel;
         }
@@ -1190,6 +1193,37 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
+        bool IAdmin.transferCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == adminDashboardViewModel.RequestId);
+                request.Status = 2;
+                request.ModifiedDate = DateTime.Now;
+                request.PhysicianId = adminDashboardViewModel.PhysicianId;
+                _db.Requests.Update(request);
+
+                Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == adminDashboardViewModel.PhysicianId);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    RequestId = (int)adminDashboardViewModel.RequestId,
+                    Status = 2,
+                    Notes = $"Admin transferred to Dr. {physician.FirstName} on {DateTime.Now.ToString("MMMM dd,yyyy")} at {string.Format("{0:hh:mm:ss tt}", DateTime.Now)} : {adminDashboardViewModel.Description}",
+                    CreatedDate = DateTime.Now,
+                    TransToPhysicianId = adminDashboardViewModel.PhysicianId,
+                    PhysicianId = adminDashboardViewModel.PhysicianId,
+                    AdminId = (int)_context.HttpContext.Session.GetInt32("AdminId")
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
 
         async Task<bool> IAdmin.sendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
@@ -1255,7 +1289,7 @@ namespace HalloDoc.Repository.Repository
         {
             try
             {
-                Request request = _db.Requests.FirstOrDefault(b=>b.RequestId == adminDashboardViewModel.RequestId);
+                Request request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(b=>b.RequestId == adminDashboardViewModel.RequestId);
                 request.Status = 11;
                 request.ModifiedDate = DateTime.Now;
                 _db.Requests.Update(request);
@@ -1270,8 +1304,8 @@ namespace HalloDoc.Repository.Repository
 
                 BlockRequest blockRequest = new BlockRequest()
                 {
-                    PhoneNumber = request.PhoneNumber,
-                    Email = request.Email,
+                    PhoneNumber = request.RequestClient.PhoneNumber,
+                    Email = request.RequestClient.Email,
                     Reason = adminDashboardViewModel.BlockReason,
                     CreatedDate = DateTime.Now,
                     RequestId = adminDashboardViewModel.RequestId.ToString(),
@@ -1279,6 +1313,91 @@ namespace HalloDoc.Repository.Repository
                 _db.BlockRequests.Add(blockRequest);
                 _db.SaveChanges();
 
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.clearCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(b => b.RequestId == adminDashboardViewModel.RequestId);
+                request.Status = 10;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog()
+                {
+                    RequestId = (int)adminDashboardViewModel.RequestId,
+                    Status = 10,
+                    CreatedDate = DateTime.Now
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        OrdersViewModel IAdmin.orders(int id)
+        {
+            var healthProfessionals = _db.HealthProfessionalTypes.ToList();
+            var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == adminid);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Dashboard"
+            };
+
+            OrdersViewModel ordersViewModel = new OrdersViewModel()
+            {
+                RequestId = id,
+                healthProfessionalTypes = healthProfessionals,
+                adminNavbarViewModel = adminNavbarViewModel
+            };
+            return ordersViewModel;
+        }
+
+        List<HealthProfessional> IAdmin.getBusiness(int professionid)
+        {
+            return _db.HealthProfessionals.Where(h=>h.Profession == professionid).ToList();
+        }
+        
+        HealthProfessional IAdmin.getBusinessData(int businessid)
+        {
+            return _db.HealthProfessionals.FirstOrDefault(h=>h.VendorId == businessid);
+        }
+
+        bool IAdmin.placeOrder(OrdersViewModel ordersViewModel)
+        {
+            try
+            {
+                var adminid = _context.HttpContext.Session.GetInt32("AdminId");
+                var admin = _db.Admins.FirstOrDefault(a=>a.AdminId == adminid);
+                OrderDetail orderDetail = new OrderDetail()
+                {
+                    VendorId = ordersViewModel.business_id,
+                    RequestId = ordersViewModel.RequestId,
+                    FaxNumber = ordersViewModel.Business_fax,
+                    Email = ordersViewModel.Business_email,
+                    BusinessContact = ordersViewModel.Business_contact,
+                    Prescription = ordersViewModel.prescription,
+                    NoOfRefill = ordersViewModel.numberOfRefills == -1 ? null:ordersViewModel.numberOfRefills,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = string.Concat(admin.FirstName," ",admin.LastName)
+                };
+                _db.OrderDetails.Add(orderDetail);
+                _db.SaveChanges();
                 return true;
             }
             catch(Exception ex)

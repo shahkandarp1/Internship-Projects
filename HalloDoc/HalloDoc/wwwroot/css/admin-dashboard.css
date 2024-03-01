@@ -516,7 +516,7 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
 
 .map-abs-btn {
     position: absolute;
-    bottom: 34px;
+    top: 44px;
     right: 17px;
 }
 
@@ -702,7 +702,7 @@ a:hover {
 }
 
 .form-floating > .select:not(:placeholder-shown) {
-    padding-top: 1.45rem;
+    padding-top: 1.45rem!important;
 }
 
 
@@ -730,16 +730,99 @@ input[type="date" i] {
     padding-top: 1.625rem !important;
 }
 
-
+.assign-transfer-modal
+{
+    padding:0px!important;
+}
 /*Agreement Modal*/
-.agreement-type-font{
-    font-size:16px;
+.agreement-type-font {
+    font-size: 16px;
 }
 
 .disclaimer-agreement-font{
     font-size:13px;
     padding:10px;
 }
+
+/*Clear Modal*/
+.clear-modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*
+    width: 450px;
+    height: 400px;*/
+}
+
+.location-modal {
+    padding: 0px !important;
+}
+
+.clear-modal-body {/*
+    width: 95% !important;
+    height: 85% !important;*/
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    padding: 60px;
+}
+
+.information-heading {
+    font-size: 23px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+    color: #3E3E3E;
+    width: 100%;
+    text-align: center;
+}
+
+.information-data {
+    color: #ADADAD;
+    font-size: 14px;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 400;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.exclamation-img {
+    width: 69px;
+    /* margin-bottom: 42px; */
+}
+
+.clear-modal-dialog-centered {
+    justify-content: center;
+}
+
+.clear-btn{
+    margin-right:5px;
+    color:white;
+}
+
+.cancel-clear-btn{
+    font-size:inherit;
+}
+
+.outer-border {
+    position: relative;
+    padding: 6px;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #F2AF00;
+    border-radius: 50%;
+}
+
+.clear-btn:hover{
+    color:white;
+}
+
+
 /* Safari */
 @-webkit-keyframes spin {
     0% {
@@ -758,13 +841,6 @@ input[type="date" i] {
 
     100% {
         transform: rotate(360deg);
-    }
-}
-
-@media screen and (max-width:602px)
-{
-    .map-abs-btn{
-        bottom:66px;
     }
 }
 
@@ -853,6 +929,12 @@ input[type="date" i] {
     .map-btn {
         font-size: 14px;
         padding: 8px 16px;
+    }
+    .information-heading{
+        font-size:20px;
+    }
+    .information-data{
+        font-size:13px;
     }
 }
 

@@ -8,6 +8,8 @@
     <script src="~/js/admin-navbar.js"></script>
     <script src="~/js/view-case.js"></script>
     <link href="~/css/view-case.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/map.css" rel="stylesheet" type="text/css" />
+
 }
 
 <div id="body">
@@ -57,37 +59,61 @@
         </div>
         </div>
         </form>
+
+    <!-- Assign Case Modal -->
+    <form asp-action="AssignCase" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssign()")">
+        <div class="modal fade" id="myModalAssign" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Assign Request</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-assign-id" />
+                        <div class="disclaimer-agreement-font assign-transfer-modal">To assign this request, search and select another physician</div>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
+                                @foreach (var items in Model.regions)
+                                {
+                                    <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                }
+                            </select>
+                            <label for="Select-region" class="form-label">Narrow search By Region</label>
+                        </div>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-physician" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssign(this)">
+                                <option class="option-modal" value="-1">Select Physician</option>
+                            </select>
+                        </div>
+                        <span id="warning-assign" class="text-danger hidden">Please Select Physician</span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="transfer-notes" placeholder="name@example.com" required asp-for="Description"></textarea>
+                            <label for="admin_notes" class="form-label">Description</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel-assign" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
     <!--Location Modal -->
 
     <div class="modal" id="myModal1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <section>
-                    <div class="mapouter">
-                        <div class="gmap_canvas">
-                            <iframe width="600" height="500" id="gmap_canvas" src="" frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
-
-                                <!-- </iframe><a href="https://123movies-to.org">123 movies</a><br> -->
-                                <style>
-                                    .mapouter {
-                                        position: relative;
-                                        text-align: right;
-                                        height: 500px;
-                                        width: 600px;
-                                    }</style>
-                                <!-- <a href="https://www.embedgooglemap.net">embedgooglemap.net</a> -->
-                                <style>
-                                    .gmap_canvas {
-                                        overflow: hidden;
-                                        background: none !important;
-                                        height: 500px;
-                                        width: 600px;
-                                    }
-                                </style>
-                            </iframe>
-                        </div>
-                    </div>
-                </section>
+            <div class="modal-content map-modal-content">
+                <div class="gmap_canvas">
+                    <iframe id="gmap_canvas" src="" frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+                    </iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -219,7 +245,7 @@
                 <div class="lower-btn">
                     @if(Model.Status == 1)
                     {
-                        <a class="btn btn-info">Assign</a>
+                        <a class="btn btn-info" id="openBtnA">Assign</a>
                     }
                     <a class="btn btn-info" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@Model.id">View Notes</a>
                     <a class="btn btn-danger" id="openBtnC">Cancel</a>
@@ -268,11 +294,76 @@
 
         });
 
-                $(document).ready(function () {
-                    $("#openBtnC").click(function () {
-                        $("#myModal").modal("show");
-                    });
+        const checkAssign = () => {
+            const select = document.getElementById("Select-physician")
+            if (select.value == -1) {
+                document.getElementById("warning-assign").style.display = "block";
+                return false;
+            }
+        }
+
+        const changePhysician = (element) => {
+            $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+                const selectphysician = document.getElementById("Select-physician");
+                for (let i = 1; i < selectphysician.options.length; ++i) {
+                    selectphysician.removeChild(selectphysician.options[i]);
+                }
+                for (let i = 0; i < response.data.length; ++i) {
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
+                }
+            });
+        }
+
+        const selectAssign = (text) => {
+            if (text.value != -1) {
+                document.getElementById("warning-assign").style.display = "none";
+            }
+        }
+
+        $(document).ready(function () {
+            $("#cancel-assign").click(function () {
+                $("#myModalAssign").modal("hide");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#openBtnC").click(function () {
+                $("#myModal").modal("show");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#openBtnA").click(function () {
+                let id = @Model.RequestId
+                let regionid = @Model.RegionId
+                const selectElement = document.getElementById("Select-region");
+                for (const option of selectElement.options) {
+                    if (option.value == regionid) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+                const selectphysician = document.getElementById("Select-physician");
+                selectphysician.innerHTML = "";
+                const firstoption = document.createElement("option");
+                firstoption.textContent = "Select Physician"
+                firstoption.value = -1
+                selectphysician.append(firstoption);
+                $.get('/Admin/GetPhysician', { regionid: regionid }, function (response) {
+                    for (let i = 0; i < response.data.length; ++i) {
+                        const newOption = document.createElement("option");
+                        newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                        newOption.value = response.data[i].physicianId
+                        selectphysician.append(newOption);
+                    }
                 });
+                document.getElementById("req-assign-id").value = id
+                $("#myModalAssign").modal("show");
+            });
+        });
 
         $(document).ready(function () {
             $("#cancel").click(function () {

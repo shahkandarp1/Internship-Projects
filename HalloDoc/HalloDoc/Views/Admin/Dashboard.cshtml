@@ -103,6 +103,7 @@
 
                     <div class="modal-body">
                         <input type="hidden" asp-for="RequestId" id="req-assign-id" />
+                        <div class="disclaimer-agreement-font assign-transfer-modal">To assign this request, search and select another physician</div>
                         <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
                             <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
                                 @foreach (var items in Model.regions)
@@ -110,6 +111,7 @@
                                     <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
                                 }
                             </select>
+                            <label for="Select-region" class="form-label">Narrow search By Region</label>
                         </div>
                         <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
                             <select class="form-control select editable" id="Select-physician" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssign(this)">
@@ -131,6 +133,51 @@
             </div>
         </div>
     </form>
+
+    <!-- Transfer Case Modal -->
+    <form asp-action="TransferCase" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssignT()")">
+        <div class="modal fade" id="myModalTransfer" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Transfer Request</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-transfer-id" />
+                        <div class="disclaimer-agreement-font assign-transfer-modal">To transfer this request, search and select another physician</div>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-region-t" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysicianT(this)">
+                                @foreach (var items in Model.regions)
+                                {
+                                    <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                }
+                            </select>
+                            <label for="Select-region-t" class="form-label">Narrow search By Region</label>
+                        </div>
+                        <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
+                            <select class="form-control select editable" id="Select-physician-t" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssignT(this)">
+                                <option class="option-modal" value="-1">Select Physician</option>
+                            </select>
+                        </div>
+                        <span id="warning-assign-t" class="text-danger hidden">Please Select Physician</span>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="transfer-notes" placeholder="name@example.com" required asp-for="Description"></textarea>
+                            <label for="admin_notes" class="form-label">Description</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
+                            <a id="cancel-assign" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
 
     <!-- Send Link Modal -->
     <form asp-action="SendLink" asp-controller="Admin" method="post">
@@ -225,11 +272,35 @@
         </div>
     </form>
 
+    <!-- Clear case Modal -->
+    <form asp-action="ClearCase" asp-controller="Admin" method="post">
+        <div class="modal" id="myModalClear">
+            <div class="modal-dialog modal-dialog-centered clear-modal-dialog-centered">
+                <div class="modal-content clear-modal-content">
+                    <div class="modal-body clear-modal-body">
+                        <input type="hidden" asp-for="RequestId" id="req-clear-id" />
+                        <div class="outer-border">
+                            <img src="../../images/exclamation-circle-fill.svg" alt="" class="exclamation-img">
+                        </div>
+                        <p class="information-heading">Confirmation for Clear Case</p>
+                        <p class="information-data">
+                            Are you sure you want to clear this request? Once clear this request then you are not able to see this request.
+                        </p>
+                        <div>
+                            <button type="submit" class="btn btn-info ok-btn clear-btn">Clear</button>
+                            <a id="cancel-clear" class="btn cancel-btn cancel-clear-btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <!--Location Modal -->
 
     <div class="modal" id="myModal1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content map-modal-content">
                 <div class="gmap_canvas">
                     <iframe id="gmap_canvas" src="" frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
                     </iframe>
@@ -442,7 +513,7 @@
                     id="search"
                     type="text"
                     placeholder="Search Patients"
-                    onkeyup="searchFilter(this)"
+                    onkeyup="filter()"
                   />
                 </span>
                 <span class="search">
@@ -451,7 +522,7 @@
                     src="../../images/search.svg"
                     alt=""
                   />
-                  <select name="" id="region" class="search-inp" onchange="regionFetch(this)">
+                  <select name="" id="region" class="search-inp" onchange="filter()">
                     <option value="-1">All Regions</option>
                     @foreach(var item in Model.regions){
                         <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
@@ -501,21 +572,22 @@
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
-    const searchFilter = (search) => {
+
+    const filter = () => {
         const states = document.getElementsByClassName("req-filter")
-        for(let i=0;i<states.length;++i)
-        {
-            if(states[i].classList.length == 3)
-            {
+        for (let i = 0; i < states.length; ++i) {
+            if (states[i].classList.length == 3) {
+                document.getElementById("partial-container").style.display = "none";
                 document.getElementsByClassName("loader-container")[0].style.display = "flex";
                 $.ajax({
                     url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
                     type: 'POST',
                     dataType: 'html',
-                    data: { search: search.value, region: document.getElementById("region").value, requestor: states[i].classList[1] },
+                    data: { search: document.getElementById("search").value, region: document.getElementById("region").value, requestor: states[i].classList[1] },
                     // Pass your data here
                     success: function (response) {
                         document.getElementsByClassName("loader-container")[0].style.display = "none";
+                        document.getElementById("partial-container").style.display = "block";
                         $("#partial-container").html(response)
                     },
                     error: function () {
@@ -562,6 +634,18 @@
         });
     });
 
+    $(document).ready(function () {
+        $("#cancel-transfer").click(function () {
+            $("#myModalTransfer").modal("hide");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-clear").click(function () {
+            $("#myModalClear").modal("hide");
+        });
+    });
+
     const submit = () => {
         document.getElementById("submit-btn").click();
     }
@@ -575,6 +659,12 @@
     const selectAssign = (text) => {
         if (text.value != -1) {
             document.getElementById("warning-assign").style.display = "none";
+        }
+    }
+
+    const selectAssignT = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assign-t").style.display = "none";
         }
     }
 
@@ -594,36 +684,39 @@
         }
     }
 
-    const regionFetch = (region) => {
-        const states = document.getElementsByClassName("req-filter")
-        for (let i = 0; i < states.length; ++i) {
-            document.getElementsByClassName("loader-container")[0].style.display = "flex";
-            if (states[i].classList.length == 3) {
-                $.ajax({
-                    url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
-                    type: 'POST',
-                    dataType: 'html',
-                    data: { region: region.value, search: document.getElementById("search").value, requestor: states[i].classList[1] },
-                    // Pass your data here
-                    success: function (response) {
-                        document.getElementsByClassName("loader-container")[0].style.display = "none";
-                        $("#partial-container").html(response)
-                    },
-                    error: function () {
-                        alert('An error occurred.');
-                    }
-                });
-            }
+    const checkAssignT = () => {
+        const select = document.getElementById("Select-physician-t")
+        if (select.value == -1) {
+            document.getElementById("warning-assign-t").style.display = "block";
+            return false;
         }
-        
     }
 
     const changePhysician = (element) => {
         $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
             const selectphysician = document.getElementById("Select-physician");
-            for (let i = 1; i < selectphysician.options.length; ++i) {
-                selectphysician.removeChild(selectphysician.options[i]);
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
             }
+        });
+    }
+
+    const changePhysicianT = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physician-t");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
             for (let i = 0; i < response.data.length; ++i) {
                 const newOption = document.createElement("option");
                 newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName

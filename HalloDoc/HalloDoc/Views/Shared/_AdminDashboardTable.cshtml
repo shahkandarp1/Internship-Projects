@@ -206,11 +206,11 @@
                             }
                             @if (Model.status == "Pending")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
+                                    <a class="dropdown-item transfer-case" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
                             }
                             @if (Model.status == "Pending" || Model.status == "ToClose")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
+                                    <a class="dropdown-item clear-case" href="#" data-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
                             }
                             @if (Model.status == "Pending")
                             {
@@ -218,9 +218,9 @@
                             }
                             @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Doctor Note</span></div></a>
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
+                                    <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
+                                <a class="dropdown-item"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Doctor Note</span></div></a>
+                                <a class="dropdown-item"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                             }
                             @if (Model.status == "ToClose")
                             {
@@ -444,11 +444,11 @@
                         }
                         @if (Model.status == "Pending")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Transfer</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 transfer-case" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Transfer</div></a>
                         }
                         @if (Model.status == "Pending" || Model.status == "ToClose")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Clear Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 clear-case" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Clear Case</div></a>
                         }
                         @if (Model.status == "Pending")
                         {
@@ -461,7 +461,7 @@
                         }
                         @if (Model.status == "Conclude" || Model.status == "Active")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Orders</div></a>
+                                <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Orders</div></a>
                         }
                         @if (Model.status == "ToClose")
                         {
@@ -526,6 +526,23 @@
         };
     }
 
+    var transfer = document.getElementsByClassName("transfer-case")
+    for (let i = 0; i < transfer.length; ++i) {
+        transfer[i].onclick = function () {
+            var id = transfer[i].getAttribute("data-id");
+            var regionid = transfer[i].getAttribute("data-region-id");
+            openTransfer(id, regionid);
+        };
+    }
+
+    var clear = document.getElementsByClassName("clear-case")
+    for (let i = 0; i < clear.length; ++i) {
+        clear[i].onclick = function () {
+            var id = clear[i].getAttribute("data-id");
+            openClear(id);
+        };
+    }
+
     const openMap = (address) => {
         console.log(address)
         
@@ -536,6 +553,13 @@
         var address = "https://maps.google.com/maps?q=" + Street + City + State + ZipCode + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
         $("#gmap_canvas").attr("src", address);
         $("#myModal1").modal("show");
+    }
+
+    const openClear = (id) => {
+
+        console.log(id)
+        document.getElementById("req-clear-id").value = id
+        $("#myModalClear").modal("show");
     }
 
 
@@ -572,6 +596,35 @@
         $("#myModalAgreement").modal("show");
     }
 
+
+    const openTransfer = (id, regionid) => {
+        console.log(id)
+        console.log(regionid)
+        const selectElement = document.getElementById("Select-region-t");
+        for (const option of selectElement.options) {
+            if (option.value == regionid) {
+                option.selected = true;
+                break;
+            }
+        }
+        const selectphysician = document.getElementById("Select-physician-t");
+        selectphysician.innerHTML = "";
+        const firstoption = document.createElement("option");
+        firstoption.textContent = "Select Physician"
+        firstoption.value = -1
+        selectphysician.append(firstoption);
+        $.get('/Admin/GetPhysician', { regionid: regionid }, function (response) {
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+        document.getElementById("req-transfer-id").value = id
+        $("#myModalTransfer").modal("show");
+    }
+
     const openAssign = (id,regionid) => {
         console.log(id)
         console.log(regionid)
@@ -583,9 +636,11 @@
             }
         }
         const selectphysician = document.getElementById("Select-physician");
-        for (let i = 1; i < selectphysician.options.length; ++i) {
-            selectphysician.removeChild(selectphysician.options[i]);
-        }
+        selectphysician.innerHTML = "";
+        const firstoption = document.createElement("option");
+        firstoption.textContent = "Select Physician"
+        firstoption.value = -1
+        selectphysician.append(firstoption);
         $.get('/Admin/GetPhysician', { regionid:regionid  }, function (response) {
             for(let i=0;i<response.data.length;++i)
             {
