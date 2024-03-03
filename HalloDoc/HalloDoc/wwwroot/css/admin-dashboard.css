@@ -822,6 +822,27 @@ input[type="date" i] {
     color:white;
 }
 
+.pagination a{
+    padding:7px 15px;
+}
+
+.pagination{
+    justify-content:flex-end;
+}
+
+.pagination-active{
+    color:white;
+    background-color:#0dcaf0;
+}
+
+.pagination-active:hover {
+    color: white;
+}
+
+.accordion
+{
+    margin-bottom:10px;
+}
 
 /* Safari */
 @-webkit-keyframes spin {

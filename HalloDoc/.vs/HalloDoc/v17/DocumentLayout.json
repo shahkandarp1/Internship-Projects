@@ -3,12 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{676841FB-3021-41F4-A18F-77BE62D567BD}|HalloDoc.Repository\\HalloDoc.Repository.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.repository\\repository\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{676841FB-3021-41F4-A18F-77BE62D567BD}|HalloDoc.Repository\\HalloDoc.Repository.csproj|solutionrelative:hallodoc.repository\\repository\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\css\\admin-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\css\\admin-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\shared\\_admindashboardtable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\shared\\_admindashboardtable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\js\\admin-dashboard.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\js\\admin-dashboard.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{676841FB-3021-41F4-A18F-77BE62D567BD}|HalloDoc.Repository\\HalloDoc.Repository.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.repository\\repository\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{676841FB-3021-41F4-A18F-77BE62D567BD}|HalloDoc.Repository\\HalloDoc.Repository.csproj|solutionrelative:hallodoc.repository\\repository\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.models\\viewmodels\\admindashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|solutionrelative:hallodoc.models\\viewmodels\\admindashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{676841FB-3021-41F4-A18F-77BE62D567BD}|HalloDoc.Repository\\HalloDoc.Repository.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.repository\\interface\\iadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\js\\admin-dashboard.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\js\\admin-dashboard.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\js\\admin-login.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -51,10 +67,6 @@
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\admin\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\admin\\reset password.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\admin\\reset password.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -75,10 +87,6 @@
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\css\\view-notes.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\css\\admin-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\css\\admin-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\patient\\businessform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\patient\\businessform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -93,10 +101,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.models\\viewmodels\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|solutionrelative:hallodoc.models\\viewmodels\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\shared\\_admindashboardtable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\shared\\_admindashboardtable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\admin\\createrequest.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -115,20 +119,12 @@
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\patient\\patientform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\views\\patient\\submitforme.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\views\\patient\\submitforme.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc.models\\viewmodels\\admindashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{263F9B35-21D5-4601-A0EB-1D167D949AD3}|HalloDoc.Models\\HalloDoc.Models.csproj|solutionrelative:hallodoc.models\\viewmodels\\admindashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\js\\form.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -189,6 +185,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|c:\\users\\prashant\\desktop\\internship-projects\\hallodoc\\hallodoc\\wwwroot\\css\\patient-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{8E98776A-0A85-432B-AA5D-1D64BA640887}|HalloDoc\\HalloDoc.csproj|solutionrelative:hallodoc\\wwwroot\\css\\patient-dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Reset Password.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HalloDoc\\Views\\Admin\\Reset Password.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -198,30 +198,82 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "_AdminDashboardTable.cshtml",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
+              "RelativeDocumentMoniker": "HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
+              "RelativeToolTip": "HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
+              "ViewState": "AQIAAAIBAAAAAAAAAAAAAAAAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-02-24T05:13:12.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "AdminController.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "HalloDoc\\Controllers\\AdminController.cs",
               "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Controllers\\AdminController.cs",
               "RelativeToolTip": "HalloDoc\\Controllers\\AdminController.cs",
-              "ViewState": "AQIAAEQBAAAAAAAAAAAgwEkBAAAWAAAA",
+              "ViewState": "AQIAAGwAAAAAAAAAAAArwGcAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-25T17:46:32.608Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeToolTip": "HalloDoc\\Views\\Admin\\Dashboard.cshtml",
+              "ViewState": "AQIAAAMCAAAAAAAAAAAnwPIBAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-02-23T15:15:36.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "admin-dashboard.js",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-dashboard.js",
+              "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\admin-dashboard.js",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-dashboard.js",
+              "RelativeToolTip": "HalloDoc\\wwwroot\\js\\admin-dashboard.js",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAQwEMAAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-02-23T15:22:25.013Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "admin-dashboard.css",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
+              "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\admin-dashboard.css",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
+              "RelativeToolTip": "HalloDoc\\wwwroot\\css\\admin-dashboard.css",
+              "ViewState": "AQIAAEQDAAAAAAAAAAAQwEsDAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-02-23T15:07:24.342Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Admin.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Repository\\Admin.cs",
               "RelativeDocumentMoniker": "HalloDoc.Repository\\Repository\\Admin.cs",
               "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Repository\\Admin.cs",
               "RelativeToolTip": "HalloDoc.Repository\\Repository\\Admin.cs",
-              "ViewState": "AQIAACIEAAAAAAAAAAAAABsEAAA6AAAA",
+              "ViewState": "AQIAAHgAAAAAAAAAAAAYwIIAAABFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-25T17:47:16.417Z",
               "EditorCaption": ""
@@ -229,45 +281,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "admin-dashboard.js",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-dashboard.js",
-              "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\admin-dashboard.js",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-dashboard.js",
-              "RelativeToolTip": "HalloDoc\\wwwroot\\js\\admin-dashboard.js",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAACkAAABPAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-23T15:22:25.013Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IAdmin.cs",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Interface\\IAdmin.cs",
-              "RelativeDocumentMoniker": "HalloDoc.Repository\\Interface\\IAdmin.cs",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Interface\\IAdmin.cs",
-              "RelativeToolTip": "HalloDoc.Repository\\Interface\\IAdmin.cs",
-              "ViewState": "AQIAADEAAAAAAAAAAAAAwDYAAAAZAAAA",
+              "Title": "AdminDashboardViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
+              "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
+              "RelativeToolTip": "HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAAABsAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-25T17:45:06.535Z",
+              "WhenOpened": "2024-02-26T15:54:58.686Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ResetPassword.cshtml",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
-              "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
-              "RelativeToolTip": "HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
-              "ViewState": "AQIAABUAAAAAAAAAAAAAABsAAAA3AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-28T16:14:29.12Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "ResetPasswordViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\ResetPasswordViewModel.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\ResetPasswordViewModel.cs",
@@ -275,12 +301,36 @@
               "RelativeToolTip": "HalloDoc.Models\\ViewModels\\ResetPasswordViewModel.cs",
               "ViewState": "AQIAAAkAAAAAAAAAAAAuwAkAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-18T13:10:48.836Z",
+              "WhenOpened": "2024-02-18T13:10:48.836Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ResetPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
+              "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
+              "RelativeToolTip": "HalloDoc\\Views\\Admin\\ResetPassword.cshtml",
+              "ViewState": "AQIAABUAAAAAAAAAAAAAABsAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-02-28T16:14:29.12Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IAdmin.cs",
+              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Interface\\IAdmin.cs",
+              "RelativeDocumentMoniker": "HalloDoc.Repository\\Interface\\IAdmin.cs",
+              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Repository\\Interface\\IAdmin.cs",
+              "RelativeToolTip": "HalloDoc.Repository\\Interface\\IAdmin.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAA+wA0AAACMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T17:45:06.535Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "PatientController.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Controllers\\PatientController.cs",
               "RelativeDocumentMoniker": "HalloDoc\\Controllers\\PatientController.cs",
@@ -288,12 +338,11 @@
               "RelativeToolTip": "HalloDoc\\Controllers\\PatientController.cs",
               "ViewState": "AQIAAHMAAAAAAAAAAAAmwH0AAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-14T17:41:55.292Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-14T17:41:55.292Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "admin-login.js",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\admin-login.js",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\admin-login.js",
@@ -301,12 +350,11 @@
               "RelativeToolTip": "HalloDoc\\wwwroot\\js\\admin-login.js",
               "ViewState": "AQIAAEgAAAAAAAAAAAAAACAAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-28T16:37:50.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-28T16:37:50.567Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "ForgotPassword.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ForgotPassword.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\ForgotPassword.cshtml",
@@ -314,12 +362,11 @@
               "RelativeToolTip": "HalloDoc\\Views\\Admin\\ForgotPassword.cshtml",
               "ViewState": "AQIAABoAAAAAAAAAAAAmwCoAAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-28T16:14:38.056Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-28T16:14:38.056Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "patient-login.js",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\patient-login.js",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\patient-login.js",
@@ -327,25 +374,23 @@
               "RelativeToolTip": "HalloDoc\\wwwroot\\js\\patient-login.js",
               "ViewState": "AQIAABIAAAAAAAAAAAAAAAIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-28T16:37:35.932Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-28T16:37:35.932Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ResetPassword.cshtml",
+              "DocumentIndex": 46,
+              "Title": "Reset Password.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Reset Password.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\Reset Password.cshtml",
               "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Reset Password.cshtml",
               "RelativeToolTip": "HalloDoc\\Views\\Admin\\Reset Password.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-28T16:33:06.145Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-28T16:33:06.145Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "ResetPassword.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\ResetPassword.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\ResetPassword.cshtml",
@@ -353,12 +398,11 @@
               "RelativeToolTip": "HalloDoc\\Views\\Patient\\ResetPassword.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-18T13:09:07.24Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-18T13:09:07.24Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "Login.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Login.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\Login.cshtml",
@@ -366,12 +410,11 @@
               "RelativeToolTip": "HalloDoc\\Views\\Admin\\Login.cshtml",
               "ViewState": "AQIAAC0AAAAAAAAAAAAAADUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-24T05:12:13.451Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-24T05:12:13.451Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "ViewNotesViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\ViewNotesViewModel.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\ViewNotesViewModel.cs",
@@ -383,7 +426,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Program.cs",
               "RelativeDocumentMoniker": "HalloDoc\\Program.cs",
@@ -395,7 +438,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "ViewNotes.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ViewNotes.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\ViewNotes.cshtml",
@@ -407,7 +450,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "ViewCase.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\ViewCase.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\ViewCase.cshtml",
@@ -419,7 +462,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "view-notes.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-notes.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\view-notes.css",
@@ -431,19 +474,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "admin-dashboard.css",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
-              "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\admin-dashboard.css",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
-              "RelativeToolTip": "HalloDoc\\wwwroot\\css\\admin-dashboard.css",
-              "ViewState": "AQIAAGcBAAAAAAAAAAAAABECAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-23T15:07:24.342Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "BusinessForm.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\BusinessForm.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\BusinessForm.cshtml",
@@ -455,7 +486,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 22,
               "Title": "form.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\form.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\form.css",
@@ -467,7 +498,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "view-case.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-case.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\view-case.css",
@@ -479,7 +510,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "Enums.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\Enums.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\Enums.cs",
@@ -491,19 +522,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "_AdminDashboardTable.cshtml",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
-              "RelativeDocumentMoniker": "HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
-              "RelativeToolTip": "HalloDoc\\Views\\Shared\\_AdminDashboardTable.cshtml",
-              "ViewState": "AQIAALoAAAAAAAAAAAAWwMUAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-24T05:13:12.414Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "CreateRequest.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\CreateRequest.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\CreateRequest.cshtml",
@@ -515,7 +534,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "PatientRequestViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\PatientRequestViewModel.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\PatientRequestViewModel.cs",
@@ -527,7 +546,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "Toast.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Shared\\Toast.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Shared\\Toast.cshtml",
@@ -540,18 +559,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 28,
-              "Title": "Dashboard.cshtml",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Dashboard.cshtml",
-              "RelativeDocumentMoniker": "HalloDoc\\Views\\Admin\\Dashboard.cshtml",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Admin\\Dashboard.cshtml",
-              "RelativeToolTip": "HalloDoc\\Views\\Admin\\Dashboard.cshtml",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAABMAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-23T15:15:36.806Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
               "Title": "PatientForm.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\PatientForm.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\PatientForm.cshtml",
@@ -588,18 +595,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 31,
-              "Title": "AdminDashboardViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
-              "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
-              "ToolTip": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
-              "RelativeToolTip": "HalloDoc.Models\\ViewModels\\AdminDashboardViewModel.cs",
-              "ViewState": "AQIAABoAAAAAAAAAAAAqwCAAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-26T15:54:58.686Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
               "Title": "form.js",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\form.js",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\form.js",
@@ -611,7 +606,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 32,
               "Title": "admin-login.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-login.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\admin-login.css",
@@ -623,7 +618,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 34,
               "Title": "ConciergeForm.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\ConciergeForm.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\ConciergeForm.cshtml",
@@ -635,7 +630,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 33,
               "Title": "ForgotPassword.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\ForgotPassword.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\ForgotPassword.cshtml",
@@ -647,7 +642,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 35,
               "Title": "RegisterViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\RegisterViewModel.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\RegisterViewModel.cs",
@@ -659,7 +654,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 36,
               "Title": "Register.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\Register.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\Register.cshtml",
@@ -671,7 +666,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 37,
               "Title": "AgreementController.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Controllers\\AgreementController.cs",
               "RelativeDocumentMoniker": "HalloDoc\\Controllers\\AgreementController.cs",
@@ -679,12 +674,11 @@
               "RelativeToolTip": "HalloDoc\\Controllers\\AgreementController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-18T13:34:05.886Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-18T13:34:05.886Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 38,
               "Title": "PatientLogin.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\PatientLogin.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\PatientLogin.cshtml",
@@ -696,7 +690,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 39,
               "Title": "PatientSite.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\PatientSite.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\PatientSite.cshtml",
@@ -708,7 +702,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 40,
               "Title": "RequestViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\ViewModels\\RequestViewModel.cs",
               "RelativeDocumentMoniker": "HalloDoc.Models\\ViewModels\\RequestViewModel.cs",
@@ -720,7 +714,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 41,
               "Title": "patient-profile.js",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\patient-profile.js",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\patient-profile.js",
@@ -732,7 +726,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 43,
               "Title": "patient-dashboard.js",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\patient-dashboard.js",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\js\\patient-dashboard.js",
@@ -744,7 +738,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 42,
               "Title": "PatientProfile.cshtml",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\Views\\Patient\\PatientProfile.cshtml",
               "RelativeDocumentMoniker": "HalloDoc\\Views\\Patient\\PatientProfile.cshtml",
@@ -756,7 +750,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 44,
               "Title": "patient-profile.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-profile.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\patient-profile.css",
@@ -768,7 +762,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 45,
               "Title": "patient-dashboard.css",
               "DocumentMoniker": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-dashboard.css",
               "RelativeDocumentMoniker": "HalloDoc\\wwwroot\\css\\patient-dashboard.css",

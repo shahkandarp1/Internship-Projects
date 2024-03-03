@@ -11,7 +11,7 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IAdmin
     {
-        public AdminDashboardViewModel adminDashboardContent(string? status, string? search, string? requestor, int? region);
+        public AdminDashboardViewModel adminDashboardContent(string? status, string? search, string? requestor, int? region,int page = 1,int pageSize = 10);
 
         public MemoryStream exportAll();
 

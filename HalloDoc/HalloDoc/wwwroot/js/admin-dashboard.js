@@ -65,6 +65,6 @@ const changeRequestor = (element) => {
         }
     }
 
-    filter()
+    filter(1,10)
 
 }

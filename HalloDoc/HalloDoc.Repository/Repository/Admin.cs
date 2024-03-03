@@ -36,7 +36,7 @@ namespace HalloDoc.Repository.Repository
             _context = context;
         }
 
-        AdminDashboardViewModel IAdmin.adminDashboardContent(string status, string? search, string? requestor, int? region)
+        AdminDashboardViewModel IAdmin.adminDashboardContent(string status, string? search, string? requestor, int? region,int page=1,int pageSize = 10)
         {
             Expression<Func<Request, bool>> exp;
             if(status == "New")
@@ -120,11 +120,15 @@ namespace HalloDoc.Repository.Repository
                 active_count = count_active,
                 conclude_count = count_conclude,
                 toclose_count = count_toclose,
-                requests = _query.ToList(),
+                requests = _query.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
                 regions = _db.Regions.ToList(),
                 status = status,
                 caseTags = casetag,
                 adminNavbarViewModel = adminNavbarViewModel,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = _query.Count(),
+                TotalPages = (int)Math.Ceiling((double)_query.Count() / pageSize)
             };
             return adminDashboardViewModel;
         }
