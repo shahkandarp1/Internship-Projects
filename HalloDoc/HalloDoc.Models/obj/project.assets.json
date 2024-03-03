@@ -922,19 +922,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pci41\\.nuget\\packages\\": {}
+    "C:\\Users\\Prashant\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj",
+      "projectUniqueName": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj",
       "projectName": "HalloDoc.Models",
-      "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj",
-      "packagesPath": "C:\\Users\\pci41\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\obj\\",
+      "projectPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\HalloDoc.Models.csproj",
+      "packagesPath": "C:\\Users\\Prashant\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Prashant\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc.Models\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pci41\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Prashant\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -954,6 +954,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -984,12 +989,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.16, 7.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
