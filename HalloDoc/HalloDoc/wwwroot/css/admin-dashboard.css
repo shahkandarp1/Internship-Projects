@@ -801,6 +801,10 @@ input[type="date" i] {
     color:white;
 }
 
+.clear-btn:active {
+    color: white!important;
+}
+
 .cancel-clear-btn{
     font-size:inherit;
 }
@@ -828,6 +832,7 @@ input[type="date" i] {
 
 .pagination{
     justify-content:flex-end;
+    margin-right:10px;
 }
 
 .pagination-active{

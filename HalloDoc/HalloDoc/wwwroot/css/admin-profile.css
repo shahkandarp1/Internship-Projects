@@ -1,0 +1,33 @@
+﻿.form-check{
+    display:inline-block;
+    margin-right:10px;
+}
+
+.form-check-input:checked {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0!important;
+    box-shadow:none;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+.form-floating > .select:not(:placeholder-shown) {
+    padding-top: 1.25rem;
+}
+
+.cancel-btn:hover {
+    color: #0dcaf0;
+}
+
+@media screen and (max-width:426px)
+{
+    .form-floating > .select:not(:placeholder-shown) {
+        padding-top: 0.9rem;
+    }
+
+    .reset-btn{
+        width:120px;
+    }
+}

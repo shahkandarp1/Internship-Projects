@@ -7,8 +7,6 @@
     <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
     <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
     <link href="~/css/map.css" rel="stylesheet" type="text/css" />
-    <script src="~/js/admin-dashboard.js"></script>
-    <script src="~/js/admin-navbar.js"></script>
 
 }
 <div id="body">
@@ -253,11 +251,11 @@
 
                         <div class="disclaimer-agreement-font">To send agreement please make sure you are updating the correct contact information below for the responsible party</div>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="tel" class="form-control phone" id="agreement-phone" asp-for="Mail_PhoneNumber" required>
+                            <input type="tel" class="form-control phone" id="agreement-phone" asp-for="Mail_PhoneNumber" required readonly>
                         </div>
                         <span class="text-danger" asp-validation-for="Mail_PhoneNumber"></span>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="email" class="form-control" id="agreement-email" placeholder="name@example.com" asp-for="Mail_Email" required>
+                            <input type="email" class="form-control" id="agreement-email" placeholder="name@example.com" asp-for="Mail_Email" required readonly>
                             <label for="agreement-email" class="form-label">Your email</label>
                         </div>
                         <span class="text-danger" asp-validation-for="Mail_Email"></span>
@@ -571,6 +569,8 @@
     </div>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+<script src="~/js/admin-navbar.js"></script>
 <script>
 
     const filter = (page,pageSize) => {

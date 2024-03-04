@@ -497,5 +497,28 @@ namespace HalloDoc.Controllers
             }
             return View(ordersViewModel);
         }
+
+        public IActionResult Profile()
+        {
+            AdminProfileViewModel adminProfileViewModel = _admin.getAdmin();
+            return View(adminProfileViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Profile(AdminProfileViewModel adminProfileViewModel)
+        {
+            
+            bool isUpdated = _admin.updateProfile(adminProfileViewModel);
+            if (isUpdated)
+            {
+                TempData["success"] = "Information Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Information could not be Updated!!";
+            }
+            return RedirectToAction("Profile");
+        }
     }
 }

@@ -78,5 +78,9 @@ namespace HalloDoc.Repository.Interface
         public HealthProfessional getBusinessData(int businessid);
 
         public bool placeOrder(OrdersViewModel ordersViewModel);
+
+        public AdminProfileViewModel getAdmin();
+
+        public bool updateProfile(AdminProfileViewModel adminProfileViewModel);
     }
 }

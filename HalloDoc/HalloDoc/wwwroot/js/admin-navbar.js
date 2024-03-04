@@ -19,3 +19,27 @@ function sidebar_close() {
         document.getElementsByClassName('accordion-button')[i].style.zIndex = "1";
     }
 }
+
+const navbar = (element) => {
+    const navbar = document.getElementsByClassName("navbar-btn")
+    for (let i = 0; i < navbar.length; ++i) {
+        navbar[i].classList.remove("sidebar-active")
+    }
+
+    element.classList.add("sidebar-active")
+}
+
+var acc = document.getElementsByClassName("accordion-mob-btn");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function () {
+        this.classList.toggle("accord-active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+}

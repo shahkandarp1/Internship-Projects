@@ -25,12 +25,12 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../../css/admin-provider/admin-navbar.css" />
     <script src="../../js/admin-provider/admin-navbar.js"></script>
     <link
-      rel="stylesheet"
-      href="../../css/admin-provider/admin-dashboard.css"
+    rel="stylesheet"
+    href="../../css/admin-provider/admin-dashboard.css"
     />
+    <link rel="stylesheet" href="../../css/admin-provider/admin-navbar.css" />
     <script src="../../js/admin-provider/admin-dashboard.js"></script>
     <link
       rel="stylesheet"
@@ -94,31 +94,39 @@
     <!-- Sidebar -->
 
     <div id="mySidebar" class="sidebar">
-      <div class="tab sidebar-tab">
-        <span class="mob-welcome-text"
-          >Welcome <span class="mob-name-text">Kandarp Shah</span></span
-        >
-        <button class="tablinks sidebar-tablinks mobile-sidebar-active">
-          <a class="mobile-sidebar-a"> Dashboard </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> Provider Location </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> My Profile </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> Providers </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> Partners </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> Access </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-          <a class="mobile-sidebar-a"> Records </a>
-        </button>
+      <div class="sidebar-tab">
+          <span class="mob-welcome-text">Welcome <span class="mob-name-text">Kandarp Shah</span></span>
+          <button class="sidebar-tablinks mobile-sidebar-active">
+              <a class="mobile-sidebar-a"> Dashboard </a>
+          </button>
+          <button class="sidebar-tablinks">
+              <a class="mobile-sidebar-a"> Provider Location </a>
+          </button>
+          <button class="sidebar-tablinks">
+              <a class="mobile-sidebar-a"> My Profile </a>
+          </button>
+          <button class="sidebar-tablinks accordion-mob-btn">Providers</button>
+          <div class="panel">
+            <a class="mobile-sidebar-a accord-inner"> Provider </a>
+            <a class="mobile-sidebar-a accord-inner"> Scheduling </a>
+            <a class="mobile-sidebar-a accord-inner"> Invoicing </a>
+          </div>
+          <button class="sidebar-tablinks">
+              <a class="mobile-sidebar-a"> Partners </a>
+          </button>
+          <button class="sidebar-tablinks accordion-mob-btn">Access</button>
+          <div class="panel">
+            <a class="mobile-sidebar-a accord-inner">Account Access</a>
+            <a class="mobile-sidebar-a accord-inner">User Access</a>
+          </div>
+          <button class="sidebar-tablinks accordion-mob-btn">Records</button>
+          <div class="panel">
+            <a class="mobile-sidebar-a accord-inner">Search Records</a>
+            <a class="mobile-sidebar-a accord-inner">Email Logs</a>
+            <a class="mobile-sidebar-a accord-inner">SMS Logs</a>
+            <a class="mobile-sidebar-a accord-inner">Patient History</a>
+            <a class="mobile-sidebar-a accord-inner">Block History</a>
+          </div>
       </div>
     </div>
 
@@ -132,28 +140,50 @@
     <!-- Navbar - Below -->
 
     <div class="bottom-navbar" id="">
-      <div class="tab">
-        <button class="tablinks sidebar-active">
+      <div>
+        <button class="navbar-btn sidebar-active" onclick="navbar(this)">
           <a> Dashboard </a>
         </button>
-        <button class="tablinks">
+        <button class="navbar-btn" onclick="navbar(this)">
           <a> Provider Location </a>
         </button>
-        <button class="tablinks">
+        <button class="navbar-btn" onclick="navbar(this)">
           <a> My Profile </a>
         </button>
-        <button class="tablinks">
-          <a> Providers </a>
-        </button>
-        <button class="tablinks">
+        <div class="dropdown navbar-dropdown">
+          <button class="navbar-btn dropdown-toggle" type="button" id="provider" data-bs-toggle="dropdown" aria-expanded="false"  onclick="navbar(this)">
+            Providers
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="provider">
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Provider</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Scheduling</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Invoicing</a></li>
+          </ul>
+        </div>
+        <button class="navbar-btn"  onclick="navbar(this)"> 
           <a> Partners </a>
         </button>
-        <button class="tablinks">
-          <a> Access </a>
-        </button>
-        <button class="tablinks">
-          <a> Records </a>
-        </button>
+        <div class="dropdown navbar-dropdown">
+          <button class="navbar-btn dropdown-toggle" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false"  onclick="navbar(this)">
+            Access
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="access">
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Account Access</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">User Access</a></li>
+          </ul>
+        </div>
+        <div class="dropdown navbar-dropdown">
+          <button class="navbar-btn dropdown-toggle" type="button" id="records" data-bs-toggle="dropdown" aria-expanded="false"  onclick="navbar(this)">
+            Records
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="records">
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Search Records</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Email Logs</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">SMS Logs</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Patient History</a></li>
+            <li><a class="navbar-dropdown-item dropdown-item" href="#">Block History</a></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -640,6 +670,21 @@
       $(document).ready(function () {
         $("#dtBasicExample").DataTable();
       });
+
+      var acc = document.getElementsByClassName("accordion-mob-btn");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+          this.classList.toggle("accord-active");
+          var panel = this.nextElementSibling;
+          if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+        });
+      }
     </script>
   </body>
 </html>

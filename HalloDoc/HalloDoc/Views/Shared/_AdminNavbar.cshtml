@@ -38,30 +38,59 @@
 
 <!-- Sidebar -->
 
+@{
+    string dashboardM,dashboard,providerlocationM,providerlocation,profileM,profile,providerM,provider,partner,partnerM,access,accessM,record,recordM;
+    dashboardM = Model.curr_active == "Dashboard" ? "mobile-sidebar-active" : "";
+    providerlocationM = Model.curr_active == "ProviderLocation" ? "mobile-sidebar-active" : "";
+    profileM = Model.curr_active == "Profile" ? "mobile-sidebar-active" : "";
+    providerM = Model.curr_active == "Provider" ? "mobile-sidebar-active" : "";
+    partnerM = Model.curr_active == "Partner" ? "mobile-sidebar-active" : "";
+    accessM = Model.curr_active == "Access" ? "mobile-sidebar-active" : "";
+    recordM = Model.curr_active == "Record" ? "mobile-sidebar-active" : "";
+
+    dashboard = Model.curr_active == "Dashboard" ? "sidebar-active" : "";
+    providerlocation = Model.curr_active == "ProviderLocation" ? "sidebar-active" : "";
+    profile = Model.curr_active == "Profile" ? "sidebar-active" : "";
+    provider = Model.curr_active == "Provider" ? "sidebar-active" : "";
+    partner = Model.curr_active == "Partner" ? "sidebar-active" : "";
+    access = Model.curr_active == "Access" ? "sidebar-active" : "";
+    record = Model.curr_active == "Record" ? "sidebar-active" : "";
+}
+
 <div id="mySidebar" class="sidebar">
-    <div class="tab sidebar-tab">
+    <div class="sidebar-tab">
         <span class="mob-welcome-text">Welcome <span class="mob-name-text">Kandarp Shah</span></span>
-        <button class="tablinks sidebar-tablinks mobile-sidebar-active">
-            <a class="mobile-sidebar-a"> Dashboard </a>
+        <button class="sidebar-tablinks @dashboardM">
+            <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
-        <button class="tablinks sidebar-tablinks">
+        <button class="sidebar-tablinks @providerlocationM">
             <a class="mobile-sidebar-a"> Provider Location </a>
         </button>
-        <button class="tablinks sidebar-tablinks">
-            <a class="mobile-sidebar-a"> My Profile </a>
+        <button class="sidebar-tablinks @profileM">
+            <a class="mobile-sidebar-a" asp-action="Profile" asp-controller="Admin"> My Profile </a>
         </button>
-        <button class="tablinks sidebar-tablinks">
-            <a class="mobile-sidebar-a"> Providers </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
+        <button class="sidebar-tablinks accordion-mob-btn @providerM">Providers</button>
+        <div class="panel">
+            <a class="mobile-sidebar-a accord-inner"> Provider </a>
+            <a class="mobile-sidebar-a accord-inner"> Scheduling </a>
+            <a class="mobile-sidebar-a accord-inner"> Invoicing </a>
+        </div>
+        <button class="sidebar-tablinks @partnerM">
             <a class="mobile-sidebar-a"> Partners </a>
         </button>
-        <button class="tablinks sidebar-tablinks">
-            <a class="mobile-sidebar-a"> Access </a>
-        </button>
-        <button class="tablinks sidebar-tablinks">
-            <a class="mobile-sidebar-a"> Records </a>
-        </button>
+        <button class="sidebar-tablinks accordion-mob-btn @accessM">Access</button>
+        <div class="panel">
+            <a class="mobile-sidebar-a accord-inner">Account Access</a>
+            <a class="mobile-sidebar-a accord-inner">User Access</a>
+        </div>
+        <button class="sidebar-tablinks accordion-mob-btn @recordM">Records</button>
+        <div class="panel">
+            <a class="mobile-sidebar-a accord-inner">Search Records</a>
+            <a class="mobile-sidebar-a accord-inner">Email Logs</a>
+            <a class="mobile-sidebar-a accord-inner">SMS Logs</a>
+            <a class="mobile-sidebar-a accord-inner">Patient History</a>
+            <a class="mobile-sidebar-a accord-inner">Block History</a>
+        </div>
     </div>
 </div>
 
@@ -75,27 +104,49 @@
 <!-- Navbar - Below -->
 
 <div class="bottom-navbar" id="">
-    <div class="tab">
-        <button class="tablinks sidebar-active">
-            <a> Dashboard </a>
+    <div>
+        <button class="navbar-btn @dashboard" onclick="navbar(this)">
+            <a asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
-        <button class="tablinks">
+        <button class="navbar-btn @providerlocation" onclick="navbar(this)">
             <a> Provider Location </a>
         </button>
-        <button class="tablinks">
-            <a> My Profile </a>
+        <button class="navbar-btn @profile" onclick="navbar(this)">
+            <a asp-action="Profile" asp-controller="Admin"> My Profile </a>
         </button>
-        <button class="tablinks">
-            <a> Providers </a>
-        </button>
-        <button class="tablinks">
+        <div class="dropdown navbar-dropdown">
+            <button class="navbar-btn dropdown-toggle @provider" type="button" id="provider" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+                Providers
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="provider">
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Provider</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Scheduling</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Invoicing</a></li>
+            </ul>
+        </div>
+        <button class="navbar-btn @partner" onclick="navbar(this)">
             <a> Partners </a>
         </button>
-        <button class="tablinks">
-            <a> Access </a>
-        </button>
-        <button class="tablinks">
-            <a> Records </a>
-        </button>
+        <div class="dropdown navbar-dropdown">
+            <button class="navbar-btn dropdown-toggle @access" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+                Access
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="access">
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Account Access</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">User Access</a></li>
+            </ul>
+        </div>
+        <div class="dropdown navbar-dropdown">
+            <button class="navbar-btn dropdown-toggle @record" type="button" id="records" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+                Records
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="records">
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Search Records</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Email Logs</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">SMS Logs</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Patient History</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" href="#">Block History</a></li>
+            </ul>
+        </div>
     </div>
 </div>

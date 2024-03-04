@@ -1,0 +1,188 @@
+﻿@model AdminProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-profile.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/patient-profile.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">My Profile</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form" asp-action="Profile" asp-controller="Admin" method="post">
+
+                <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+
+                <!-- Account Information  -->
+                <div class="upper-text">
+                    Account Information
+                </div>
+                <div class="row">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="user-name" placeholder="name@example.com" asp-for="UserName" disabled>
+                        <label for="user-name" class="form-label">User Name</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control " id="password" placeholder="name@example.com" asp-for="Password">
+                        <label for="password" class="form-label">Password</label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select " id="Select-status" placeholder="name@example.com" asp-for="status" disabled>
+                            <option value="1">Active</option>
+                            <option value="2">Pending</option>
+                            <option value="3">Completed</option>
+                        </select>
+                        <label for="Select-status" class="form-label">Status</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select editable" id="Select-status" placeholder="name@example.com" asp-for="role_id" disabled>
+                            @for(var i=0;i<Model.aspNetRoles.Count;++i)
+                            {
+                                <option value="@Model.aspNetRoles[i].Id">@Model.aspNetRoles[i].Name</option>
+                            }
+                        </select>
+                        <label for="Select-status" class="form-label">Role</label>
+                    </div>
+                </div>
+                <div class="lower-btn">
+                    <a class="back-btn reset-btn mt-3"><span class="back-text">Reset Password</span></a>
+                </div>
+
+                <!-- Administrator Information -->
+
+                <div class="upper-text margin-top mt-3">
+                    Administrator Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="first-name" placeholder="name@example.com" asp-for="FirstName" disabled>
+                        <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="last-name" placeholder="name@example.com" asp-for="LastName" disabled>
+                        <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable top-editable" id="email" placeholder="name@example.com" asp-for="Email" disabled>
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable top-editable" id="confirm-email" placeholder="name@example.com" asp-for="ConfirmEmail" disabled>
+                        <label for="confirm-email" class="form-label">Confirm Email</label>
+                        <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable top-editable" id="phone" asp-for="PhoneNumber" disabled>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        @for(var i=0;i<Model.checkboxViewModels.Count;++i)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <label class="form-check-label" for="flexCheckDefault@(i)">
+                                    @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <div class="lower-btn" id="top-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="top_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+
+                @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                }
+
+                <!-- Mailing & Billing Information -->
+                <div class="upper-text margin-top mt-3">
+                    Mailing & Billing Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address1" placeholder="name@example.com" asp-for="Address1" disabled>
+                        <label for="address1" class="form-label">Address 1</label>
+                        <span asp-validation-for="Address1" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address2" placeholder="name@example.com" asp-for="Address2" disabled>
+                        <label for="address2" class="form-label">Address 2</label>
+                        <span asp-validation-for="Address2" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="city" placeholder="name@example.com" asp-for="City" disabled>
+                        <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select editable bottom-editable" id="Select-state" placeholder="name@example.com" asp-for="RegionId" disabled>
+                            @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                            {
+                                <option value="@Model.checkboxViewModels[i].Id">@(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())</option>
+                            }
+                        </select>
+                        <label for="Select-state" class="form-label">State</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="zipcode" placeholder="name@example.com" asp-for="ZipCode" disabled>
+                        <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable bottom-editable" id="phone" asp-for="Alt_PhoneNumber" disabled>
+                        <span asp-validation-for="Alt_PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn" id="bottom-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="bottom_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-profile.js"></script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

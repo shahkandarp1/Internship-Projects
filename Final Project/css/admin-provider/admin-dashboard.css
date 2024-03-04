@@ -434,6 +434,8 @@ table.dataTable thead>tr>th.sorting:before , table.dataTable thead>tr>th.sorting
     width: 100%;
     min-width: 55px;
   }
+
+
 @media screen and (max-width:1155px) {
     .row-card-img{
         width: 15px;

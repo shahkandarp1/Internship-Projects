@@ -76,7 +76,7 @@ namespace HalloDoc.Repository.Repository
 
             if (search != null)
             {
-                _query = _query.Where(r => r.RequestClient.FirstName.Contains(search) || r.RequestClient.LastName.Contains(search));
+                _query = _query.Where(r => r.RequestClient.FirstName.ToLower().Contains(search.ToLower()) || r.RequestClient.LastName.ToLower().Contains(search.ToLower()));
             }
 
             if (requestor == "Family")
@@ -1409,5 +1409,106 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
+
+        AdminProfileViewModel IAdmin.getAdmin()
+        {
+            int adminId = (int)_context.HttpContext.Session.GetInt32("AdminId");
+            HalloDoc.Admin admin = _db.Admins.Include(a => a.AspNetUser).FirstOrDefault(a => a.AdminId == adminId);
+            List<Region> regions = _db.Regions.ToList();
+            IQueryable<AdminRegion> adminRegions = _db.AdminRegions.Where(a=>a.AdminId == adminId);
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+            List<AspNetRole> aspNetRoles = _db.AspNetRoles.ToList();
+            for(var i=0;i<regions.Count;i++)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel()
+                {
+                    Id = regions[i].RegionId,
+                    Name = regions[i].Name,
+                    isChecked = adminRegions.FirstOrDefault(a => a.RegionId == regions[i].RegionId) == null ? false : true
+                });
+            }
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = string.Concat(admin.FirstName, " ", admin.LastName),
+                curr_active = "Profile"
+            };
+
+            AdminProfileViewModel adminProfile = new AdminProfileViewModel()
+            { 
+                UserName = admin.AspNetUser.UserName,
+                status = 1,
+                role_id = admin.RoleId,
+                FirstName = admin.FirstName,
+                LastName = admin.LastName,
+                Email = admin.Email,
+                ConfirmEmail = admin.Email,
+                adminNavbarViewModel = adminNavbarViewModel,
+                PhoneNumber = admin.Mobile,
+                Alt_PhoneNumber = admin.AltPhone,
+                checkboxViewModels = checkboxViewModels,
+                Address1 = admin.Address1,
+                Address2 = admin.Address2,
+                City = admin.City,
+                RegionId = admin.RegionId,
+                ZipCode = admin.Zip,
+                aspNetRoles = aspNetRoles
+            };
+
+            return adminProfile;
+
+        }
+
+        bool IAdmin.updateProfile(AdminProfileViewModel adminProfileViewModel)
+        {
+            try
+            {
+                int adminId = (int)_context.HttpContext.Session.GetInt32("AdminId");
+                int aspId = (int)_context.HttpContext.Session.GetInt32("AspNetUserId");
+                HalloDoc.Admin admin = _db.Admins.Include(a => a.AspNetUser).FirstOrDefault(a => a.AdminId == adminId);
+                IQueryable<AdminRegion> adminRegions = _db.AdminRegions.Where(a => a.AdminId == adminId);
+                admin.FirstName = adminProfileViewModel.FirstName ?? admin.FirstName;
+                admin.LastName = adminProfileViewModel.LastName ?? admin.LastName;
+                admin.Email = adminProfileViewModel.Email ?? admin.Email;
+                admin.Mobile = adminProfileViewModel.PhoneNumber ?? admin.Mobile;
+                admin.Address1 = adminProfileViewModel.Address1 ?? admin.Address1;
+                admin.Address2 = adminProfileViewModel.Address2 ?? admin.Address2;
+                admin.City = adminProfileViewModel.City ?? admin.City;
+                admin.RegionId = adminProfileViewModel.RegionId ?? admin.RegionId;
+                admin.Zip = adminProfileViewModel.ZipCode ?? admin.Zip;
+                admin.AltPhone = adminProfileViewModel.Alt_PhoneNumber ?? admin.AltPhone;
+                admin.ModifiedDate = DateTime.Now;
+                admin.ModifiedBy = aspId;
+
+                _db.Admins.Update(admin);
+
+                for(var i=0;i<adminProfileViewModel.checkboxViewModels.Count;++i)
+                {
+                    if (adminProfileViewModel.checkboxViewModels[i].isChecked == true && adminRegions.FirstOrDefault(a => a.RegionId == adminProfileViewModel.checkboxViewModels[i].Id) == null)
+                    {
+                        AdminRegion adminRegion = new AdminRegion()
+                        {
+                            AdminId = adminId,
+                            RegionId = (int)adminProfileViewModel.checkboxViewModels[i].Id
+                        };
+                        _db.AdminRegions.Add(adminRegion);
+                    }
+                    else if(adminProfileViewModel.checkboxViewModels[i].isChecked == false && adminRegions.FirstOrDefault(a => a.RegionId == adminProfileViewModel.checkboxViewModels[i].Id) != null)
+                    {
+                        AdminRegion adminRegion = adminRegions.FirstOrDefault(a => a.RegionId == adminProfileViewModel.checkboxViewModels[i].Id);
+                        _db.AdminRegions.Remove(adminRegion);
+                    }
+                }
+
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
     }
 }
