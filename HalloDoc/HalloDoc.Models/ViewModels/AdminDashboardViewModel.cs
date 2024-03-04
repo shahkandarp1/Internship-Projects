@@ -21,6 +21,12 @@ namespace HalloDoc.ViewModels
         public List<Region> regions { get; set; } = new List<Region>();
         public string status { get; set; }
 
+        //pagination
+        public int? CurrentPage { get; set; }
+        public int? PageSize { get; set; }
+        public int? TotalItems { get; set; }
+        public int? TotalPages { get; set; }
+
         //Cancel Request
         public List<CaseTag> caseTags { get; set; }
         //also used in assign case 

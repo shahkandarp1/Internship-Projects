@@ -100,39 +100,39 @@ namespace HalloDoc.Controllers
             return View(adminDashboardViewModel);
         }
 
-        public IActionResult New(string? search,string ?requestor,int? region)
+        public IActionResult New(string? search,string ?requestor,int? region,int page=1,int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable",adminDashboardViewModel);
         }
 
-        public IActionResult Pending(string? search, string? requestor, int? region)
+        public IActionResult Pending(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Pending", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Pending", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
 
-        public IActionResult Active(string? search, string? requestor, int? region)
+        public IActionResult Active(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Active", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Active", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
 
-        public IActionResult Conclude(string? search, string? requestor, int? region)
+        public IActionResult Conclude(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Conclude", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Conclude", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
 
-        public IActionResult Close(string? search, string? requestor, int? region)
+        public IActionResult Close(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("ToClose", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("ToClose", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
 
-        public IActionResult Unpaid(string? search, string? requestor, int? region)
+        public IActionResult Unpaid(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Unpaid", search, requestor, region);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Unpaid", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
 

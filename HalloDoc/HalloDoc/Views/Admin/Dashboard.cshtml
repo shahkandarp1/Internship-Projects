@@ -496,7 +496,7 @@
           </div>
         </div>
 
-        <div class="bottom-main-container mt-3">
+        <div class="bottom-main-container mt-3 mb-3 pb-3">
           <!-- Filter Section -->
 
           <div class="filter-section">
@@ -513,7 +513,7 @@
                     id="search"
                     type="text"
                     placeholder="Search Patients"
-                    onkeyup="filter()"
+                    onkeyup="filter(1,10)"
                   />
                 </span>
                 <span class="search">
@@ -522,7 +522,7 @@
                     src="../../images/search.svg"
                     alt=""
                   />
-                  <select name="" id="region" class="search-inp" onchange="filter()">
+                  <select name="" id="region" class="search-inp" onchange="filter(1,10)">
                     <option value="-1">All Regions</option>
                     @foreach(var item in Model.regions){
                         <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
@@ -573,7 +573,7 @@
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
 
-    const filter = () => {
+    const filter = (page,pageSize) => {
         const states = document.getElementsByClassName("req-filter")
         for (let i = 0; i < states.length; ++i) {
             if (states[i].classList.length == 3) {
@@ -583,7 +583,7 @@
                     url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
                     type: 'POST',
                     dataType: 'html',
-                    data: { search: document.getElementById("search").value, region: document.getElementById("region").value, requestor: states[i].classList[1] },
+                    data: { search: document.getElementById("search").value, region: document.getElementById("region").value, requestor: states[i].classList[1],page:page,pageSize:pageSize },
                     // Pass your data here
                     success: function (response) {
                         document.getElementsByClassName("loader-container")[0].style.display = "none";
