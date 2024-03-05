@@ -50,6 +50,10 @@ namespace HalloDoc.Controllers
                 {
                     TempData["error"] = "You dont have rights to login into this website!!";
                 }
+                else if (result == 5)
+                {
+                    TempData["error"] = "There was some issue in Login!!";
+                }
                 else
                 {
                     TempData["success"] = "Loged In Successfully!!";
@@ -519,6 +523,24 @@ namespace HalloDoc.Controllers
                 TempData["error"] = "Information could not be Updated!!";
             }
             return RedirectToAction("Profile");
+        }
+
+        public IActionResult ResetPasswordProfile(string password)
+        {
+            if(password == null)
+            {
+                return Json(new { isReseted = 1 });
+            }
+
+            bool isReseted = _admin.resetPasswordProfile(password);
+            if (isReseted)
+            {
+                return Json(new { isReseted = 2 });
+            }
+            else
+            {
+                return Json(new { isReseted = 3 });
+            }
         }
     }
 }

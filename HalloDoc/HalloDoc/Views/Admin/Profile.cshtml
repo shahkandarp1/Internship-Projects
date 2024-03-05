@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="lower-btn">
-                    <a class="back-btn reset-btn mt-3"><span class="back-text">Reset Password</span></a>
+                    <a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">Reset Password</span></a>
                 </div>
 
                 <!-- Administrator Information -->
@@ -181,6 +181,26 @@
 
 <script src="~/js/admin-navbar.js"></script>
 <script src="~/js/admin-profile.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#reset-password').on('click', function () {
+            var inputValue = $('#password').val();
+            console.log(inputValue)
+            $.get('/Admin/ResetPasswordProfile', { password: inputValue }, function (response) {
+                if (response.isReseted == 1) {
+                    toastr.error("Please enter password!!")
+                }
+                else if (response.isReseted == 2) {
+                    toastr.success("Password reseted successfully!!")
+                    document.getElementById("password").value = ""
+                }
+                else {
+                    toastr.error("Password could not be reseted!!")
+                }
+            });
+        });
+    });
+</script>
 @section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />

@@ -21,6 +21,10 @@
     color: #0dcaf0;
 }
 
+.reset-btn{
+    cursor:pointer;
+}
+
 @media screen and (max-width:426px)
 {
     .form-floating > .select:not(:placeholder-shown) {

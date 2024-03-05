@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Hosting.Server;
 using System.Net.Mail;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Identity;
+using HalloDoc.Repository.Interface;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace HaloDocMVC.NET.Controllers
 {
@@ -25,12 +29,16 @@ namespace HaloDocMVC.NET.Controllers
         private readonly ILogger<PatientController> _logger;
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _context;
+        private readonly IPatient _patient;
+        private readonly IAdmin _admin;
 
-        public PatientController(ILogger<PatientController> logger, ApplicationDbContext db,IHttpContextAccessor context)
+        public PatientController(ILogger<PatientController> logger, ApplicationDbContext db,IHttpContextAccessor context,IPatient patient,IAdmin admin)
         {
             _logger = logger;
             _db = db;
             _context = context;
+            _patient = patient;
+            _admin = admin;
         }
 
         public IActionResult PatientSite()
@@ -54,30 +62,28 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == model.Email);
-                if (user != null)
+                var result = _patient.login(model);
+                if(result == 1)
                 {
-                    if (model.Password == user.PasswordHash)
-                    {
-                        var role = _db.AspNetUserRoles.FirstOrDefault(u=>u.UserId == user.Id);
-                        if(role.RoleId != 1)
-                        {
-                            ModelState.AddModelError("Password", "You are not having rights of patient site");
-                            return View();
-                        }
-                        var curr_user = _db.Users.FirstOrDefault(u=>u.AspNetUserId == user.Id);
-                        _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
-                        _context.HttpContext.Session.SetInt32("UserId", curr_user.UserId);
-                        return RedirectToAction("PatientDashboard");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Password", "Incorrect Password");
-                    }
+                    ModelState.AddModelError("Password", "You are not having rights of patient site");
+                    return View();
+                }
+                else if(result == 2)
+                {
+                    TempData["success"] = "Loged in Successfully!!";
+                    return RedirectToAction("PatientDashboard");
+                }
+                else if(result == 3)
+                {
+                    ModelState.AddModelError("Password", "Incorrect Password");
+                }
+                else if(result == 4)
+                {
+                    ModelState.AddModelError("Username", "Incorrect Username");
                 }
                 else
                 {
-                    ModelState.AddModelError("Username", "Incorrect Username");
+                    TempData["error"] = "There was some issue in Log in!!";
                 }
             }
             return View();
@@ -90,7 +96,7 @@ namespace HaloDocMVC.NET.Controllers
 
         public IActionResult ResetPassword(string Token)
         {
-            PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u => u.Token == Token);
+            PasswordReset passwordReset = _patient.getResetPassword(Token);
             if(passwordReset == null)
             {
                 return NotFound();
@@ -116,63 +122,19 @@ namespace HaloDocMVC.NET.Controllers
         {
             if(ModelState.IsValid)
             {
-                PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u=>u.Token == modal.Token); 
-                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Email == passwordReset.Email);
-                aspNetUser.PasswordHash = modal.Password;
-                _db.AspNetUsers.Update(aspNetUser);
-                _db.SaveChanges();
-                passwordReset.IsUpdated = true;
-                _db.PasswordResets.Update(passwordReset);
-                _db.SaveChanges();
-                ViewData["Message"] = "Password Reseted successfully!!!";
-                return View();
+                bool isReseted = _patient.resetPassword(modal);
+                if (isReseted)
+                {
+                    ViewData["Message"] = "Password Reseted successfully!!!";
+                }
             }
             return View(modal);
         }
 
         public IActionResult EmailCheck(string email)
         {
-            var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == email);
-            if (user == null)
-            {
-                return Json(new { isValid = false });
-            }
-            string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-            string senderPassword = "shahkandarp2430";
-            string platformTitle = "HalloDoc";
-            string Token = Guid.NewGuid().ToString();
-            PasswordReset passwordReset = new PasswordReset
-            {
-                Token = Token,
-                Email = email,
-                CreatedDate = DateTime.Now
-            };
-            _db.PasswordResets.Add(passwordReset);
-            _db.SaveChanges();
-            var inviteLink = Url.Action("ResetPassword", "Patient", new { token= Token }, Request.Scheme);
-            var subject = "Reset Password - HalloDoc";
-            var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-            MailMessage mailMessage = new MailMessage
-            {
-                From = new MailAddress(senderEmail, "HalloDoc"),
-                Subject = subject,
-                IsBodyHtml = true,
-                Body = body
-            };
-
-            SmtpClient client = new SmtpClient("smtp.office365.com")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential(senderEmail, senderPassword),
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false
-            };
-            mailMessage.To.Add(email);
-
-            client.SendMailAsync(mailMessage);
-
-            return Json(new { isValid = true });
+            bool isSent = _patient.sendResetLink(email);
+            return Json(new { isValid = isSent });
         }
 
         [HttpGet]
@@ -187,220 +149,29 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
-                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await modal.ImageContent.CopyToAsync(stream);
-                    }
-                }
-                
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if(region == null)
-                {
-                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                if (user != null)
+
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                    var block = _db.BlockRequests.FirstOrDefault(u=>u.Email == user.Email);
-                    if(block != null)
-                    {
-                        ModelState.AddModelError("ImageContent", "This request is blocked");
-                        return View(modal);
-                    }
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(modal);
+                }
 
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        Address = modal.Room,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 2,
-                        UserId = curr_user.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
+                var isCreated = _patient.patientRequest(modal);
+                if(isCreated.Result)
+                {
+                    TempData["success"] = "Request Created Successfully!!!";
                     return RedirectToAction("PatientSite");
-
                 }
                 else
                 {
-
-                    AspNetUser aspuser = new AspNetUser
-                    {
-                        UserName = modal.Email,
-                        Email = modal.Email,
-                        PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now,
-                        PasswordHash = modal.Password,
-                    };
-
-
-                    _db.AspNetUsers.Add(aspuser);
-                    _db.SaveChanges();
-
-
-                    User us = new User
-                    {
-                        AspNetUserId = aspuser.Id,
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        Email = modal.Email,
-                        Mobile = modal.Phone,
-                        Street = modal.Street,
-                        City = modal.City,
-                        State = modal.State,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day,
-                        CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now,
-
-                    };
-
-                    _db.Users.Add(us);
-                    _db.SaveChanges();
-
-                    AspNetUserRole aspnr = new AspNetUserRole
-                    {
-                        UserId = aspuser.Id,
-                        RoleId = 1
-                    };
-
-                    _db.AspNetUserRoles.Add(aspnr);
-                    _db.SaveChanges();
-
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        Address = modal.Room,
-                        ZipCode = modal.ZipCode,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 2,
-                        UserId = us.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-                    
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    return RedirectToAction("PatientSite");
-
+                    TempData["error"] = "Request could not be Created!!!";
                 }
             }
             return View(modal);
@@ -412,7 +183,7 @@ namespace HaloDocMVC.NET.Controllers
             {
                 return View();
             }
-            var existingUser = _db.AspNetUsers.SingleOrDefault(u => u.Email == email);
+            var existingUser = _patient.getAspNetUser(email);
             bool isValidEmail;
             if (existingUser == null)
             {
@@ -448,247 +219,29 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
-                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await modal.ImageContent.CopyToAsync(stream);
-                    }
-                }
-
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
-                {
-                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                if(user != null)
+
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
-                    if (block != null)
-                    {
-                        ModelState.AddModelError("ImageContent", "This request is blocked");
-                        return View(modal);
-                    }
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        Address = modal.Room,
-                        ZipCode = modal.ZipCode,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(modal);
+                }
 
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FamilyFirstName,
-                        LastName = modal.FamilyLastName,
-                        PhoneNumber = modal.FamilyPhoneNumber,
-                        Email = modal.FamilyEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 3,
-                        UserId = curr_user.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        RelationName = modal.FamilyRelation,
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
+                var isCreated = _patient.familyRequest(modal);
+                if (isCreated.Result)
+                {
+                    TempData["success"] = "Request Created Successfully!!!";
                     return RedirectToAction("PatientSite");
                 }
                 else
                 {
-                    AspNetUser aspuser = new AspNetUser
-                    {
-                        UserName = modal.Email,
-                        Email = modal.Email,
-                        PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now
-                    };
-
-
-                    _db.AspNetUsers.Add(aspuser);
-                    _db.SaveChanges();
-
-
-                    User us = new User
-                    {
-                        AspNetUserId = aspuser.Id,
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        Email = modal.Email,
-                        Mobile = modal.Phone,
-                        Street = modal.Street,
-                        City = modal.City,
-                        State = modal.State,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day,
-                        CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now,
-
-                    };
-
-                    _db.Users.Add(us);
-                    _db.SaveChanges();
-
-                    AspNetUserRole aspnr = new AspNetUserRole
-                    {
-                        UserId = aspuser.Id,
-                        RoleId = 1
-                    };
-
-                    _db.AspNetUserRoles.Add(aspnr);
-                    _db.SaveChanges();
-
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        Address = modal.Room,
-                        ZipCode = modal.ZipCode,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FamilyFirstName,
-                        LastName = modal.FamilyLastName,
-                        PhoneNumber = modal.FamilyPhoneNumber,
-                        Email = modal.FamilyEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 3,
-                        UserId = us.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        RelationName = modal.FamilyRelation,
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
-                    {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
-
-                    mailMessage.To.Add(modal.Email);
-
-                    client.SendMailAsync(mailMessage);
-
-                    return RedirectToAction("PatientSite");
-
+                    TempData["error"] = "Request could not be Created!!!";
                 }
             }
             return View(modal);
@@ -698,7 +251,7 @@ namespace HaloDocMVC.NET.Controllers
         public IActionResult Register(int id)
         {
             RegisterViewModel modal = new RegisterViewModel();
-            AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
+            AspNetUser aspNetUser = _patient.getAspNetUserById(id);
             modal.Id = id;
             modal.Email = aspNetUser.Email;
             return View(modal);
@@ -710,13 +263,11 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == modal.Id);
-                aspNetUser.Email = modal.Email;
-                aspNetUser.UserName = modal.Email;
-                aspNetUser.PasswordHash = modal.Password;
-                _db.AspNetUsers.Update(aspNetUser);
-                _db.SaveChanges();
-                ViewData["Message"] = "Registered successfully!!!";
+                var isRegistered = _patient.register(modal);
+                if(isRegistered)
+                {
+                    ViewData["Message"] = "Registered successfully!!!";
+                }
                 return View();
             }
             return View(modal);
@@ -730,254 +281,29 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
-
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.ConciergeState.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
+                bool isVerified = _admin.verifyRegion(modal.ConciergeState);
+                if (!isVerified)
                 {
-                    ModelState.AddModelError("Room", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                if (user != null)
+
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
-                    if (block != null)
-                    {
-                        ModelState.AddModelError("Room", "This request is blocked");
-                        return View(modal);
-                    }
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.ConciergeState,
-                        Street = modal.ConciergeStreet,
-                        City = modal.ConciergeCity,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ConciergeZipcode,
-                        Address = modal.Room,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(modal);
+                }
 
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.ConciergeFirstName,
-                        LastName = modal.ConciergeLastName,
-                        PhoneNumber = modal.ConciergePhoneNumber,
-                        Email = modal.ConciergeEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 4,
-                        UserId = curr_user.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    Concierge concierge = new Concierge
-                    {
-                        ConciergeName = string.Concat(modal.ConciergeFirstName,' ',modal.ConciergeLastName),
-                        RegionId = region.RegionId,
-                        CreatedDate = DateTime.Now,
-                        Street = modal.ConciergeStreet,
-                        City = modal.ConciergeCity,
-                        State = modal.ConciergeState,
-                        ZipCode = modal.ConciergeZipcode
-                    };
-
-                    _db.Concierges.Add(concierge); 
-                    _db.SaveChanges();
-
-                    RequestConcierge requestconcierge = new RequestConcierge
-                    {
-                        ConciergeId = concierge.ConciergeId,
-                        RequestId = req.RequestId
-                    };
-
-                    _db.RequestConcierges.Add(requestconcierge);
-                    _db.SaveChanges();
-
+                var isCreated = _patient.conciergeRequest(modal);
+                if (isCreated.Result)
+                {
+                    TempData["success"] = "Request Created Successfully!!!";
                     return RedirectToAction("PatientSite");
                 }
                 else
                 {
-                    AspNetUser aspuser = new AspNetUser
-                    {
-                        UserName = modal.Email,
-                        Email = modal.Email,
-                        PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now
-                    };
-
-
-                    _db.AspNetUsers.Add(aspuser);
-                    _db.SaveChanges();
-
-
-                    User us = new User
-                    {
-                        AspNetUserId = aspuser.Id,
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        Email = modal.Email,
-                        Mobile = modal.Phone,
-                        Street = modal.ConciergeStreet,
-                        City = modal.ConciergeCity,
-                        State = modal.ConciergeState,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ConciergeZipcode,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day,
-                        CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now,
-
-                    };
-
-                    _db.Users.Add(us);
-                    _db.SaveChanges();
-
-                    AspNetUserRole aspnr = new AspNetUserRole
-                    {
-                        UserId = aspuser.Id,
-                        RoleId = 1
-                    };
-
-                    _db.AspNetUserRoles.Add(aspnr);
-                    _db.SaveChanges();
-
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.ConciergeState,
-                        Street = modal.ConciergeStreet,
-                        City = modal.ConciergeCity,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ConciergeZipcode,
-                        Address = modal.Room,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.ConciergeFirstName,
-                        LastName = modal.ConciergeLastName,
-                        PhoneNumber = modal.ConciergePhoneNumber,
-                        Email = modal.ConciergeEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 4,
-                        UserId = us.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    Concierge concierge = new Concierge
-                    {
-                        ConciergeName = string.Concat(modal.ConciergeFirstName, ' ', modal.ConciergeLastName),
-                        RegionId = region.RegionId,
-                        CreatedDate = DateTime.Now,
-                        Street = modal.ConciergeStreet,
-                        City = modal.ConciergeCity,
-                        State = modal.ConciergeState,
-                        ZipCode = modal.ConciergeZipcode
-                    };
-
-                    _db.Concierges.Add(concierge);
-                    _db.SaveChanges();
-
-                    RequestConcierge requestconcierge = new RequestConcierge
-                    {
-                        ConciergeId = concierge.ConciergeId,
-                        RequestId = req.RequestId
-                    };
-
-                    _db.RequestConcierges.Add(requestconcierge);
-                    _db.SaveChanges();
-
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
-                    {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
-
-                    mailMessage.To.Add(modal.Email);
-
-                    client.SendMailAsync(mailMessage);
-
-                    return RedirectToAction("PatientSite");
+                    TempData["error"] = "Request could not be Created!!!";
                 }
             }
             return View(modal);
@@ -990,248 +316,29 @@ namespace HaloDocMVC.NET.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
-
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    ModelState.AddModelError("Room", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                if(user!=null)
+
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
-                    if (block != null)
-                    {
-                        ModelState.AddModelError("Room", "This request is blocked");
-                        return View(modal);
-                    }
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        Address = modal.Room,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(modal);
+                }
 
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.BusinessFirstName,
-                        LastName = modal.BusinessLastName,
-                        PhoneNumber = modal.BusinessPhoneNumber,
-                        Email = modal.BusinessEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 1,
-                        UserId = curr_user.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        CaseNumber = modal.BusinessCaseNumber
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    Business business = new Business
-                    {
-                        Name = modal.BusinessPropertyName,
-                        CreatedDate = DateTime.Now,
-                        RegionId = region.RegionId,
-
-                    };
-
-                    _db.Businesses.Add(business);
-                    _db.SaveChanges();
-
-                    RequestBusiness requestbusiness = new RequestBusiness
-                    {
-                        RequestId = req.RequestId,
-                        BusinessId = business.BusinessId
-                    };
-
-                    _db.RequestBusinesses.Add(requestbusiness);
-                    _db.SaveChanges();
-
+                var isCreated = _patient.businessRequest(modal);
+                if (isCreated.Result)
+                {
+                    TempData["success"] = "Request Created Successfully!!!";
                     return RedirectToAction("PatientSite");
                 }
                 else
                 {
-                    AspNetUser aspuser = new AspNetUser
-                    {
-                        UserName = modal.Email,
-                        Email = modal.Email,
-                        PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now
-                    };
-
-
-                    _db.AspNetUsers.Add(aspuser);
-                    _db.SaveChanges();
-
-
-                    User us = new User
-                    {
-                        AspNetUserId = aspuser.Id,
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        Email = modal.Email,
-                        Mobile = modal.Phone,
-                        Street = modal.Street,
-                        City = modal.City,
-                        State = modal.State,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day,
-                        CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now,
-
-                    };
-
-                    _db.Users.Add(us);
-                    _db.SaveChanges();
-
-                    AspNetUserRole aspnr = new AspNetUserRole
-                    {
-                        UserId = aspuser.Id,
-                        RoleId = 1
-                    };
-
-                    _db.AspNetUserRoles.Add(aspnr);
-                    _db.SaveChanges();
-
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        Address = modal.Room,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.BusinessFirstName,
-                        LastName = modal.BusinessLastName,
-                        PhoneNumber = modal.BusinessPhoneNumber,
-                        Email = modal.BusinessEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 1,
-                        UserId = us.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        CaseNumber = modal.BusinessCaseNumber
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    Business business = new Business
-                    {
-                        Name = modal.BusinessPropertyName,
-                        CreatedDate = DateTime.Now,
-                        RegionId = region.RegionId,
-
-                    };
-
-                    _db.Businesses.Add(business);
-                    _db.SaveChanges();
-
-                    RequestBusiness requestbusiness = new RequestBusiness
-                    {
-                        RequestId = req.RequestId,
-                        BusinessId = business.BusinessId
-                    };
-
-                    _db.RequestBusinesses.Add(requestbusiness);
-                    _db.SaveChanges();
-
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
-                    {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
-
-                    mailMessage.To.Add(modal.Email);
-
-                    client.SendMailAsync(mailMessage);
-
-                    return RedirectToAction("PatientSite");
+                    TempData["error"] = "Request could not be Created!!!";
                 }
             }
 
@@ -1245,30 +352,14 @@ namespace HaloDocMVC.NET.Controllers
 
         public async Task<IActionResult> PatientDashboard()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({id})").ToList();
-            var curr_user = _db.Users.FirstOrDefault(u=>u.UserId == id);
-            DashboardViewModel dashboardViewModel = new DashboardViewModel
-            {
-                requests = data,
-                name = string.Concat(curr_user.FirstName,' ',curr_user.LastName)
-            };
-
+            DashboardViewModel dashboardViewModel = _patient.getDashboardData();
             return View(dashboardViewModel);
         }
 
         public IActionResult SubmitSomeoneElse()
         {
 
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var session_user = _db.Users.FirstOrDefault(u => u.UserId == id);
-            FamilyRequestViewModel familyRequestViewModel = new FamilyRequestViewModel()
-            {
-                FamilyFirstName = session_user.FirstName,
-                FamilyLastName = session_user.LastName,
-                FamilyEmail = session_user.Email,
-                FamilyPhoneNumber = session_user.Mobile,
-            };
+            FamilyRequestViewModel familyRequestViewModel = _patient.getFamilyRequest();
             return View(familyRequestViewModel);
         }
 
@@ -1278,246 +369,29 @@ namespace HaloDocMVC.NET.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == modal.Email);
-                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await modal.ImageContent.CopyToAsync(stream);
-                    }
-                }
-
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
-                {
-                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                if (user != null)
+
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                    var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
-                    if (block != null)
-                    {
-                        ModelState.AddModelError("ImageContent", "This request is blocked");
-                        return View(modal);
-                    }
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        Address = modal.Room,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
+                    TempData["error"] = "Patient with this email is blocked!!!";
+                    return View(modal);
+                }
 
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FamilyFirstName,
-                        LastName = modal.FamilyLastName,
-                        PhoneNumber = modal.FamilyPhoneNumber,
-                        Email = modal.FamilyEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 3,
-                        UserId = curr_user.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        RelationName = modal.FamilyRelation,
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
+                var isCreated = _patient.someoneElseRequest(modal);
+                if (isCreated.Result)
+                {
+                    TempData["success"] = "Request Created Successfully!!!";
                     return RedirectToAction("PatientDashboard");
                 }
                 else
                 {
-                    AspNetUser aspuser = new AspNetUser
-                    {
-                        UserName = modal.Email,
-                        Email = modal.Email,
-                        PhoneNumber = modal.Phone,
-                        CreatedDate = DateTime.Now
-                    };
-
-
-                    _db.AspNetUsers.Add(aspuser);
-                    _db.SaveChanges();
-
-
-                    User us = new User
-                    {
-                        AspNetUserId = aspuser.Id,
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        Email = modal.Email,
-                        Mobile = modal.Phone,
-                        Street = modal.Street,
-                        City = modal.City,
-                        State = modal.State,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day,
-                        CreatedBy = aspuser.Id,
-                        CreatedDate = DateTime.Now,
-
-                    };
-
-                    _db.Users.Add(us);
-                    _db.SaveChanges();
-
-                    AspNetUserRole aspnr = new AspNetUserRole
-                    {
-                        UserId = aspuser.Id,
-                        RoleId = 1
-                    };
-
-                    _db.AspNetUserRoles.Add(aspnr);
-                    _db.SaveChanges();
-
-                    RequestClient rc = new RequestClient
-                    {
-                        FirstName = modal.FirstName,
-                        LastName = modal.LastName,
-                        PhoneNumber = modal.Phone,
-                        Email = modal.Email,
-                        State = modal.State,
-                        Street = modal.Street,
-                        City = modal.City,
-                        RegionId = region.RegionId,
-                        ZipCode = modal.ZipCode,
-                        Notes = modal.Symptoms,
-                        NotiEmail = modal.Email,
-                        Address = modal.Room,
-                        NotiMobile = modal.Phone,
-                        StrMonth = modal.DateOfBirth.Month.ToString(),
-                        IntYear = modal.DateOfBirth.Year,
-                        IntDate = modal.DateOfBirth.Day
-                    };
-
-                    _db.RequestClients.Add(rc);
-                    _db.SaveChanges();
-
-                    int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                    Request req = new Request
-                    {
-                        FirstName = modal.FamilyFirstName,
-                        LastName = modal.FamilyLastName,
-                        PhoneNumber = modal.FamilyPhoneNumber,
-                        Email = modal.FamilyEmail,
-                        RequestClientId = rc.RequestClientId,
-                        RequestTypeId = 3,
-                        UserId = us.UserId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now,
-                        IsUrgentEmailSent = new BitArray(new[] { false }),
-                        ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-                        RelationName = modal.FamilyRelation,
-
-                    };
-
-                    _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    if (modal.ImageContent != null)
-                    {
-                        RequestWiseFile rfile = new RequestWiseFile
-                        {
-                            RequestId = req.RequestId,
-                            FileName = modal.ImageContent.FileName,
-                            CreatedDate = DateTime.Now,
-                            IsDeleted = new BitArray(new[] { false })
-                        };
-                        _db.RequestWiseFiles.Add(rfile);
-                        _db.SaveChanges();
-                    }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = Url.Action("Register", "Patient", new { id = aspuser.Id }, Request.Scheme);
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
-                    {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
-
-                    mailMessage.To.Add(modal.Email);
-
-                    client.SendMailAsync(mailMessage);
-
-                    return RedirectToAction("PatientDashboard");
+                    TempData["error"] = "Request could not be Created!!!";
                 }
             }
             
@@ -1526,18 +400,7 @@ namespace HaloDocMVC.NET.Controllers
 
         public IActionResult SubmitForMe()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var user = _db.Users.FirstOrDefault(u=>u.UserId == id);
-            PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Phone = user.Mobile,
-                DateOfBirth = DateTime.Parse($"{user.IntYear}-{user.StrMonth}-{user.IntDate}")
-
-            };
-
+            PatientRequestViewModel patientRequestViewModel = _patient.getPatientRequest();
             return View(patientRequestViewModel);
         }
 
@@ -1547,122 +410,37 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id = _context.HttpContext.Session.GetInt32("AspNetUserId");
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
-                if (modal.ImageContent != null && modal.ImageContent.Length > 0)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await modal.ImageContent.CopyToAsync(stream);
-                    }
-                }
-
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
-                {
-                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
 
-                var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                var block = _db.BlockRequests.FirstOrDefault(u => u.Email == user.Email);
-                if (block != null)
+                bool isBlocked = _admin.verifyBlock(modal.Email);
+                if (isBlocked)
                 {
-                    ModelState.AddModelError("ImageContent", "This request is blocked");
+                    TempData["error"] = "Patient with this email is blocked!!!";
                     return View(modal);
                 }
 
-                RequestClient rc = new RequestClient
+                var isCreated = _patient.selfRequest(modal);
+                if (isCreated.Result)
                 {
-                    FirstName = modal.FirstName,
-                    LastName = modal.LastName,
-                    PhoneNumber = modal.Phone,
-                    Email = modal.Email,
-                    State = modal.State,
-                    Street = modal.Street,
-                    City = modal.City,
-                    RegionId = region.RegionId,
-                    ZipCode = modal.ZipCode,
-                    Address = modal.Room,
-                    Notes = modal.Symptoms,
-                    NotiEmail = modal.Email,
-                    NotiMobile = modal.Phone,
-                    StrMonth = modal.DateOfBirth.Month.ToString(),
-                    IntYear = modal.DateOfBirth.Year,
-                    IntDate = modal.DateOfBirth.Day
-                };
-
-                _db.RequestClients.Add(rc);
-                _db.SaveChanges();
-
-                int requests = _db.Requests.Where(u => u.CreatedDate.Date == DateTime.Now.Date).Count();
-
-                Request req = new Request
-                {
-                    FirstName = modal.FirstName,
-                    LastName = modal.LastName,
-                    PhoneNumber = modal.Phone,
-                    Email = modal.Email,
-                    RequestClientId = rc.RequestClientId,
-                    RequestTypeId = 2,
-                    UserId = curr_user.UserId,
-                    Status = 1,
-                    CreatedDate = DateTime.Now,
-                    IsUrgentEmailSent = new BitArray(new[] { false }),
-                    ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
-
-                };
-
-                _db.Requests.Add(req);
-                _db.SaveChanges();
-
-                if (modal.ImageContent != null)
-                {
-                    RequestWiseFile rfile = new RequestWiseFile
-                    {
-                        RequestId = req.RequestId,
-                        FileName = modal.ImageContent.FileName,
-                        CreatedDate = DateTime.Now,
-                        IsDeleted = new BitArray(new[] { false })
-                    };
-                    _db.RequestWiseFiles.Add(rfile);
-                    _db.SaveChanges();
+                    TempData["success"] = "Request Created Successfully!!!";
+                    return RedirectToAction("PatientDashboard");
                 }
-
-
-                RequestStatusLog rst = new RequestStatusLog
+                else
                 {
-                    RequestId = req.RequestId,
-                    Status = 1,
-                    CreatedDate = DateTime.Now
-                };
-
-                _db.RequestStatusLogs.Add(rst);
-                _db.SaveChanges();
-
-                return RedirectToAction("PatientDashboard");
-
+                    TempData["error"] = "Request could not be Created!!!";
+                }
             }
             return View(modal);
         }
 
         public IActionResult PatientProfile()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var curr_user = _db.Users.FirstOrDefault(u=>u.UserId == id);
-            PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel
-            {
-                FirstName = curr_user.FirstName,
-                LastName = curr_user.LastName,
-                Email = curr_user.Email,
-                Phone = curr_user.Mobile,
-                DateOfBirth = DateTime.Parse($"{curr_user.IntYear}-{curr_user.StrMonth}-{curr_user.IntDate}"),
-                Street = curr_user.Street,
-                State = curr_user.State,
-                City = curr_user.City,
-                ZipCode = curr_user.ZipCode
-            };
+            PatientRequestViewModel patientRequestViewModel = _patient.getPatientProfile();
             return View(patientRequestViewModel);
         }
 
@@ -1672,52 +450,28 @@ namespace HaloDocMVC.NET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                if (region == null)
+                bool isVerified = _admin.verifyRegion(modal.State);
+                if (!isVerified)
                 {
-                    ModelState.AddModelError("ImageContent", "Currently we are not serving in this region");
+                    TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
-                
-                var aspnetid = _context.HttpContext.Session.GetInt32("AspNetUserId");
-                var userid = _context.HttpContext.Session.GetInt32("UserId");
 
-                User user = _db.Users.FirstOrDefault(u=>u.UserId == userid);
-
-                if(user.Email != modal.Email)
+                int isUpdated = _patient.updatePatientProfile(modal);
+                if(isUpdated == 1)
                 {
-                    var check_user_count = _db.AspNetUsers.Where(u => u.Email == modal.Email).Count();
-                    if (check_user_count == 1)
-                    {
-                        ModelState.AddModelError("ImageContent", "This Email already exists");
-                        return View(modal);
-                    }
+                    TempData["success"] = "Information updated successfully!!!";
+                    return RedirectToAction("PatientDashboard");
                 }
-
-                user.FirstName = modal.FirstName;
-                user.LastName = modal.LastName;
-                user.Email = modal.Email;
-                user.Mobile = modal.Phone;
-                user.Street = modal.Street;
-                user.City = modal.City;
-                user.State = modal.State;
-                user.RegionId = region.RegionId;
-                user.ZipCode = modal.ZipCode;
-                user.StrMonth = modal.DateOfBirth.Month.ToString();
-                user.IntYear = modal.DateOfBirth.Year;
-                user.IntDate = modal.DateOfBirth.Day;
-                user.ModifiedBy = aspnetid;
-                user.ModifiedDate = DateTime.Now;
-
-                _db.Users.Update(user);
-
-                AspNetUser aspuser = _db.AspNetUsers.FirstOrDefault(u=>u.Id == aspnetid);
-                aspuser.Email = modal.Email;
-                aspuser.PhoneNumber = modal.Phone;
-                aspuser.UserName = modal.Email;
-
-                _db.AspNetUsers.Update(aspuser);
-                _db.SaveChanges();
+                else if(isUpdated == 2)
+                {
+                    TempData["error"] = "This email already exists!!!";
+                    return View(modal);
+                }
+                else
+                {
+                    TempData["error"] = "Information could not be updated!!!";
+                }
 
                 return RedirectToAction("PatientDashboard");
 
@@ -1728,81 +482,26 @@ namespace HaloDocMVC.NET.Controllers
         [HttpGet]
         public IActionResult ViewDocument(int id)
         {
-            var user_id = _context.HttpContext.Session.GetInt32("UserId");
-            var request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(u=>u.RequestId == id);
-            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u=>u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
-            var user = _db.Users.FirstOrDefault(u=>u.UserId == user_id);
-            ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
-            {
-                patient_name = string.Concat(request.RequestClient.FirstName,' ', request.RequestClient.LastName),
-                name = string.Concat(user.FirstName, ' ', user.LastName),
-                confirmation_number = request.ConfirmationNumber,
-                requestWiseFiles = documents,
-                uploader_name = string.Concat(request.FirstName, ' ', request.LastName)
-            };
+            ViewDocumentModal viewDocumentModal = _patient.getViewDocument(id);
             return View(viewDocumentModal);
         }
 
         [HttpPost]
         public async Task<IActionResult> FileUpload([FromForm]IFormFile file, [FromForm] int id)
         {
-            if (file != null && file.Length > 0)
-            {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file.FileName);
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await file.CopyToAsync(stream);
-                }
-            }
-            RequestWiseFile requestWiseFile = new RequestWiseFile
-            {
-                RequestId = id,
-                FileName = file.FileName,
-                CreatedDate = DateTime.Now,
-                IsDeleted = new BitArray(new[] { false })
-            };
-            _db.RequestWiseFiles.Add(requestWiseFile);
-            _db.SaveChanges();
-            return Json(new { isFileUploaded = true });
+            Task<bool> isFileUploaded = _patient.fileUpload(file, id);
+            return Json(new { isFileUploaded = isFileUploaded });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ViewDocument(ViewDocumentModal modal)
         {
-            if(modal.filename == null)
-            {
-                return View(modal);
-            }
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var user = _db.Users.FirstOrDefault(u=>u.UserId == id);
-            var zipName = $"{user.FirstName}-{user.LastName}-documents.zip";
-            string[] filenames = modal.filename.Split(',') ;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                //required: using System.IO.Compression;
-                using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true))
-                {
-                    //QUery the Products table and get all image content
-
-                    for(var i=0;i< filenames.Length - 1; ++i)
-                    {
-                        var entry = zip.CreateEntry(filenames[i]);
-                        HttpClient client = new HttpClient();
-                        byte[] imageBytes = await client.GetByteArrayAsync($"https://localhost:7088/uploads/{filenames[i]}");
-                        using (MemoryStream fileStream = new MemoryStream(imageBytes))
-                        using (var entryStream = entry.Open())
-                        {
-                            fileStream.CopyTo(entryStream);
-                        }
-                    }
-                }
-                Response.ContentType = "application/zip";
-                Response.Headers.Add("Content-Disposition", $"attachment; filename={zipName}");
-                return File(ms.ToArray(), "application/zip", zipName);
-            }
-            
-            return Json(new { isDownloaded = true });
+            var result = _admin.downloadMultipleFiles(modal);
+            await result;
+            Response.ContentType = "application/zip";
+            Response.Headers.Add("Content-Disposition", $"attachment; filename={result.Result.Item2}");
+            return File(result.Result.Item1.ToArray(), "application/zip", result.Result.Item2);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

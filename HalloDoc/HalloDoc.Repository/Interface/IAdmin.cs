@@ -82,5 +82,7 @@ namespace HalloDoc.Repository.Interface
         public AdminProfileViewModel getAdmin();
 
         public bool updateProfile(AdminProfileViewModel adminProfileViewModel);
+
+        public bool resetPasswordProfile(string password);
     }
 }

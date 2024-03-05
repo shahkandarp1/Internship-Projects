@@ -22,6 +22,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.IO.Compression;
 using DocumentFormat.OpenXml.Office2010.Word;
+using Microsoft.AspNetCore.Identity;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -811,30 +812,39 @@ namespace HalloDoc.Repository.Repository
 
         int IAdmin.login(LoginViewModel loginViewModel)
         {
-            AspNetUser user = _db.AspNetUsers.FirstOrDefault(a=>a.Email == loginViewModel.Email);
-            if (user == null)
+            try
             {
-                return 1;
-            }
-            else
-            {
-                if(loginViewModel.Password == user.PasswordHash)
+                AspNetUser user = _db.AspNetUsers.FirstOrDefault(a => a.Email == loginViewModel.Email);
+                if (user == null)
                 {
-                    var role = _db.AspNetUserRoles.FirstOrDefault(u => u.UserId == user.Id);
-                    if(role.RoleId == 1)
-                    {
-                        return 3;
-                    }
-                    var admin = _db.Admins.FirstOrDefault(a => a.AspNetUserId == user.Id);
-                    _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
-                    _context.HttpContext.Session.SetInt32("AdminId", admin.AdminId);
-                    return 4;
-
+                    return 1;
                 }
                 else
                 {
-                    return 2;
+                    var passwordHasher = new PasswordHasher<AspNetUser>();
+                    var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginViewModel.Password);
+                    if (result == PasswordVerificationResult.Success)
+                    {
+                        var role = _db.AspNetUserRoles.FirstOrDefault(u => u.UserId == user.Id);
+                        if (role.RoleId == 1)
+                        {
+                            return 3;
+                        }
+                        var admin = _db.Admins.FirstOrDefault(a => a.AspNetUserId == user.Id);
+                        _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
+                        _context.HttpContext.Session.SetInt32("AdminId", admin.AdminId);
+                        return 4;
+
+                    }
+                    else
+                    {
+                        return 2;
+                    }
                 }
+            }
+            catch(Exception exp)
+            {
+                return 5;
             }
         }
 
@@ -1146,7 +1156,8 @@ namespace HalloDoc.Repository.Repository
             {
                 PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u => u.Token == resetPasswordViewModel.Token);
                 AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Email == passwordReset.Email);
-                aspNetUser.PasswordHash = resetPasswordViewModel.Password;
+                var passwordHasher = new PasswordHasher<AspNetUser>();
+                aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, resetPasswordViewModel.Password);
                 _db.AspNetUsers.Update(aspNetUser);
                 _db.SaveChanges();
                 passwordReset.IsUpdated = true;
@@ -1505,6 +1516,24 @@ namespace HalloDoc.Repository.Repository
                 return true;
             }
             catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.resetPasswordProfile(string password)
+        {
+            try
+            {
+                int aspId = (int)_context.HttpContext.Session.GetInt32("AspNetUserId");
+                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a=>a.Id == aspId);
+                var passwordHasher = new PasswordHasher<AspNetUser>();
+                aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, password);
+                _db.AspNetUsers.Update(aspNetUser);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
             {
                 return false;
             }
