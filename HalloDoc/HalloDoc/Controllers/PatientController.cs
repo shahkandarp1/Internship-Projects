@@ -21,9 +21,12 @@ using Microsoft.AspNetCore.Identity;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using DocumentFormat.OpenXml.Drawing;
+using HalloDoc.Repository.Auth;
 
 namespace HaloDocMVC.NET.Controllers
 {
+    [CustomAuthorize("Patient")]
+
     public class PatientController : Controller
     {
         private readonly ILogger<PatientController> _logger;
@@ -48,44 +51,6 @@ namespace HaloDocMVC.NET.Controllers
 
         public IActionResult SubmitRequest()
         {
-            return View();
-        }
-
-        public IActionResult PatientLogin()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult PatientLogin(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = _patient.login(model);
-                if(result == 1)
-                {
-                    ModelState.AddModelError("Password", "You are not having rights of patient site");
-                    return View();
-                }
-                else if(result == 2)
-                {
-                    TempData["success"] = "Loged in Successfully!!";
-                    return RedirectToAction("PatientDashboard");
-                }
-                else if(result == 3)
-                {
-                    ModelState.AddModelError("Password", "Incorrect Password");
-                }
-                else if(result == 4)
-                {
-                    ModelState.AddModelError("Username", "Incorrect Username");
-                }
-                else
-                {
-                    TempData["error"] = "There was some issue in Log in!!";
-                }
-            }
             return View();
         }
 
@@ -131,11 +96,6 @@ namespace HaloDocMVC.NET.Controllers
             return View(modal);
         }
 
-        public IActionResult EmailCheck(string email)
-        {
-            bool isSent = _patient.sendResetLink(email);
-            return Json(new { isValid = isSent });
-        }
 
         [HttpGet]
         public IActionResult PatientForm()
@@ -196,13 +156,6 @@ namespace HaloDocMVC.NET.Controllers
             return Json(new { isValid = isValidEmail });
         }
 
-        public IActionResult Logout()
-        {
-
-            _context.HttpContext.Session.Clear();
-            return Json(new { isLogout = true});
-        }
-
         public IActionResult BusinessForm()
         {
             return View();
@@ -243,32 +196,6 @@ namespace HaloDocMVC.NET.Controllers
                 {
                     TempData["error"] = "Request could not be Created!!!";
                 }
-            }
-            return View(modal);
-        }
-
-
-        public IActionResult Register(int id)
-        {
-            RegisterViewModel modal = new RegisterViewModel();
-            AspNetUser aspNetUser = _patient.getAspNetUserById(id);
-            modal.Id = id;
-            modal.Email = aspNetUser.Email;
-            return View(modal);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel modal)
-        {
-            if (ModelState.IsValid)
-            {
-                var isRegistered = _patient.register(modal);
-                if(isRegistered)
-                {
-                    ViewData["Message"] = "Registered successfully!!!";
-                }
-                return View();
             }
             return View(modal);
         }

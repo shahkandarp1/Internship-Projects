@@ -13,89 +13,24 @@ using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Presentation;
 using System.Collections;
 using Irony.Parsing;
+using HalloDoc.Repository.Auth;
 
 namespace HalloDoc.Controllers
 {
+
+    [CustomAuthorize("Admin")]
     public class AdminController : Controller
     {
         private readonly IAdmin _admin;
+        private readonly IPatient _patient;
+        private readonly IJwtService _jwt;
         
 
-        public AdminController(IAdmin admin)
+        public AdminController(IAdmin admin,IJwtService jwt, IPatient patient)
         {
             _admin = admin;
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel loginViewModel)
-        {
-            if(ModelState.IsValid)
-            {
-                int result = _admin.login(loginViewModel);
-                if(result == 1)
-                {
-                    TempData["error"] = "Username is incorrect!!";
-                }
-                else if(result == 2)
-                {
-                    TempData["error"] = "Password is incorrect!!";
-                }
-                else if(result == 3)
-                {
-                    TempData["error"] = "You dont have rights to login into this website!!";
-                }
-                else if (result == 5)
-                {
-                    TempData["error"] = "There was some issue in Login!!";
-                }
-                else
-                {
-                    TempData["success"] = "Loged In Successfully!!";
-                    return RedirectToAction("Dashboard");
-                }
-            }
-            return View(loginViewModel);
-        }
-
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
-        {
-            if(ModelState.IsValid)
-            {
-                int result = _admin.forgotPassword(forgotPasswordViewModel);
-                if(result == 1)
-                {
-                    TempData["error"] = "This email does not exists!!";
-                }
-                else if(result == 2)
-                {
-                    TempData["error"] = "Email could not be sent!!";
-                }
-                else
-                {
-                    TempData["success"] = "Email sent successfully!!";
-                }
-            }
-            return View(forgotPasswordViewModel);
-        }
-
-        public IActionResult Logout()
-        {
-
-            bool isLogout = _admin.logout();
-            return Json(new { isLogout = isLogout });
+            _jwt = jwt;
+            _patient = patient;
         }
 
         public IActionResult Dashboard()
@@ -333,47 +268,6 @@ namespace HalloDoc.Controllers
         {
             Task<bool> sentMail = _admin.sendDocumentsMail(filename);
             return Json(new { isSent = sentMail });
-        }
-
-        public IActionResult ResetPassword(string token)
-        {
-            PasswordReset passwordReset = _admin.getPasswordReset(token);
-            if (passwordReset == null)
-            {
-                return NotFound();
-            }
-            if (passwordReset.IsUpdated == true)
-            {
-                return NotFound();
-            }
-            TimeSpan difference = DateTime.Now.Subtract(passwordReset.CreatedDate);
-            double hours = difference.TotalHours;
-            if (hours > 24)
-            {
-                return NotFound();
-            }
-            ResetPasswordViewModel resetPasswordViewModel = new ResetPasswordViewModel();
-            resetPasswordViewModel.Token = token;
-            return View(resetPasswordViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ResetPassword(ResetPasswordViewModel modal)
-        {
-            if(ModelState.IsValid)
-            {
-                bool isReseted = _admin.resetPassword(modal);
-                if(isReseted)
-                {
-                    TempData["success"] = "Password reseted Successfully!!";
-                }
-                else
-                {
-                    TempData["error"] = "Password could not be reseted!!";
-                }
-            }
-            return View(modal);
         }
 
         public IActionResult GetPhysician(int regionid)

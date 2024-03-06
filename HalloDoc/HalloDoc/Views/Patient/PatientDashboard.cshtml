@@ -18,10 +18,10 @@
             <img src="../../images/logo1.png" alt="" class="logo" />
             <div class="right-side-elements">
                 <span class="welcome-text">Welcome <span class="name-text">@Model.name</span></span>
-                <a class="logout log" asp-controller="Patient" asp-action="PatientLogin">
+                <a class="logout log" asp-controller="Login" asp-action="PatientLogin">
                     <span class="logout-text">Logout</span>
                 </a>
-                <a class="logout-mob log" asp-controller="Patient" asp-action="PatientLogin">
+                <a class="logout-mob log" asp-controller="Login" asp-action="PatientLogin">
                     <img id="logout" src="../../images/box-arrow-right.svg" alt="" class="logout-img" />
                 </a>
                 <button class="moon" onclick="changeMode()">
@@ -225,3 +225,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var logElements = document.querySelectorAll('.log');
+        logElements.forEach(function (element) {
+            element.addEventListener('click', function () {
+
+                $.get('/Login/Logout', function (response) {
+                    console.log(response)
+                });
+            });
+        });
+    });
+</script>

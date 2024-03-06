@@ -23,11 +23,13 @@ namespace HalloDoc.Repository.Repository
     {
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _context;
+        private readonly IJwtService _jwt;
 
-        public Patient(ApplicationDbContext db, IHttpContextAccessor context)
+        public Patient(ApplicationDbContext db, IHttpContextAccessor context, IJwtService jwt)
         {
             _db = db;
             _context = context;
+            _jwt = jwt;
         }
 
         int IPatient.login(LoginViewModel model)
@@ -40,15 +42,7 @@ namespace HalloDoc.Repository.Repository
                     var passwordHasher = new PasswordHasher<AspNetUser>();
                     var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
                     if (result == PasswordVerificationResult.Success)
-                    {
-                        var role = _db.AspNetUserRoles.FirstOrDefault(u => u.UserId == user.Id);
-                        if (role.RoleId != 1)
-                        {
-                            return 1;
-                        }
-                        var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
-                        _context.HttpContext.Session.SetInt32("AspNetUserId", user.Id);
-                        _context.HttpContext.Session.SetInt32("UserId", curr_user.UserId);
+                    { 
                         return 2;
                     }
                     else
@@ -112,7 +106,7 @@ namespace HalloDoc.Repository.Repository
             };
             _db.PasswordResets.Add(passwordReset);
             _db.SaveChanges();
-            var inviteLink = $"https://localhost:7088/Patient/ResetPassword/?token={Token}";
+            var inviteLink = $"https://localhost:7088/Login/ResetPassword/?token={Token}";
             var subject = "Reset Password - HalloDoc";
             var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
             MailMessage mailMessage = new MailMessage
@@ -559,7 +553,7 @@ namespace HalloDoc.Repository.Repository
                     string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                     string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Patient/Register/{aspuser.Id}";
+                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
 
@@ -797,7 +791,7 @@ namespace HalloDoc.Repository.Repository
                     string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                     string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Patient/Register/{aspuser.Id}";
+                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
 
@@ -1044,7 +1038,7 @@ namespace HalloDoc.Repository.Repository
                     string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                     string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Patient/Register/{aspuser.Id}";
+                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";   
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
 
@@ -1083,9 +1077,11 @@ namespace HalloDoc.Repository.Repository
 
         DashboardViewModel IPatient.getDashboardData()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({id})").ToList();
-            var curr_user = _db.Users.FirstOrDefault(u => u.UserId == id);
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+            var data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({cookieModel.userId})").ToList();
+            var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
                 requests = data,
@@ -1120,8 +1116,10 @@ namespace HalloDoc.Repository.Repository
 
         FamilyRequestViewModel IPatient.getFamilyRequest()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var session_user = _db.Users.FirstOrDefault(u => u.UserId == id);
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+            var session_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             FamilyRequestViewModel familyRequestViewModel = new FamilyRequestViewModel()
             {
                 FamilyFirstName = session_user.FirstName,
@@ -1338,7 +1336,7 @@ namespace HalloDoc.Repository.Repository
                     string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                     string senderPassword = "shahkandarp2430";
                     var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Patient/Register/{aspuser.Id}";
+                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";   
                     var subject = "Register - HalloDoc";
                     var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
 
@@ -1372,8 +1370,10 @@ namespace HalloDoc.Repository.Repository
 
         PatientRequestViewModel IPatient.getPatientRequest()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var user = _db.Users.FirstOrDefault(u => u.UserId == id);
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+            var user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
             {
                 FirstName = user.FirstName,
@@ -1390,8 +1390,10 @@ namespace HalloDoc.Repository.Repository
         {
             try
             {
-                var id = _context.HttpContext.Session.GetInt32("AspNetUserId");
-                var user = _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Id == cookieModel.aspId);
                 if (modal.ImageContent != null && modal.ImageContent.Length > 0)
                 {
                     var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", modal.ImageContent.FileName);
@@ -1482,8 +1484,10 @@ namespace HalloDoc.Repository.Repository
 
         PatientRequestViewModel IPatient.getPatientProfile()
         {
-            var id = _context.HttpContext.Session.GetInt32("UserId");
-            var curr_user = _db.Users.FirstOrDefault(u => u.UserId == id);
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+            var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel
             {
                 FirstName = curr_user.FirstName,
@@ -1504,10 +1508,11 @@ namespace HalloDoc.Repository.Repository
             try
             {
                 var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
-                var aspnetid = _context.HttpContext.Session.GetInt32("AspNetUserId");
-                var userid = _context.HttpContext.Session.GetInt32("UserId");
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
 
-                User user = _db.Users.FirstOrDefault(u => u.UserId == userid);
+                User user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
 
                 if (user.Email != modal.Email)
                 {
@@ -1530,12 +1535,12 @@ namespace HalloDoc.Repository.Repository
                 user.StrMonth = modal.DateOfBirth.Month.ToString();
                 user.IntYear = modal.DateOfBirth.Year;
                 user.IntDate = modal.DateOfBirth.Day;
-                user.ModifiedBy = aspnetid;
+                user.ModifiedBy = cookieModel.aspId;
                 user.ModifiedDate = DateTime.Now;
 
                 _db.Users.Update(user);
 
-                AspNetUser aspuser = _db.AspNetUsers.FirstOrDefault(u => u.Id == aspnetid);
+                AspNetUser aspuser = _db.AspNetUsers.FirstOrDefault(u => u.Id == cookieModel.aspId);
                 aspuser.Email = modal.Email;
                 aspuser.PhoneNumber = modal.Phone;
                 aspuser.UserName = modal.Email;
@@ -1552,10 +1557,12 @@ namespace HalloDoc.Repository.Repository
 
         ViewDocumentModal IPatient.getViewDocument(int id)
         {
-            var user_id = _context.HttpContext.Session.GetInt32("UserId");
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
             var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
             var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
-            var user = _db.Users.FirstOrDefault(u => u.UserId == user_id);
+            var user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
             {
                 patient_name = string.Concat(request.RequestClient.FirstName, ' ', request.RequestClient.LastName),
@@ -1571,7 +1578,6 @@ namespace HalloDoc.Repository.Repository
         {
             try
             {
-                var adminId = _context.HttpContext.Session.GetInt32("AdminId");
                 if (file != null && file.Length > 0)
                 {
                     var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file.FileName);

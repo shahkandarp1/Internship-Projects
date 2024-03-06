@@ -61,18 +61,6 @@ const redirect = () => {
     window.location.assign(`./${document.getElementById("redirect-value").value}`);
 }
 
-$(document).ready(function () {
-    var logElements = document.querySelectorAll('.log');
-    logElements.forEach(function (element) {
-        element.addEventListener('click', function () {
-
-            $.get('/Patient/Logout', function (response) {
-                console.log(response)
-            });
-        });
-    });
-});
-
 window.onload = (e) => {
 
         const mode = localStorage.getItem("mode")
