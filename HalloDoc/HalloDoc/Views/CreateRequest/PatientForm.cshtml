@@ -22,7 +22,7 @@
         <div class="flex-container">
             <div class="top-text">
                 <span class="submit-text" id="submit-text">Submit Information</span>
-                    <a class="back-btn" asp-controller="Patient" asp-action="SubmitRequest">
+                    <a class="back-btn" asp-action="SubmitRequest">
                         &lt; <span class="back-text">Back</span>
                     </a>
             </div>
@@ -167,7 +167,7 @@
         $('#emailInput').on('blur', function () {
             var inputValue = $('#emailInput').val();
 
-            $.get('/Patient/PatientCheck', { email: inputValue }, function (response) {
+            $.get('/CreateRequest/PatientCheck', { email: inputValue }, function (response) {
                 if (!response.isValid ) {
                     const pass = document.getElementsByClassName("hidden-pass");
                     for (let i = 0; i < pass.length; ++i) {
@@ -192,7 +192,7 @@
 
         var inputValue = $('#emailInput').val();
 
-        $.get('/Patient/PatientCheck', { email: inputValue }, function (response) {
+        $.get('/CreateRequest/PatientCheck', { email: inputValue }, function (response) {
             if (!response.isValid) {
                 const pass = document.getElementsByClassName("hidden-pass");
                 for (let i = 0; i < pass.length; ++i) {

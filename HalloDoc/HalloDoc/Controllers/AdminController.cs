@@ -436,5 +436,64 @@ namespace HalloDoc.Controllers
                 return Json(new { isReseted = 3 });
             }
         }
+
+        public IActionResult EncounterForm(int id)
+        {
+            EncounterFormViewModel encounterFormViewModel = _admin.getEncounterFormDetails(id);
+            return View(encounterFormViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EncounterForm(EncounterFormViewModel encounterFormViewModel)
+        {
+            bool isUpdated = _admin.updateEncounterForm(encounterFormViewModel);
+            if(isUpdated)
+            {
+                TempData["success"] = "Encounter Form Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Encounter Form could not be Updated!!";
+            }
+            return View(encounterFormViewModel);
+        }
+
+        public IActionResult CloseCase(int id)
+        {
+            CloseCaseViewModel closeCaseViewModel = _admin.getCloseCase(id);
+            return View(closeCaseViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CloseCase(CloseCaseViewModel closeCaseViewModel)
+        {
+            bool isUpdated = _admin.updateCloseCase(closeCaseViewModel);
+            if (isUpdated)
+            {
+                TempData["success"] = "Information Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Information could not be Updated!!";
+            }
+            return RedirectToAction("CloseCase",new { id = closeCaseViewModel.RequestId});
+        }
+
+        public IActionResult FinalCloseCase(int id)
+        {
+            bool isClosed = _admin.closeCase(id);
+            if (isClosed)
+            {
+                TempData["success"] = "Case Closed!!";
+            }
+            else
+            {
+                TempData["error"] = "Case could not be Closed!!";
+            }
+            return RedirectToAction("Dashboard");
+        }
+
     }
 }

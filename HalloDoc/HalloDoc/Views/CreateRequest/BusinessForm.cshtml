@@ -1,6 +1,6 @@
-﻿@model FamilyRequestViewModel
+﻿@model BusinessRequestViewModel
 @{
-    ViewData["Title"] = "Family Request";
+    ViewData["Title"] = "Business Request";
 }
 @section Styles {
     <link href="~/css/form.css" rel="stylesheet" type="text/css" />
@@ -42,41 +42,46 @@
         <div class="flex-container">
             <div class="top-text">
                 <span class="submit-text" id="submit-text">Submit Information</span>
-                <a class="back-btn" asp-controller="Patient" asp-action="SubmitRequest">
+                <a class="back-btn" asp-action="SubmitRequest">
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form" asp-action="FamilyForm" method="post" enctype="multipart/form-data">
+            <form class="main-form" asp-action="BusinessForm" method="post" enctype="multipart/form-data">
 
-                <!-- Family/Friend Information  -->
+                <!-- Business Information  -->
 
                 <div class="upper-text">
-                    Family/Friend Information
+                    Business Information
                 </div>
                 <div class="row family-info-row">
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="family-first-name" placeholder="name@example.com" asp-for="FamilyFirstName">
-                        <label for="family-first-name" class="form-label">Your First Name</label>
-                        <span asp-validation-for="FamilyFirstName" class="text-danger"></span>
+                        <input type="text" class="form-control" id="business-first-name" placeholder="name@example.com" asp-for="BusinessFirstName">
+                        <label for="business-first-name" class="form-label">Your First Name</label>
+                        <span asp-validation-for="BusinessFirstName" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="family-last-name" placeholder="name@example.com" asp-for="FamilyLastName">
-                        <label for="family-last-name" class="form-label">Your Last Name</label>
-                        <span asp-validation-for="FamilyLastName" class="text-danger"></span>
+                        <input type="text" class="form-control" id="business-last-name" placeholder="name@example.com" asp-for="BusinessLastName">
+                        <label for="business-last-name" class="form-label">Your Last Name</label>
+                        <span asp-validation-for="BusinessLastName" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control phone" id="family-phone"  asp-for="FamilyPhoneNumber">
-                        <span asp-validation-for="FamilyPhoneNumber" class="text-danger"></span>
+                        <input type="tel" class="form-control phone" id="business-phone" asp-for="BusinessPhoneNumber">
+                        <span asp-validation-for="BusinessPhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="family-email" placeholder="name@example.com" asp-for="FamilyEmail">
-                        <label for="family-email" class="form-label">Your email</label>
-                        <span asp-validation-for="FamilyEmail" class="text-danger"></span>
+                        <input type="text" class="form-control" id="business-email" placeholder="name@example.com" asp-for="BusinessEmail">
+                        <label for="business-email" class="form-label">Your email</label>
+                        <span asp-validation-for="BusinessEmail" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="text" class="form-control" id="relation" placeholder="name@example.com" asp-for="FamilyRelation">
-                        <label for="relation" class="form-label">Relation With patient</label>
-                        <span asp-validation-for="FamilyRelation" class="text-danger"></span>
+                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com" asp-for="BusinessPropertyName">
+                        <label for="property-name" class="form-label">Business/Property Name</label>
+                        <span asp-validation-for="BusinessPropertyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="property-name" placeholder="name@example.com" asp-for="BusinessCaseNumber">
+                        <label for="property-name" class="form-label">Case Number(Optional)</label>
+                        <span asp-validation-for="BusinessCaseNumber" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -87,8 +92,7 @@
                 </div>
                 <div class="row symptoms-textarea">
                     <div class="form-floating mt-3 inp col-sm-12">
-                        <textarea class="form-control text-area" id="floatingInput"
-                                  placeholder="name@example.com" asp-for="Symptoms"></textarea>
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Symptoms"></textarea>
                         <label for="floatingInput" class="form-label">Enter Brief Details of Symptoms(Optional)</label>
                         <span asp-validation-for="Symptoms" class="text-danger"></span>
                     </div>
@@ -156,29 +160,9 @@
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
                         <input type="text" class="form-control" id="room" placeholder="name@example.com" asp-for="Room">
                         <label for="room" class="form-label">Room / Suite (Optional)</label>
-                        <span asp-validation-for="Room" class="text-danger"></span>
                     </div>
+                    <span asp-validation-for="Room" class="text-danger custom-msg"></span>
                 </div>
-
-
-                <!-- Upload Photo or Document -->
-                <div class="upper-text margin-top">
-                    Upload Photo or Document(Optional)
-                </div>
-                <div class="file-upload symptoms-textarea">
-                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12 upload-form">
-                        <input type="text" class="form-control" id="file-upload" disabled>
-                        <label for="file-upload" class="upload-label dob-label" id="form-label">Select File</label>
-                    </div>
-                    <label class="custom-file-upload mt-3">
-                        <input type="file" onchange="getFileData(this)" asp-for="ImageContent"/>
-                        <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
-                        <span class="upload-text">
-                            Upload
-                        </span>
-                    </label>
-                </div>
-                    <span asp-validation-for="ImageContent" class="text-danger custom-msg"></span>
 
                 <!-- Submit / Clear -->
                 <div class="lower-btn">
@@ -196,6 +180,6 @@
     }
 
     <!-- Bottom Part -->
-
     <partial name="_FormFooter" />
+    
 </div>

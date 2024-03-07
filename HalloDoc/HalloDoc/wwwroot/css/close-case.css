@@ -1,0 +1,58 @@
+﻿.close-doc{
+    margin:0px;
+}
+
+.table, .mob-documents {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.top-flex{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.invoice-btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #0dcaf0;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid #0dcaf0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bottom-container
+{
+    padding:20px;
+}
+
+.location{
+    width:51px;
+    margin:0px;
+}
+
+.cancel-btn:hover{
+    color:#0dcaf0;
+}
+
+@media screen and (max-width:570px)
+{
+    .top-flex{
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:flex-start;
+    }
+
+    .invoice-btn{
+        font-size:13px;
+    }
+}
+
+@media screen and (max-width:828px)
+{
+    .location{
+        width:40px;
+    }
+}

@@ -24,6 +24,9 @@ using System.IO.Compression;
 using DocumentFormat.OpenXml.Office2010.Word;
 using Microsoft.AspNetCore.Identity;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -126,6 +129,7 @@ namespace HalloDoc.Repository.Repository
                 active_count = count_active,
                 conclude_count = count_conclude,
                 toclose_count = count_toclose,
+                unpaid_count = count_unpaid,
                 requests = _query.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
                 regions = _db.Regions.ToList(),
                 status = status,
@@ -443,7 +447,7 @@ namespace HalloDoc.Repository.Repository
                 string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                 string senderPassword = "shahkandarp2430";
                 var platformTitle = "HalloDoc";
-                var inviteLink = "https://localhost:7088/Patient/SubmitRequest";
+                var inviteLink = "https://localhost:7088/CreateRequest/SubmitRequest";
                 var subject = "Register - HalloDoc";
                 var body = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},<br />Click the following link to create new request in our portal,<br /><br /><a href='{inviteLink}'>Create Request</a><br /><br />Regards,<br/>{platformTitle}<br/>";
 
@@ -1575,6 +1579,282 @@ namespace HalloDoc.Repository.Repository
                 return true;
             }
             catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        Request IAdmin.getRequest(int id)
+        {
+            return _db.Requests.FirstOrDefault(u => u.RequestId == id);
+        }
+
+        bool IAdmin.agree(int id)
+        {
+            try
+            {
+                var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
+                request.Status = 3;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    Status = 3,
+                    RequestId = id,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.disagree(int id, string notes)
+        {
+            try
+            {
+                var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
+                request.Status = 7;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    Status = 7,
+                    RequestId = id,
+                    CreatedDate = DateTime.Now,
+                    Notes = notes
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        EncounterFormViewModel IAdmin.getEncounterFormDetails(int id)
+        {
+            Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r=>r.RequestId == id);
+            EncounterForm encounterForm = _db.EncounterForms.FirstOrDefault(r => r.RequestId == id);
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Dashboard"
+            };
+
+            EncounterFormViewModel encounterFormViewModel = new EncounterFormViewModel()
+            {
+                RequestId = id,
+                adminNavbarViewModel = adminNavbarViewModel,
+                FirstName = request.RequestClient.FirstName,
+                LastName = request.RequestClient.LastName,
+                Email = request.RequestClient.Email,
+                PhoneNumber = request.RequestClient.PhoneNumber,
+                DateOfBirth = DateTime.Parse($"{request.RequestClient.IntYear}-{request.RequestClient.StrMonth}-{request.RequestClient.IntDate}"),
+                Location = string.Concat(request.RequestClient.Street, ',', request.RequestClient.City, ',', request.RequestClient.State, ',', request.RequestClient.ZipCode),
+                Date = encounterForm?.Date ?? DateTime.Now,
+                Illness_history = encounterForm?.HistoryIllness,
+                Medical_history = encounterForm?.MedicalHistory,
+                Medications = encounterForm?.Medications ,
+                Allergies = encounterForm?.Allergies ,
+                Temp = encounterForm?.Temp,
+                Hr = encounterForm?.Hr,
+                Rr = encounterForm?.Rr,
+                BpS = encounterForm?.BpS,
+                BpD = encounterForm?.BpD,
+                O2 = encounterForm?.O2,
+                Pain = encounterForm?.Pain,
+                Heent = encounterForm?.Heent,
+                Cv = encounterForm?.Cv,
+                Chest = encounterForm?.Chest,
+                Abd = encounterForm?.Abd,
+                Extr = encounterForm?.Extr,
+                Skin = encounterForm?.Skin,
+                Neuro = encounterForm?.Neuro,
+                Other = encounterForm?.Other,
+                Diagnosis = encounterForm?.Diagnosis,
+                TreatmentPlan = encounterForm?.TreatmentPlan,
+                MedicationDispensed = encounterForm?.MedicationDispensed,
+                Procedures = encounterForm?.Procedures,
+                FollowUp = encounterForm?.FollowUp,
+            };
+            return encounterFormViewModel;
+        }
+
+        bool IAdmin.updateEncounterForm(EncounterFormViewModel encounterFormViewModel)
+        {
+            try
+            {
+                EncounterForm encounterForm = _db.EncounterForms.FirstOrDefault(r => r.RequestId == encounterFormViewModel.RequestId);
+                if (encounterForm == null)
+                {
+                    EncounterForm encounter = new EncounterForm()
+                    {
+                        Date = DateTime.Now,
+                        RequestId = (int)encounterFormViewModel.RequestId,
+                        HistoryIllness = encounterFormViewModel?.Illness_history,
+                        MedicalHistory = encounterFormViewModel?.Medical_history,
+                        Medications = encounterFormViewModel?.Medications,
+                        Allergies = encounterFormViewModel?.Allergies,
+                        Temp = encounterFormViewModel?.Temp,
+                        Hr = encounterFormViewModel?.Hr,
+                        Rr = encounterFormViewModel?.Rr,
+                        BpS = encounterFormViewModel?.BpS,
+                        BpD = encounterFormViewModel?.BpD,
+                        O2 = encounterFormViewModel?.O2,
+                        Pain = encounterFormViewModel?.Pain,
+                        Heent = encounterFormViewModel?.Heent,
+                        Cv = encounterFormViewModel?.Cv,
+                        Chest = encounterFormViewModel?.Chest,
+                        Abd = encounterFormViewModel?.Abd,
+                        Extr = encounterFormViewModel?.Extr,
+                        Skin = encounterFormViewModel?.Skin,
+                        Neuro = encounterFormViewModel?.Neuro,
+                        Other = encounterFormViewModel?.Other,
+                        Diagnosis = encounterFormViewModel?.Diagnosis,
+                        TreatmentPlan = encounterFormViewModel?.TreatmentPlan,
+                        MedicationDispensed = encounterFormViewModel?.MedicationDispensed,
+                        Procedures = encounterFormViewModel?.Procedures,
+                        FollowUp = encounterFormViewModel?.FollowUp,
+                    };
+
+                    _db.EncounterForms.Add(encounter);
+                    _db.SaveChanges();
+
+                }
+                else
+                {
+                    encounterForm.Date = encounterFormViewModel.Date;
+                    encounterForm.HistoryIllness = encounterFormViewModel?.Illness_history;
+                    encounterForm.MedicalHistory = encounterFormViewModel?.Medical_history;
+                    encounterForm.Medications = encounterFormViewModel?.Medications;
+                    encounterForm.Allergies = encounterFormViewModel?.Allergies;
+                    encounterForm.Temp = encounterFormViewModel?.Temp;
+                    encounterForm.Hr = encounterFormViewModel?.Hr;
+                    encounterForm.Rr = encounterFormViewModel?.Rr;
+                    encounterForm.BpS = encounterFormViewModel?.BpS;
+                    encounterForm.BpD = encounterFormViewModel?.BpD;
+                    encounterForm.O2 = encounterFormViewModel?.O2;
+                    encounterForm.Pain = encounterFormViewModel?.Pain;
+                    encounterForm.Heent = encounterFormViewModel?.Heent;
+                    encounterForm.Cv = encounterFormViewModel?.Cv;
+                    encounterForm.Chest = encounterFormViewModel?.Chest;
+                    encounterForm.Abd = encounterFormViewModel?.Abd;
+                    encounterForm.Extr = encounterFormViewModel?.Extr;
+                    encounterForm.Skin = encounterFormViewModel?.Skin;
+                    encounterForm.Neuro = encounterFormViewModel?.Neuro;
+                    encounterForm.Other = encounterFormViewModel?.Other;
+                    encounterForm.Diagnosis = encounterFormViewModel?.Diagnosis;
+                    encounterForm.TreatmentPlan = encounterFormViewModel?.TreatmentPlan;
+                    encounterForm.MedicationDispensed = encounterFormViewModel?.MedicationDispensed;
+                    encounterForm.Procedures = encounterFormViewModel?.Procedures;
+                    encounterForm.FollowUp = encounterFormViewModel?.FollowUp;
+
+                    _db.EncounterForms.Update(encounterForm);
+                    _db.SaveChanges();
+                }
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        CloseCaseViewModel IAdmin.getCloseCase(int id)
+        {
+            var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
+            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Dashboard"
+            };
+
+            CloseCaseViewModel closeCaseViewModel = new CloseCaseViewModel()
+            {
+                RequestId = id,
+                patient_name = string.Concat(request.RequestClient.FirstName, ' ', request.RequestClient.LastName),
+                confirmation_number = request.ConfirmationNumber,
+                requestWiseFiles = documents,
+                uploader_name = string.Concat(request.FirstName, ' ', request.LastName),
+                adminNavbarViewModel = adminNavbarViewModel,
+                FirstName = request.RequestClient.FirstName,
+                LastName = request.RequestClient.LastName,
+                PhoneNumber = request.RequestClient.PhoneNumber,
+                Email = request.RequestClient.Email,
+                DateOfBirth = DateTime.Parse($"{request.RequestClient.IntYear}-{request.RequestClient.StrMonth}-{request.RequestClient.IntDate}")
+            };
+            return closeCaseViewModel;
+        }
+
+        bool IAdmin.updateCloseCase(CloseCaseViewModel closeCaseViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == closeCaseViewModel.RequestId);
+                RequestClient requestClient = _db.RequestClients.FirstOrDefault(r=>r.RequestClientId == request.RequestId);
+                requestClient.PhoneNumber = closeCaseViewModel.PhoneNumber;
+                requestClient.Email = closeCaseViewModel.Email;
+                _db.RequestClients.Update(requestClient);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.closeCase(int id)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == id);
+                request.Status = 9;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog()
+                {
+                    RequestId = request.RequestId,
+                    Status = 9,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                RequestClosed requestClosed = new RequestClosed()
+                {
+                    RequestId = request.RequestId,
+                    RequestStatusLogId = requestStatusLog.RequestStatusLogId
+                };
+
+                _db.RequestCloseds.Add(requestClosed);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
             {
                 return false;
             }

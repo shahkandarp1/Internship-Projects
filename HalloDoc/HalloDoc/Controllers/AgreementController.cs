@@ -3,22 +3,25 @@ using HalloDoc.ViewModels;
 using HalloDoc;
 using HaloDocMVC.NET.Controllers;
 using Microsoft.EntityFrameworkCore;
+using HalloDoc.Repository.Interface;
 
 namespace HalloDoc.Controllers
 {
     public class AgreementController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IAdmin _admin;
         private readonly IHttpContextAccessor _context;
 
-        public AgreementController( ApplicationDbContext db, IHttpContextAccessor context)
+        public AgreementController( ApplicationDbContext db, IHttpContextAccessor context, IAdmin admin)
         {
             _db = db;
             _context = context;
+            _admin = admin;
         }
         public IActionResult Index(int id)
         {
-            var request_status = _db.Requests.FirstOrDefault(u=>u.RequestId == id);
+            var request_status = _admin.getRequest(id);
             if(request_status.Status != 2)
             {
                 return NotFound();
@@ -31,39 +34,14 @@ namespace HalloDoc.Controllers
 
         public IActionResult Agree(int id)
         {
-            var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
-            request.Status = 3;
-            request.ModifiedDate = DateTime.Now;
-            _db.Requests.Update(request);
-
-            RequestStatusLog requestStatusLog = new RequestStatusLog
-            {
-                Status = 3,
-                RequestId = id,
-                CreatedDate = DateTime.Now,
-            };
-            _db.RequestStatusLogs.Add(requestStatusLog);
-            _db.SaveChanges();
-            return Json(new { isAgreed = true });
+            bool isAgreed = _admin.agree(id);
+            return Json(new { isAgreed = isAgreed });
         }
 
         public IActionResult Disagree(int id,string notes)
         {
-            var request = _db.Requests.FirstOrDefault(u => u.RequestId == id);
-            request.Status = 7;
-            request.ModifiedDate = DateTime.Now;
-            _db.Requests.Update(request);
-
-            RequestStatusLog requestStatusLog = new RequestStatusLog
-            {
-                Status = 7,
-                RequestId = id,
-                CreatedDate = DateTime.Now,
-                Notes = notes
-            };
-            _db.RequestStatusLogs.Add(requestStatusLog);
-            _db.SaveChanges();
-            return Json(new { isAgreed = true });
+            bool isDiasagreed = _admin.disagree(id,notes);
+            return Json(new { isAgreed = isDiasagreed });
         }
     }
 }

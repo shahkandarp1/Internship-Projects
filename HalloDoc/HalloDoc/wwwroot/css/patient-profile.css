@@ -384,6 +384,17 @@ input[type="password"]::-ms-clear {
     display: none;
 }
 
+textarea{
+    resize:none;
+}
+
+.encounter-head{
+    text-align:center;
+    color:#0dcaf0;
+    font-weight:500;
+    font-size:22px;
+}
+
 
 @media screen and (max-width:769px) {
     .custom-file-upload {
@@ -482,6 +493,9 @@ input[type="password"]::-ms-clear {
 
     .file-upload-img {
         margin: 0px;
+    }
+    .encounter-head {
+        font-size: 17px;
     }
 }
 

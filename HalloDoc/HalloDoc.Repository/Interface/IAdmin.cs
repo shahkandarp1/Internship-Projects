@@ -84,5 +84,22 @@ namespace HalloDoc.Repository.Interface
         public bool updateProfile(AdminProfileViewModel adminProfileViewModel);
 
         public bool resetPasswordProfile(string password);
+
+        public Request getRequest(int id);
+
+        public bool agree(int id);
+
+        public bool disagree(int id,string notes);
+
+        public EncounterFormViewModel getEncounterFormDetails(int id);
+
+        public bool updateEncounterForm(EncounterFormViewModel encounterFormViewModel);
+
+        public CloseCaseViewModel getCloseCase(int id);
+
+        public bool updateCloseCase(CloseCaseViewModel closeCaseViewModel);
+
+        public bool closeCase(int id);
+
     }
 }

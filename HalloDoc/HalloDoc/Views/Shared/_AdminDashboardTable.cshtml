@@ -219,12 +219,11 @@
                             @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                             {
                                     <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
-                                <a class="dropdown-item"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Doctor Note</span></div></a>
-                                <a class="dropdown-item"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
+                                    <a class="dropdown-item" asp-action="EncounterForm" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                             }
                             @if (Model.status == "ToClose")
                             {
-                                <a class="dropdown-item" href="#"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Close Case</span></div></a>
+                                    <a class="dropdown-item" asp-action="CloseCase" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Close Case</span></div></a>
                             }
 
                         </div>
@@ -456,8 +455,7 @@
                         }
                         @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Doctor Note</div></a>
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Encounter</div></a>
+                                <a class="col-md-3 col-sm-6 col-6" asp-action="EncounterForm" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Encounter</div></a>
                         }
                         @if (Model.status == "Conclude" || Model.status == "Active")
                         {
@@ -465,7 +463,7 @@
                         }
                         @if (Model.status == "ToClose")
                         {
-                            <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Close Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6" asp-action="CloseCase" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Close Case</div></a>
                         }
                         <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
                     </div>
@@ -593,6 +591,10 @@
     }
 
     const openAgreement = (id, typeid,email,phonenumber) => {
+        document.getElementById("business-agreement").style.display = "none";
+        document.getElementById("patient-agreement").style.display = "none";
+        document.getElementById("family-agreement").style.display = "none";
+        document.getElementById("concierge-agreement").style.display = "none";
         if(typeid == 1)
         {
             document.getElementById("business-agreement").style.display = "block";

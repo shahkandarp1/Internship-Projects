@@ -1,0 +1,226 @@
+﻿@model EncounterFormViewModel
+@{
+    ViewData["Title"] = "Encounter Form";
+}
+@section Styles {
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+}
+
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Encounter Form</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form" asp-action="EncounterForm" asp-controller="Admin" method="post">
+
+                <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                <input type="hidden" asp-for="RequestId" />
+
+                <!-- Medical Report-Confidential  -->
+                <div class="upper-text encounter-head">
+                    Medical Report-Confidential
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="first-name" placeholder="name@example.com" asp-for="FirstName" disabled>
+                        <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="last-name" placeholder="name@example.com" asp-for="LastName" disabled>
+                        <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="date" class="form-control editable dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" disabled>
+                        <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="date" class="form-control editable dob" id="date" placeholder="name@example.com" asp-for="Date" disabled>
+                        <label for="date" class="form-label dob-label">Date</label>
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable" id="phone" asp-for="PhoneNumber" disabled>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable" id="email" placeholder="name@example.com" asp-for="Email" disabled>
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="floatingInput_illness"
+                                  placeholder="name@example.com" asp-for="Illness_history" disabled></textarea>
+                        <label for="floatingInput_illness" class="form-label">History of Illness</label>
+                        <span asp-validation-for="Illness_history" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="floatingInput_medical"
+                                  placeholder="name@example.com" asp-for="Medical_history" disabled></textarea>
+                        <label for="floatingInput_medical" class="form-label">Medical History</label>
+                        <span asp-validation-for="Medical_history" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="floatingInput_medication"
+                                  placeholder="name@example.com" asp-for="Medications" disabled></textarea>
+                        <label for="floatingInput_medication" class="form-label">Medications</label>
+                        <span asp-validation-for="Medications" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="floatingInput_allergies"
+                                  placeholder="name@example.com" asp-for="Allergies" disabled></textarea>
+                        <label for="floatingInput_allergies" class="form-label">Allergies</label>
+                        <span asp-validation-for="Allergies" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
+                        <input type="number" class="form-control editable" id="temp" placeholder="name@example.com" asp-for="Temp" disabled>
+                        <label for="temp" class="form-label">Temp</label>
+                        <span asp-validation-for="Temp" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
+                        <input type="number" class="form-control editable" id="hr" placeholder="name@example.com" asp-for="Hr" disabled>
+                        <label for="hr" class="form-label">HR</label>
+                        <span asp-validation-for="Hr" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
+                        <input type="number" class="form-control editable" id="rr" placeholder="name@example.com" asp-for="Rr" disabled>
+                        <label for="rr" class="form-label">RR</label>
+                        <span asp-validation-for="Rr" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-6 col-6">
+                        <input type="number" class="form-control editable" id="bps" placeholder="name@example.com" asp-for="BpS" disabled>
+                        <label for="bps" class="form-label">BP(S)</label>
+                        <span asp-validation-for="BpS" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-6 col-6">
+                        <input type="number" class="form-control editable" id="bpd" placeholder="name@example.com" asp-for="BpD" disabled>
+                        <label for="bpd" class="form-label">BP(D)</label>
+                        <span asp-validation-for="BpD" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
+                        <input type="number" class="form-control editable" id="O2" placeholder="name@example.com" asp-for="O2" disabled>
+                        <label for="O2" class="form-label">O2</label>
+                        <span asp-validation-for="O2" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
+                        <input type="text" class="form-control editable" id="pain" placeholder="name@example.com" asp-for="Pain" disabled>
+                        <label for="pain" class="form-label">Pain</label>
+                        <span asp-validation-for="Pain" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="heent"
+                                  placeholder="name@example.com" asp-for="Heent" disabled></textarea>
+                        <label for="heent" class="form-label">HEENT</label>
+                        <span asp-validation-for="Heent" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="CV"
+                                  placeholder="name@example.com" asp-for="Cv" disabled></textarea>
+                        <label for="CV" class="form-label">CV</label>
+                        <span asp-validation-for="Cv" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Chest"
+                                  placeholder="name@example.com" asp-for="Chest" disabled></textarea>
+                        <label for="Chest" class="form-label">Chest</label>
+                        <span asp-validation-for="Chest" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Abd"
+                                  placeholder="name@example.com" asp-for="Abd" disabled></textarea>
+                        <label for="Abd" class="form-label">ABD</label>
+                        <span asp-validation-for="Abd" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Extr"
+                                  placeholder="name@example.com" asp-for="Extr" disabled></textarea>
+                        <label for="Extr" class="form-label">Extr</label>
+                        <span asp-validation-for="Extr" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Skin"
+                                  placeholder="name@example.com" asp-for="Skin" disabled></textarea>
+                        <label for="Skin" class="form-label">Skin</label>
+                        <span asp-validation-for="Skin" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Neuro"
+                                  placeholder="name@example.com" asp-for="Neuro" disabled></textarea>
+                        <label for="Neuro" class="form-label">Neuro</label>
+                        <span asp-validation-for="Neuro" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Other"
+                                  placeholder="name@example.com" asp-for="Other" disabled></textarea>
+                        <label for="Other" class="form-label">Other</label>
+                        <span asp-validation-for="Other" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Diagnosis"
+                                  placeholder="name@example.com" asp-for="Diagnosis" disabled></textarea>
+                        <label for="Diagnosis" class="form-label">Diagnosis</label>
+                        <span asp-validation-for="Diagnosis" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="TreatmentPlan"
+                                  placeholder="name@example.com" asp-for="TreatmentPlan" disabled></textarea>
+                        <label for="TreatmentPlan" class="form-label">Treatment Plan</label>
+                        <span asp-validation-for="TreatmentPlan" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="MedicationDispensed"
+                                  placeholder="name@example.com" asp-for="MedicationDispensed" disabled></textarea>
+                        <label for="MedicationDispensed" class="form-label">Medication Dispensed</label>
+                        <span asp-validation-for="MedicationDispensed" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <textarea class="form-control text-area editable" id="Procedures"
+                                  placeholder="name@example.com" asp-for="Procedures" disabled></textarea>
+                        <label for="Procedures" class="form-label">Procedures</label>
+                        <span asp-validation-for="Procedures" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-sm-12">
+                        <textarea class="form-control text-area editable" id="floatingInput_followup"
+                                  placeholder="name@example.com" asp-for="FollowUp" disabled></textarea>
+                        <label for="floatingInput_followup" class="form-label">FollowUp</label>
+                        <span asp-validation-for="FollowUp" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn" id="bottom-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="Edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/patient-profile.js"></script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

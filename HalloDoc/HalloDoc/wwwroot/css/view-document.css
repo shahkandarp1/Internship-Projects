@@ -16,6 +16,7 @@
 
 .view-main {
     font-size: 1.4rem !important;
+    font-weight:500;
 }
 
 .top-part {
@@ -136,6 +137,7 @@ input[type="file"] {
 
 .document-main {
     font-size: 1.2rem !important;
+    font-weight:500;
 }
 
 /*Middle Part*/

@@ -126,10 +126,14 @@ namespace HalloDoc.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Append("jwt", "", new CookieOptions()
+            var cookieOptions = new CookieOptions
             {
-                Expires = DateTime.Now.AddDays(-1)
-            });
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                IsEssential = true
+            };
+            Response.Cookies.Delete("jwt", cookieOptions);
             return Json(new { isLogout = true });
         }
 

@@ -1,0 +1,223 @@
+﻿@model CloseCaseViewModel
+@{
+    ViewData["Title"] = "Close Case";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-document.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/close-case.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/view-document.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="upload-main-container">
+        <div class="upload-inner-container">
+            <div class="top-part">
+                <span class="main-heading view-main dark-heading-text" id="main-heading">Documents</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="wrapper">
+
+                <div id="Dashboard" class="main-content">
+                    <div class="top-flex">
+                        <div>
+                            <span class="pt-name-text dark-text">Patient Name</span>
+                            <div class="pt-name">@Model.patient_name<span class="con_num dark-text">(@Model.confirmation_number)</span></div>
+                        </div>
+                        <a class="invoice-btn">Create Invoice Through QuickBooks</a>
+                    </div>
+                    <div class="middle-part">
+                        <span class="main-heading document-main dark-heading-text" id="main-heading">Documents</span>
+                    </div>
+
+                </div>
+                <form class="desktop-table" asp-action="CloseCase" method="post">
+                    <input type="hidden" asp-for="patient_name" />
+                    <input type="hidden" asp-for="RequestId" />
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.requestWiseFiles)
+                            {
+                                <tr>
+                                    <td class="first-col">
+                                        <span class="document-combo close-doc">
+                                            @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                            {
+                                                <img src="~/images/file-x-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                            {
+                                                <img src="~/images/file-earmark-pdf-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                            {
+                                                <img src="~/images/file-word-fill.svg" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/images/card-image.svg" />
+                                            }
+
+                                            <span class="document-name">@row.FileName</span>
+                                        </span>
+                                    </td>
+                                    <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
+                                    <td>
+                                        <div class="action-flex">
+                                            <div class="outerr-div">
+                                                <a class="downld-btn" download href="~/uploads/@(row.FileName)">
+                                                    <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="mob-documents">
+                        @foreach (var row in Model.requestWiseFiles)
+                        {
+                            <span class="mob-component">
+                                <div class="first-col">
+                                    <span class="document-combo mob-doc-name close-doc">
+                                        @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                        {
+                                            <img src="~/images/file-x-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                        {
+                                            <img src="~/images/file-earmark-pdf-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                        {
+                                            <img src="~/images/file-word-fill.svg" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/card-image.svg" />
+                                        }
+                                        <span class="document-name mob-text dark-text">@row.FileName</span>
+                                    </span>
+                                </div>
+                                <span class="document-name mob-text mob-date dark-text">@row.CreatedDate.ToString("MMMM dd,yyyy")</span>
+                                <div class="mob-action-flex">
+                                    <a class="downld-btn mob-download margin-right" download href="~/uploads/@(row.FileName)">
+                                        <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                    </a>
+                                </div>
+                            </span>
+                        }
+                    </div>
+                    <div class="bottom-container">
+                        <div class="upper-text main-heading document-main dark-heading-text">
+                            Patient Information
+                        </div>
+                        <div class="row symptoms-textarea">
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" class="form-control" id="first-name" placeholder="name@example.com" asp-for="FirstName" disabled>
+                                <label for="first-name" class="form-label">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" class="form-control" id="last-name" placeholder="name@example.com" asp-for="LastName" disabled>
+                                <label for="last-name" class="form-label">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" disabled>
+                                <label for="dob" class="form-label dob-label">Date Of Birth</label>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-lg-5 col-md-5 col-sm-10 col-10">
+                                <input type="tel" class="form-control phone editable" id="phone" asp-for="PhoneNumber" disabled>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <a class="location col-lg-1 col-md-1 col-sm-2 mt-3">
+                                <img class="map-img" src="../../images/telephone-blue.svg" alt="">
+                            </a>
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <input type="email" class="form-control editable" id="email" placeholder="name@example.com" asp-for="Email" disabled>
+                                <label for="email" class="form-label">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- Submit / Clear -->
+                        <div class="lower-btn" id="bottom-edit">
+                            <a class="lower-custom-btn submit-btn" onclick="Edit()">Edit</a>
+                            <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                            <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                            <a class="lower-custom-btn cancel-btn" asp-action="FinalCloseCase" asp-route-id="@Model.RequestId">Close Case</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<script src="~/js/admin-navbar.js"></script>
+@*<script src="~/js/patient-profile.js"></script>*@
+<script>
+
+    const Edit = () => {
+        const editable = document.getElementsByClassName('editable')
+        for (let i = 0; i < editable.length; ++i) {
+            editable[i].disabled = false;
+        }
+        const btn = document.getElementsByClassName('lower-custom-btn')
+        for (let i = 0; i < btn.length; ++i) {
+            if (btn[i].classList.length == 3) {
+                btn[i].classList.remove("hidden");
+            }
+            else {
+                btn[i].classList.add("hidden");
+            }
+        }
+    }
+
+    const Cancel = () => {
+        location.reload()
+    }
+
+    window.onload = function () {
+        const inputDate = document.getElementById('dob');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('max', today);
+
+        const phoneInputField = document.getElementsByClassName("phone");
+        for (let i = 0; i < phoneInputField.length; ++i) {
+            const phoneInput = window.intlTelInput(phoneInputField[i], {
+                utilsScript:
+                    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            });
+        }
+    }
+</script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -87,6 +87,12 @@ window.onload = function () {
     const today = new Date().toISOString().split('T')[0];
     inputDate.setAttribute('max', today);
 
+    //used in encounter form
+
+    const inputDatee = document.getElementById('date');
+    const todayy = new Date().toISOString().split('T')[0];
+    inputDatee.setAttribute('max', todayy);
+
     const phoneInputField = document.getElementsByClassName("phone");
     for (let i = 0; i < phoneInputField.length; ++i) {
         const phoneInput = window.intlTelInput(phoneInputField[i], {
