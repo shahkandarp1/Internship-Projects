@@ -1,7 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Access Denied";
 }
+@section Styles {
+    <link href="~/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/access-denied.css" rel="stylesheet" type="text/css" />
+}
 
-<h1>
-    Access Denied⚠️⚠️⚠️
-</h1>
+<div id="body">
+
+    <partial name="_FormNavbar"/>
+
+    <div class="access_denied">
+        <img src="~/images/access-denied.jpg" class="access-denied-img" />
+    </div>
+
+</div>
+
+

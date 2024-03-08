@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\HalloDoc.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\access-denied.css",
+      "PackagePath": "staticwebassets\\css\\access-denied.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
       "PackagePath": "staticwebassets\\css\\admin-dashboard.css"
     },
@@ -659,6 +663,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\LesfImage.png",
       "PackagePath": "staticwebassets\\images\\LesfImage.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\access-denied.jpg",
+      "PackagePath": "staticwebassets\\images\\access-denied.jpg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\active.png",

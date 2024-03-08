@@ -135,7 +135,8 @@
                         <tr>
                             <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
                             <td>@Enum.GetName(typeof(Status), @row.Status)</td>
-                            <td>@if (row.Status == 8)
+                            <td>
+                                @if (row.Status == 6 || row.Status == 7 || row.Status == 8 || row.Status == 9)
                                 {
                                     <a class="document" asp-controller="Patient" asp-action="ViewDocument" asp-route-id="@(row.RequestId)">
                                         <span class="logout-text">(@(row.Count ?? 0)) Documents</span>
@@ -152,7 +153,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 @for(var i = 0; i < Model.requests.Count; ++i)
                 {
-                    if (Model.requests[i].Status == 8)
+                    if (Model.requests[i].Status == 6 || Model.requests[i].Status == 7 || Model.requests[i].Status == 8 || Model.requests[i].Status == 9 )
                     {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="flush-heading@(i)">

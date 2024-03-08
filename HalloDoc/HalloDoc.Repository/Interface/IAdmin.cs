@@ -65,6 +65,8 @@ namespace HalloDoc.Repository.Interface
 
         public bool transferCase(AdminDashboardViewModel adminDashboardViewModel);
 
+        public bool isSamePhysician(AdminDashboardViewModel adminDashboardViewModel);
+
         public Task<bool> sendAgreement(AdminDashboardViewModel adminDashboardViewModel);
 
         public bool blockCase(AdminDashboardViewModel adminDashboardViewModel);

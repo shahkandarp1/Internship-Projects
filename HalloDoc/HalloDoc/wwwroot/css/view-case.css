@@ -568,6 +568,10 @@ a:hover {
     padding-top: 1.625rem!important;
 }
 
+.physician-assign {
+    color: #adadad;
+}
+
 
 @media screen and (max-width:769px) {
     .custom-file-upload {

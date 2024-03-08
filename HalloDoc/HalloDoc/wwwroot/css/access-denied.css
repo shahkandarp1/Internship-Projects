@@ -1,0 +1,32 @@
+﻿body
+{
+    background-color:white;
+}
+
+.access_denied
+{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:80vh;
+}
+
+.access-denied-img {
+    width: 600px;
+}
+
+@media screen and (max-width:770px)
+{
+    .access-denied-img
+    {
+        width:400px;
+    }
+}
+@media screen and (max-width:426px)
+{
+    .access-denied-img
+    {
+        width:300px;
+    }
+}

@@ -395,6 +395,11 @@ textarea{
     font-size:22px;
 }
 
+.cancel-btn:hover
+{
+    color:#0dcaf0;
+}
+
 
 @media screen and (max-width:769px) {
     .custom-file-upload {

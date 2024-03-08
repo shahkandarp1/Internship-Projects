@@ -743,6 +743,9 @@ input[type="date" i] {
     font-size:13px;
     padding:10px;
 }
+.physician-assign {
+    color: #adadad;
+}
 
 /*Clear Modal*/
 .clear-modal-content {

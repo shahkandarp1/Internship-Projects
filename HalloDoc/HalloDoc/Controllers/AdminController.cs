@@ -267,7 +267,7 @@ namespace HalloDoc.Controllers
         public IActionResult SendMailDocuments([FromForm] string filename)
         {
             Task<bool> sentMail = _admin.sendDocumentsMail(filename);
-            return Json(new { isSent = sentMail });
+            return Json(new { isSent = sentMail.Result });
         }
 
         public IActionResult GetPhysician(int regionid)
@@ -293,6 +293,13 @@ namespace HalloDoc.Controllers
 
         public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
+            bool isExists = _admin.isSamePhysician(adminDashboardViewModel);
+            if(isExists)
+            {
+                TempData["error"] = "This doctor already has the same case!!";
+                return RedirectToAction("Dashboard");
+            }
+
             bool isTransfered = _admin.transferCase(adminDashboardViewModel);
             if (isTransfered)
             {
@@ -317,8 +324,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Agreement could not be sent!!";
             }
-            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", newAdminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         public IActionResult BlockCase(AdminDashboardViewModel adminDashboardViewModel)

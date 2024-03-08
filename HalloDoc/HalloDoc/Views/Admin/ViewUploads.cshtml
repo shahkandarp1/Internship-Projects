@@ -276,7 +276,14 @@
                         contentType: false,
                         type: "POST",
                         success: function (data) {
-                            toastr.success("Mail Sent Successfully!!")
+                            if(data.isSent)
+                            {
+                                toastr.success("Mail Sent Successfully!!")
+                            }
+                            else
+                            {
+                                toastr.error("Failed to send email!!");
+                            }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             toastr.error("Failed to send email!!"); 

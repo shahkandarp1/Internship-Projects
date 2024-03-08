@@ -1103,17 +1103,17 @@ namespace HalloDoc.Repository.Repository
 
                     
                     success = true;
-                    await LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, true, retryCount);
+                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, true, retryCount);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    retryCount++;
 
                     if (retryCount >= 3) 
                     {
-                        await LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, false, retryCount);
+                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, false, retryCount);
                     }
+                    retryCount++;
                 }
             }
 
@@ -1121,7 +1121,7 @@ namespace HalloDoc.Repository.Repository
             
         }
 
-        private async Task LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount)
+        void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount)
         {
             if(request_id!=-1)
             {
@@ -1139,8 +1139,8 @@ namespace HalloDoc.Repository.Repository
                     RoleId = 1
 
                 };
-                await _db.EmailLogs.AddAsync(emailLog);
-                await _db.SaveChangesAsync();
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChangesAsync();
             }
             else
             {
@@ -1158,8 +1158,8 @@ namespace HalloDoc.Repository.Repository
                     RoleId = 3
 
                 };
-                await _db.EmailLogs.AddAsync(emailLog);
-                await _db.SaveChangesAsync();
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
             }
 
             
@@ -1269,6 +1269,16 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        bool IAdmin.isSamePhysician(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == adminDashboardViewModel.RequestId);
+            if(request.PhysicianId == adminDashboardViewModel.PhysicianId)
+            {
+                return true;
+            }
+            return false;
+        }
+
         async Task<bool> IAdmin.sendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
             int retryCount = 1;
@@ -1314,17 +1324,17 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    await LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,cookieModel.userId, -1, true, retryCount);
+                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,cookieModel.userId, -1, true, retryCount);
                     break;
                 }
                 catch (Exception ex)
                 {
-                    retryCount++;
 
                     if (retryCount >= 3)
                     {
-                        await LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount);
+                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount);
                     }
+                    retryCount++;
                 }
             }
 
