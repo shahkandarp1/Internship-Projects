@@ -13,26 +13,14 @@ namespace HalloDoc.ViewModels
 
         public int? RequestId { get; set; }
 
-        [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        [Required]
-        public string Location { get; set; }
-        [Required]
-        public DateTime DateOfBirth { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Location { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
-        [Required]
-        public DateTime Date { get; set; } = DateTime.Now;
-
-        [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
-        public string PhoneNumber { get; set; }
-
-        [Required]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-            ErrorMessage = "Please enter valid Email")]
-        public string Email { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
+        public string? PhoneNumber { get; set; }
+        public string? Email { get; set; }
 
         public string? Illness_history { get; set; }
 

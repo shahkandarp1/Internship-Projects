@@ -71,7 +71,7 @@
         </button>
         <button class="sidebar-tablinks accordion-mob-btn @providerM">Providers</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner"> Provider </a>
+            <a class="mobile-sidebar-a accord-inner" asp-action="Provider" asp-controller="Admin"> Provider </a>
             <a class="mobile-sidebar-a accord-inner"> Scheduling </a>
             <a class="mobile-sidebar-a accord-inner"> Invoicing </a>
         </div>
@@ -119,7 +119,7 @@
                 Providers
             </button>
             <ul class="dropdown-menu" aria-labelledby="provider">
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Provider</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" asp-action="Provider" asp-controller="Admin">Provider</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item" href="#">Scheduling</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item" href="#">Invoicing</a></li>
             </ul>

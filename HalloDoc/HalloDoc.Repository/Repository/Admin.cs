@@ -27,6 +27,7 @@ using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Irony.Parsing;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -1868,6 +1869,171 @@ namespace HalloDoc.Repository.Repository
             {
                 return false;
             }
+        }
+
+        ProviderViewModel IAdmin.getProviderPageDetails(int id=-1,int page=1,int pageSize=10)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            IQueryable<Physician> physicians = _db.Physicians;
+
+            if(id != -1 && id!=null)
+            {
+                physicians = physicians.Where(p => p.RegionId == id);
+            }
+
+            List<Physician> physician = physicians.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            List<PhysicianProvider> physicianProviders = new List<PhysicianProvider>();
+
+            TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+            for (var i=0;i< physician.Count;++i)
+            {
+                PhysicianNotification physicianNotification = _db.PhysicianNotifications.FirstOrDefault(p=>p.PhysicianId == physician[i].PhysicianId);
+                Role role = _db.Roles.FirstOrDefault(r => r.RoleId == physician[i].RoleId);
+                List<Shift> shift = _db.Shifts.Where(s=>s.PhysicianId == physician[i].PhysicianId && s.StartDate <= DateOnly.FromDateTime(DateTime.Now)).ToList();
+                List<ShiftDetail> shiftDetails = new List<ShiftDetail>();
+                bool isActive = false;
+                foreach(var sh in shift)
+                {
+                    List<ShiftDetail> shiftDetail = _db.ShiftDetails.Where(p => p.ShiftId == sh.ShiftId && p.ShiftDate.Date == DateTime.Now.Date).ToList();
+                    if(shiftDetail.Count>0)
+                    {
+                        shiftDetails.AddRange(shiftDetail);
+                    }
+                }
+                foreach(var sd in shiftDetails)
+                {
+                    if(currentTime.IsBetween(sd.StartTime, sd.EndTime))
+                    {
+                        isActive = true;
+                        break;
+                    }
+                }
+                physicianProviders.Add(new PhysicianProvider()
+                {
+                    isStopNotification = physicianNotification == null?false: physicianNotification.IsNotificationStopped[0],
+                    name = string.Concat(physician[i].FirstName,", ", physician[i].LastName),
+                    status = physician[i].Status,
+                    role = role?.Name ?? "-",
+                    physicianId = physician[i].PhysicianId,
+                    oncallstatus = isActive == true? "On Call":"Unavailable",
+                });
+            }
+
+            List<Region> regions = _db.Regions.ToList();
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider"
+            };
+
+            ProviderViewModel providerViewModel = new ProviderViewModel()
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                physicianproviders = physicianProviders,
+                regions = regions,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = physicians.Count(),
+                TotalPages = (int)Math.Ceiling((double)physicians.Count() / pageSize)
+            };
+
+            return providerViewModel;
+
+        }
+
+        bool IAdmin.changeNotification(int id,bool update)
+        {
+            try
+            {
+                PhysicianNotification physicianNotification = _db.PhysicianNotifications.FirstOrDefault(p=>p.PhysicianId == id);
+                if(physicianNotification == null)
+                {
+                    PhysicianNotification physicianNotification1 = new PhysicianNotification()
+                    {
+                        PhysicianId = id,
+                        IsNotificationStopped = new BitArray(new[] { update })
+                    };
+                    _db.PhysicianNotifications.Add(physicianNotification1);
+                }
+                else
+                {
+                    physicianNotification.IsNotificationStopped = new BitArray(new[] { update });
+                    _db.PhysicianNotifications.Update(physicianNotification);
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        async Task<bool> IAdmin.contactProvider(ProviderViewModel providerViewModel)
+        {
+            int retryCount = 1;
+            bool success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
+            {
+
+                var physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == providerViewModel.ProviderId);
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                var platformTitle = "HalloDoc";
+                var subject = "Contact - HalloDoc";
+                var body = $"Hello {physician.FirstName} {physician.LastName},<br />{providerViewModel.message}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+                try
+                {
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = subject,
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(physician.Email);
+
+
+                    await client.SendMailAsync(mailMessage);
+
+
+                    success = true;
+                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    if (retryCount >= 3)
+                    {
+                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount);
+                    }
+                    retryCount++;
+                }
+            }
+
+            return success;
         }
 
     }

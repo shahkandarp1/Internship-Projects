@@ -462,7 +462,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Encounter Form could not be Updated!!";
             }
-            return View(encounterFormViewModel);
+            return RedirectToAction("EncounterForm",new { id = encounterFormViewModel.RequestId});
         }
 
         public IActionResult CloseCase(int id)
@@ -499,6 +499,38 @@ namespace HalloDoc.Controllers
                 TempData["error"] = "Case could not be Closed!!";
             }
             return RedirectToAction("Dashboard");
+        }
+
+        public IActionResult Provider()
+        {
+            ProviderViewModel providerViewModel = _admin.getProviderPageDetails(-1);
+            return View(providerViewModel);
+        }
+
+        public IActionResult ProviderTable(int id = -1,int page=1,int pageSize = 10)
+        {
+            ProviderViewModel providerViewModel = _admin.getProviderPageDetails(id,page,pageSize);
+            return PartialView("_AdminProviderTable", providerViewModel);
+        }
+
+        public IActionResult ChangeNotification(int id,bool update)
+        {
+            bool isUpdated = _admin.changeNotification(id,update);
+            return Json(new {isUpdated = isUpdated });
+        }
+        
+        public IActionResult ContactProvider(ProviderViewModel providerViewModel)
+        {
+            Task<bool> isSent = _admin.contactProvider(providerViewModel);
+            if (isSent.Result)
+            {
+                TempData["success"] = "Mail Sent Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Mail Could not be sent!!";
+            }
+            return RedirectToAction("Provider");
         }
 
     }

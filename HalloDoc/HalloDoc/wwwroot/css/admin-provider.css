@@ -1,0 +1,147 @@
+﻿.btn
+{
+    width:auto;
+}
+
+.inner-pt-container{
+    width:100%;
+}
+
+.contact-btn {
+    color: #0dcaf0!important;
+    border: 1px solid #0dcaf0;
+    padding:5px 10px;
+}
+
+.contact-btn:hover {
+    border-color: #0dcaf0;
+}
+
+.contact-btn:first-child{
+    margin-right:4px;
+}
+
+td {
+    color: #757678!important;
+    font-weight:400;
+}
+
+tr{
+    text-align:center;
+}
+
+.form-check-input:checked {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0 !important;
+    box-shadow: none;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+.top-check{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.accordion-button::after
+{
+    display:none;
+}
+
+.form-check{
+    margin-bottom:25px;
+}
+
+.lower-btn-mob-flex{
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
+}
+
+.modal-body
+{
+    padding:20px;
+    align-items:flex-start;
+    width:100%;
+}
+
+.cancel-btn
+{
+    color:#0dcaf0!important;
+}
+
+.contact-top {
+    color: #757678;
+}
+
+.modal-content {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.text-area{
+    height:100px!important;
+}
+
+.both-check{
+    margin-bottom:10px;
+}
+
+@media screen and (max-width: 1180px) {
+    .accordion {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 660px)
+{
+    .inner-pt-container
+    {
+        flex-direction:column;
+    }
+
+    .search{
+        width:100%;
+        margin-right:0px!important;
+        margin-bottom:15px!important;
+    }
+
+    .patient-text-btn
+    {
+        font-size:14px;
+    }
+
+    .search-inp {
+        font-size: 14px;
+    }
+}
+
+
+
+@media screen and (max-width:810px) {
+    .table {
+        display: none;
+    }
+
+    .accordion {
+        display: block;
+    }
+}
+
+@media screen and (max-width:330px)
+{
+    .search-image{
+        width:15px;
+    }
+}
+
+@media screen and (max-width:426px)
+{
+    .flex-container{
+        width:90%;
+    }
+}

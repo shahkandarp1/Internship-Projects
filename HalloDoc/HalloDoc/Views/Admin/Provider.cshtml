@@ -1,0 +1,183 @@
+﻿@model ProviderViewModel
+@{
+    ViewData["Title"] = "Provider Information";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <!-- Contact Provider Modal -->
+    <form asp-action="ContactProvider" asp-controller="Admin" method="post" onsubmit="">
+        <div class="modal fade" id="myModalProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Contact Your Provider</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="ProviderId" id="req-provider-id" />
+                        <span class="modal-head mb-3"><span class="contact-top">Choose communication to send message:</span></span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="SMS" asp-for="communication_type" checked>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                SMS
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" asp-for="communication_type" value="Email" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Email
+                            </label>
+                        </div>
+                        <div class="form-check both-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" asp-for="communication_type" value="Both" id="flexRadioDefault3">
+                            <label class="form-check-label" for="flexRadioDefault3">
+                                Both
+                            </label>
+                        </div>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="block-reason" placeholder="name@example.com" required asp-for="message"></textarea>
+                            <label for="admin_notes" class="form-label">Message</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
+                            <a id="cancel-provider" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Provider Information</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <span class="search">
+                                <img class="search-image"
+                                     src="../../images/search.svg"
+                                     alt="" />
+                                <select name="" id="region" class="search-inp" onchange="filter(1,10)">
+                                    <option value="-1">All Regions</option>
+                                    @foreach (var item in Model.regions)
+                                    {
+                                        <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </span>
+                            <a class="btn btn-info text-white patient-text-btn" asp-action="ExportAll" asp-controller="Admin">
+                                <span>Create Provider Account</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+        const filter = (page,pageSize) => {
+            document.getElementById("partial-container").style.display = "none";
+            document.getElementsByClassName("loader-container")[0].style.display = "flex";
+            $.ajax({
+                url: `/Admin/ProviderTable`,
+                type: 'POST',
+                dataType: 'html',
+                data: { id:document.getElementById("region").value, page: page, pageSize: pageSize },
+                // Pass your data here
+                success: function (response) {
+                    document.getElementsByClassName("loader-container")[0].style.display = "none";
+                    document.getElementById("partial-container").style.display = "block";
+                    $("#partial-container").html(response)
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#cancel-provider").click(function () {
+                $("#myModalProvider").modal("hide");
+            });
+        });
+
+
+        const changeNotification = (element) => {
+        const physicianid = element.getAttribute("data-id")
+            console.log(physicianid)
+        $.ajax({
+            url: `/Admin/ChangeNotification`,
+            type: 'POST',
+            dataType: 'html',
+            data: { id: physicianid,update:element.checked },
+            // Pass your data here
+            success: function (response) {
+                console.log(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+        }
+
+        window.onload = () => {
+
+            $.ajax({
+                url: `/Admin/ProviderTable`,
+                type: 'POST',
+                dataType: 'html',
+                // Pass your data here
+                success: function (response) {
+                    document.getElementsByClassName("loader-container")[0].style.display = "none";
+                    $("#partial-container").html(response)
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
+            });
+
+        }
+    </script>
+
+
+    <script src="~/js/admin-navbar.js"></script>
+    <script src="~/js/admin-dashboard.js"></script>

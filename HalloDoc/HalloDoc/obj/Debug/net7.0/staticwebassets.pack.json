@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\css\\admin-profile.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-provider.css",
+      "PackagePath": "staticwebassets\\css\\admin-provider.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\agreement.css",
       "PackagePath": "staticwebassets\\css\\agreement.css"
     },

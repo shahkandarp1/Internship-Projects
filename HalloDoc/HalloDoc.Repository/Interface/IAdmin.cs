@@ -103,5 +103,11 @@ namespace HalloDoc.Repository.Interface
 
         public bool closeCase(int id);
 
+        public ProviderViewModel getProviderPageDetails(int id=-1, int page = 1, int pageSize = 10);
+
+        public bool changeNotification(int id, bool update);
+
+        public Task<bool> contactProvider(ProviderViewModel providerViewModel);
+
     }
 }

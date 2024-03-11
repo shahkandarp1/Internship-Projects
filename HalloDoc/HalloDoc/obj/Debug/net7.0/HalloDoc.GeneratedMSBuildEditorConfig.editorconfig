@@ -40,6 +40,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/Provider.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUHJvdmlkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/ViewCase.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmlld0Nhc2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -138,6 +142,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_AdminNavbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbk5hdmJhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_AdminProviderTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pblByb3ZpZGVyVGFibGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_FormFooter.cshtml]
