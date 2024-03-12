@@ -533,5 +533,43 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Provider");
         }
 
+        public IActionResult CreatePhysician()
+        {
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.getCreatePhysicianDetails();
+            return View(physicianAccountViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            if(physicianAccountViewModel.Signature == null || physicianAccountViewModel.Photo == null)
+            {
+                TempData["error"] = "Please upload neccessarry documents!!";
+                return View(physicianAccountViewModel);
+            }
+
+            if(ModelState.IsValid)
+            {
+                if(_patient.getAspNetUser(physicianAccountViewModel.Email) != null)
+                {
+                    TempData["error"] = "This Email Id Already Exists!!";
+                    return View(physicianAccountViewModel);
+                }
+
+                Task<bool> isCreated = _admin.createPhysician(physicianAccountViewModel);
+                if(isCreated.Result)
+                {
+                    TempData["success"] = "Account Created Successfully!!";
+                    return RedirectToAction("Provider");
+                }
+                else
+                {
+                    TempData["error"] = "Account Could not be Created!!";
+                }
+            }
+            return View(physicianAccountViewModel);
+        }
+
     }
 }

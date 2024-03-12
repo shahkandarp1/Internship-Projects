@@ -2,6 +2,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using HalloDoc;
 using HalloDoc.Repository.Interface;
 using HalloDoc.Repository.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,6 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<IAdmin, HalloDoc.Repository.Repository.Admin>();
 builder.Services.AddScoped<IPatient, HalloDoc.Repository.Repository.Patient>();
 builder.Services.AddScoped<IJwtService, HalloDoc.Repository.Repository.JwtService>();
-
 
 var app = builder.Build();
 

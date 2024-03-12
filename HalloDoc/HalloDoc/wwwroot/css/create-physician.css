@@ -1,0 +1,87 @@
+﻿.custom-file-upload
+{
+    padding:5px 10px;
+}
+
+.bottom-physician-upload
+{
+    display:none;
+}
+.upload-doc-btn {
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor:pointer;
+}
+.onboarding-header {
+    border-top: 1px solid #9A9A9A;
+    padding-top: 20px;
+}
+
+.bottom-upload-label{
+    width:250px;
+}
+
+.view-doc-btn {
+    cursor:pointer;
+}
+
+.form-check{
+    margin-right:20px;
+}
+.bottom-physician-upload {
+    margin:0px;
+}
+
+.document-outer-flex{
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+.document-inner-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.bottom-border {
+    border-bottom: 1px solid #9A9A9A;
+    padding-bottom: 30px;
+}
+
+@media screen and (max-width:625px) {
+    .form-check {
+        margin-right: 10px;
+    }
+    .bottom-upload-label {
+        width:230px;
+        font-size: 15px;
+    }
+    .bottom-physician-upload {
+        display: block;
+    }
+    .upload-text{
+        display:none;
+    }
+    .document-inner-flex{
+        flex-direction:column;
+    }
+    .upload-doc-btn{
+        margin-bottom:5px;
+    }
+}
+
+@media screen and (max-width:460px)
+{
+    .bottom-upload-label {
+        width: 180px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:380px) {
+    .bottom-upload-label {
+        width: 140px;
+        font-size: 14px;
+    }
+}

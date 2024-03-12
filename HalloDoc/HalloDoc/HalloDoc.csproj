@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\provider_documents\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

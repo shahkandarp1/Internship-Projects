@@ -1877,7 +1877,7 @@ namespace HalloDoc.Repository.Repository
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.getDetails(token);
 
-            IQueryable<Physician> physicians = _db.Physicians;
+            IQueryable<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false }));
 
             if(id != -1 && id!=null)
             {
@@ -1989,6 +1989,257 @@ namespace HalloDoc.Repository.Repository
                 var platformTitle = "HalloDoc";
                 var subject = "Contact - HalloDoc";
                 var body = $"Hello {physician.FirstName} {physician.LastName},<br />{providerViewModel.message}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+                try
+                {
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = subject,
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(physician.Email);
+
+
+                    await client.SendMailAsync(mailMessage);
+
+
+                    success = true;
+                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    if (retryCount >= 3)
+                    {
+                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount);
+                    }
+                    retryCount++;
+                }
+            }
+
+            return success;
+        }
+
+        PhysicianAccountViewModel IAdmin.getCreatePhysicianDetails()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider"
+            };
+
+            List<Region> regions = _db.Regions.ToList();
+
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+
+            for(var i=0;i<regions.Count;++i)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel()
+                {
+                    Name = regions[i].Name,
+                    Id = regions[i].RegionId,
+                    isChecked = false
+                }); ;
+            }
+
+            PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel()
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                checkboxViewModels = checkboxViewModels
+            };
+            return physicianAccountViewModel;
+        }
+
+        async Task<bool> IAdmin.createPhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            var passwordHasher = new PasswordHasher<AspNetUser>();
+            Region region = _db.Regions.FirstOrDefault(r=>r.RegionId == physicianAccountViewModel.RegionId);
+            AspNetUser aspNetUser = new AspNetUser()
+            {
+                Email = physicianAccountViewModel.Email,
+                UserName = string.Concat("MD.", physicianAccountViewModel.LastName.Substring(0, 1).ToUpper() , physicianAccountViewModel.LastName.Substring(1).ToLower() , "." , physicianAccountViewModel.FirstName.Substring(0, 1).ToUpper()),
+                CreatedDate = DateTime.Now
+            };
+            var password = string.Concat(aspNetUser.UserName, DateTime.Now.ToString("yyyyMMddHHmmss"));
+            aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, password);
+            _db.AspNetUsers.Add(aspNetUser);
+            _db.SaveChanges();
+
+            Physician physician = new Physician()
+            {
+                AspNetUserId = aspNetUser.Id,
+                FirstName = physicianAccountViewModel.FirstName,
+                LastName = physicianAccountViewModel.LastName,
+                Email = physicianAccountViewModel.Email,
+                Mobile = physicianAccountViewModel.PhoneNumber,
+                AltPhone = physicianAccountViewModel.AltPhone,
+                MedicalLicense = physicianAccountViewModel.MedicalLicense,
+                Npinumber = physicianAccountViewModel.NPI_Number,
+                SyncEmailAddress = physicianAccountViewModel.Sync_Email,
+                Address1 = physicianAccountViewModel.Address1,
+                Address2 = physicianAccountViewModel.Address2,
+                City = physicianAccountViewModel.City,
+                RegionId = physicianAccountViewModel.RegionId,
+                Zip = physicianAccountViewModel.Zipcode,
+                BusinessName = physicianAccountViewModel.BusinessName,
+                BusinessWebsite = physicianAccountViewModel.BusinessWebsite,
+                AdminNotes = physicianAccountViewModel.Admin_Notes,
+                IsAgreementDoc = new BitArray(new[] { physicianAccountViewModel.IsAgreementDoc }),
+                IsBackgroundDoc = new BitArray(new[] { physicianAccountViewModel.IsBackgroundDoc }),
+                IsLicenseDoc = new BitArray(new[] { physicianAccountViewModel.IsLicenseDoc }),
+                IsNonDisclosureDoc = new BitArray(new[] { physicianAccountViewModel.IsNonDisclosureDoc }),
+                IsCredentialDoc = new BitArray(new[] { physicianAccountViewModel.IsCredentialDoc }),
+                IsDeleted = new BitArray(new[] { false }),
+                Status = 2,
+                RoleId = 1
+            };
+
+            _db.Physicians.Add(physician);
+            _db.SaveChanges();
+
+            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}");
+            Directory.CreateDirectory(filePath);
+
+            if (physicianAccountViewModel.Signature != null && physicianAccountViewModel.Signature.Length > 0)
+            {
+                var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}", physicianAccountViewModel.Signature.FileName);
+                using (var stream = System.IO.File.Create(filePathh))
+                {
+                    await physicianAccountViewModel.Signature.CopyToAsync(stream);
+                }
+            }
+
+            if (physicianAccountViewModel.Photo != null && physicianAccountViewModel.Photo.Length > 0)
+            {
+                var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}", physicianAccountViewModel.Photo.FileName);
+                using (var stream = System.IO.File.Create(filePathh))
+                {
+                    await physicianAccountViewModel.Photo.CopyToAsync(stream);
+                }
+            }
+
+            physician.Signature = physicianAccountViewModel.Signature.FileName;
+            physician.Photo = physicianAccountViewModel.Signature.FileName;
+
+            _db.Physicians.Update(physician);
+            _db.SaveChanges();
+
+            for(var i=0;i<physicianAccountViewModel.checkboxViewModels.Count;++i)
+            {
+                if (physicianAccountViewModel.checkboxViewModels[i].isChecked == true)
+                {
+                    PhysicianRegion physicianRegion = new PhysicianRegion()
+                    {
+                        PhysicianId = physician.PhysicianId,
+                        RegionId = (int)physicianAccountViewModel.checkboxViewModels[i].Id
+                    };
+                    _db.PhysicianRegions.Add(physicianRegion);
+                    _db.SaveChanges();
+                }
+            }
+
+            if(physicianAccountViewModel.IsAgreementDoc)
+            {
+                if (physicianAccountViewModel.AgreementDoc != null && physicianAccountViewModel.AgreementDoc.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\Agreement.pdf");
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.AgreementDoc.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            if (physicianAccountViewModel.IsBackgroundDoc)
+            {
+                if (physicianAccountViewModel.BackgroundDoc != null && physicianAccountViewModel.BackgroundDoc.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\Background.pdf");
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.BackgroundDoc.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            if (physicianAccountViewModel.IsLicenseDoc)
+            {
+                if (physicianAccountViewModel.LicenseDoc != null && physicianAccountViewModel.LicenseDoc.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\License.pdf");
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.LicenseDoc.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            if (physicianAccountViewModel.IsNonDisclosureDoc)
+            {
+                if (physicianAccountViewModel.NonDisclosureDoc != null && physicianAccountViewModel.NonDisclosureDoc.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\NonDiscolsure.pdf");
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.NonDisclosureDoc.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            if (physicianAccountViewModel.IsCredentialDoc)
+            {
+                if (physicianAccountViewModel.CredentialDoc != null && physicianAccountViewModel.CredentialDoc.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\HIPAA.pdf");
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.CredentialDoc.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            PhysicianLocation physicianLocation = new PhysicianLocation()
+            {
+                PhysicianId = physician.PhysicianId,
+                Latitude = physicianAccountViewModel?.lat != null ? physicianAccountViewModel?.lat : 0,
+                Longitude = physicianAccountViewModel?.lng != null ? physicianAccountViewModel?.lng : 0,
+                CreatedDate = DateTime.Now,
+                PhysicianName = string.Concat(physician.FirstName, ' ', physician.LastName),
+                Address = string.Concat(physician.Address1, ", ", physician.City, ", ", region.Name, " ", physician.Zip)
+            };
+            _db.PhysicianLocations.Add(physicianLocation);
+            _db.SaveChanges();
+
+            int retryCount = 1;
+            bool success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
+            {
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                var platformTitle = "HalloDoc";
+                var subject = "Account Credentials - HalloDoc";
+                var body = $"Hello {physician.FirstName} {physician.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {physician.Email}<br />Password : {password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.getDetails(token);

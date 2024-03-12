@@ -1,0 +1,372 @@
+﻿@model PhysicianAccountViewModel
+@{
+    ViewData["Title"] = "Create Physician";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/create-physician.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/patient-profile.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Create Physician Account</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Provider">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form" asp-action="CreatePhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form">
+
+                <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                <input type="hidden" asp-for="lat" id="lat" />
+                <input type="hidden" asp-for="lng" id="long" />
+
+                <!-- Account Information  -->
+                <div class="upper-text">
+                    Physician Information
+                </div>
+                <div class="row">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="first-name" placeholder="name@example.com" asp-for="FirstName" >
+                        <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="last-name" placeholder="name@example.com" asp-for="LastName" >
+                        <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable top-editable" id="email" placeholder="name@example.com" asp-for="Email" >
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable top-editable" id="phone" asp-for="PhoneNumber" >
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="medical-license" placeholder="name@example.com" asp-for="MedicalLicense" >
+                        <label for="medical-license" class="form-label">Medical License</label>
+                        <span asp-validation-for="MedicalLicense" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="npi-number" placeholder="name@example.com" asp-for="NPI_Number" >
+                        <label for="npi-number" class="form-label">NPI Number</label>
+                        <span asp-validation-for="NPI_Number" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="Sync_Email" placeholder="name@example.com" asp-for="Sync_Email" >
+                        <label for="Sync_Email" class="form-label">Synchronization Email Address</label>
+                        <span asp-validation-for="Sync_Email" class="text-danger"></span>
+                    </div>
+                    <div class="mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <label class="form-check-label" for="flexCheckDefault@(i)">
+                                    @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                }
+
+                <!-- Mailing & Billing Information -->
+                <div class="upper-text margin-top mt-3">
+                    Mailing & Billing Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address1" placeholder="name@example.com" asp-for="Address1" >
+                        <label for="address1" class="form-label">Address 1</label>
+                        <span asp-validation-for="Address1" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address2" placeholder="name@example.com" asp-for="Address2" >
+                        <label for="address2" class="form-label">Address 2</label>
+                        <span asp-validation-for="Address2" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="city" placeholder="name@example.com" asp-for="City" >
+                        <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select editable bottom-editable" id="Select-state" placeholder="name@example.com" asp-for="RegionId" >
+                            @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                            {
+                                <option value="@Model.checkboxViewModels[i].Id">@(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())</option>
+                            }
+                        </select>
+                        <label for="Select-state" class="form-label">State</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="zipcode" placeholder="name@example.com" asp-for="Zipcode" >
+                        <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="Zipcode" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable bottom-editable" id="phone" asp-for="AltPhone" >
+                        <span asp-validation-for="AltPhone" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Provider Profile -->
+                <div class="upper-text margin-top mt-3">
+                    Provider Profile
+                </div>
+
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="business_name" placeholder="name@example.com" asp-for="BusinessName">
+                        <label for="business_name" class="form-label">Business Name</label>
+                        <span asp-validation-for="BusinessName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="business_website" placeholder="name@example.com" asp-for="BusinessWebsite">
+                        <label for="business_website" class="form-label">Business Website</label>
+                        <span asp-validation-for="BusinessWebsite" class="text-danger"></span>
+                    </div>
+                    <div class="file-upload symptoms-textarea col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-floating mt-3 inp upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label-photo">Select Photo</label>
+                        </div>
+                        <label class="custom-file-upload mt-3">
+                            <input type="file" onchange="getFileData(this,'form-label-photo')" asp-for="Photo" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                    </div>
+                    <div class="file-upload symptoms-textarea col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-floating mt-3 inp upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label-signature">Select Signature</label>
+                        </div>
+                        <label class="custom-file-upload mt-3">
+                            <input type="file" onchange="getFileData(this,'form-label-signature')" asp-for="Signature" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-sm-12 mb-3">
+                        <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Admin_Notes"></textarea>
+                        <label for="floatingInput" class="form-label">Admin Notes(Optional)</label>
+                        <span asp-validation-for="Admin_Notes" class="text-danger"></span>
+                    </div> 
+                </div>
+
+
+                <!-- Onboarding -->
+                <div class="upper-text margin-top onboarding-header mt-3">
+                    Onboarding
+                </div>
+
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Independent Contractor Agreement
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="agreement" onchange="fileUploaded(this)" asp-for="AgreementDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="agreement-btn" class="submit-btn upload-doc-btn view-doc-btn hidden agreement-btn" onclick="viewDoc(this)"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Background Check
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="background" onchange="fileUploaded(this)" asp-for="BackgroundDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="background-btn" class="submit-btn upload-doc-btn view-doc-btn hidden background-btn" onclick="viewDoc(this)"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            HIPAA Compliance
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="hipaa" onchange="fileUploaded(this)" asp-for="CredentialDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="hipaa-btn" class="submit-btn upload-doc-btn view-doc-btn hidden hipaa-btn" onclick="viewDoc(this)"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div> 
+                
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Non-Disclosure Agreement
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="nondisclosure" onchange="fileUploaded(this)" asp-for="NonDisclosureDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="nondisclosure-btn" class="submit-btn upload-doc-btn view-doc-btn hidden nondisclosure-btn" onclick="viewDoc(this)"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 document-outer-flex bottom-border">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            License Document
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="license" onchange="fileUploaded(this)" asp-for="LicenseDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="license-btn" class="submit-btn upload-doc-btn view-doc-btn hidden license-btn" onclick="viewDoc(this)"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn" id="bottom-edit">
+                    <button class="lower-custom-btn submit-btn" type="submit" id="submit-physician">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-profile.js"></script>
+<script>
+
+    const getFileData = (myFile,id) => {
+        var file = myFile.files[0];
+        var filename = file.name;
+        document.getElementById(id).innerHTML = `${filename}`;
+    }
+
+    const fileUploaded = (element) => {
+        const id = element.id
+        document.getElementById(`${id}-check`).checked = true
+        document.getElementById(`${id}-btn`).style.display = 'inline-block'
+
+    }
+
+    const viewDoc = (element) => {
+            const id = element.id.split("-")[0]
+            const fileInput = document.getElementById(id);
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const blobUrl = URL.createObjectURL(new Blob([event.target.result], { type: 'application/pdf' }));
+                    window.open(blobUrl, '_blank');
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            } else {
+                alert('Please select a file to view.');
+            }
+    }
+
+    const submitButton = document.getElementById("submit-physician");
+    submitButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default form submission
+        getLatLong(); // Call getLatLong function
+    });
+
+    const getLatLong = () => {
+        var geocoder = new google.maps.Geocoder();
+        const selectElement = document.getElementById("Select-state")
+        for (let option of selectElement.options) {
+            if (option.value == selectElement.value) {
+                const address = document.getElementById("address1").value + ',' + document.getElementById("city").value + ',' + option.text + ' ' + document.getElementById("zipcode").value
+                console.log(address)
+                geocoder.geocode({ address: address }, function (results, status) {
+                    if (status == "OK") {
+                        var latitude = results[0].geometry.location.lat();
+                        var longitude = results[0].geometry.location.lng();
+                        console.log(document.getElementById('lat'))
+                        console.log(document.getElementById('long'))
+                        document.getElementById('lat').value = latitude;
+                        document.getElementById('long').value = longitude;
+                        console.log(document.getElementById('lat').value);
+                        console.log(document.getElementById('long').value);
+                        document.getElementById("main-form").submit();
+                    } else {
+                        console.log("Geocoding failed: " + status);
+                        document.getElementById("main-form").submit();
+                    }
+                });
+            }
+        }
+        
+    }
+
+
+</script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -109,5 +109,9 @@ namespace HalloDoc.Repository.Interface
 
         public Task<bool> contactProvider(ProviderViewModel providerViewModel);
 
+        public PhysicianAccountViewModel getCreatePhysicianDetails();
+
+        public Task<bool> createPhysician(PhysicianAccountViewModel physicianAccountViewModel);
+
     }
 }
