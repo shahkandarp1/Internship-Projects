@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml.Presentation;
 using System.Collections;
 using Irony.Parsing;
 using HalloDoc.Repository.Auth;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace HalloDoc.Controllers
 {
@@ -569,6 +570,81 @@ namespace HalloDoc.Controllers
                 }
             }
             return View(physicianAccountViewModel);
+        }
+
+        public IActionResult EditPhysician(int id)
+        {
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.getPhysicianDetails(id);
+            return View(physicianAccountViewModel);
+        }
+
+        public IActionResult FileUploadPhysician([FromForm] IFormFile file, [FromForm] int id, [FromForm] string name)
+        {
+            Task<bool> isUploaded = _admin.fileUploadPhysician(file, id, name);
+            return Json(new { isUploaded = isUploaded.Result });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            Task<bool> isUpdated = _admin.updatePhysician(physicianAccountViewModel);
+            if (isUpdated.Result)
+            {
+                TempData["success"] = "Information Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Information could not be Updated!!";
+            }
+            return RedirectToAction("EditPhysician",new { id=physicianAccountViewModel.PhysicianId });
+        }
+
+        public IActionResult ResetPasswordPhysician(string password, int id)
+        {
+            int isreset = 0;
+            if(password == null)
+            {
+                isreset = 1;
+                return Json(new { isReseted = isreset });
+            }
+
+            bool isReseted = _admin.resetPasswordPhysician(password, id);
+            if(isReseted)
+            {
+                isreset = 2;
+            }
+            else
+            {
+                isreset = 3;
+            }
+            return Json(new { isReseted  = isreset });
+        }
+
+        public IActionResult DeletePhysician(int id)
+        {
+            bool isDeleted = _admin.deletePhysician(id);
+            if (isDeleted)
+            {
+                TempData["success"] = "Account Deleted!!";
+            }
+            else
+            {
+                TempData["error"] = "Account could not be deleted!!";
+            }
+            return RedirectToAction("Provider");
+        }
+
+        public IActionResult PatientHistory()
+        {
+            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatients(null,null,null,null);
+            return View(patientHistoryViewModel);
+        }
+
+        public IActionResult PatientHistoryTable(string? firstname,string? lastname,string? email,string? phone,int page=1,int pageSize = 10)
+        {
+            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatients(firstname,lastname,email,phone,page,pageSize);
+            return PartialView("_PatientHistoryTable", patientHistoryViewModel);
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,6 +113,18 @@ namespace HalloDoc.Repository.Interface
         public PhysicianAccountViewModel getCreatePhysicianDetails();
 
         public Task<bool> createPhysician(PhysicianAccountViewModel physicianAccountViewModel);
+
+        public PhysicianAccountViewModel getPhysicianDetails(int id);
+
+        public Task<bool> fileUploadPhysician(IFormFile file, int id, string name);
+
+        public Task<bool> updatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
+
+        public bool resetPasswordPhysician(string password, int id);
+
+        public bool deletePhysician(int id);
+
+        public PatientHistoryViewModel getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10);
 
     }
 }

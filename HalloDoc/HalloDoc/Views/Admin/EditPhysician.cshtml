@@ -1,0 +1,440 @@
+﻿@model PhysicianAccountViewModel
+@{
+    ViewData["Title"] = "Edit Physician";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/create-physician.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/patient-profile.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Edit Physician Account</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Provider">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form" asp-action="EditPhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form">
+
+                <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                <input type="hidden" asp-for="PhysicianId" />
+                <input type="hidden" asp-for="AspId" />
+                <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                <input type="hidden" asp-for="lat" id="lat" />
+                <input type="hidden" asp-for="lng" id="long" />
+
+                <!-- Account Information  -->
+                <div class="upper-text">
+                    Account Information
+                </div>
+                <div class="row">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control top-most-editable" id="user-name" placeholder="name@example.com" asp-for="UserName" readonly disabled>
+                        <label for="user-name" class="form-label">User Name</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="password" placeholder="name@example.com" asp-for="Password">
+                        <label for="password" class="form-label">Password</label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="Status" disabled>
+                            <option value="1">Pending</option>
+                            <option value="2">Active</option>
+                            <option value="3">In-Active</option>
+                        </select>
+                        <label for="Select-status" class="form-label">Status</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select editable top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="role_id" disabled>
+                            @for (var i = 0; i < Model.roles.Count; ++i)
+                            {
+                                <option value="@Model.roles[i].RoleId">@Model.roles[i].Name</option>
+                            }
+                        </select>
+                        <label for="Select-status" class="form-label">Role</label>
+                    </div>
+                </div>
+                <div class="lower-btn" id="top-most-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="top_most_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                    <a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">Reset Password</span></a>
+                </div>
+
+                <!-- Physician Information  -->
+                <div class="upper-text">
+                    Physician Information
+                </div>
+                <div class="row">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="first-name" placeholder="name@example.com" asp-for="FirstName" disabled>
+                        <label for="first-name" class="form-label">First Name</label>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="last-name" placeholder="name@example.com" asp-for="LastName" disabled>
+                        <label for="last-name" class="form-label">Last Name</label>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable top-editable" id="email" placeholder="name@example.com" asp-for="Email" disabled>
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable top-editable" id="phone" asp-for="PhoneNumber" disabled>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="medical-license" placeholder="name@example.com" asp-for="MedicalLicense" disabled>
+                        <label for="medical-license" class="form-label">Medical License</label>
+                        <span asp-validation-for="MedicalLicense" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="npi-number" placeholder="name@example.com" asp-for="NPI_Number" disabled>
+                        <label for="npi-number" class="form-label">NPI Number</label>
+                        <span asp-validation-for="NPI_Number" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable top-editable" id="Sync_Email" placeholder="name@example.com" asp-for="Sync_Email" disabled>
+                        <label for="Sync_Email" class="form-label">Synchronization Email Address</label>
+                        <span asp-validation-for="Sync_Email" class="text-danger"></span>
+                    </div>
+                    <div class="mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <label class="form-check-label" for="flexCheckDefault@(i)">
+                                    @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="lower-btn" id="top-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="top_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+
+                @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                {
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                    @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                }
+
+                <!-- Mailing & Billing Information -->
+                <div class="upper-text margin-top mt-3">
+                    Mailing & Billing Information
+                </div>
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address1" placeholder="name@example.com" asp-for="Address1" disabled>
+                        <label for="address1" class="form-label">Address 1</label>
+                        <span asp-validation-for="Address1" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="address2" placeholder="name@example.com" asp-for="Address2" disabled>
+                        <label for="address2" class="form-label">Address 2</label>
+                        <span asp-validation-for="Address2" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="city" placeholder="name@example.com" asp-for="City" disabled>
+                        <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select editable bottom-editable" id="Select-state" placeholder="name@example.com" asp-for="RegionId" disabled>
+                            @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                            {
+                                <option value="@Model.checkboxViewModels[i].Id">@(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())</option>
+                            }
+                        </select>
+                        <label for="Select-state" class="form-label">State</label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-editable" id="zipcode" placeholder="name@example.com" asp-for="Zipcode" disabled>
+                        <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="Zipcode" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone editable bottom-editable" id="phone" asp-for="AltPhone" disabled>
+                        <span asp-validation-for="AltPhone" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="lower-btn" id="bottom-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="bottom_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+
+                <!-- Provider Profile -->
+                <div class="upper-text margin-top mt-3">
+                    Provider Profile
+                </div>
+
+                <div class="row symptoms-textarea">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-most-editable" id="business_name" placeholder="name@example.com" asp-for="BusinessName" disabled>
+                        <label for="business_name" class="form-label">Business Name</label>
+                        <span asp-validation-for="BusinessName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable bottom-most-editable" id="business_website" placeholder="name@example.com" asp-for="BusinessWebsite" disabled>
+                        <label for="business_website" class="form-label">Business Website</label>
+                        <span asp-validation-for="BusinessWebsite" class="text-danger"></span>
+                    </div>
+                    <div class="file-upload symptoms-textarea col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-floating mt-3 inp upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label-photo">Select Photo</label>
+                        </div>
+                        <label class="custom-file-upload mt-3 remove-disable disabled-label">
+                            <input type="file" id="photo" onchange="getFileData(this,'form-label-photo')" asp-for="Photo" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                    </div>
+                    <div class="file-upload symptoms-textarea col-lg-6 col-md-6 col-sm-12">
+                        <div class="form-floating mt-3 inp upload-form">
+                            <input type="text" class="form-control" id="file-upload" disabled>
+                            <label for="file-upload" class="upload-label dob-label" id="form-label-signature">Select Signature</label>
+                        </div>
+                        <label class="custom-file-upload mt-3 remove-disable disabled-label">
+                            <input type="file" id="signature" onchange="getFileData(this,'form-label-signature')" asp-for="Signature" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-floating mt-3 inp col-sm-12 mb-3">
+                        <img src="@Url.Content($"~/provider_documents/{Model.PhysicianId}/{Model.signature_name}")" class="signature-img" />
+                    </div>
+                    <div class="form-floating mt-3 inp col-sm-12 mb-3">
+                        <textarea class="form-control text-area bottom-most-editable" id="floatingInput" placeholder="name@example.com" asp-for="Admin_Notes" disabled></textarea>
+                        <label for="floatingInput" class="form-label">Admin Notes(Optional)</label>
+                        <span asp-validation-for="Admin_Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="lower-btn" id="bottom-most-edit">
+                    <a class="lower-custom-btn submit-btn" onclick="bottom_most_edit()">Edit</a>
+                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                </div>
+
+
+                <!-- Onboarding -->
+                <div class="upper-text margin-top onboarding-header mt-3">
+                    Onboarding
+                </div>
+
+                @{
+                    string agreement, background, hipaa, nondisclosure, license;
+                    agreement = Model.IsAgreementDoc == true ? "" : "hidden";
+                    background = Model.IsBackgroundDoc == true ? "" : "hidden";
+                    hipaa = Model.IsCredentialDoc == true ? "" : "hidden";
+                    nondisclosure = Model.IsNonDisclosureDoc == true ? "" : "hidden";
+                    license = Model.IsLicenseDoc == true ? "" : "hidden";
+                }
+
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Independent Contractor Agreement
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="agreement" onchange="fileUpload(this)" asp-for="AgreementDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="agreement-btn" class="submit-btn upload-doc-btn view-doc-btn @(agreement) agreement-btn" onclick="viewDoc('Agreement')"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Background Check
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="background" onchange="fileUpload(this)" asp-for="BackgroundDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="background-btn" class="submit-btn upload-doc-btn view-doc-btn @(background) background-btn" onclick="viewDoc('Background')"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            HIPAA Compliance
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="hipaa" onchange="fileUpload(this)" asp-for="CredentialDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="hipaa-btn" class="submit-btn upload-doc-btn view-doc-btn @(hipaa) hipaa-btn" onclick="viewDoc('HIPAA')"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <div class="mt-3 document-outer-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            Non-Disclosure Agreement
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="nondisclosure" onchange="fileUpload(this)" asp-for="NonDisclosureDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="nondisclosure-btn" class="submit-btn upload-doc-btn view-doc-btn @(nondisclosure) nondisclosure-btn" onclick="viewDoc('NonDiscolsure')"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <div class="mt-3 document-outer-flex bottom-border">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
+                        <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
+                            License Document
+                        </label>
+                    </div>
+                    <div class="document-inner-flex">
+                        <label class="submit-btn upload-doc-btn">
+                            <input type="file" id="license" onchange="fileUpload(this)" asp-for="LicenseDoc" />
+                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
+                            <span class="upload-text">
+                                Upload
+                            </span>
+                        </label>
+                        <div id="license-btn" class="submit-btn upload-doc-btn view-doc-btn @(license) license-btn" onclick="viewDoc('License')"><span class="upload-text">View</span><img class="file-upload-img bottom-physician-upload" src="~/images/paper.svg" /></div>
+                    </div>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn">
+                    <a asp-controller="Admin" asp-action="Provider" class="lower-custom-btn submit-btn">Back</a>
+                    <a asp-action="DeletePhysician" asp-controller="Admin" asp-route-id="@Model.PhysicianId" class="btn btn-danger delete-btn">Delete Account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/edit-physician.js"></script>
+<script>
+
+    const getFileData = (myFile, id) => {
+        var file = myFile.files[0];
+        var filename = file.name;
+        document.getElementById(id).innerHTML = `${filename}`;
+    }
+
+    $(document).ready(function () {
+        $('#reset-password').on('click', function () {
+            var inputValue = $('#password').val();
+            console.log(inputValue)
+            $.get('/Admin/ResetPasswordPhysician', { password: inputValue, id: @(Model.AspId) }, function (response) {
+                if (response.isReseted == 1) {
+                    toastr.error("Please enter password!!")
+                }
+                else if (response.isReseted == 2) {
+                    toastr.success("Password reseted successfully!!")
+                    document.getElementById("password").value = ""
+                }
+                else {
+                    toastr.error("Password could not be reseted!!")
+                }
+            });
+        });
+    });
+
+    const viewDoc = (filename) => {
+        var pdfPath = "@Url.Content($"~/provider_documents/{Model.PhysicianId}/")";
+        pdfPath += `${filename}.pdf`
+        console.log(pdfPath)
+        window.open(pdfPath, '_blank');
+    }
+
+    const fileUpload = (element) => {
+        var inputValue = element;
+        var file = inputValue.files[0];
+        var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append("id", id);
+        formData.append("name", element.id);
+
+
+
+        $.ajax(
+            {
+                url: "/Admin/FileUploadPhysician",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    location.reload();
+                }
+            }
+        );
+    }
+
+
+</script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

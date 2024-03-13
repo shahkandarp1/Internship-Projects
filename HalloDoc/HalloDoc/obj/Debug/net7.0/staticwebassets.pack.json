@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets\\css\\patient-dashboard.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-history.css",
+      "PackagePath": "staticwebassets\\css\\patient-history.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-login.css",
       "PackagePath": "staticwebassets\\css\\patient-login.css"
     },
@@ -985,6 +989,10 @@
       "PackagePath": "staticwebassets\\js\\agreement.js"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\edit-physician.js",
+      "PackagePath": "staticwebassets\\js\\edit-physician.js"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\form.js",
       "PackagePath": "staticwebassets\\js\\form.js"
     },
@@ -1253,24 +1261,64 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\5\\1710246647876.JPEG",
-      "PackagePath": "staticwebassets\\provider_documents\\5\\1710246647876.JPEG"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\1710246647876.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\2\\1710246647876.JPEG"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\5\\Agreement.pdf",
-      "PackagePath": "staticwebassets\\provider_documents\\5\\Agreement.pdf"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\2\\Agreement.pdf"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\5\\Background.pdf",
-      "PackagePath": "staticwebassets\\provider_documents\\5\\Background.pdf"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\paper.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\2\\paper.svg"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\5\\HIPAA.pdf",
-      "PackagePath": "staticwebassets\\provider_documents\\5\\HIPAA.pdf"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\3\\1710246647876.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\3\\1710246647876.JPEG"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\5\\Screenshot (3).png",
-      "PackagePath": "staticwebassets\\provider_documents\\5\\Screenshot (3).png"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\3\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\3\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\3\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\3\\Agreement.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\3\\paper.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\3\\paper.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\1710246647876.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\1710246647876.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\Agreement.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\Background.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\Background.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\HIPAA.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\HIPAA.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\NonDiscolsure.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\NonDiscolsure.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\Screenshot (3).png",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\Screenshot (3).png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\6\\paper.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\6\\paper.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\.net-Whole-Plane-2024.pdf",

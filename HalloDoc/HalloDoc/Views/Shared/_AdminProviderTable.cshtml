@@ -39,7 +39,7 @@
                     <td>@status</td>
                     <td>
                     <span class="btn contact-btn contact-provider" data-id="@Model.physicianproviders[i].physicianId">Contact</span>
-                        <span class="btn contact-btn">Edit</span>
+                    <a class="btn contact-btn" asp-action="EditPhysician" asp-controller="Admin" asp-route-id="@Model.physicianproviders[i].physicianId">Edit</a>
                     </td>
                 </tr>
 
@@ -101,7 +101,7 @@
                     </div>
                     <div class="lower-btn-mob-flex">
                         <span class="btn contact-btn contact-provider" data-id="@Model.physicianproviders[i].physicianId">Contact</span>
-                        <span class="btn contact-btn">Edit</span>
+                        <a class="btn contact-btn" asp-action="EditPhysician" asp-controller="Admin" asp-route-id="@Model.physicianproviders[i].physicianId">Edit</a>
                     </div>
                 </div>
             </div>

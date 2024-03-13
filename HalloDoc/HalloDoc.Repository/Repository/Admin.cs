@@ -28,6 +28,7 @@ using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Irony.Parsing;
+using System.Collections.Immutable;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -1194,7 +1195,7 @@ namespace HalloDoc.Repository.Repository
 
         List<Physician> IAdmin.getPhysician(int regionid)
         {
-            return _db.Physicians.Where(p=>p.RegionId == regionid).ToList();
+            return _db.Physicians.Where( p=>p.RegionId == regionid && p.IsDeleted == new BitArray(new[] { false }) ).ToList();
         }
 
         bool IAdmin.assignCase(AdminDashboardViewModel adminDashboardViewModel)
@@ -1877,7 +1878,7 @@ namespace HalloDoc.Repository.Repository
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.getDetails(token);
 
-            IQueryable<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false }));
+            IQueryable<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
 
             if(id != -1 && id!=null)
             {
@@ -2085,6 +2086,10 @@ namespace HalloDoc.Repository.Repository
             _db.AspNetUsers.Add(aspNetUser);
             _db.SaveChanges();
 
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
             Physician physician = new Physician()
             {
                 AspNetUserId = aspNetUser.Id,
@@ -2111,7 +2116,9 @@ namespace HalloDoc.Repository.Repository
                 IsCredentialDoc = new BitArray(new[] { physicianAccountViewModel.IsCredentialDoc }),
                 IsDeleted = new BitArray(new[] { false }),
                 Status = 2,
-                RoleId = 1
+                RoleId = 1,
+                CreatedDate = DateTime.Now,
+                CreatedBy = cookieModel.aspId
             };
 
             _db.Physicians.Add(physician);
@@ -2240,9 +2247,6 @@ namespace HalloDoc.Repository.Repository
                 var platformTitle = "HalloDoc";
                 var subject = "Account Credentials - HalloDoc";
                 var body = $"Hello {physician.FirstName} {physician.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {physician.Email}<br />Password : {password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
-                var request = _context.HttpContext.Request;
-                var token = request.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.getDetails(token);
                 try
                 {
 
@@ -2285,6 +2289,316 @@ namespace HalloDoc.Repository.Repository
             }
 
             return success;
+        }
+
+        PhysicianAccountViewModel IAdmin.getPhysicianDetails(int id)
+        {
+            Physician physician = _db.Physicians.Include(p=>p.AspNetUser).FirstOrDefault(p=>p.PhysicianId == id);
+            PhysicianLocation physicianLocation = _db.PhysicianLocations.FirstOrDefault(p => p.PhysicianId == id);
+            IQueryable<PhysicianRegion> physicianRegion = _db.PhysicianRegions.Where(p => p.PhysicianId == id);
+            List<Region> regions = _db.Regions.ToList();
+
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+
+            List<Role> roles = _db.Roles.Where(r => r.AccountType == 2).ToList();
+
+            for (var i = 0; i < regions.Count; ++i)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel()
+                {
+                    Name = regions[i].Name,
+                    Id = regions[i].RegionId,
+                    isChecked = physicianRegion.FirstOrDefault(a => a.RegionId == regions[i].RegionId) == null ? false : true
+                }); ;
+            }
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider"
+            };
+
+
+            PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel()
+            {
+                PhysicianId = id,
+                AspId = physician.AspNetUser.Id,
+                adminNavbarViewModel = adminNavbarViewModel,
+                checkboxViewModels = checkboxViewModels,
+                UserName = physician.AspNetUser?.UserName,
+                roles = roles,
+                role_id = physician?.RoleId,
+                FirstName = physician?.FirstName,
+                LastName = physician?.LastName,
+                Email = physician?.Email,
+                PhoneNumber = physician?.Mobile,
+                NPI_Number = physician?.Npinumber,
+                MedicalLicense = physician?.MedicalLicense,
+                Sync_Email = physician?.SyncEmailAddress,
+                Address1 = physician?.Address1,
+                Address2 = physician?.Address2,
+                City = physician?.City,
+                RegionId = (int)physician?.RegionId,
+                Zipcode = physician?.Zip,
+                AltPhone = physician?.AltPhone,
+                BusinessName = physician?.BusinessName,
+                BusinessWebsite = physician?.BusinessWebsite,
+                signature_name = physician?.Signature,
+                Admin_Notes = physician?.AdminNotes,
+                IsAgreementDoc = physician.IsAgreementDoc[0],
+                IsBackgroundDoc = physician.IsBackgroundDoc[0],
+                IsCredentialDoc = physician.IsCredentialDoc[0],
+                IsLicenseDoc = physician.IsLicenseDoc[0],
+                IsNonDisclosureDoc = physician.IsNonDisclosureDoc[0]
+            };
+
+            return physicianAccountViewModel;
+
+        }
+
+        async Task<bool> IAdmin.fileUploadPhysician(IFormFile file, int id, string name)
+        {
+            try
+            {
+                Physician physician = _db.Physicians.FirstOrDefault(p => p.PhysicianId == id);
+                var filePathh = "";
+
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                if (name == "license")
+                {
+                    filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\License.pdf");
+                    if (System.IO.File.Exists(filePathh))
+                    {
+                        System.IO.File.Delete(filePathh);
+                    }
+                    physician.IsLicenseDoc = new BitArray(new[] { true });
+                }
+                else if (name == "nondisclosure")
+                {
+                    filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\NonDiscolsure.pdf");
+                    if (System.IO.File.Exists(filePathh))
+                    {
+                        System.IO.File.Delete(filePathh);
+                    }
+                    physician.IsNonDisclosureDoc = new BitArray(new[] { true });
+                }
+                else if (name == "hipaa")
+                {
+                    filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\HIPAA.pdf");
+                    if (System.IO.File.Exists(filePathh))
+                    {
+                        System.IO.File.Delete(filePathh);
+                    }
+                    physician.IsCredentialDoc = new BitArray(new[] { true });
+                }
+                else if (name == "background")
+                {
+                    filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\Background.pdf");
+                    if (System.IO.File.Exists(filePathh))
+                    {
+                        System.IO.File.Delete(filePathh);
+                    }
+                    physician.IsBackgroundDoc = new BitArray(new[] { true });
+                }
+                else if (name == "agreement")
+                {
+                    filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}\\Agreement.pdf");
+                    if (System.IO.File.Exists(filePathh))
+                    {
+                        System.IO.File.Delete(filePathh);
+                    }
+                    physician.IsAgreementDoc = new BitArray(new[] { true });
+                }
+
+
+                using (var stream = System.IO.File.Create(filePathh))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                physician.ModifiedDate = DateTime.Now;
+                physician.ModifiedBy = cookieModel.aspId;
+                _db.Physicians.Update(physician);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        async Task<bool> IAdmin.updatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            try
+            {
+
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == physicianAccountViewModel.PhysicianId);
+                physician.Status = physicianAccountViewModel?.Status ?? physician.Status;
+                physician.RoleId = physicianAccountViewModel?.role_id ?? physician.RoleId;
+                physician.FirstName = physicianAccountViewModel?.FirstName ?? physician.FirstName;
+                physician.LastName = physicianAccountViewModel?.LastName ?? physician.LastName;
+                physician.Email = physicianAccountViewModel?.Email ?? physician.Email;
+                physician.Mobile = physicianAccountViewModel?.PhoneNumber ?? physician.Mobile;
+                physician.MedicalLicense = physicianAccountViewModel?.MedicalLicense ?? physician.MedicalLicense;
+                physician.Npinumber = physicianAccountViewModel?.NPI_Number ?? physician.Npinumber;
+                physician.SyncEmailAddress = physicianAccountViewModel?.Sync_Email ?? physician.SyncEmailAddress;
+                physician.Address1 = physicianAccountViewModel?.Address1 ?? physician.Address1;
+                physician.City = physicianAccountViewModel?.City ?? physician.City;
+                physician.RegionId = physicianAccountViewModel?.RegionId ?? physician.RegionId;
+                physician.Zip = physicianAccountViewModel?.Zipcode ?? physician.Zip;
+                physician.AltPhone = physicianAccountViewModel?.AltPhone ?? physician.AltPhone;
+                physician.BusinessName = physicianAccountViewModel?.BusinessName ?? physician.BusinessName;
+                physician.BusinessWebsite = physicianAccountViewModel?.BusinessWebsite ?? physician.BusinessWebsite;
+                physician.AdminNotes = physicianAccountViewModel?.Admin_Notes ?? physician.AdminNotes;
+                physician.ModifiedDate = DateTime.Now;
+                physician.ModifiedBy = cookieModel.aspId;
+
+                if (physicianAccountViewModel.Signature != null && physicianAccountViewModel.Signature.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}", physicianAccountViewModel.Signature.FileName);
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.Signature.CopyToAsync(stream);
+                    }
+                    physician.Signature = physicianAccountViewModel.Signature.FileName;
+                }
+
+                if (physicianAccountViewModel.Photo != null && physicianAccountViewModel.Photo.Length > 0)
+                {
+                    var filePathh = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\provider_documents\\{physician.PhysicianId}", physicianAccountViewModel.Photo.FileName);
+                    using (var stream = System.IO.File.Create(filePathh))
+                    {
+                        await physicianAccountViewModel.Photo.CopyToAsync(stream);
+                    }
+                    physician.Photo = physicianAccountViewModel.Photo.FileName;
+                }
+
+                _db.Physicians.Update(physician);
+
+                IQueryable<PhysicianRegion> physicianRegions = _db.PhysicianRegions.Where(p=>p.PhysicianId == physicianAccountViewModel.PhysicianId);
+
+                for (var i = 0; i < physicianAccountViewModel.checkboxViewModels.Count; ++i)
+                {
+                    if (physicianAccountViewModel.checkboxViewModels[i].isChecked == true && physicianRegions.FirstOrDefault(a => a.RegionId == physicianAccountViewModel.checkboxViewModels[i].Id) == null)
+                    {
+                        PhysicianRegion physicianRegion = new PhysicianRegion()
+                        {
+                            PhysicianId = (int)physicianAccountViewModel.PhysicianId,
+                            RegionId = (int)physicianAccountViewModel.checkboxViewModels[i].Id
+                        };
+                        _db.PhysicianRegions.Add(physicianRegion);
+                    }
+                    else if (physicianAccountViewModel.checkboxViewModels[i].isChecked == false && physicianRegions.FirstOrDefault(a => a.RegionId == physicianAccountViewModel.checkboxViewModels[i].Id) != null)
+                    {
+                        PhysicianRegion physicianRegion = physicianRegions.FirstOrDefault(a => a.RegionId == physicianAccountViewModel.checkboxViewModels[i].Id);
+                        _db.PhysicianRegions.Remove(physicianRegion);
+                    }
+                }
+
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.resetPasswordPhysician(string password,int id)
+        {
+            try
+            {
+                AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Id == id);
+                var passwordHasher = new PasswordHasher<AspNetUser>();
+                aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, password);
+                _db.AspNetUsers.Update(aspNetUser);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.deletePhysician(int id)
+        {
+            try
+            {
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == id);
+                physician.IsDeleted = new BitArray(new[] { true });
+                physician.ModifiedDate = DateTime.Now;
+                physician.ModifiedBy = cookieModel.aspId;
+
+                _db.Physicians.Update(physician);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        PatientHistoryViewModel IAdmin.getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10)
+        {
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record"
+            };
+
+            IQueryable<User> users = _db.Users;
+
+            if(firstname!=null)
+            {
+                users = users.Where(r => r.FirstName.ToLower().Contains(firstname.ToLower()));
+            }
+            if(lastname!=null)
+            {
+                users = users.Where(r => r.LastName.ToLower().Contains(lastname.ToLower()));
+            }
+            if(email!=null)
+            {
+                users = users.Where(r => r.Email.ToLower().Contains(email.ToLower()));
+            }
+            if(phone!=null)
+            {
+                users = users.Where(r => r.Mobile.Contains(phone));
+            }
+
+            PatientHistoryViewModel patientHistoryViewModel = new PatientHistoryViewModel
+            { 
+                adminNavbarViewModel = adminNavbarViewModel,
+                users = users.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = users.Count(),
+                TotalPages = (int)Math.Ceiling((double)users.Count() / pageSize)
+            };
+
+            return patientHistoryViewModel;
+
         }
 
     }

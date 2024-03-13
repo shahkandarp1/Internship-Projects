@@ -1,0 +1,49 @@
+﻿.symptoms-textarea
+{
+    width:100%;
+    margin-top:0px;
+}
+
+.flex-container{
+    width:95%;
+}
+
+.inner-pt-container{
+    justify-content:center;
+}
+
+.filter-section {
+    padding: 10px;
+}
+
+.reset-btn{
+    height:auto;
+}
+
+.back-btn {
+    margin-top: 0px !important;
+    display: inline-block;
+}
+.back-text
+{
+    margin-right:0px;
+}
+
+th,td{
+    text-align:left;
+}
+
+th:last-child {
+    text-align: center;
+}
+
+.encounter-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lower-btn{
+    margin-top:0px;
+    margin-bottom:5px;
+}

@@ -32,12 +32,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/EditPhysician.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFBoeXNpY2lhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/EncounterForm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRW5jb3VudGVyRm9ybS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/Orders.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/PatientHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUGF0aWVudEhpc3RvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/Profile.cshtml]
@@ -158,6 +166,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_FormNavbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Gb3JtTmF2YmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_PatientHistoryTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9QYXRpZW50SGlzdG9yeVRhYmxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_ValidationScriptsPartial.cshtml]
