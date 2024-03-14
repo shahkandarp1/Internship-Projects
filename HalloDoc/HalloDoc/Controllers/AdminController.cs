@@ -647,5 +647,47 @@ namespace HalloDoc.Controllers
             return PartialView("_PatientHistoryTable", patientHistoryViewModel);
         }
 
+        public IActionResult PatientRecord(int id, int page = 1, int pageSize = 10)
+        {
+            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatientRecords(id,page,pageSize);
+            return View(patientHistoryViewModel);
+        }
+        public IActionResult PatientRecordTable(int id, int page = 1, int pageSize = 10)
+        {
+            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatientRecords(id,page,pageSize);
+            return PartialView("_PatientRecordTable", patientHistoryViewModel);
+        }
+
+        public IActionResult BlockHistory()
+        {
+            BlockHistoryViewModel blockHistoryViewModel = _admin.getBlockHistoryData(null, null, null, null);
+            return View(blockHistoryViewModel);
+        }
+
+        public IActionResult BlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10)
+        {
+            BlockHistoryViewModel blockHistoryViewModel = _admin.getBlockHistoryData(name, date, email, phone, page, pageSize);
+            return PartialView("_RequestBlockHistory", blockHistoryViewModel);
+        }
+
+        public IActionResult ToggleActive(int blockrequestid,bool value)
+        {
+            bool isToggled = _admin.toggleActive(blockrequestid, value);
+            return Json(new { isToggled = isToggled });
+        }
+
+        public IActionResult RestoreBlock(int blockrequestid)
+        {
+            bool isRestored = _admin.restoreBlock(blockrequestid);
+            if(isRestored)
+            {
+                TempData["success"] = "Request Restored Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be Restored!!";
+            }
+            return RedirectToAction("Dashboard");
+        }
     }
 }

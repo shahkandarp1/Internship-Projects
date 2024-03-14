@@ -126,5 +126,13 @@ namespace HalloDoc.Repository.Interface
 
         public PatientHistoryViewModel getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10);
 
+        public PatientHistoryViewModel getAllPatientRecords(int id,int page = 1, int pageSize = 10);
+
+        public BlockHistoryViewModel getBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10);
+
+        public bool toggleActive(int blockrequestid, bool value);
+
+        public bool restoreBlock(int blockrequestid);
+
     }
 }

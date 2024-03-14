@@ -28,7 +28,7 @@ namespace HalloDoc.Repository.Interface
 
         public AspNetUser getAspNetUser(string email);
 
-        public DashboardViewModel getDashboardData();
+        public DashboardViewModel getDashboardData(int page = 1, int pageSize = 10);
 
         public AspNetUser getAspNetUserById(int id);
 

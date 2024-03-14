@@ -35,4 +35,6 @@ public partial class BlockRequest
 
     [Column(TypeName = "timestamp without time zone")]
     public DateTime? ModifiedDate { get; set; }
+
+    public string? Name { get; set; }
 }

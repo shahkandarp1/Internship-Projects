@@ -103,7 +103,7 @@ namespace HalloDoc.ViewModels
 
         public string? UserName { get; set; }
 
-        public short? Status { get; set; }
+        public int? Status { get; set; }
 
         public int? role_id { get; set; }
 

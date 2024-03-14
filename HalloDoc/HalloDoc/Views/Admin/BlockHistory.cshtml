@@ -1,0 +1,131 @@
+﻿@model BlockHistoryViewModel
+@{
+    ViewData["Title"] = "Block History";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-history.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Block History</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="row symptoms-textarea">
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="name" placeholder="name@example.com">
+                                    <label for="first-name" class="form-label">Name</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="date" class="form-control dob" id="date" placeholder="name@example.com">
+                                    <label for="dob" class="form-label dob-label">Date</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="email" placeholder="name@example.com">
+                                    <label for="email" class="form-label">Email</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="phone" placeholder="name@example.com">
+                                    <label for="phone" class="form-label">PhoneNumber</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="lower-btn" id="top-most-edit">
+                        <a class="lower-custom-btn cancel-btn" onclick="erase()">Clear</a>
+                        <button class="lower-custom-btn submit-btn" onclick="filter(1,10)">Search</button>
+                    </div>
+                </div>
+
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/BlockHistoryData`,
+            type: 'POST',
+            dataType: 'html',
+            data: { name: document.getElementById("name").value, date: document.getElementById("date").value, email: document.getElementById("email").value, phone: document.getElementById("phone").value, page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    const erase = () => {
+        document.getElementById("name").value = ""
+        document.getElementById("date").value = ""
+        document.getElementById("email").value = ""
+        document.getElementById("phone").value = ""
+        filter(1, 10)
+    }
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/BlockHistoryData`,
+            type: 'POST',
+            dataType: 'html',
+            data: { name: document.getElementById("name").value, date: document.getElementById("date").value, email: document.getElementById("email").value, phone: document.getElementById("phone").value, page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

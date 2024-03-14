@@ -47,3 +47,49 @@ th:last-child {
     margin-top:0px;
     margin-bottom:5px;
 }
+
+/*Patient Record*/
+.action-record-btn{
+    background-color:white;
+}
+
+.center-div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+td{
+    height:50px;
+}
+
+.outer-img-circle {
+    color: #0dcaf0;
+}
+
+.logout-text {
+    font-size: 12px;
+    color: #0dcaf0;
+}
+
+a.document-mob {
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+}
+
+.document-count{
+    margin-right:4px;
+}
+
+th:last-child{
+    text-align:left;
+}
+
+/*block history*/
+
+.tick-color{
+    color:black;
+}

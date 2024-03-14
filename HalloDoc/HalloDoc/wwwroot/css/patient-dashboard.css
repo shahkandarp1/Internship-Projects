@@ -308,7 +308,6 @@ a {
 
 
 .tabcontent {
-  height: 80vh;
   margin-top: 40px;
 }
 
@@ -327,6 +326,7 @@ a {
   background-color: white;
   box-shadow: 0.1px 0.1px 18px -13px black;
   border-radius: 10px;
+  padding-bottom:12px;
 }
 
 .create-request {
@@ -439,6 +439,7 @@ tr td {
   box-shadow: none;
   display: none;
   z-index: -1;
+  margin-bottom:12px;
 }
 
 .collapse {
@@ -590,6 +591,25 @@ a:hover
 }
 .document:hover, .document-mob:hover, .logout:hover {
     color: #0dcaf0;
+}
+
+/*Pagination*/
+.pagination a {
+    padding: 7px 15px;
+}
+
+.pagination {
+    justify-content: flex-end;
+    margin-right: 10px;
+}
+
+.pagination-active {
+    color: white;
+    background-color: #0dcaf0;
+}
+
+.pagination-active:hover {
+    color: white;
 }
 
 

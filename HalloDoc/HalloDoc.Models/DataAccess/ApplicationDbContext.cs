@@ -93,7 +93,6 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Smslog> Smslogs { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<RequestViewModel> RequestViewModels { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

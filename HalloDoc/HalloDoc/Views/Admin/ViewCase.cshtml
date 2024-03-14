@@ -1,4 +1,5 @@
-﻿@model ViewCaseViewModel
+﻿@using System.Diagnostics;
+@model ViewCaseViewModel
 @{
     ViewData["Title"] = "View Case";
     Layout = "_AdminLayout";
@@ -147,9 +148,11 @@
                     }
                 </div>
 
-                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+
+                <a class="back-btn" onclick="goBack()">
                     &lt; <span class="back-text">Back</span>
                 </a>
+
             </div>
             <form class="main-form" asp-action="ViewCase" method="post" onsubmit="beforeSubmit()">
 
@@ -370,6 +373,10 @@
                 $("#myModal").modal("hide");
             });
         });
+
+        function goBack() {
+            window.history.back();
+        }
 
         $(document).ready(function () {
             $("#openBtn").click(function () {

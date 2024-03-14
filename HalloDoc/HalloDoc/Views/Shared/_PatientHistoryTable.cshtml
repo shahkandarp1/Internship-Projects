@@ -19,7 +19,7 @@
                 <td>@item.Email</td>
                 <td>@item.Mobile</td>
                 <td>@(string.Concat(item.Street,", ",item.City,", ",item.State," - ",item.ZipCode))</td>
-                <td class="encounter-flex"><a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">Explore</span></a></td>
+                <td class="encounter-flex"><a class="back-btn reset-btn mt-3" id="reset-password" asp-action="PatientRecord" asp-controller="Admin" asp-route-id="@item.UserId"><span class="back-text">Explore</span></a></td>
             </tr>
         }
     </tbody>
@@ -53,12 +53,12 @@
                             <img src="../../images/telephone-black.svg" alt="" class="inner-img">
                         </div>
                         <span class="accordion-heading-inner">
-                            Patient :
+                            Phone Number :
                             <span class="accordion-value-inner">@Model.users[i].Mobile</span>
                         </span>
                     </div>
                     <div class="lower-btn-mob-flex">
-                        <a class="btn contact-btn">Explore</a>
+                        <a asp-action="PatientRecord" asp-controller="Admin" asp-route-id="@Model.users[i].UserId" class="btn contact-btn">Explore</a>
                     </div>
                 </div>
             </div>

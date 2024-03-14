@@ -1,0 +1,149 @@
+﻿@model PatientHistoryViewModel
+@using static HalloDoc.ViewModels.Enums;
+<table class="table">
+    <thead>
+        <tr>
+            <th>Client/Member</th>
+            <th>Created Date</th>
+            <th>Conformation</th>
+            <th>Provider Name</th>
+            <th>Concluded Date</th>
+            <th>Status</th>
+            <th class="align-text-center">Final Report</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.requestViewModels)
+        {
+            <tr>
+                <td>@item.PtName</td>
+                <td>@item.CreatedDate.ToString("MMMM dd,yyyy")</td>
+                <td>@item.ConfirmationNumber</td>
+                <td>@if(item.Name == null || item.Name == " ")
+                    {
+                        <span class="align-text-center">-</span>
+                    }
+                    else
+                    {
+                        <span>Dr. @item.Name</span>
+                    }
+                </td>
+                <td>@(item.ConcludedDate == null ? "-" : item.ConcludedDate?.ToString("MMMM dd,yyyy"))</td>
+                <td>@Enum.GetName(typeof(Status), @item.Status)</td>
+                <td class="position-relative">
+                    @if (item.Status == 6 || item.Status == 7 || item.Status == 8 || item.Status == 9)
+                    {
+                        <a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">View</span></a>
+                    }
+                    else
+                    {
+                        <span class="align-text-center">-</span>
+                    }
+                </td>
+                <td class="position-relative">
+                    <div class="dropdown show">
+                        <button class="action-record-btn back-btn reset-btn mt-3"
+                                role="button"
+                                id="dropdownMenuLink"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId" class="dropdown-item assign-case"><div class="action-item"><span>View Case</span></div></a>
+                            <a asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId" class="dropdown-item cancel-case"><div class="action-item"><span class="document-count">@(item.Count == null ? 0 : item.Count)</span><span>Documents</span></div></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    @for(var i=0;i<Model.requestViewModels.Count;++i)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-heading@(i)">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
+                    <div class="mb-3">@(Model.requestViewModels[i].PtName)</div>
+                    <div>@(Model.requestViewModels[i].ConfirmationNumber)</div>
+                </button>
+            </h2>
+            <div id="flush-collapse@(i)" class="accordion-collapse collapse" aria-labelledby="flush-heading@(i)"
+                 data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body main-flex">
+                    <div class="inner-flex">
+                        <div class="outer-img-circle">
+                            <img src="../../images/calendar.svg" alt="" class="inner-img">
+                        </div>
+                        <span class="accordion-heading-inner">
+                            Created Date :
+                            <span class="accordion-value-inner">@(Model.requestViewModels[i].CreatedDate.ToString("MMMM dd,yyyy"))</span>
+                        </span>
+                    </div>
+                    <div class="inner-flex">
+                        <img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
+                        <span class="accordion-heading-inner">
+                            Provider :
+                            <span class="accordion-value-inner">@(Model.requestViewModels[i].Name == null || Model.requestViewModels[i].Name == " " ? "-" : $"Dr. {Model.requestViewModels[i].Name}")</span>
+                        </span>
+                    </div>
+                    <div class="inner-flex">
+                        <div class="outer-img-circle">
+                            <img src="../../images/calendar.svg" alt="" class="inner-img">
+                        </div>
+                        <span class="accordion-heading-inner">
+                            Concluded Date :
+                            <span class="accordion-value-inner">@(Model.requestViewModels[i].ConcludedDate == null ? "-" : Model.requestViewModels[i].ConcludedDate?.ToString("MMMM dd,yyyy"))</span>
+                        </span>
+                    </div>
+                    <div class="inner-flex">
+                        <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner">
+                        <span class="accordion-heading-inner">
+                            Status :
+                            <span class="accordion-value-inner">@Enum.GetName(typeof(Status), @Model.requestViewModels[i].Status)</span>
+                        </span>
+                    </div>
+                    <a asp-action="ViewCase" asp-controller="Admin" asp-route-id="@Model.requestViewModels[i].RequestId" class="document-mob">
+                        <span class="logout-text">View Case</span>
+                    </a>
+                    <a asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@Model.requestViewModels[i].RequestId" class="document-mob">
+                        <span class="logout-text">(@(Model.requestViewModels[i].Count == null ? 0 : Model.requestViewModels[i].Count)) Documents</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a data-page="@(Model.CurrentPage - 1)" href="#">Previous</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a data-page="@i" href="#" class="@(i == Model.CurrentPage ? "pagination-active" : "")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a data-page="@(Model.CurrentPage + 1)" href="#">Next</a>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.pagination a').click(function (e) {
+            e.preventDefault();
+            var page = $(this).attr('data-page');
+
+            filter(page, 10)
+        });
+    });
+</script>

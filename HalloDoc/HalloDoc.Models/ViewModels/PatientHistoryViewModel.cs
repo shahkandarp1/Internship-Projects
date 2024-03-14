@@ -8,7 +8,8 @@ namespace HalloDoc.ViewModels
 {
     public class PatientHistoryViewModel
     {
-        public List<User> users { get; set; }
+        public List<User>? users { get; set; }
+        public List<RequestViewModel>? requestViewModels { get; set; }
 
         public AdminNavbarViewModel adminNavbarViewModel { get; set; }
 

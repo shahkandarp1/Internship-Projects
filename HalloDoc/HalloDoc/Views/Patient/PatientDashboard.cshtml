@@ -107,124 +107,15 @@
         </div>
     </div>
 
-    <!-- Table View - Desktop -->
+    <!--Partial View-->
+    <div id="partial-container"></div>
 
-    <div id="Dashboard" class="tabcontent">
-        <span class="main-heading" id="main-heading">Medical History</span>
-        <div class="main-content">
-            <div class="create-request">
-                <button type="button" class="create-request-btn" id="request-btn" data-bs-toggle="modal"
-                        data-bs-target="#myModal">
-                    Create New Request
-                </button>
-                <a class="create-request-btn-mob" data-bs-toggle="modal" data-bs-target="#myModal">
-                    <img id="create-request" src="../../images/plus.svg" alt="" class="logout-img" />
-                </a>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="heading">Created date</th>
-                        <th class="heading">Current Status</th>
-                        <th class="heading">Document</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var row in Model.requests)
-                    {
-                        <tr>
-                            <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
-                            <td>@Enum.GetName(typeof(Status), @row.Status)</td>
-                            <td>
-                                @if (row.Status == 6 || row.Status == 7 || row.Status == 8 || row.Status == 9)
-                                {
-                                    <a class="document" asp-controller="Patient" asp-action="ViewDocument" asp-route-id="@(row.RequestId)">
-                                        <span class="logout-text">(@(row.Count ?? 0)) Documents</span>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                   
-                </tbody>
-            </table>
 
-            <!-- Table Mobile - Accordian -->
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                @for(var i = 0; i < Model.requests.Count; ++i)
-                {
-                    if (Model.requests[i].Status == 6 || Model.requests[i].Status == 7 || Model.requests[i].Status == 8 || Model.requests[i].Status == 9 )
-                    {
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-heading@(i)">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
-                                    <img src="../../images/clock.svg" alt="" class="accordion-img"> <span class="accordion-heading">
-                                        Created
-                                        Date: <span class="accordion-value">@Model.requests[i].CreatedDate.ToString("MMMM dd,yyyy")</span>
-                                    </span>
-                                </button>
-                            </h2>
-                            <div id="flush-collapse@(i)" class="accordion-collapse collapse" aria-labelledby="flush-heading@(i)"
-                                 data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body main-flex">
-                                    <div class="inner-flex">
-                                        <img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
-                                        <span class="accordion-heading-inner">
-                                            Provider :
-                                            <span class="accordion-value-inner">@Model.requests[i].Name</span>
-                                        </span>
-                                    </div>
-                                    <div class="inner-flex">
-                                        <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span class="accordion-heading-inner">
-                                            Current
-                                            Status: <span class="accordion-value-inner">@Enum.GetName(typeof(Status), @Model.requests[i].Status)</span>
-                                        </span>
-                                    </div>
-                                    <a class="document-mob" asp-controller="Patient" asp-action="ViewDocument" asp-route-id="@(Model.requests[i].RequestId)">
-                                        <span class="logout-text">(@(Model.requests[i].Count ?? 0)) Documents</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-heading@(i)">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
-                                    <img src="../../images/clock.svg" alt="" class="accordion-img"> <span class="accordion-heading">
-                                        Created
-                                        Date: <span class="accordion-value">@Model.requests[i].CreatedDate.ToString("MMMM dd,yyyy")</span>
-                                    </span>
-                                </button>
-                            </h2>
-                            <div id="flush-collapse@(i)" class="accordion-collapse collapse" aria-labelledby="flush-heading@(i)"
-                                 data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body main-flex">
-                                    <div class="inner-flex">
-                                        <img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
-                                        <span class="accordion-heading-inner">
-                                            Provider :
-                                            <span class="accordion-value-inner">@Model.requests[i].Name</span>
-                                        </span>
-                                    </div>
-                                    <div class="inner-flex">
-                                        <img src="../../images/success-icon.svg" alt="" class="accordion-img-inner"> <span class="accordion-heading-inner">
-                                            Current
-                                            Status: <span class="accordion-value-inner">@Enum.GetName(typeof(Status), @Model.requests[i].Status)</span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                
-            </div>
-        </div>
+    <!--Loader-->
+    <div class="loader-container">
+        <div class="loader"></div>
     </div>
+
 </div>
 
 <script>
@@ -239,4 +130,44 @@
             });
         });
     });
+
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Patient/PatientDashboardTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    window.onload = () => {
+        $.ajax({
+            url: `/Patient/PatientDashboardTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+
 </script>

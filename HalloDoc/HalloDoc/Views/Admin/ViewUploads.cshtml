@@ -21,7 +21,7 @@
         <div class="upload-inner-container">
             <div class="top-part">
                 <span class="main-heading view-main dark-heading-text" id="main-heading">Documents</span>
-                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                <a class="back-btn" onclick="goBack()">
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
@@ -362,6 +362,10 @@
             }
         });
     });
+
+    function goBack() {
+        window.history.back();
+    }
 
     $(document).ready(function () {
         $('#download-all-mob').on('click', function () {

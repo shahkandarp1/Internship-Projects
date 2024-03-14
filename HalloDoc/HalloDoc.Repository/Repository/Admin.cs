@@ -29,6 +29,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Irony.Parsing;
 using System.Collections.Immutable;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -1367,6 +1368,8 @@ namespace HalloDoc.Repository.Repository
                     Reason = adminDashboardViewModel.BlockReason,
                     CreatedDate = DateTime.Now,
                     RequestId = adminDashboardViewModel.RequestId.ToString(),
+                    IsActive = new BitArray(new[] { false }),
+                    Name = string.Concat(request.RequestClient.FirstName , " " , request.RequestClient.LastName)
                 };
                 _db.BlockRequests.Add(blockRequest);
                 _db.SaveChanges();
@@ -2353,7 +2356,8 @@ namespace HalloDoc.Repository.Repository
                 IsBackgroundDoc = physician.IsBackgroundDoc[0],
                 IsCredentialDoc = physician.IsCredentialDoc[0],
                 IsLicenseDoc = physician.IsLicenseDoc[0],
-                IsNonDisclosureDoc = physician.IsNonDisclosureDoc[0]
+                IsNonDisclosureDoc = physician.IsNonDisclosureDoc[0],
+                Status = physician.Status
             };
 
             return physicianAccountViewModel;
@@ -2444,7 +2448,7 @@ namespace HalloDoc.Repository.Repository
                 CookieModel cookieModel = _jwt.getDetails(token);
 
                 Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == physicianAccountViewModel.PhysicianId);
-                physician.Status = physicianAccountViewModel?.Status ?? physician.Status;
+                physician.Status = (short?)(physicianAccountViewModel?.Status ?? physician.Status);
                 physician.RoleId = physicianAccountViewModel?.role_id ?? physician.RoleId;
                 physician.FirstName = physicianAccountViewModel?.FirstName ?? physician.FirstName;
                 physician.LastName = physicianAccountViewModel?.LastName ?? physician.LastName;
@@ -2600,6 +2604,131 @@ namespace HalloDoc.Repository.Repository
             return patientHistoryViewModel;
 
         }
+
+        PatientHistoryViewModel IAdmin.getAllPatientRecords(int id,int page = 1, int pageSize = 10)
+        {
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            int count = _db.Requests.Where(u => u.UserId == id).Count();
+            List<RequestViewModel> data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({id},{pageSize},{((page - 1) * pageSize)})").ToList();
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record"
+            };
+
+            PatientHistoryViewModel patientHistoryViewModel = new PatientHistoryViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                requestViewModels = data,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = count,
+                TotalPages = (int)Math.Ceiling((double)count / pageSize)
+            };
+
+            return patientHistoryViewModel;
+
+        }
+
+        BlockHistoryViewModel IAdmin.getBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record"
+            };
+
+            IQueryable<BlockRequest> blockRequests = _db.BlockRequests;
+
+            if(name!=null)
+            {
+                blockRequests = blockRequests.Where(r => r.Name.ToLower().Contains(name.ToLower()));
+            }
+            if (date != null)
+            {
+                blockRequests = blockRequests.Where(r => r.CreatedDate.Value.Date == date.Value.Date);
+            }
+            if (email != null)
+            {
+                blockRequests = blockRequests.Where(r => r.Email.ToLower().Contains(email.ToLower()));
+            }
+            if (phone != null)
+            {
+                blockRequests = blockRequests.Where(r => r.PhoneNumber.Contains(phone));
+            }
+
+            BlockHistoryViewModel blockHistoryViewModel = new BlockHistoryViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                blockRequests = blockRequests.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = blockRequests.Count(),
+                TotalPages = (int)Math.Ceiling((double)blockRequests.Count() / pageSize)
+            };
+
+            return blockHistoryViewModel;
+        }
+
+        bool IAdmin.toggleActive(int blockrequestid, bool value)
+        {
+            try
+            {
+                BlockRequest blockRequest = _db.BlockRequests.FirstOrDefault(b=>b.BlockRequestId == blockrequestid);
+                blockRequest.IsActive = new BitArray(new[] { value });
+                blockRequest.ModifiedDate = DateTime.Now;
+                _db.BlockRequests.Update(blockRequest);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.restoreBlock(int blockrequestid)
+        {
+            try
+            {
+                BlockRequest blockRequest = _db.BlockRequests.FirstOrDefault(b => b.BlockRequestId == blockrequestid);
+                var requestid = blockRequest.RequestId;
+                _db.BlockRequests.Remove(blockRequest);
+
+                List<RequestStatusLog> requestStatusLogs = _db.RequestStatusLogs.Where(r=>r.RequestId == int.Parse(requestid)).OrderBy(r=>r.CreatedDate).ToList();
+
+                var status = requestStatusLogs[requestStatusLogs.Count - 2].Status;
+
+                Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == int.Parse(requestid));
+                request.Status = status;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    Status = status,
+                    CreatedDate = DateTime.Now,
+                    RequestId = int.Parse(requestid),
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
 
     }
 }

@@ -49,8 +49,14 @@ namespace HaloDocMVC.NET.Controllers
 
         public async Task<IActionResult> PatientDashboard()
         {
-            DashboardViewModel dashboardViewModel = _patient.getDashboardData();
+            DashboardViewModel dashboardViewModel = _patient.getDashboardData(1,10);
             return View(dashboardViewModel);
+        }
+
+        public async Task<IActionResult> PatientDashboardTable(int page=1,int pageSize=10)
+        {
+            DashboardViewModel dashboardViewModel = _patient.getDashboardData(page,pageSize);
+            return PartialView("_PatientDashboard",dashboardViewModel);
         }
 
         public IActionResult SubmitSomeoneElse()

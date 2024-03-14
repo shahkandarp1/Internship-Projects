@@ -1075,17 +1075,22 @@ namespace HalloDoc.Repository.Repository
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
 
-        DashboardViewModel IPatient.getDashboardData()
+        DashboardViewModel IPatient.getDashboardData(int page = 1, int pageSize = 10)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
             CookieModel cookieModel = _jwt.getDetails(token);
-            var data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({cookieModel.userId})").ToList();
+            int count = _db.Requests.Where(u => u.UserId == cookieModel.userId).Count();
+            List<RequestViewModel> data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({cookieModel.userId},{pageSize},{((page - 1) * pageSize)})").ToList();
             var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
                 requests = data,
-                name = string.Concat(curr_user.FirstName, ' ', curr_user.LastName)
+                name = string.Concat(curr_user.FirstName, ' ', curr_user.LastName),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = count,
+                TotalPages = (int)Math.Ceiling((double)count / pageSize)
             };
             return dashboardViewModel;
         }
