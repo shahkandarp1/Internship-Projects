@@ -93,3 +93,8 @@ th:last-child{
 .tick-color{
     color:black;
 }
+
+/*search records*/
+.form-floating > .select-dropdown:not(:placeholder-shown) {
+    padding-top: .75rem !important;
+}

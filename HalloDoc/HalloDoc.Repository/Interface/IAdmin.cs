@@ -134,5 +134,11 @@ namespace HalloDoc.Repository.Interface
 
         public bool restoreBlock(int blockrequestid);
 
+        public SearchRecordViewModel getSearchedData(int? status,string? name,int? requesttypeid,DateTime? fromdos,DateTime? todos,string? providername,string? email,string? phonenumber, int page = 1, int pageSize = 10);
+
+        public bool deleteRequest(int id);
+
+        public MemoryStream exportSearchedData(SearchRecordViewModel searchRecordViewModel);
+
     }
 }

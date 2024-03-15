@@ -1,0 +1,179 @@
+﻿@model SearchRecordViewModel
+@{
+    ViewData["Title"] = "Search Records";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-history.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Search Records</span>
+                <a class="btn btn-info text-white patient-text-btn" onclick="submit()">
+                    <i class="bi bi-arrow-90deg-right"></i>
+                    <span class="d-none d-lg-inline-flex">Export Data To Excel</span>
+                </a>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="row symptoms-textarea">
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <select class="form-control select select-dropdown top-most-editable" id="status" placeholder="name@example.com">
+                                        <option value="-1">Select Request Status</option>
+                                        <option value="1">Unassigned</option>
+                                        <option value="2">Accepted</option>
+                                        <option value="3">MDEnRoute</option>
+                                        <option value="4">MDOnSite</option>
+                                        <option value="5">Conclude</option>
+                                        <option value="6">Cancelled</option>
+                                        <option value="7">CancelledByPatient</option>
+                                        <option value="8">Closed</option>
+                                        <option value="9">Unpaid</option>
+                                        <option value="10">Clear</option>
+                                        <option value="11">Blocked</option>
+                                    </select>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="name" placeholder="name@example.com">
+                                    <label for="name" class="form-label">Patient Name</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <select class="form-control select select-dropdown top-most-editable" id="requesttypeid" placeholder="name@example.com">
+                                        <option value="-1">Select Request Type</option>
+                                        @foreach (var item in Model.requestTypes)
+                                        {
+                                            <option value="@item.RequestTypeId">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="date" class="form-control dob" id="fromdos" placeholder="name@example.com">
+                                    <label for="fromdos" class="form-label dob-label">From Date Of Service</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="date" class="form-control dob" id="todos" placeholder="name@example.com">
+                                    <label for="todos" class="form-label dob-label">To Date Of Service</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="providername" placeholder="name@example.com">
+                                    <label for="providername" class="form-label">Provider Name</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="email" placeholder="name@example.com">
+                                    <label for="email" class="form-label">Email</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg-3 col-md-3 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="phonenumber" placeholder="name@example.com">
+                                    <label for="phonenumber" class="form-label">PhoneNumber</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="lower-btn" id="top-most-edit">
+                        <a class="lower-custom-btn cancel-btn" onclick="erase()">Clear</a>
+                        <button class="lower-custom-btn submit-btn" onclick="filter(1,10)">Search</button>
+                    </div>
+                </div>
+
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        var status = document.getElementById("status").value == -1 ? null : document.getElementById("status").value
+        var requesttypeid = document.getElementById("requesttypeid").value == -1 ? null : document.getElementById("requesttypeid").value
+        $.ajax({
+            url: `/Admin/SearchRecordTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { name: document.getElementById("name").value, status: status, requesttypeid: requesttypeid, fromdos: document.getElementById("fromdos").value, todos: document.getElementById("todos").value, providername: document.getElementById("providername").value, email: document.getElementById("email").value, phonenumber: document.getElementById("phonenumber").value, page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    const erase = () => {
+        document.getElementById("name").value = ""
+        document.getElementById("status").value = -1
+        document.getElementById("requesttypeid").value = -1
+        document.getElementById("fromdos").value = ""
+        document.getElementById("todos").value = ""
+        document.getElementById("providername").value = ""
+        document.getElementById("email").value = ""
+        document.getElementById("phonenumber").value = ""
+        filter(1, 10)
+    }
+
+    const submit = () => {
+        document.getElementById("submit-btn").click();
+    }
+
+    window.onload = () => {
+        var status = document.getElementById("status").value == -1 ? null : document.getElementById("status").value
+        var requesttypeid = document.getElementById("requesttypeid").value == -1 ? null : document.getElementById("requesttypeid").value
+        $.ajax({
+            url: `/Admin/SearchRecordTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { name: document.getElementById("name").value, status: status, requesttypeid: requesttypeid, fromdos: document.getElementById("fromdos").value, todos: document.getElementById("todos").value, providername: document.getElementById("providername").value, email: document.getElementById("email").value, phonenumber: document.getElementById("phonenumber").value, page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

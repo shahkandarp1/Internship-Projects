@@ -1,39 +1,12 @@
 ﻿@model AdminDashboardViewModel
 
 <form asp-action="Dashboard" asp-controller="Admin" method="post">
-    @Html.HiddenFor(m => m.status)
-    @for (int i = 0; i < Model.regions.Count; i++)
-    {
-        @Html.HiddenFor(m => m.regions[i].Name)
-        @Html.HiddenFor(m => m.regions[i].RegionId)
-    }
-    @for (int i = 0; i < Model.requests.Count; i++)
-    {
-        @Html.HiddenFor(m => m.requests[i].FirstName)
-        @Html.HiddenFor(m => m.requests[i].LastName)
-        @Html.HiddenFor(m => m.requests[i].PhoneNumber)
-        @Html.HiddenFor(m => m.requests[i].RequestTypeId)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.FirstName)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.LastName)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.PhoneNumber)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.Street)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.Address)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.ZipCode)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.State)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.City)
-        @Html.HiddenFor(m => m.requests[i].CreatedDate)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.IntYear)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.StrMonth)
-        @Html.HiddenFor(m => m.requests[i].RequestClient.IntDate)
-        @Html.HiddenFor(m => m.requests[i].Physician.FirstName)
-        for(int j=0;j<Model.requests[i].RequestStatusLogs.ToList().Count;++j)
-        {
-            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].Status)
-            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].CreatedDate)
-            @Html.HiddenFor(m => m.requests[i].RequestStatusLogs.ToList()[j].Notes)
-            
-        }
-    }
+<input type="hidden" asp-for="requestor" id="requestor_submit">
+<input type="hidden" asp-for="RegionId" id="region_submit">
+<input type="hidden" asp-for="search" id="search_submit">
+@Html.HiddenFor(m => m.CurrentPage)
+@Html.HiddenFor(m => m.PageSize)
+@Html.HiddenFor(m => m.status)
 <button class="d-none" id="submit-btn"></button>
 <table id="dtBasicExample" class="table">
     <thead class="thead-dark">

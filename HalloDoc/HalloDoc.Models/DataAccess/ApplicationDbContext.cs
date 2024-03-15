@@ -93,6 +93,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Smslog> Smslogs { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
     public virtual DbSet<RequestViewModel> RequestViewModels { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -276,6 +277,8 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Request>(entity =>
         {
             entity.HasKey(e => e.RequestId).HasName("Request_pkey");
+
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'::\"bit\"");
 
             entity.HasOne(d => d.Physician).WithMany(p => p.Requests).HasConstraintName("Request_PhysicianId_fkey");
 

@@ -15,6 +15,7 @@ using System.Collections;
 using Irony.Parsing;
 using HalloDoc.Repository.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Runtime.CompilerServices;
 
 namespace HalloDoc.Controllers
 {
@@ -87,7 +88,8 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Dashboard(AdminDashboardViewModel model)
         {
-            MemoryStream memoryStream = _admin.export(model);
+            AdminDashboardViewModel viewmodel = _admin.adminDashboardContent(model.status, model.search, model.requestor, model.RegionId, (int)model.CurrentPage, (int)model.PageSize);
+            MemoryStream memoryStream = _admin.export(viewmodel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Data-{model.status}.xlsx");
         }
 
@@ -689,5 +691,37 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
+
+        public IActionResult SearchRecord()
+        {
+            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(null, null, null, null, null, null, null, null);
+            return View(searchRecordViewModel);
+        }
+
+        public IActionResult SearchRecordTable(int? status, string? name, int? requesttypeid, DateTime? fromdos, DateTime? todos, string? providername, string? email, string? phonenumber, int page = 1, int pageSize = 10)
+        {
+            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(status, name, requesttypeid, fromdos, todos, providername, email, phonenumber, page, pageSize);
+            return PartialView("_SearchRecordTable",searchRecordViewModel);
+        }
+
+        public IActionResult DeleteRequest(int id)
+        {
+            bool isDeleted = _admin.deleteRequest(id);
+            if(isDeleted)
+            {
+                TempData["success"] = "Request Deleted Successfully!!";
+            }
+            else{
+                TempData["error"] = "Request could not be Deleted!!";
+            }
+            return RedirectToAction("SearchRecord");
+        }
+
+        public IActionResult ExportSearchedData(SearchRecordViewModel searchRecordViewModel)
+        {
+            MemoryStream memoryStream = _admin.exportSearchedData(searchRecordViewModel);
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Filtered-Data.xlsx");
+        }
+
     }
 }

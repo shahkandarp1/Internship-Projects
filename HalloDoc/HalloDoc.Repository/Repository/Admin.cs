@@ -30,6 +30,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Irony.Parsing;
 using System.Collections.Immutable;
 using DocumentFormat.OpenXml.Wordprocessing;
+using static HalloDoc.ViewModels.Enums;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -74,14 +75,14 @@ namespace HalloDoc.Repository.Repository
                 exp = r => r.Status == 9;
             }
 
-            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r => r.RequestStatusLogs).Where(exp).OrderByDescending(e => e.CreatedDate);
+            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r => r.RequestStatusLogs).Where(exp).Where(r=>r.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
 
-            var count_new = _db.Requests.Count(r => r.Status == 1);
-            var count_pending = _db.Requests.Count(r => r.Status == 2);
-            var count_active = _db.Requests.Count(r => r.Status == 3 || r.Status == 4);
-            var count_conclude = _db.Requests.Count(r => r.Status == 5);
-            var count_toclose = _db.Requests.Count(r => r.Status == 6 || r.Status == 7 || r.Status == 8);
-            var count_unpaid = _db.Requests.Count(r => r.Status == 9);
+            var count_new = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 1);
+            var count_pending = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 2);
+            var count_active = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 3 || r.Status == 4);
+            var count_conclude = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 5);
+            var count_toclose = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 6 || r.Status == 7 || r.Status == 8);
+            var count_unpaid = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 9);
             var casetag = _db.CaseTags.ToList();
 
             if (search != null)
@@ -151,7 +152,7 @@ namespace HalloDoc.Repository.Repository
             try
             {
                 List<Request> data = new List<Request>();
-                data = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).ToList();
+                data = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("Export All");
 
@@ -229,7 +230,7 @@ namespace HalloDoc.Repository.Repository
                 List<Request> data = new List<Request>();
                 data = model.requests;
                 var workbook = new XLWorkbook();
-                var worksheet = workbook.Worksheets.Add("Export All");
+                var worksheet = workbook.Worksheets.Add("Export");
 
                 int count = 1;
                 worksheet.Cell(1, count++).Value = "Name";
@@ -288,7 +289,7 @@ namespace HalloDoc.Repository.Repository
                         if (stat.Status == 2)
                         {
                             dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
-                            notes = stat.Notes ?? "";
+                            notes += stat.Notes + Environment.NewLine;
                         }
                     }
                     worksheet.Cell(row, count++).Value = string.Concat(item.RequestClient.FirstName, ',', item.RequestClient.LastName);
@@ -329,7 +330,7 @@ namespace HalloDoc.Repository.Repository
                     worksheet.Cell(row, count++).Value = (item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode));
                     if (model.status != "Conclude" || model.status != "Unpaid")
                     {
-                        worksheet.Cell(row, count++).Value = "Admin transferred to Dr.AGOLA on 10\\10\\2023 at 4:11:38 AM:test";
+                        worksheet.Cell(row, count++).Value = notes;
                     }
                     row++;
                 }
@@ -2726,6 +2727,181 @@ namespace HalloDoc.Repository.Repository
             catch(Exception exp)
             {
                 return false;
+            }
+        }
+
+        SearchRecordViewModel IAdmin.getSearchedData(int? status, string? name, int? requesttypeid, DateTime? fromdos, DateTime? todos, string? providername, string? email, string? phonenumber, int page = 1, int pageSize = 10)
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record"
+            };
+
+            List<RequestType> requestTypes = _db.RequestTypes.ToList();
+
+            IQueryable<Request> requests = _db.Requests.Include(r => r.RequestClient).Include(r => r.RequestNotes).Include(r => r.RequestStatusLogs).Include(r => r.Physician).Where(r => r.IsDeleted == new BitArray(new[] { false }));
+            if(status!=null)
+            {
+                requests = requests.Where(r=>r.Status == status);
+            }
+            if(name!=null)
+            {
+                requests = requests.Where(r => r.RequestClient.FirstName.ToLower().Contains(name.ToLower()) || r.RequestClient.LastName.ToLower().Contains(name.ToLower()));
+            }
+            if(requesttypeid!=null)
+            {
+                requests = requests.Where(r => r.RequestTypeId == requesttypeid);
+            }
+            if(fromdos!=null && todos == null)
+            {
+                requests = requests.Where(r => r.AcceptedDate.Value.Date >= fromdos.Value.Date);
+            }
+            if(fromdos == null && todos != null)
+            {
+                requests = requests.Where(r => r.AcceptedDate.Value.Date <= todos.Value.Date);
+            }
+            if(fromdos != null && todos != null)
+            {
+                requests = requests.Where(r => r.AcceptedDate.Value.Date >= fromdos.Value.Date && r.AcceptedDate.Value.Date <= todos.Value.Date);
+            }
+            if(providername!=null)
+            {
+                requests = requests.Where(r => r.Physician.FirstName.ToLower().Contains(providername.ToLower()) || r.Physician.LastName.ToLower().Contains(providername.ToLower()));
+            }
+            if(email!=null)
+            {
+                requests = requests.Where(r => r.RequestClient.Email.ToLower().Contains(email.ToLower()));
+            }
+            if(phonenumber!=null)
+            {
+                requests = requests.Where(r => r.RequestClient.PhoneNumber.ToLower().Contains(phonenumber.ToLower()));
+            }
+
+            SearchRecordViewModel searchRecordViewModel = new SearchRecordViewModel
+            {
+                requests = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                alldata = requests.ToList(),
+                adminNavbarViewModel = adminNavbarViewModel,
+                requestTypes = requestTypes,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = requests.Count(),
+                TotalPages = (int)Math.Ceiling((double)requests.Count() / pageSize)
+            };
+
+            return searchRecordViewModel;
+
+        }
+
+        bool IAdmin.deleteRequest(int id)
+        {
+            try
+            {
+                Request req = _db.Requests.FirstOrDefault(r=>r.RequestId == id);
+                req.IsDeleted = new BitArray(new[] { true });
+                req.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(req);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+
+        }
+
+        MemoryStream IAdmin.exportSearchedData(SearchRecordViewModel model)
+        {
+            try
+            {
+                List<Request> data = new List<Request>();
+                data = model.alldata;
+                var workbook = new XLWorkbook();
+                var worksheet = workbook.Worksheets.Add("Export All");
+
+                worksheet.Cell(1, 1).Value = "Patient Name";
+                worksheet.Cell(1, 2).Value = "Requestor";
+                worksheet.Cell(1, 3).Value = "Date Of Service";
+                worksheet.Cell(1, 4).Value = "Close Case Date";
+                worksheet.Cell(1, 5).Value = "Email";
+                worksheet.Cell(1, 6).Value = "Phone Number";
+                worksheet.Cell(1, 7).Value = "Address";
+                worksheet.Cell(1, 8).Value = "Zip";
+                worksheet.Cell(1, 9).Value = "Request Status";
+                worksheet.Cell(1, 10).Value = "Physician Name";
+                worksheet.Cell(1, 11).Value = "Physician Notes";
+                worksheet.Cell(1, 12).Value = "Cancelled By Provider Note";
+                worksheet.Cell(1, 13).Value = "Admin Note";
+                worksheet.Cell(1, 14).Value = "Patient Note";
+
+                int row = 2;
+                foreach (var item in data)
+                {
+                    var closecasedate = "-";
+                    string cancelprovicernote = "";
+                    foreach (var requeststatuslog in item.RequestStatusLogs)
+                    {
+                        if (requeststatuslog.Status == 9)
+                        {
+                            closecasedate = requeststatuslog.CreatedDate.ToString("MMMM dd,yyyy");
+                        }
+                        if (requeststatuslog.Status == 2 && requeststatuslog?.TransToAdmin == new BitArray(new[] { true }))
+                        {
+                            cancelprovicernote += requeststatuslog.Notes + Environment.NewLine;
+                        }
+                    }
+                    var requestor = "";
+                    if(item.RequestTypeId == 1)
+                    {
+                        requestor = "Business";
+                    }
+                    else if (item.RequestTypeId == 2)
+                    {
+                        requestor = "Patient";
+                    }
+                    else if (item.RequestTypeId == 3)
+                    {
+                        requestor = "Family";
+                    }
+                    else
+                    {
+                        requestor = "Concierge"; 
+                    }
+                    worksheet.Cell(row, 1).Value = string.Concat(item.RequestClient.FirstName, ", ", item.RequestClient.LastName);
+                    worksheet.Cell(row, 2).Value = requestor;
+                    worksheet.Cell(row, 3).Value = item.AcceptedDate == null ? "-" : item.AcceptedDate?.ToString("MMMM dd,yyyy");
+                    worksheet.Cell(row, 4).Value = closecasedate;
+                    worksheet.Cell(row, 5).Value = item.RequestClient.Email;
+                    worksheet.Cell(row, 6).Value = item.RequestClient.PhoneNumber;
+                    worksheet.Cell(row, 7).Value = string.Concat(item.RequestClient.Street, ", ", item.RequestClient.City, ", ", item.RequestClient.State);
+                    worksheet.Cell(row, 8).Value = item.RequestClient.ZipCode;
+                    worksheet.Cell(row, 9).Value = Enum.GetName(typeof(Status), @item.Status);
+                    worksheet.Cell(row, 10).Value = item?.Physician?.FirstName == null ? "-" : "Dr. " + item?.Physician?.FirstName;
+                    worksheet.Cell(row, 11).Value = item?.RequestNotes.FirstOrDefault()?.PhysicianNotes == null ? "-" : item?.RequestNotes.FirstOrDefault()?.PhysicianNotes;
+                    worksheet.Cell(row, 12).Value = cancelprovicernote == "" ? "-" : cancelprovicernote;
+                    worksheet.Cell(row, 13).Value = item?.RequestNotes.FirstOrDefault()?.AdminNotes == null ? "-" : item?.RequestNotes.FirstOrDefault()?.AdminNotes;
+                    worksheet.Cell(row, 14).Value = item.RequestClient?.Notes == null ? "-" : item.RequestClient?.Notes;
+                    row++;
+                }
+                worksheet.Columns().AdjustToContents();
+
+                var memoryStream = new MemoryStream();
+                workbook.SaveAs(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return memoryStream;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                throw;
             }
         }
 

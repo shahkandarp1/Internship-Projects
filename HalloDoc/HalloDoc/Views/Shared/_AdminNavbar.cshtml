@@ -85,7 +85,7 @@
         </div>
         <button class="sidebar-tablinks accordion-mob-btn @recordM">Records</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner">Search Records</a>
+            <a class="mobile-sidebar-a accord-inner" asp-action="SearchRecord" asp-controller="Admin">Search Records</a>
             <a class="mobile-sidebar-a accord-inner">Email Logs</a>
             <a class="mobile-sidebar-a accord-inner">SMS Logs</a>
             <a asp-action="PatientHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner">Patient History</a>
@@ -141,7 +141,7 @@
                 Records
             </button>
             <ul class="dropdown-menu" aria-labelledby="records">
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Search Records</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" asp-action="SearchRecord" asp-controller="Admin">Search Records</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item" href="#">Email Logs</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item" href="#">SMS Logs</a></li>
                 <li><a asp-action="PatientHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item">Patient History</a></li>

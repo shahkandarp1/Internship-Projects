@@ -647,6 +647,17 @@
     });
 
     const submit = () => {
+        const states = document.getElementsByClassName("req-filter")
+        for (let i = 0; i < states.length; ++i) {
+            if (states[i].classList.length == 3) {
+                    document.getElementById("requestor_submit").value = states[i].classList[1]
+                    document.getElementById("region_submit").value = document.getElementById("region").value
+                    document.getElementById("search_submit").value = document.getElementById("search").value
+                console.log(document.getElementById("requestor_submit").value)
+                console.log(document.getElementById("region_submit").value)
+                console.log(document.getElementById("search_submit").value)
+            }
+        }
         document.getElementById("submit-btn").click();
     }
 

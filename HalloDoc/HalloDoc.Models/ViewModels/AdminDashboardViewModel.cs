@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -51,5 +52,9 @@ namespace HalloDoc.ViewModels
         //Block Case
 
         public string BlockReason { get; set; }
+
+        //export
+        public string? requestor { get; set; }
+        public string? search { get; set; } 
     }
 }
