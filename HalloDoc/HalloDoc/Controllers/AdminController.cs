@@ -16,6 +16,7 @@ using Irony.Parsing;
 using HalloDoc.Repository.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.CompilerServices;
+using HalloDoc.Models;
 
 namespace HalloDoc.Controllers
 {
@@ -717,10 +718,69 @@ namespace HalloDoc.Controllers
             return RedirectToAction("SearchRecord");
         }
 
-        public IActionResult ExportSearchedData(SearchRecordViewModel searchRecordViewModel)
+        public IActionResult ExportSearchedData(SearchRecordViewModel model)
         {
+            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(model.status,  model.name, model.requesttypeid, model.fromdos, model.todos, model.providername, model.email, model.phonenumber, (int)model.CurrentPage, (int)model.PageSize);
             MemoryStream memoryStream = _admin.exportSearchedData(searchRecordViewModel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Filtered-Data.xlsx");
+        }
+
+        public IActionResult AccountAccess()
+        {
+            AccountAccessViewModel accountAccessViewModel = _admin.getAllRolesDetails();
+            return View(accountAccessViewModel);
+        }
+
+        public IActionResult AccountAccessTable(int page = 1, int pageSize = 10)
+        {
+            AccountAccessViewModel accountAccessViewModel = _admin.getAllRolesDetails();
+            return PartialView("_AccountAccessTable",accountAccessViewModel);
+        }
+
+        public IActionResult CreateAccess()
+        {
+            AdminNavbarViewModel adminNavbarViewModel = _admin.getCreateAccessNavbar();
+            return View(adminNavbarViewModel);
+        }
+
+        public IActionResult GetMenus(int? id)
+        {
+            List<Menu> menu = _admin.getMenus(id);
+            return Json(new { data = menu });
+        }
+
+        public IActionResult CreateRole(string? menus,string? role_name,int? account_type)
+        {
+            bool isCreated = _admin.createRole(menus, role_name, account_type);
+            if(isCreated)
+            {
+                TempData["success"] = "Role Created Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Role could not be Created!!";
+            }
+            return Json(new { isCreated  = isCreated });
+        }
+
+        public IActionResult DeleteRole(int? id)
+        {
+            bool isDeleted = _admin.deleteRole(id);
+            if(isDeleted)
+            {
+                TempData["success"] = "Role Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Role could not be Deleted!!";
+            }
+            return RedirectToAction("AccountAccess");
+        }
+
+        public IActionResult EditRole(int? id)
+        {
+            EditAccessViewModel editAccessViewModel = _admin.getRoleDetails(id);
+            return View(editAccessViewModel);
         }
 
     }

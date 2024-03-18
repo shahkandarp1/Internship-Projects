@@ -1,0 +1,159 @@
+﻿@model AdminNavbarViewModel
+@{
+    ViewData["Title"] = "Create Access";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/create-access.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Create Role</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="AccountAccess">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="upper-text">
+                                Details
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" id="roles" />
+                        <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                            <input type="text" class="form-control" id="role-name" placeholder="name@example.com">
+                            <label for="role-name" class="form-label">Role Name</label>
+                        </div>
+                        <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                            <select class="form-control select " id="account-type" placeholder="name@example.com" onchange="changeAccountType(this)">
+                                <option value="-1">All</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Provider</option>
+                            </select>
+                            <label for="account-type" class="form-label">Account Type</label>
+                        </div>
+                    </div>
+                    <div id="checkboxes"></div>
+                    <div class="lower-btn" id="bottom-edit">
+                        <button class="lower-custom-btn submit-btn" id="submit-btn" onclick="createRole()">Save</button>
+                        <a class="lower-custom-btn cancel-btn">Cancel</a>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function createCheckbox(heading,value) {
+        const checkboxContainer = document.getElementById('checkboxes');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.classList.add('form-check-input');
+        const checkboxId = `flexCheckDefault` + Math.random().toString(36).substring(2, 15);
+        checkbox.id = checkboxId;
+        checkbox.value = value;
+        checkbox.addEventListener('change', function () {
+            checkboxChange(this);
+        });
+        const label = document.createElement('label');
+        label.classList.add('form-check-label');
+        label.setAttribute('for', checkboxId);
+        label.textContent = heading;
+        const formCheck = document.createElement('div');
+        formCheck.classList.add('form-check');
+        formCheck.appendChild(checkbox);
+        formCheck.appendChild(label);
+        checkboxContainer.appendChild(formCheck);
+    }
+
+
+    window.onload = () => {
+        $.post('/Admin/GetMenus', { id: -1 }, function (response) {
+            for (let i = 0; i < response.data.length;++i)
+            {
+                createCheckbox(response.data[i].name, response.data[i].menuId);
+            }
+        });
+    }
+
+    const changeAccountType = (element) => {
+        const checkboxContainer = document.getElementById('checkboxes');
+        const roles = document.getElementById("roles").value;
+        roles.value = "";
+        checkboxContainer.innerHTML = "";
+        $.post('/Admin/GetMenus', { id: element.value }, function (response) {
+            console.log(response.data)
+            for (let i = 0; i < response.data.length; ++i) {
+                createCheckbox(response.data[i].name, response.data[i].menuId);
+            }
+        });
+    }
+
+    const checkboxChange = (element) => {
+        document.getElementById("roles").value += element.value + ",";
+        console.log(document.getElementById("roles").value)
+    }
+
+    const createRole = () => {
+        if (document.getElementById("role-name").value == null || document.getElementById("account-type").value == -1)
+        {
+            toastr.error("Please Fill required Details!!")
+            return;
+        }
+        const checkboxes = document.getElementsByClassName("form-check-input")
+        let flag = 0
+        for (let i = 0; i < checkboxes.length;++i)
+        {
+            if (checkboxes[i].checked == true)
+            {
+                flag = 1
+                break
+            }
+        }
+        if(flag == 0)
+        {
+            toastr.error("Atleast 1 menu item must be selected!!")
+            return;
+        }
+
+        $.post('/Admin/CreateRole', { menus: document.getElementById("roles").value, role_name: document.getElementById("role-name").value, account_type : document.getElementById("account-type").value }, function (response) {
+            if (response.isCreated)
+            {
+                window.location.href = `/Admin/AccountAccess`;
+            }
+        });
+
+    }
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

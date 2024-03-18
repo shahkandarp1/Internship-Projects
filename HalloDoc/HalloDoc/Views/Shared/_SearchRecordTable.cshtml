@@ -3,45 +3,16 @@
 @using static HalloDoc.ViewModels.Enums;
 
 <form asp-action="ExportSearchedData" asp-controller="Admin" method="post">
-    @Html.HiddenFor(m => m.adminNavbarViewModel.Name)
-    @Html.HiddenFor(m => m.adminNavbarViewModel.curr_active)
-    @for(var i=0;i<Model.requestTypes.Count;++i)
-    {
-        @Html.HiddenFor(m => m.requestTypes[i].RequestTypeId)
-        @Html.HiddenFor(m => m.requestTypes[i].Name)
-    }
-    @for (int i = 0; i < Model.alldata.Count; i++)
-    {
-        @Html.HiddenFor(m => m.alldata[i].AcceptedDate)
-        @Html.HiddenFor(m => m.alldata[i].RequestTypeId)
-        @Html.HiddenFor(m => m.alldata[i].RequestId)
-        @Html.HiddenFor(m => m.alldata[i].Status)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.FirstName)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.LastName)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.PhoneNumber)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.Email)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.Street)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.Address)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.ZipCode)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.State)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.City)
-        @Html.HiddenFor(m => m.alldata[i].RequestClient.Notes)
-        @Html.HiddenFor(m => m.alldata[i].CreatedDate)
-        @Html.HiddenFor(m => m.alldata[i].Physician.FirstName)
-        for (int j = 0; j < Model.alldata[i].RequestStatusLogs.ToList().Count; ++j)
-        {
-            @Html.HiddenFor(m => m.alldata[i].RequestStatusLogs.ToList()[j].Status)
-            @Html.HiddenFor(m => m.alldata[i].RequestStatusLogs.ToList()[j].CreatedDate)
-            @Html.HiddenFor(m => m.alldata[i].RequestStatusLogs.ToList()[j].Notes)
-
-        }
-        for (int j = 0; j < Model.alldata[i].RequestNotes.ToList().Count; ++j)
-        {
-            @Html.HiddenFor(m => m.alldata[i].RequestNotes.ToList()[j].AdminNotes)
-            @Html.HiddenFor(m => m.alldata[i].RequestNotes.ToList()[j].PhysicianNotes)
-
-        }
-    }
+    <input type="hidden" asp-for="CurrentPage"/>
+    <input type="hidden" asp-for="PageSize"/>
+    <input type="hidden" asp-for="status" id="excel_status"/>
+    <input type="hidden" asp-for="name" id="excel_name" />
+    <input type="hidden" asp-for="requesttypeid" id="excel_requesttypeid" />
+    <input type="hidden" asp-for="fromdos" id="excel_fromdos" />
+    <input type="hidden" asp-for="todos" id="excel_todos" />
+    <input type="hidden" asp-for="providername" id="excel_providername" />
+    <input type="hidden" asp-for="email" id="excel_email" />
+    <input type="hidden" asp-for="phonenumber" id="excel_phonenumber" />
     <button class="d-none" id="submit-btn"></button>
 </form>
 
@@ -61,7 +32,6 @@
                 <th>Request Status</th>
                 <th>Physician Name</th>
                 <th>Physician Notes</th>
-                <th>Cancelled By Provider Note</th>
                 <th>Admin Note</th>
                 <th>Patient Note</th>
                 <th>Delete Permanently</th>
@@ -133,20 +103,6 @@
                         }
                     </td>
                     <td>
-                        @if (cancelprovicernote.Count > 0)
-                        {
-                            @for (var i = 0; i < cancelprovicernote.Count;++i)
-                            {
-                                <div>@cancelprovicernote[i]</div>
-                            }
-
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
                         @if (item?.RequestNotes.FirstOrDefault()?.AdminNotes == null)
                         {
                             <span>-</span>
@@ -205,7 +161,7 @@
             <h2 class="accordion-header" id="flush-heading@(i)">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
-                    <div class="mb-3">@(string.Concat(Model.requests[i].RequestClient.FirstName, ", ", Model.requests[i].RequestClient.FirstName))</div>
+                    <div class="mb-3">@(string.Concat(Model.requests[i].RequestClient.FirstName, ", ", Model.requests[i].RequestClient.LastName))</div>
                     <div>@(string.Concat(Model.requests[i].RequestClient.Street, ", ", Model.requests[i].RequestClient.City, ", ", Model.requests[i].RequestClient.State))</div>
                 </button>
             </h2>
@@ -333,28 +289,6 @@
                                 else
                                 {
                                     <span>@Model.requests[i]?.RequestNotes.FirstOrDefault()?.PhysicianNotes</span>
-                                }
-                            </span>
-                        </span>
-                    </div>
-                    <div class="inner-flex">
-                        <div class="outer-img-circle">
-                            <img src="../../images/list.png" alt="" class="inner-img">
-                        </div>
-                        <span class="accordion-heading-inner">
-                            Cancelled By Provider Note :
-                            <span class="accordion-value-inner">
-                                @if (cancelprovicernote.Count > 0)
-                                {
-                                    @for (var j = 0; j < cancelprovicernote.Count; ++j)
-                                    {
-                                        <div>@cancelprovicernote[j]</div>
-                                    }
-
-                                }
-                                else
-                                {
-                                    <span>-</span>
                                 }
                             </span>
                         </span>

@@ -1,0 +1,28 @@
+﻿.flex-container {
+    width: 60%;
+}
+.form-check {
+    margin-bottom: 5px;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+#checkboxes {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 660px) {
+    .inner-pt-container {
+        flex-direction: row;
+    }
+    .flex-container {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 426px)
+{
+    .form-floating > .select:not(:placeholder-shown) {
+        padding-top: 0.9rem !important;
+    }
+}

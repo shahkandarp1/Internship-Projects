@@ -31,6 +31,8 @@ using Irony.Parsing;
 using System.Collections.Immutable;
 using DocumentFormat.OpenXml.Wordprocessing;
 using static HalloDoc.ViewModels.Enums;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using HalloDoc.Models;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -2746,7 +2748,7 @@ namespace HalloDoc.Repository.Repository
             List<RequestType> requestTypes = _db.RequestTypes.ToList();
 
             IQueryable<Request> requests = _db.Requests.Include(r => r.RequestClient).Include(r => r.RequestNotes).Include(r => r.RequestStatusLogs).Include(r => r.Physician).Where(r => r.IsDeleted == new BitArray(new[] { false }));
-            if(status!=null)
+            if(status!=null && status != -1)
             {
                 requests = requests.Where(r=>r.Status == status);
             }
@@ -2754,7 +2756,7 @@ namespace HalloDoc.Repository.Repository
             {
                 requests = requests.Where(r => r.RequestClient.FirstName.ToLower().Contains(name.ToLower()) || r.RequestClient.LastName.ToLower().Contains(name.ToLower()));
             }
-            if(requesttypeid!=null)
+            if(requesttypeid!=null && requesttypeid !=-1)
             {
                 requests = requests.Where(r => r.RequestTypeId == requesttypeid);
             }
@@ -2837,9 +2839,8 @@ namespace HalloDoc.Repository.Repository
                 worksheet.Cell(1, 9).Value = "Request Status";
                 worksheet.Cell(1, 10).Value = "Physician Name";
                 worksheet.Cell(1, 11).Value = "Physician Notes";
-                worksheet.Cell(1, 12).Value = "Cancelled By Provider Note";
-                worksheet.Cell(1, 13).Value = "Admin Note";
-                worksheet.Cell(1, 14).Value = "Patient Note";
+                worksheet.Cell(1, 12).Value = "Admin Note";
+                worksheet.Cell(1, 13).Value = "Patient Note";
 
                 int row = 2;
                 foreach (var item in data)
@@ -2885,9 +2886,8 @@ namespace HalloDoc.Repository.Repository
                     worksheet.Cell(row, 9).Value = Enum.GetName(typeof(Status), @item.Status);
                     worksheet.Cell(row, 10).Value = item?.Physician?.FirstName == null ? "-" : "Dr. " + item?.Physician?.FirstName;
                     worksheet.Cell(row, 11).Value = item?.RequestNotes.FirstOrDefault()?.PhysicianNotes == null ? "-" : item?.RequestNotes.FirstOrDefault()?.PhysicianNotes;
-                    worksheet.Cell(row, 12).Value = cancelprovicernote == "" ? "-" : cancelprovicernote;
-                    worksheet.Cell(row, 13).Value = item?.RequestNotes.FirstOrDefault()?.AdminNotes == null ? "-" : item?.RequestNotes.FirstOrDefault()?.AdminNotes;
-                    worksheet.Cell(row, 14).Value = item.RequestClient?.Notes == null ? "-" : item.RequestClient?.Notes;
+                    worksheet.Cell(row, 12).Value = item?.RequestNotes.FirstOrDefault()?.AdminNotes == null ? "-" : item?.RequestNotes.FirstOrDefault()?.AdminNotes;
+                    worksheet.Cell(row, 13).Value = item.RequestClient?.Notes == null ? "-" : item.RequestClient?.Notes;
                     row++;
                 }
                 worksheet.Columns().AdjustToContents();
@@ -2903,6 +2903,164 @@ namespace HalloDoc.Repository.Repository
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw;
             }
+        }
+
+        AccountAccessViewModel IAdmin.getAllRolesDetails(int page=1,int pageSize=10)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access"
+            };
+
+            IQueryable<Role> roles = _db.Roles.Where(r => r.IsDeleted == new BitArray(new[] { false }));
+
+            AccountAccessViewModel accountAccessViewModel = new AccountAccessViewModel
+            {
+                roles = roles.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                adminNavbarViewModel = adminNavbarViewModel,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = roles.Count(),
+                TotalPages = (int)Math.Ceiling((double)roles.Count() / pageSize)
+            };
+
+            return accountAccessViewModel;
+
+        }
+
+        AdminNavbarViewModel IAdmin.getCreateAccessNavbar()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access"
+            };
+            return adminNavbarViewModel;
+        }
+
+        List<Menu> IAdmin.getMenus(int? id)
+        {
+            if(id==-1)
+            {
+                return _db.Menus.ToList();
+            }
+
+            return _db.Menus.Where(m => m.AccountType == id).ToList();
+        }
+
+        bool IAdmin.createRole(string? menus, string? role_name, int? account_type)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                string[] menu = menus.Split(",");
+
+                Role role = new Role
+                {
+                    Name = role_name,
+                    AccountType = (short)account_type,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = cookieModel.name,
+                    IsDeleted = new BitArray(new[] { false })
+                };
+                _db.Roles.Add(role);
+                _db.SaveChanges();
+
+
+                for(var i=0;i< menu.Length - 1;++i)
+                {
+                    RoleMenu roleMenu = new RoleMenu
+                    {
+                        RoleId = role.RoleId,
+                        MenuId = int.Parse(menu[i])
+                    };
+                    _db.RoleMenus.Add(roleMenu);
+                }
+
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.deleteRole(int? id)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == id);
+                role.IsDeleted = new BitArray(new[] { true });
+                role.ModifiedDate = DateTime.Now;
+                role.ModifiedBy = cookieModel.name;
+
+                _db.Roles.Update(role);
+                _db.SaveChanges();
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        EditAccessViewModel IAdmin.getRoleDetails(int? id)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access"
+            };
+
+            Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == id);
+            IQueryable<RoleMenu> roleMenus = _db.RoleMenus.Where(r=>r.RoleId == id);
+
+            List<Menu> menus = _db.Menus.Where(r=>r.AccountType == role.AccountType).ToList();
+
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+
+            for(var i=0; i<menus.Count; i++)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel
+                {
+                    Name = menus[i].Name,
+                    Id = menus[i].MenuId,
+                    isChecked = roleMenus.FirstOrDefault(r => r.MenuId == menus[i].MenuId) == null ? false : true
+                });
+            }
+
+            EditAccessViewModel editAccessViewModel = new EditAccessViewModel
+            {
+                Name = role.Name,
+                Account_type = role.AccountType,
+                adminNavbarViewModel = adminNavbarViewModel,
+                checkboxViewModels = checkboxViewModels,
+            };
+
+            return editAccessViewModel;
+
         }
 
 

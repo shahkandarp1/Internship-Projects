@@ -148,6 +148,14 @@
     }
 
     const submit = () => {
+        document.getElementById("excel_name").value = document.getElementById("name").value
+        document.getElementById("excel_status").value = document.getElementById("status").value
+        document.getElementById("excel_requesttypeid").value = document.getElementById("requesttypeid").value
+        document.getElementById("excel_fromdos").value = document.getElementById("fromdos").value
+        document.getElementById("excel_todos").value = document.getElementById("todos").value
+        document.getElementById("excel_providername").value = document.getElementById("providername").value
+        document.getElementById("excel_email").value = document.getElementById("email").value
+        document.getElementById("excel_phonenumber").value = document.getElementById("phonenumber").value
         document.getElementById("submit-btn").click();
     }
 

@@ -1,0 +1,109 @@
+﻿@model AccountAccessViewModel
+@{
+    ViewData["Title"] = "Account Access";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/account-access.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Account Access</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <a class="back-btn create-btn reset-btn" id="edit-btn" asp-action="CreateAccess" asp-controller="Admin">
+                                <span class="back-text create-text">Create Access</span>
+                                <img id="create-request" src="../../images/plus.svg" alt="" class="logout-img" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/AccountAccessTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#cancel-provider").click(function () {
+            $("#myModalProvider").modal("hide");
+        });
+    });
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/AccountAccessTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

@@ -16,12 +16,20 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/AccountAccess.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWNjb3VudEFjY2Vzcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/BlockHistory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQmxvY2tIaXN0b3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/CloseCase.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ2xvc2VDYXNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/CreateAccess.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlQWNjZXNzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/CreatePhysician.cshtml]
@@ -38,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/EditPhysician.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFBoeXNpY2lhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/EditRole.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFJvbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Admin/EncounterForm.cshtml]
@@ -154,6 +166,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/Toast.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFRvYXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_AccountAccessTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BY2NvdW50QWNjZXNzVGFibGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci41/Desktop/Internship-Projects/HalloDoc/HalloDoc/Views/Shared/_AdminDashboardTable.cshtml]

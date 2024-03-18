@@ -80,7 +80,7 @@
         </button>
         <button class="sidebar-tablinks accordion-mob-btn @accessM">Access</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner">Account Access</a>
+            <a class="mobile-sidebar-a accord-inner" asp-action="AccountAccess" asp-controller="Admin">Account Access</a>
             <a class="mobile-sidebar-a accord-inner">User Access</a>
         </div>
         <button class="sidebar-tablinks accordion-mob-btn @recordM">Records</button>
@@ -132,7 +132,7 @@
                 Access
             </button>
             <ul class="dropdown-menu" aria-labelledby="access">
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Account Access</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item" asp-action="AccountAccess" asp-controller="Admin">Account Access</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item" href="#">User Access</a></li>
             </ul>
         </div>

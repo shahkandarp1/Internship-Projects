@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\css\\access-denied.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\account-access.css",
+      "PackagePath": "staticwebassets\\css\\account-access.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\admin-dashboard.css",
       "PackagePath": "staticwebassets\\css\\admin-dashboard.css"
     },
@@ -35,6 +39,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\close-case.css",
       "PackagePath": "staticwebassets\\css\\close-case.css"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\create-access.css",
+      "PackagePath": "staticwebassets\\css\\create-access.css"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\create-physician.css",

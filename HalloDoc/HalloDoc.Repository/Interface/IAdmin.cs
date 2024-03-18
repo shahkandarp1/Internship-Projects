@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using HalloDoc.Models;
 using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -139,6 +140,18 @@ namespace HalloDoc.Repository.Interface
         public bool deleteRequest(int id);
 
         public MemoryStream exportSearchedData(SearchRecordViewModel searchRecordViewModel);
+
+        public AccountAccessViewModel getAllRolesDetails(int page = 1, int pageSize = 10);
+
+        public AdminNavbarViewModel getCreateAccessNavbar();
+
+        public List<Menu> getMenus(int? id);
+
+        public bool createRole(string? menus, string? role_name, int? account_type);
+
+        public bool deleteRole(int? id);
+
+        public EditAccessViewModel getRoleDetails(int? id);
 
     }
 }
