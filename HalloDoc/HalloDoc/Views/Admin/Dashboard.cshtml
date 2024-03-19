@@ -315,22 +315,22 @@
         
             <div class="row status-row">
                 <div class="col-lg-2 col-md-4 col-4 mb-2">
-                    <div class="row-cards new new-active"
+                    <div class="row-cards new"
                          id="card1"
                          onclick="changeStatus(this)">
                         <div class="inner-row-cards">
                             <img src="../../images/new.svg"
                                  alt=""
-                                 class="row-card-img hidden"
+                                 class="row-card-img"
                                  id="new" />
                             <img src="../../images/new_active.png"
                                  alt=""
-                                 class="row-card-img"
+                                 class="row-card-img hidden"
                                  id="new-active" />
                             <span class="row-card-text">NEW</span>
                         </div>
                         <h4 class="type_no_txt">@Model.new_count</h4>
-                        <div id="new-img" class="absolutivity">
+                        <div id="new-img" class="absolutivity hidden">
                             <img src="../../images/caret-down-fill.svg"
                                  alt=""
                                  class="arrow-width" />
@@ -494,7 +494,7 @@
           </div>
         </div>
 
-        <div class="bottom-main-container mt-3 mb-3 pb-3">
+        <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
           <!-- Filter Section -->
 
           <div class="filter-section">
@@ -579,6 +579,12 @@
             if (states[i].classList.length == 3) {
                 document.getElementById("partial-container").style.display = "none";
                 document.getElementsByClassName("loader-container")[0].style.display = "flex";
+                localStorage.setItem("status", document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1))
+                localStorage.setItem("search", document.getElementById("search").value)
+                localStorage.setItem("requestor", states[i].classList[1])
+                localStorage.setItem("region", document.getElementById("region").value)
+                localStorage.setItem("page", page)
+                localStorage.setItem("pageSize", pageSize)
                 $.ajax({
                     url: `/Admin/${document.getElementById("status-text").innerHTML.substring(1, document.getElementById("status-text").innerHTML.length - 1)}`,
                     type: 'POST',
@@ -748,6 +754,8 @@
                 $.get('/Login/Logout', function (response) {
                     console.log(response)
                 });
+
+                clearStorage()
             });
         });
     });
@@ -762,19 +770,107 @@
             });
         }
 
-        $.ajax({
-            url: `/Admin/New`,
-            type: 'POST',
-            dataType: 'html',
-            // Pass your data here
-            success: function (response) {
-                document.getElementsByClassName("loader-container")[0].style.display = "none";
-                $("#partial-container").html(response)
-            },
-            error: function () {
-                alert('An error occurred.');
+        if(localStorage.getItem("status") == null)
+        {
+
+            const states = document.getElementsByClassName("row-cards")
+            const current_state = "new"
+            for (let i = 0; i < states.length; ++i) {
+                if (states[i].classList.length == 3 && states[i].classList[1] == current_state) {
+                    break;
+                }
+                else if (states[i].classList[1] == current_state) {
+                    states[i].classList.add(`${states[i].classList[1]}-active`)
+                    document.getElementById(`${states[i].classList[1]}-active`).classList.remove('hidden')
+                    document.getElementById(`${states[i].classList[1]}`).classList.add('hidden')
+                    document.getElementById(`${states[i].classList[1]}-img`).classList.remove('hidden')
+                }
+                else if (states[i].classList.length == 3) {
+                    states[i].classList.remove(`${states[i].classList[1]}-active`)
+                    document.getElementById(`${states[i].classList[1]}-active`).classList.add('hidden')
+                    document.getElementById(`${states[i].classList[1]}`).classList.remove('hidden')
+                    document.getElementById(`${states[i].classList[1]}-img`).classList.add('hidden')
+                }
             }
-        });
+            let name = current_state.split("-").length == 1 ? current_state.split("-")[0] : current_state.split("-")[1]
+            document.getElementById("status-text").innerHTML = `(${name.charAt(0).toUpperCase() + name.slice(1)})`
+
+            $.ajax({
+                url: `/Admin/New`,
+                type: 'POST',
+                dataType: 'html',
+                // Pass your data here
+                success: function (response) {
+                    document.getElementsByClassName("loader-container")[0].style.display = "none";
+                    $("#partial-container").html(response)
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
+            });
+        }
+        else
+        {
+
+            const states = document.getElementsByClassName("row-cards")
+            const current_state = localStorage.getItem("status").toLowerCase() == "close" ? "to-close" : localStorage.getItem("status").toLowerCase()
+            for (let i = 0; i < states.length; ++i) {
+                if (states[i].classList.length == 3 && states[i].classList[1] == current_state) {
+                    break;
+                }
+                else if (states[i].classList[1] == current_state) {
+                    states[i].classList.add(`${states[i].classList[1]}-active`)
+                    document.getElementById(`${states[i].classList[1]}-active`).classList.remove('hidden')
+                    document.getElementById(`${states[i].classList[1]}`).classList.add('hidden')
+                    document.getElementById(`${states[i].classList[1]}-img`).classList.remove('hidden')
+                }
+                else if (states[i].classList.length == 3) {
+                    states[i].classList.remove(`${states[i].classList[1]}-active`)
+                    document.getElementById(`${states[i].classList[1]}-active`).classList.add('hidden')
+                    document.getElementById(`${states[i].classList[1]}`).classList.remove('hidden')
+                    document.getElementById(`${states[i].classList[1]}-img`).classList.add('hidden')
+                }
+            }
+            let name = current_state.split("-").length == 1 ? current_state.split("-")[0] : current_state.split("-")[1]
+            document.getElementById("status-text").innerHTML = `(${name.charAt(0).toUpperCase() + name.slice(1)})`
+
+            const statess = document.getElementsByClassName("req-filter")
+            const current_statee = localStorage.getItem("requestor") ?? "All"
+
+            for (let i = 0; i < statess.length; ++i) {
+                if (statess[i].classList.length == 3 && statess[i].classList[1] == current_statee) {
+                    break;
+                }
+                else if (statess[i].classList[1] == current_statee) {
+                    statess[i].classList.add(`filter-active`)
+                }
+                else if (statess[i].classList.length == 3) {
+                    statess[i].classList.remove(`filter-active`)
+                }
+            }
+
+            document.getElementById("search").value = localStorage.getItem("search")
+            document.getElementById("region").value = localStorage.getItem("region") ?? -1
+            
+            $.ajax({
+                url: `/Admin/${localStorage.getItem("status")}`,
+                type: 'POST',
+                dataType: 'html',
+                data: { search: localStorage.getItem("search"), region: localStorage.getItem("region"), requestor: localStorage.getItem("requestor"), page: localStorage.getItem("page") ?? 1, pageSize: localStorage.getItem("pageSize") ?? 10 },
+                // Pass your data here
+                success: function (response) {
+                    document.getElementsByClassName("loader-container")[0].style.display = "none";
+                    document.getElementById("partial-container").style.display = "block";
+                    $("#partial-container").html(response)
+                },
+                error: function () {
+                    alert('An error occurred.');
+                }
+            });
+                
+        }
+
+        
     }
 </script>
 

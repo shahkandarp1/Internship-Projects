@@ -21,15 +21,19 @@ body {
 /* Navbar - Top */
 
 .moon {
-    padding: 5px;
+    padding: 5px!important;
     border: 1px solid #0dcaf0;
     border-radius: 5px;
     display: flex;
-    width: 31px;
+    width: 31px !important;
+    height: 30px !important;
     justify-content: center;
     align-items: center;
     margin-right: 13px;
-    background-color: white;
+}
+
+.moon-img{
+    color:#0dcaf0!important;
 }
 
 .logout-mob {
@@ -408,6 +412,7 @@ a {
     background-color: #E5F8FD !important;
     border-radius: 5px;
 }
+
 
 @media screen and (max-height: 450px) {
     .sidebar {

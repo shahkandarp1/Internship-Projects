@@ -28,7 +28,7 @@
                         }
                     </td>
                     <td>
-                        <a class="back-btn reset-btn margin-right" id="edit-btn"><span class="back-text">Edit</span></a>
+                        <a class="back-btn reset-btn margin-right" id="edit-btn" asp-action="EditRole" asp-controller="Admin" asp-route-id="@item.RoleId"><span class="back-text">Edit</span></a>
                         <a class="back-btn reset-btn" id="delete-btn" asp-action="DeleteRole" asp-controller="Admin" asp-route-id="@item.RoleId"><span class="back-text">Delete</span></a>
                     </td>
                 </tr>
@@ -58,7 +58,7 @@
                         </span>
                     </div>
                     <div class="lower-btn-mob-flex">
-                        <a class="btn contact-btn" asp-action="DeleteRequest" asp-controller="Admin">Edit</a>
+                        <a class="btn contact-btn" asp-action="EditRole" asp-controller="Admin" asp-route-id="@Model.roles[i].RoleId">Edit</a>
                         <a class="btn contact-btn" asp-action="DeleteRole" asp-controller="Admin" asp-route-id="@Model.roles[i].RoleId">Delete</a>
                     </div>
                 </button>

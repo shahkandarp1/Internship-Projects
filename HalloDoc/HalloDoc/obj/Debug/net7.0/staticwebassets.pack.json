@@ -49,6 +49,10 @@
       "PackagePath": "staticwebassets\\css\\create-physician.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\dark-theme.css",
+      "PackagePath": "staticwebassets\\css\\dark-theme.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\form.css",
       "PackagePath": "staticwebassets\\css\\form.css"
     },
@@ -1033,12 +1037,20 @@
       "PackagePath": "staticwebassets\\js\\submit-request.js"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\theme.js",
+      "PackagePath": "staticwebassets\\js\\theme.js"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-case.js",
       "PackagePath": "staticwebassets\\js\\view-case.js"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-document.js",
       "PackagePath": "staticwebassets\\js\\view-document.js"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\js\\view-uploads.js",
+      "PackagePath": "staticwebassets\\js\\view-uploads.js"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\lib\\bootstrap\\LICENSE",

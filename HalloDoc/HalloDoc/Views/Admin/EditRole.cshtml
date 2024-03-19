@@ -25,12 +25,12 @@
     <div class="main-container">
         <div class="flex-container">
             <div class="top-text">
-                <span class="submit-text" id="submit-text">Create Role</span>
+                <span class="submit-text" id="submit-text">Edit Role</span>
                 <a class="back-btn" asp-controller="Admin" asp-action="AccountAccess">
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <div class="bottom-main-container mt-3 mb-3 pb-3">
+            <div class="bottom-main-container bg-body mt-3 mb-3 pb-3">
                 <!-- Filter Section -->
 
                 <div class="filter-section">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <input type="hidden" id="roles" />
+                        <input type="hidden" id="roles" asp-for="menus"/>
                         <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
                             <input type="text" class="form-control" id="role-name" placeholder="name@example.com" asp-for="Name">
                             <label for="role-name" class="form-label">Role Name</label>
@@ -60,7 +60,7 @@
                         @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" value="@Model.checkboxViewModels[i].Id" checked="@Model.checkboxViewModels[i].isChecked" onchange="checkboxChange(this)">
                                 <label class="form-check-label" for="flexCheckDefault@(i)">
                                     @(Model.checkboxViewModels[i].Name)
                                 </label>
@@ -68,7 +68,7 @@
                         }
                     </div>
                     <div class="lower-btn" id="bottom-edit">
-                        <button class="lower-custom-btn submit-btn" id="submit-btn" onclick="createRole()">Save</button>
+                        <button class="lower-custom-btn submit-btn" id="submit-btn" onclick="editRole()">Save</button>
                         <a class="lower-custom-btn cancel-btn">Cancel</a>
                     </div>
                 </div>
@@ -106,8 +106,7 @@
     const changeAccountType = (element) => {
         const checkboxContainer = document.getElementById('checkboxes');
         checkboxContainer.innerHTML = "";
-        const roles = document.getElementById("roles").value;
-        roles.value = "";
+        document.getElementById("roles").value = "";
         $.post('/Admin/GetMenus', { id: element.value }, function (response) {
             console.log(response.data)
             for (let i = 0; i < response.data.length; ++i) {
@@ -117,11 +116,19 @@
     }
 
     const checkboxChange = (element) => {
-        document.getElementById("roles").value += element.value + ",";
-        console.log(document.getElementById("roles").value)
+        if(element.checked == true)
+        {
+            document.getElementById("roles").value += element.value + ",";
+            console.log(document.getElementById("roles").value)
+        }
+        else{
+            var substringToRemove = element.value + ","
+            document.getElementById("roles").value = document.getElementById("roles").value.replace(substringToRemove, "")
+            console.log(document.getElementById("roles").value);
+        }
     }
 
-    const createRole = () => {
+    const editRole = () => {
         if (document.getElementById("role-name").value == null || document.getElementById("account-type").value == -1) {
             toastr.error("Please Fill required Details!!")
             return;
@@ -139,8 +146,10 @@
             return;
         }
 
-        $.post('/Admin/CreateRole', { menus: document.getElementById("roles").value, role_name: document.getElementById("role-name").value, account_type: document.getElementById("account-type").value }, function (response) {
-            if (response.isCreated) {
+        var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+        $.post('/Admin/EditRole', { id: id, menus: document.getElementById("roles").value, role_name: document.getElementById("role-name").value, account_type: document.getElementById("account-type").value }, function (response) {
+            if (response.isEditted) {
                 window.location.href = `/Admin/AccountAccess`;
             }
         });

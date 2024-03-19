@@ -27,6 +27,7 @@ namespace HalloDoc.Repository.Interface
         public Task<bool> conciergeRequest(ConciergeRequestViewModel modal);
 
         public AspNetUser getAspNetUser(string email);
+        public AspNetUser getAspNetUserLogin(string email);
 
         public DashboardViewModel getDashboardData(int page = 1, int pageSize = 10);
 

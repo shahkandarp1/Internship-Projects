@@ -37,7 +37,7 @@ namespace HalloDoc.Repository.Repository
 
             var userId = "";
             var name = "";
-
+            var menus = "";
             if(aspNetRole.Role.Name == "Patient")
             {
                 var user = _db.Users.FirstOrDefault(a => a.AspNetUserId == aspNetUser.Id);
@@ -49,12 +49,22 @@ namespace HalloDoc.Repository.Repository
                 var admin = _db.Admins.FirstOrDefault(a => a.AspNetUserId == aspNetUser.Id);
                 userId = admin.AdminId.ToString();
                 name = string.Concat(admin.FirstName, " ", admin.LastName);
+                var rolemenu = _db.RoleMenus.Where(r=>r.RoleId == admin.RoleId).ToList();
+                for(var i=0;i< rolemenu.Count; i++)
+                {
+                    menus += _db.Menus.FirstOrDefault(r => r.MenuId == rolemenu[i].MenuId).Name + ",";
+                }
             }
             else if(aspNetRole.Role.Name == "Provider")
             {
                 var physician = _db.Physicians.FirstOrDefault(a => a.AspNetUserId == aspNetUser.Id);
                 userId = physician.PhysicianId.ToString();
                 name = string.Concat(physician.FirstName, " ", physician.LastName);
+                var rolemenu = _db.RoleMenus.Where(r => r.RoleId == physician.RoleId).ToList();
+                for (var i = 0; i < rolemenu.Count; i++)
+                {
+                    menus += _db.Menus.FirstOrDefault(r => r.MenuId == rolemenu[i].MenuId).Name + ",";
+                }
             }
             
 
@@ -66,6 +76,7 @@ namespace HalloDoc.Repository.Repository
                 new Claim(ClaimTypes.Role, aspNetRole.Role.Name),
                 new Claim("UserId", userId),
                 new Claim("Name", name),
+                new Claim("Menus", menus),
             };
 
 
@@ -155,6 +166,7 @@ namespace HalloDoc.Repository.Repository
                 role = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value,
                 email = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value,
                 name = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "Name").Value,
+                menus = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "Menus").Value
             };
 
             return cookieModel;

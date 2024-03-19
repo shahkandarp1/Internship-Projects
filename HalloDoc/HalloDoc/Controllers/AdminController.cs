@@ -783,5 +783,20 @@ namespace HalloDoc.Controllers
             return View(editAccessViewModel);
         }
 
+        [HttpPost]
+        public IActionResult EditRole(int? id, string? menus, string? role_name, int? account_type)
+        {
+            bool isEditted = _admin.editRoleDetails(id,menus,role_name,account_type);
+            if(isEditted)
+            {
+                TempData["success"] = "Role Editted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Role could not be Editted!!";
+            }
+            return Json(new { isEditted = isEditted });
+        }
+
     }
 }

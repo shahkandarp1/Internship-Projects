@@ -21,10 +21,7 @@ namespace HalloDoc.ViewModels
         [Required(ErrorMessage = "Please enter the patient's date of birth")]
         public DateTime DateOfBirth { get; set; }
 
-        [Required(ErrorMessage = "Please enter the patient's email address")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-            ErrorMessage = "Please enter valid Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
         [Phone(ErrorMessage = "Please enter a valid phone number")]

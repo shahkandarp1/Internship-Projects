@@ -27,6 +27,13 @@ const navbar = (element) => {
     }
 
     element.classList.add("sidebar-active")
+
+    localStorage.removeItem("status");
+    localStorage.removeItem("requestor");
+    localStorage.removeItem("page");
+    localStorage.removeItem("pageSize");
+    localStorage.removeItem("search");
+    localStorage.removeItem("region");
 }
 
 var acc = document.getElementsByClassName("accordion-mob-btn");
@@ -42,4 +49,13 @@ for (i = 0; i < acc.length; i++) {
             panel.style.display = "block";
         }
     });
+}
+
+const clearStorage = () => {
+    localStorage.removeItem("status");
+    localStorage.removeItem("requestor");
+    localStorage.removeItem("page");
+    localStorage.removeItem("pageSize");
+    localStorage.removeItem("search");
+    localStorage.removeItem("region");
 }

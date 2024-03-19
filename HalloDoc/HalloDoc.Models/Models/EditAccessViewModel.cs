@@ -16,5 +16,7 @@ namespace HalloDoc.Models
         public string? Name { get; set; }
 
         public int? Account_type { get; set; }
+
+        public string? menus { get; set; }
     }
 }

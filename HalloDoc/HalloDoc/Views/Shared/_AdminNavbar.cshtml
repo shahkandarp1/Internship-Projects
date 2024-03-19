@@ -3,8 +3,8 @@
 @Html.HiddenFor(m => m.Name)
 @Html.HiddenFor(m => m.curr_active)
 
-<div class="navbar-custom">
-    <button class="nav-btn list-border"
+<div class="navbar-custom bg-body">
+    <button class="nav-btn list-border bg-body"
             type="button"
             data-toggle="collapse"
             data-target="#navbarNav"
@@ -16,23 +16,22 @@
     </button>
     <img src="../../images/logo1.png" alt="" class="logo" />
     <div class="right-side-elements">
-        <span class="welcome-text">Welcome <span class="name-text">@Model.Name</span></span>
-        <a class="logout log" asp-controller="Login" asp-action="PatientLogin">
+        <span class="welcome-text">Welcome <span class="name-text" id="nav-name-text">@Model.Name</span></span>
+        <a class="logout log bg-body" asp-controller="Login" asp-action="PatientLogin">
             <span class="logout-text">Logout</span>
         </a>
-        <a class="logout-mob log" asp-controller="Login" asp-action="PatientLogin">
+        <a class="logout-mob log bg-body" asp-controller="Login" asp-action="PatientLogin">
             <img id="logout"
                  src="../../images/box-arrow-right.svg"
                  alt=""
                  class="logout-img" />
         </a>
-        <button class="moon" onclick="changeMode()">
-            <img id="moon" src="../../images/moon.svg" alt="" class="moon-img" />
-            <img id="sun"
-                 src="../../images/sun.svg"
-                 alt=""
-                 class="moon-img hidden" />
-        </button>
+        <div class="pg-theme">
+            <button type="button" id="pg-theme-btn" class="btn btn-outline-info moon bg-body"
+                    data-bs-toggle="button">
+                <i class="bi bi-moon moon-img" id="theme-btn"></i>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -57,39 +56,61 @@
     record = Model.curr_active == "Record" ? "sidebar-active" : "";
 }
 
-<div id="mySidebar" class="sidebar">
+<!-- Roles -->
+@{
+    string dashboardrole, providerlocationrole, profilerole, providermainrole, providerrole, schedulingrole, invoicingrole, partnerrole, accessrole, accountaccessrole, useraccessrole, recordrole, searchrecordrole, emailrole, smsrole, patienthistoryrole, blockhistoryrole;
+    dashboardrole = Model.menus.Contains("Dashboard") ? "" : "hidden";
+    providerlocationrole = Model.menus.Contains("Provider Location") ? "" : "hidden";
+    profilerole = Model.menus.Contains("My Profile") ? "" : "hidden";
+    providerrole = Model.menus.Contains("Provider") ? "" : "hidden";
+    schedulingrole = Model.menus.Contains("Scheduling") ? "" : "hidden";
+    invoicingrole = Model.menus.Contains("Invoicing") ? "" : "hidden";
+    providermainrole = Model.menus.Contains("Provider") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "hidden";
+    partnerrole = Model.menus.Contains("Partners") ? "" : "hidden";
+    accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") ? "" : "hidden";
+    accountaccessrole = Model.menus.Contains("Account Access") ? "" : "hidden";
+    useraccessrole = Model.menus.Contains("User Access") ? "" : "hidden";
+    recordrole = Model.menus.Contains("Search Records") || Model.menus.Contains("Email Logs") || Model.menus.Contains("SMS Logs") || Model.menus.Contains("Patient History") || Model.menus.Contains("Block History") ? "" : "hidden";
+    searchrecordrole = Model.menus.Contains("Search Records") ? "" : "hidden";
+    emailrole = Model.menus.Contains("Email Logs") ? "" : "hidden";
+    smsrole = Model.menus.Contains("SMS Logs") ? "" : "hidden";
+    patienthistoryrole = Model.menus.Contains("Patient History") ? "" : "hidden";
+    blockhistoryrole = Model.menus.Contains("Block History") ? "" : "hidden";
+}
+
+<div id="mySidebar" class="sidebar bg-body">
     <div class="sidebar-tab">
-        <span class="mob-welcome-text">Welcome <span class="mob-name-text">Kandarp Shah</span></span>
-        <button class="sidebar-tablinks @dashboardM">
+        <span class="mob-welcome-text">Welcome <span class="mob-name-text" id="nav-mob-name-text">Kandarp Shah</span></span>
+        <button class="sidebar-tablinks @dashboardM @dashboardrole" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
-        <button class="sidebar-tablinks @providerlocationM">
+        <button class="sidebar-tablinks @providerlocationM @providerlocationrole" onclick="clearStorage()">
             <a class="mobile-sidebar-a"> Provider Location </a>
         </button>
-        <button class="sidebar-tablinks @profileM">
+        <button class="sidebar-tablinks @profileM @profilerole" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="Profile" asp-controller="Admin"> My Profile </a>
         </button>
-        <button class="sidebar-tablinks accordion-mob-btn @providerM">Providers</button>
+        <button class="sidebar-tablinks accordion-mob-btn @providerM @providermainrole" onclick="clearStorage()">Providers</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner" asp-action="Provider" asp-controller="Admin"> Provider </a>
-            <a class="mobile-sidebar-a accord-inner"> Scheduling </a>
-            <a class="mobile-sidebar-a accord-inner"> Invoicing </a>
+            <a class="mobile-sidebar-a accord-inner @providerrole" asp-action="Provider" asp-controller="Admin"> Provider </a>
+            <a class="mobile-sidebar-a accord-inner @schedulingrole"> Scheduling </a>
+            <a class="mobile-sidebar-a accord-inner @invoicingrole"> Invoicing </a>
         </div>
-        <button class="sidebar-tablinks @partnerM">
+        <button class="sidebar-tablinks @partnerM @partnerrole" onclick="clearStorage()">
             <a class="mobile-sidebar-a"> Partners </a>
         </button>
-        <button class="sidebar-tablinks accordion-mob-btn @accessM">Access</button>
+        <button class="sidebar-tablinks accordion-mob-btn @accessM @accessrole" onclick="clearStorage()">Access</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner" asp-action="AccountAccess" asp-controller="Admin">Account Access</a>
-            <a class="mobile-sidebar-a accord-inner">User Access</a>
+            <a class="mobile-sidebar-a accord-inner @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a>
+            <a class="mobile-sidebar-a accord-inner @useraccessrole">User Access</a>
         </div>
-        <button class="sidebar-tablinks accordion-mob-btn @recordM">Records</button>
+        <button class="sidebar-tablinks accordion-mob-btn @recordM @recordrole" onclick="clearStorage()">Records</button>
         <div class="panel">
-            <a class="mobile-sidebar-a accord-inner" asp-action="SearchRecord" asp-controller="Admin">Search Records</a>
-            <a class="mobile-sidebar-a accord-inner">Email Logs</a>
-            <a class="mobile-sidebar-a accord-inner">SMS Logs</a>
-            <a asp-action="PatientHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner">Patient History</a>
-            <a asp-action="BlockHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner">Block History</a>
+            <a class="mobile-sidebar-a accord-inner @searchrecordrole" asp-action="SearchRecord" asp-controller="Admin">Search Records</a>
+            <a class="mobile-sidebar-a accord-inner @emailrole">Email Logs</a>
+            <a class="mobile-sidebar-a accord-inner @smsrole">SMS Logs</a>
+            <a asp-action="PatientHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner @patienthistoryrole">Patient History</a>
+            <a asp-action="BlockHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner @blockhistoryrole">Block History</a>
         </div>
     </div>
 </div>
@@ -103,49 +124,49 @@
 
 <!-- Navbar - Below -->
 
-<div class="bottom-navbar" id="">
+<div class="bottom-navbar bg-body" id="">
     <div>
-        <button class="navbar-btn @dashboard" onclick="navbar(this)">
+        <button class="navbar-btn bg-body @dashboard @dashboardrole" onclick="navbar(this)">
             <a asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
-        <button class="navbar-btn @providerlocation" onclick="navbar(this)">
+        <button class="navbar-btn bg-body @providerlocation @providerlocationrole" onclick="navbar(this)">
             <a> Provider Location </a>
         </button>
-        <button class="navbar-btn @profile" onclick="navbar(this)">
+        <button class="navbar-btn bg-body @profile @profilerole" onclick="navbar(this)">
             <a asp-action="Profile" asp-controller="Admin"> My Profile </a>
         </button>
         <div class="dropdown navbar-dropdown">
-            <button class="navbar-btn dropdown-toggle @provider" type="button" id="provider" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+            <button class="navbar-btn dropdown-toggle bg-body @provider @providermainrole" type="button" id="provider" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
                 Providers
             </button>
             <ul class="dropdown-menu" aria-labelledby="provider">
-                <li><a class="navbar-dropdown-item dropdown-item" asp-action="Provider" asp-controller="Admin">Provider</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Scheduling</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Invoicing</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @providerrole" asp-action="Provider" asp-controller="Admin">Provider</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @schedulingrole" href="#">Scheduling</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @invoicingrole" href="#">Invoicing</a></li>
             </ul>
         </div>
-        <button class="navbar-btn @partner" onclick="navbar(this)">
+        <button class="navbar-btn bg-body @partner @partnerrole" onclick="navbar(this)">
             <a> Partners </a>
         </button>
         <div class="dropdown navbar-dropdown">
-            <button class="navbar-btn dropdown-toggle @access" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+            <button class="navbar-btn bg-body dropdown-toggle @access @accessrole" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
                 Access
             </button>
-            <ul class="dropdown-menu" aria-labelledby="access">
-                <li><a class="navbar-dropdown-item dropdown-item" asp-action="AccountAccess" asp-controller="Admin">Account Access</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">User Access</a></li>
+            <ul class="dropdown-menu bg-body" aria-labelledby="access">
+                <li><a class="navbar-dropdown-item dropdown-item @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @useraccessrole" href="#">User Access</a></li>
             </ul>
         </div>
         <div class="dropdown navbar-dropdown">
-            <button class="navbar-btn dropdown-toggle @record" type="button" id="records" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
+            <button class="navbar-btn dropdown-toggle bg-body @record @recordrole" type="button" id="records" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
                 Records
             </button>
             <ul class="dropdown-menu" aria-labelledby="records">
-                <li><a class="navbar-dropdown-item dropdown-item" asp-action="SearchRecord" asp-controller="Admin">Search Records</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">Email Logs</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item" href="#">SMS Logs</a></li>
-                <li><a asp-action="PatientHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item">Patient History</a></li>
-                <li><a asp-action="BlockHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item">Block History</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @searchrecordrole" asp-action="SearchRecord" asp-controller="Admin">Search Records</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @emailrole" href="#">Email Logs</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @smsrole" href="#">SMS Logs</a></li>
+                <li><a asp-action="PatientHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item @patienthistoryrole">Patient History</a></li>
+                <li><a asp-action="BlockHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item @blockhistoryrole">Block History</a></li>
             </ul>
         </div>
     </div>

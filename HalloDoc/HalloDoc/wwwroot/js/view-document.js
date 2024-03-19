@@ -73,8 +73,8 @@ const allCheck = () => {
 const changeMode = () => {
     
         const mode = localStorage.getItem("mode")
-        if (mode == null || mode == "Light") {
-            localStorage.setItem("mode", "Dark")
+        if (mode == null || mode == "light") {
+            localStorage.setItem("mode", "dark")
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
@@ -87,7 +87,7 @@ const changeMode = () => {
             }
         }
         else {
-            localStorage.setItem("mode", "Light")
+            localStorage.setItem("mode", "light")
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
@@ -105,8 +105,7 @@ const changeMode = () => {
 window.onload = (e) => {
 
     const mode = localStorage.getItem("mode")
-    if (mode == "Light" || mode == null) {
-        localStorage.setItem("mode", "Light")
+    if (mode == "light" || mode == null) {
         document.getElementById("body").style.backgroundColor = "#FAFAFA";
         document.getElementById("sun").classList.add("hidden")
         document.getElementById("moon").classList.remove("hidden")
@@ -119,7 +118,6 @@ window.onload = (e) => {
         }
     }
     else {
-        localStorage.setItem("mode", "Dark")
         document.getElementById("body").style.backgroundColor = "black";
         document.getElementById("moon").classList.add("hidden")
         document.getElementById("sun").classList.remove("hidden")

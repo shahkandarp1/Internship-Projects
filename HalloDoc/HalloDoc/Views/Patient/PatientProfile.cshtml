@@ -32,10 +32,10 @@
         <img src="../../images/logo1.png" alt="" class="logo" />
         <div class="right-side-elements">
             <span class="welcome-text">Welcome <span class="name-text">@(string.Concat(Model.FirstName,' ',Model.LastName))</span></span>
-            <a class="logout log" asp-controller="Patient" asp-action="PatientLogin" onclick="logout()">
+            <a class="logout log" asp-controller="Login" asp-action="PatientLogin" onclick="logout()">
                 <span class="logout-text">Logout</span>
             </a>
-            <a class="logout-mob log" asp-controller="Patient" asp-action="PatientLogin">
+            <a class="logout-mob log" asp-controller="Login" asp-action="PatientLogin">
                 <img id="logout" src="../../images/box-arrow-right.svg" alt="" class="logout-img" />
             </a>
             <button class="moon" onclick="changeMode()">
@@ -145,7 +145,7 @@
                         <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="email" class="form-control editable" id="emailInput" placeholder="name@example.com" asp-for="Email" disabled>
+                        <input type="email" class="form-control" id="emailInput" placeholder="name@example.com" asp-for="Email" disabled>
                         <label for="emailInput" class="form-label">Email</label>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
@@ -199,4 +199,4 @@
     @{
         <partial name="_ValidationScriptsPartial" />
     }
-    }
+}

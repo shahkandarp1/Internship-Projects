@@ -1,8 +1,8 @@
 ﻿const changeMode = () => {
     try {
         const mode = localStorage.getItem("mode")
-        if (mode == null || mode == "Light") {
-            localStorage.setItem("mode", "Dark")
+        if (mode == null || mode == "light") {
+            localStorage.setItem("mode", "dark")
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
@@ -11,7 +11,7 @@
             document.getElementsByClassName("bottom-part-a")[1].style.color = "white"
         }
         else {
-            localStorage.setItem("mode", "Light")
+            localStorage.setItem("mode", "light")
             document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
             document.getElementById("sun").classList.add("hidden")
             document.getElementById("moon").classList.remove("hidden")
@@ -29,7 +29,7 @@ window.onload = () => {
     console.log(mode)
     console.log("Hello")
 
-    if (mode == "Light" || mode == null) {
+    if (mode == "light" || mode == null) {
         console.log("in try")
         document.getElementById("body").style.backgroundColor = "rgba(250, 250, 250, 0.4)";
         document.getElementById("sun").classList.add("hidden")

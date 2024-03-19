@@ -17,5 +17,7 @@ namespace HalloDoc.ViewModels
         public string email { get; set; }
 
         public string name { get; set; }
+
+        public string? menus { get; set; }
     }
 }

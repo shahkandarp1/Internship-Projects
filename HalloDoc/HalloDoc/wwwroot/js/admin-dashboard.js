@@ -29,6 +29,13 @@
 
     document.getElementById("search").value = ""
 
+    localStorage.setItem("status", name.charAt(0).toUpperCase() + name.slice(1))
+    localStorage.setItem("search", "")
+    localStorage.setItem("requestor", "")
+    localStorage.setItem("region", "")
+    localStorage.setItem("page", 1)
+    localStorage.setItem("pageSize", 10)
+
     document.getElementById("region").value = -1
     document.getElementsByClassName("loader-container")[0].style.display = "flex";
     document.getElementById("partial-container").style.display = "none";

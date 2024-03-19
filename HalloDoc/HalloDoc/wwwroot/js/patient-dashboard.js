@@ -23,8 +23,8 @@ function sidebar_close() {
 const changeMode = () => {
   try {
     const mode = localStorage.getItem("mode")
-    if (mode == null || mode == "Light") {
-      localStorage.setItem("mode", "Dark")
+    if (mode == null || mode == "light") {
+      localStorage.setItem("mode", "dark")
       document.getElementById("body").style.backgroundColor = "black";
       document.getElementById("main-heading").style.color = "white"
       document.getElementById("moon").classList.add("hidden")
@@ -32,7 +32,7 @@ const changeMode = () => {
       document.getElementsByClassName("main-content")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
     }
     else {
-      localStorage.setItem("mode", "Light")
+      localStorage.setItem("mode", "light")
       document.getElementById("body").style.backgroundColor = "#FAFAFA";
       document.getElementById("main-heading").style.color = "black"
       document.getElementById("sun").classList.add("hidden")
@@ -61,10 +61,26 @@ const redirect = () => {
     window.location.assign(`./${document.getElementById("redirect-value").value}`);
 }
 
-window.onload = (e) => {
+window.onload = () => {
+
+        $.ajax({
+            url: `/Patient/PatientDashboardTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
 
         const mode = localStorage.getItem("mode")
-        if (mode == "Light" || mode == null) {
+        if (mode == "light" || mode == null) {
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("main-heading").style.color = "black"
             document.getElementById("sun").classList.add("hidden")

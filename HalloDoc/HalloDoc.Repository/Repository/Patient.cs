@@ -39,6 +39,11 @@ namespace HalloDoc.Repository.Repository
                 var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == model.Email);
                 if (user != null)
                 {
+                    var role = _db.AspNetUserRoles.FirstOrDefault(u=>u.UserId == user.Id);
+                    if(role.RoleId != 1)
+                    {
+                        return 4;
+                    }
                     var passwordHasher = new PasswordHasher<AspNetUser>();
                     var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
                     if (result == PasswordVerificationResult.Success)
@@ -52,7 +57,46 @@ namespace HalloDoc.Repository.Repository
                 }
                 else
                 {
-                    return 4;
+                    var aspid = _db.AspNetUsers.FirstOrDefault(u => u.UserName == model.Email);
+                    if(aspid != null)
+                    {
+                        var role = _db.AspNetUserRoles.FirstOrDefault(u => u.UserId == aspid.Id);
+                        if (role.RoleId != 2 && role.RoleId != 3)
+                        {
+                            return 4;
+                        }
+                        if(role.RoleId == 2)
+                        {
+                            HalloDoc.Admin admin = _db.Admins.FirstOrDefault(a=>a.AspNetUserId == aspid.Id);
+                            if(admin?.Status == null || admin?.Status !=2)
+                            {
+                                return 6;
+                            }
+                        }
+                        if(role.RoleId == 3)
+                        {
+                            HalloDoc.Physician physician = _db.Physicians.FirstOrDefault(a=>a.AspNetUserId == aspid.Id);
+                            if(physician?.Status == null || physician?.Status != 2)
+                            {
+                                return 6;
+                            }
+                        }
+                        var passwordHasher = new PasswordHasher<AspNetUser>();
+                        var result = passwordHasher.VerifyHashedPassword(aspid, aspid.PasswordHash, model.Password);
+                        if (result == PasswordVerificationResult.Success)
+                        {
+                            return 2;
+                        }
+                        else
+                        {
+                            return 3;
+                        }
+
+                    }
+                    else
+                    {
+                        return 4;
+                    }
                 }
             }
             catch(Exception ex)
@@ -1074,6 +1118,14 @@ namespace HalloDoc.Repository.Repository
         {
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
+        AspNetUser IPatient.getAspNetUserLogin(string email)
+        {
+            if(_db.AspNetUsers.SingleOrDefault(u => u.Email == email) == null)
+            {
+                return _db.AspNetUsers.SingleOrDefault(u => u.UserName == email);
+            }
+            return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
+        }
 
         DashboardViewModel IPatient.getDashboardData(int page = 1, int pageSize = 10)
         {
@@ -1530,7 +1582,6 @@ namespace HalloDoc.Repository.Repository
 
                 user.FirstName = modal.FirstName;
                 user.LastName = modal.LastName;
-                user.Email = modal.Email;
                 user.Mobile = modal.Phone;
                 user.Street = modal.Street;
                 user.City = modal.City;
@@ -1544,13 +1595,6 @@ namespace HalloDoc.Repository.Repository
                 user.ModifiedDate = DateTime.Now;
 
                 _db.Users.Update(user);
-
-                AspNetUser aspuser = _db.AspNetUsers.FirstOrDefault(u => u.Id == cookieModel.aspId);
-                aspuser.Email = modal.Email;
-                aspuser.PhoneNumber = modal.Phone;
-                aspuser.UserName = modal.Email;
-
-                _db.AspNetUsers.Update(aspuser);
                 _db.SaveChanges();
                 return 1;
             }

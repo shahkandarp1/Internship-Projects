@@ -4,15 +4,15 @@
 const changeMode = () => {
     try {
         const mode = localStorage.getItem("mode")
-        if (mode == null || mode == "Light") {
-            localStorage.setItem("mode", "Dark")
+        if (mode == null || mode == "light") {
+            localStorage.setItem("mode", "dark")
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("i-am-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
             document.getElementById("sun").classList.remove("hidden")
         }
         else {
-            localStorage.setItem("mode", "Light")
+            localStorage.setItem("mode", "light")
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("i-am-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")
@@ -27,7 +27,7 @@ const changeMode = () => {
 window.onload = () => {
     
         const mode = localStorage.getItem("mode")
-        if (mode == "Light" || mode == null) {
+        if (mode == "light" || mode == null) {
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("i-am-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")

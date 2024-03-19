@@ -36,8 +36,8 @@ const changeMode = () => {
     try {   
         const mode = localStorage.getItem("mode")
         let formtext = document.getElementsByClassName("form-label")
-        if(mode==null || mode=="Light"){
-            localStorage.setItem("mode","Dark")
+        if(mode==null || mode=="light"){
+            localStorage.setItem("mode","dark")
             document.getElementById("body").style.backgroundColor = "rgba(62, 62, 62, 0.5)";
             document.getElementById("login-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
@@ -50,7 +50,7 @@ const changeMode = () => {
             }
         }
         else{
-            localStorage.setItem("mode","Light")
+            localStorage.setItem("mode","light")
             document.getElementById("body").style.backgroundColor = "transparent";
             document.getElementById("login-text").style.color = "#3e3e3e"
             document.getElementById("sun").classList.add("hidden")
@@ -72,7 +72,7 @@ window.onload = () => {
     const mode = localStorage?.getItem("mode")
     let formtext = document.getElementsByClassName("form-label")
     
-        if (mode == "Light" || mode == null) {
+        if (mode == "light" || mode == null) {
             console.log("in try")
             document.getElementById("body").style.backgroundColor = "transparent";
             document.getElementById("login-text").style.color = "#3e3e3e"

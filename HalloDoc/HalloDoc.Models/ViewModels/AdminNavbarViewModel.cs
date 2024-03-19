@@ -10,5 +10,7 @@ namespace HalloDoc.ViewModels
     {
         public string? Name { get; set; }
         public string? curr_active { get; set; }
+        public string? menus { get; set; }
+
     }
 }

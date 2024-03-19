@@ -168,23 +168,4 @@
         });
     }
 
-    window.onload = () => {
-        $.ajax({
-            url: `/Patient/PatientDashboardTable`,
-            type: 'POST',
-            dataType: 'html',
-            data: { page: 1, pageSize: 10 },
-            // Pass your data here
-            success: function (response) {
-                document.getElementsByClassName("loader-container")[0].style.display = "none";
-                document.getElementById("partial-container").style.display = "block";
-                $("#partial-container").html(response)
-            },
-            error: function () {
-                alert('An error occurred.');
-            }
-        });
-    }
-
-
 </script>

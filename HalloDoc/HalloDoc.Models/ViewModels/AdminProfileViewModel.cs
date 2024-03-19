@@ -16,7 +16,7 @@ namespace HalloDoc.ViewModels
         public short? status { get; set; }
         public int? role_id { get; set; }
 
-        public List<AspNetRole> aspNetRoles { get; set; }
+        public List<Role> roles { get; set; }
 
         [Required]
         public string FirstName { get; set; }

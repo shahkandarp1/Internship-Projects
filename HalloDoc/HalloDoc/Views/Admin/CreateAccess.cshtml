@@ -30,7 +30,7 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <div class="bottom-main-container mt-3 mb-3 pb-3">
+            <div class="bottom-main-container bg-body mt-3 mb-3 pb-3">
                 <!-- Filter Section -->
 
                 <div class="filter-section">
@@ -105,8 +105,7 @@
 
     const changeAccountType = (element) => {
         const checkboxContainer = document.getElementById('checkboxes');
-        const roles = document.getElementById("roles").value;
-        roles.value = "";
+        document.getElementById("roles").value = "";
         checkboxContainer.innerHTML = "";
         $.post('/Admin/GetMenus', { id: element.value }, function (response) {
             console.log(response.data)
@@ -117,8 +116,15 @@
     }
 
     const checkboxChange = (element) => {
-        document.getElementById("roles").value += element.value + ",";
-        console.log(document.getElementById("roles").value)
+        if (element.checked == true) {
+            document.getElementById("roles").value += element.value + ",";
+            console.log(document.getElementById("roles").value)
+        }
+        else {
+            var substringToRemove = element.value + ","
+            document.getElementById("roles").value = document.getElementById("roles").value.replace(substringToRemove, "")
+            console.log(document.getElementById("roles").value);
+        }
     }
 
     const createRole = () => {

@@ -124,7 +124,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
 
@@ -367,7 +368,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             ViewCaseViewModel viewCaseViewModel = new ViewCaseViewModel()
@@ -520,7 +522,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
@@ -783,7 +786,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             ViewNotesViewModel viewNotesViewModel = new ViewNotesViewModel
@@ -951,7 +955,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
@@ -1421,7 +1426,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             OrdersViewModel ordersViewModel = new OrdersViewModel()
@@ -1484,7 +1490,7 @@ namespace HalloDoc.Repository.Repository
             List<Region> regions = _db.Regions.ToList();
             IQueryable<AdminRegion> adminRegions = _db.AdminRegions.Where(a=>a.AdminId == cookieModel.userId);
             List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
-            List<AspNetRole> aspNetRoles = _db.AspNetRoles.ToList();
+            List<Role> roles = _db.Roles.Where(r=>r.AccountType == 1 && r.IsDeleted == new BitArray(new[] { false })).ToList();
             for(var i=0;i<regions.Count;i++)
             {
                 checkboxViewModels.Add(new CheckboxViewModel()
@@ -1495,12 +1501,12 @@ namespace HalloDoc.Repository.Repository
                 });
             }
 
-            
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Profile"
+                curr_active = "Profile",
+                menus = cookieModel.menus
             };
 
             AdminProfileViewModel adminProfile = new AdminProfileViewModel()
@@ -1521,7 +1527,7 @@ namespace HalloDoc.Repository.Repository
                 City = admin.City,
                 RegionId = admin.RegionId,
                 ZipCode = admin.Zip,
-                aspNetRoles = aspNetRoles
+                roles = roles
             };
 
             return adminProfile;
@@ -1671,7 +1677,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             EncounterFormViewModel encounterFormViewModel = new EncounterFormViewModel()
@@ -1805,7 +1812,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard"
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
             };
 
             CloseCaseViewModel closeCaseViewModel = new CloseCaseViewModel()
@@ -1936,7 +1944,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Provider"
+                curr_active = "Provider",
+                menus = cookieModel.menus
             };
 
             ProviderViewModel providerViewModel = new ProviderViewModel()
@@ -2052,7 +2061,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Provider"
+                curr_active = "Provider",
+                menus = cookieModel.menus
             };
 
             List<Region> regions = _db.Regions.ToList();
@@ -2066,7 +2076,7 @@ namespace HalloDoc.Repository.Repository
                     Name = regions[i].Name,
                     Id = regions[i].RegionId,
                     isChecked = false
-                }); ;
+                }); 
             }
 
             PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel()
@@ -2090,6 +2100,15 @@ namespace HalloDoc.Repository.Repository
             var password = string.Concat(aspNetUser.UserName, DateTime.Now.ToString("yyyyMMddHHmmss"));
             aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, password);
             _db.AspNetUsers.Add(aspNetUser);
+            _db.SaveChanges();
+
+            AspNetUserRole aspNetUserRole = new AspNetUserRole
+            {
+                UserId = aspNetUser.Id,
+                RoleId = 3
+            };
+
+            _db.AspNetUserRoles.Add(aspNetUserRole);
             _db.SaveChanges();
 
             var request = _context.HttpContext.Request;
@@ -2310,7 +2329,7 @@ namespace HalloDoc.Repository.Repository
 
             List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
 
-            List<Role> roles = _db.Roles.Where(r => r.AccountType == 2).ToList();
+            List<Role> roles = _db.Roles.Where(r => r.AccountType == 2 && r.IsDeleted == new BitArray(new[] { false })).ToList();
 
             for (var i = 0; i < regions.Count; ++i)
             {
@@ -2319,13 +2338,14 @@ namespace HalloDoc.Repository.Repository
                     Name = regions[i].Name,
                     Id = regions[i].RegionId,
                     isChecked = physicianRegion.FirstOrDefault(a => a.RegionId == regions[i].RegionId) == null ? false : true
-                }); ;
+                });
             }
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Provider"
+                curr_active = "Provider",
+                menus = cookieModel.menus
             };
 
 
@@ -2572,7 +2592,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Record"
+                curr_active = "Record",
+                menus = cookieModel.menus
             };
 
             IQueryable<User> users = _db.Users;
@@ -2620,7 +2641,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Record"
+                curr_active = "Record",
+                menus = cookieModel.menus
             };
 
             PatientHistoryViewModel patientHistoryViewModel = new PatientHistoryViewModel
@@ -2646,7 +2668,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Record"
+                curr_active = "Record",
+                menus = cookieModel.menus
             };
 
             IQueryable<BlockRequest> blockRequests = _db.BlockRequests;
@@ -2742,7 +2765,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Record"
+                curr_active = "Record",
+                menus = cookieModel.menus
             };
 
             List<RequestType> requestTypes = _db.RequestTypes.ToList();
@@ -2914,14 +2938,15 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Access"
+                curr_active = "Access",
+                menus = cookieModel.menus
             };
 
             IQueryable<Role> roles = _db.Roles.Where(r => r.IsDeleted == new BitArray(new[] { false }));
 
             AccountAccessViewModel accountAccessViewModel = new AccountAccessViewModel
             {
-                roles = roles.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                roles = roles.Skip((page - 1) * pageSize).Take(pageSize).OrderByDescending(r=>r.CreatedBy).ToList(),
                 adminNavbarViewModel = adminNavbarViewModel,
                 CurrentPage = page,
                 PageSize = pageSize,
@@ -2942,7 +2967,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Access"
+                curr_active = "Access",
+                menus = cookieModel.menus
             };
             return adminNavbarViewModel;
         }
@@ -3031,7 +3057,8 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Access"
+                curr_active = "Access",
+                menus = cookieModel.menus
             };
 
             Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == id);
@@ -3040,6 +3067,13 @@ namespace HalloDoc.Repository.Repository
             List<Menu> menus = _db.Menus.Where(r=>r.AccountType == role.AccountType).ToList();
 
             List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+
+            string roles = "";
+
+            for(var i=0;i< roleMenus.Count();++i)
+            {
+                roles += roleMenus.ToList()[i].MenuId + ",";
+            }
 
             for(var i=0; i<menus.Count; i++)
             {
@@ -3057,10 +3091,97 @@ namespace HalloDoc.Repository.Repository
                 Account_type = role.AccountType,
                 adminNavbarViewModel = adminNavbarViewModel,
                 checkboxViewModels = checkboxViewModels,
+                menus = roles,
             };
 
             return editAccessViewModel;
 
+        }
+
+        bool IAdmin.editRoleDetails(int? id, string? menus, string? role_name, int? account_type)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                string[] menu = menus.Split(",");
+
+                Role role = _db.Roles.FirstOrDefault(r => r.RoleId == id);
+
+                if (role.AccountType == account_type)
+                {
+                    
+                    IQueryable<RoleMenu> roleMenus = _db.RoleMenus.Where(r => r.RoleId == id);
+                    for (var i = 0; i < menu.Length - 1; ++i)
+                    {
+                        if(roleMenus.FirstOrDefault(r=>r.MenuId == int.Parse(menu[i])) == null)
+                        {
+                            RoleMenu roleMenu = new RoleMenu
+                            {
+                                RoleId = role.RoleId,
+                                MenuId = int.Parse(menu[i])
+                            };
+                            _db.RoleMenus.Add(roleMenu);
+                        }
+                    }
+
+                    Dictionary<int, bool> keyValuePairs = new Dictionary<int, bool>();
+
+                    for(var i=0;i< roleMenus.Count();++i)
+                    {
+                        keyValuePairs[roleMenus.ToList()[i].MenuId] = false;
+                    }
+
+                    for(var i=0;i< menu.Length - 1;++i)
+                    {
+                        keyValuePairs[int.Parse(menu[i])] = true;
+                    }
+
+                    for(var i=0;i< roleMenus.Count(); ++i)
+                    {
+                        if(keyValuePairs[roleMenus.ToList()[i].MenuId] == false)
+                        {
+                            _db.RoleMenus.Remove(roleMenus.FirstOrDefault(r => r.MenuId == roleMenus.ToList()[i].MenuId));
+                        }
+                    }
+
+                }
+                else
+                {
+                    IQueryable<RoleMenu> roleMenus = _db.RoleMenus.Where(r => r.RoleId == id);
+                    for(var i=0;i< roleMenus.Count();++i)
+                    {
+                        _db.RoleMenus.Remove(roleMenus.FirstOrDefault(r=>r.MenuId == roleMenus.ToList()[i].MenuId));
+                    }
+
+                    for (var i = 0; i < menu.Length - 1; ++i)
+                    {
+                        RoleMenu roleMenu = new RoleMenu
+                        {
+                            RoleId = role.RoleId,
+                            MenuId = int.Parse(menu[i])
+                        };
+                        _db.RoleMenus.Add(roleMenu);
+                    }
+
+                }
+
+                role.Name = role_name;
+                role.AccountType = (short)account_type;
+                role.ModifiedDate = DateTime.Now;
+                role.ModifiedBy = cookieModel.name;
+                _db.Roles.Update(role);
+                _db.SaveChanges();
+
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
         }
 
 

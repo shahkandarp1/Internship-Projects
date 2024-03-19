@@ -60,8 +60,8 @@ $(document).ready(function () {
 const changeMode = () => {
     try {
         const mode = localStorage.getItem("mode")
-        if (mode == null || mode == "Light") {
-            localStorage.setItem("mode", "Dark")
+        if (mode == null || mode == "light") {
+            localStorage.setItem("mode", "dark")
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("submit-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
@@ -69,7 +69,7 @@ const changeMode = () => {
             document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
         }
         else {
-            localStorage.setItem("mode", "Light")
+            localStorage.setItem("mode", "light")
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("submit-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")
@@ -90,8 +90,10 @@ window.onload = function () {
     //used in encounter form
 
     const inputDatee = document.getElementById('date');
-    const todayy = new Date().toISOString().split('T')[0];
-    inputDatee.setAttribute('max', todayy);
+    if (inputDatee) {
+        const todayy = new Date().toISOString().split('T')[0];
+        inputDatee.setAttribute('max', todayy);
+    }
 
     const phoneInputField = document.getElementsByClassName("phone");
     for (let i = 0; i < phoneInputField.length; ++i) {
@@ -102,7 +104,7 @@ window.onload = function () {
     }
 
     const mode = localStorage.getItem("mode")
-    if (mode == "Light" || mode == null) {
+    if (mode == "light" || mode == null) {
         document.getElementById("body").style.backgroundColor = "#FAFAFA";
         document.getElementById("submit-text").style.color = "black"
         document.getElementById("sun").classList.add("hidden")

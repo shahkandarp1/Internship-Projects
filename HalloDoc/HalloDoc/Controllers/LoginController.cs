@@ -32,7 +32,7 @@ namespace HalloDoc.Controllers
                 if (result == 2)
                 {
                     TempData["success"] = "Loged in Successfully!!";
-                    AspNetUser user = _patient.getAspNetUser(model.Email);
+                    AspNetUser user = _patient.getAspNetUserLogin(model.Email);
                     var jwtToken = _jwt.GenerateJWTAuthetication(user);
                     CookieModel cookieModel = _jwt.getDetails(jwtToken);
                     Response.Cookies.Append("jwt", jwtToken);
@@ -52,6 +52,10 @@ namespace HalloDoc.Controllers
                 else if (result == 4)
                 {
                     TempData["error"] = "Incorrect Username!!";
+                }
+                else if (result == 6)
+                {
+                    TempData["error"] = "Your account is currently is not active!! Please Contact Your Admin.";
                 }
                 else
                 {

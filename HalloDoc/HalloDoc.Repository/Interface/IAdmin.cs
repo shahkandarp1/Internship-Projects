@@ -153,5 +153,7 @@ namespace HalloDoc.Repository.Interface
 
         public EditAccessViewModel getRoleDetails(int? id);
 
+        public bool editRoleDetails(int? id, string? menus, string? role_name, int? account_type);
+
     }
 }

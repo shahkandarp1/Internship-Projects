@@ -6,7 +6,7 @@
 @section Styles {
     <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
     <link href="~/css/view-document.css" rel="stylesheet" type="text/css" />
-    <script src="~/js/view-document.js"></script>
+    <script src="~/js/view-uploads.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 }
@@ -25,9 +25,9 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <div class="wrapper">
+            <div class="wrapper bg-body">
 
-                <div id="Dashboard" class="main-content">
+                <div id="Dashboard" class="main-content bg-body">
                     <span class="pt-name-text dark-text">Patient Name</span>
                     <div class="pt-name">@Model.patient_name<span class="con_num dark-text">(@Model.confirmation_number)</span></div>
                     <span class="upload-desc dark-text">Check here for any files that you or doctors of your subsequents requestors have attatched for you to review.</span>
@@ -70,7 +70,7 @@
                     </div>
 
                 </div>
-                <form class="desktop-table" asp-action="ViewUploads">
+                <form class="desktop-table bg-body" asp-action="ViewUploads">
                     <input type="hidden" asp-for="patient_name"/>
                     <input type="hidden" style="opacity:0;height:1px;width:1px;" id="filename" asp-for="filename" />
                     <table class="table">

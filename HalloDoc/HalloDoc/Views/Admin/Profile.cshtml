@@ -29,7 +29,7 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form" asp-action="Profile" asp-controller="Admin" method="post">
+            <form class="main-form bg-body" asp-action="Profile" asp-controller="Admin" method="post">
 
                 <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                 <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
@@ -50,17 +50,17 @@
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
                         <select class="form-control select " id="Select-status" placeholder="name@example.com" asp-for="status" disabled>
-                            <option value="1">Active</option>
-                            <option value="2">Pending</option>
-                            <option value="3">Completed</option>
+                            <option value="1">Pending</option>
+                            <option value="2">Active</option>
+                            <option value="3">In-Active</option>
                         </select>
                         <label for="Select-status" class="form-label">Status</label>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
                         <select class="form-control select editable" id="Select-status" placeholder="name@example.com" asp-for="role_id" disabled>
-                            @for(var i=0;i<Model.aspNetRoles.Count;++i)
+                            @for(var i=0;i<Model.roles.Count;++i)
                             {
-                                <option value="@Model.aspNetRoles[i].Id">@Model.aspNetRoles[i].Name</option>
+                                <option value="@Model.roles[i].RoleId">@Model.roles[i].Name</option>
                             }
                         </select>
                         <label for="Select-status" class="form-label">Role</label>

@@ -7,8 +7,8 @@ const getFileData = (myFile) => {
 const changeMode = () => {
     try {
         const mode = localStorage.getItem("mode")
-        if (mode == null || mode == "Light") {
-            localStorage.setItem("mode", "Dark")
+        if (mode == null || mode == "light") {
+            localStorage.setItem("mode", "dark")
             document.getElementById("body").style.backgroundColor = "black";
             document.getElementById("submit-text").style.color = "white"
             document.getElementById("moon").classList.add("hidden")
@@ -16,7 +16,7 @@ const changeMode = () => {
             document.getElementsByClassName("main-form")[0].style.backgroundColor = "rgba(173, 173, 173, 0.8)"
         }
         else {
-            localStorage.setItem("mode", "Light")
+            localStorage.setItem("mode", "light")
             document.getElementById("body").style.backgroundColor = "#FAFAFA";
             document.getElementById("submit-text").style.color = "black"
             document.getElementById("sun").classList.add("hidden")
@@ -109,7 +109,7 @@ window.onload = function () {
     }
 
     const mode = localStorage.getItem("mode")
-    if (mode == "Light" || mode == null) {
+    if (mode == "light" || mode == null) {
         document.getElementById("body").style.backgroundColor = "#FAFAFA";
         document.getElementById("submit-text").style.color = "black"
         document.getElementById("sun").classList.add("hidden")
