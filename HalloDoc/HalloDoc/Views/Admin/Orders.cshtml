@@ -1,6 +1,7 @@
 ﻿@model OrdersViewModel
 @{
     ViewData["Title"] = "Orders";
+    Layout = "_AdminLayout";
 }
 @section Styles {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -29,13 +30,14 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form" asp-action="Orders" asp-controller="Admin" method="post">
+            <form class="main-form bg-body" asp-action="Orders" asp-controller="Admin" method="post">
 
                 <!-- General Information  -->
                 <div class="row">
                     <input type="hidden" asp-for="RequestId"/>
                     <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                     <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
 
                     @for (int i = 0; i < Model.healthProfessionalTypes.Count; i++)
                     {
@@ -98,7 +100,7 @@
                 <!-- Submit / Clear -->
                 <div class="lower-btn">
                     <button class="lower-custom-btn submit-btn" type="submit">Submit</button>
-                    <a class="lower-custom-btn cancel-btn" onclick="Cancel()">Cancel</a>
+                    <a class="lower-custom-btn cancel-btn bg-body" onclick="Cancel()">Cancel</a>
                 </div>
             </form>
         </div>

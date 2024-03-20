@@ -33,6 +33,10 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using static HalloDoc.ViewModels.Enums;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using HalloDoc.Models;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Microsoft.Extensions.Configuration;
+using Twilio.Http;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -42,11 +46,13 @@ namespace HalloDoc.Repository.Repository
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _context;
         private readonly IJwtService _jwt;
-        public Admin(ApplicationDbContext db, IHttpContextAccessor context, IJwtService jwt)
+        private readonly IConfiguration _configuration;
+        public Admin(ApplicationDbContext db, IHttpContextAccessor context, IJwtService jwt, IConfiguration configuration)
         {
             _db = db;
             _context = context;
             _jwt = jwt;
+            _configuration = configuration;
         }
 
         AdminDashboardViewModel IAdmin.adminDashboardContent(string status, string? search, string? requestor, int? region,int page=1,int pageSize = 10)
@@ -478,6 +484,21 @@ namespace HalloDoc.Repository.Repository
                 mailMessage.To.Add(dashboardViewModel.Mail_Email);
 
                 client.SendMailAsync(mailMessage);
+
+                var accountSid = _configuration["Twilio:accountSid"];
+                var authToken = _configuration["Twilio:authToken"];
+                var twilionumber = _configuration["Twilio:twilioNumber"];
+
+                var messageBody = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},\nClick the following link to create new request in our portal,\n\n{inviteLink}\n\nRegards,\n{platformTitle}";
+
+                TwilioClient.Init(accountSid, authToken);
+
+                var message = MessageResource.Create(
+                    from: new Twilio.Types.PhoneNumber(twilionumber),
+                    body: messageBody,
+                    to: new Twilio.Types.PhoneNumber("+91" + dashboardViewModel.Mail_PhoneNumber)
+                );
+
                 return true;
             }
             catch(Exception exp)
@@ -1026,7 +1047,7 @@ namespace HalloDoc.Repository.Repository
                     for (var i = 0; i < filenames.Length - 1; ++i)
                     {
                         var entry = zip.CreateEntry(filenames[i]);
-                        HttpClient client = new HttpClient();
+                        System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
                         byte[] imageBytes = await client.GetByteArrayAsync($"https://localhost:7088/uploads/{filenames[i]}");
                         using (MemoryStream fileStream = new MemoryStream(imageBytes))
                         using (var entryStream = entry.Open())
@@ -1114,7 +1135,7 @@ namespace HalloDoc.Repository.Repository
 
                     
                     success = true;
-                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, true, retryCount);
+                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, true, retryCount,5);
                     break;
                 }
                 catch (Exception ex)
@@ -1122,7 +1143,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3) 
                     {
-                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, false, retryCount);
+                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, false, retryCount,5);
                     }
                     retryCount++;
                 }
@@ -1132,7 +1153,7 @@ namespace HalloDoc.Repository.Repository
             
         }
 
-        void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount)
+        void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id)
         {
             if(request_id!=-1)
             {
@@ -1147,11 +1168,12 @@ namespace HalloDoc.Repository.Repository
                     IsEmailSent = new BitArray(new[] { success }) ,
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    RoleId = 1
+                    RoleId = role_id,
+                    SentDate = DateTime.Now,
 
                 };
                 _db.EmailLogs.Add(emailLog);
-                _db.SaveChangesAsync();
+                _db.SaveChanges();
             }
             else
             {
@@ -1166,7 +1188,8 @@ namespace HalloDoc.Repository.Repository
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    RoleId = 3
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -1304,7 +1327,7 @@ namespace HalloDoc.Repository.Repository
                 var platformTitle = "HalloDoc";
                 var subject = "Agreement - HalloDoc";
                 var inviteLink = $"https://localhost:7088/Agreement/Index/{adminDashboardViewModel.RequestId}";
-                var body = $"Hello {user.RequestClient.FirstName} {user.RequestClient.FirstName},<br />Please review agreement and accept it so that we can start your treatment,<br /><br /><a href='{inviteLink}'>Review Agreement</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                var body = $"Hello {user.RequestClient.FirstName} {user.RequestClient.LastName},<br />Please review agreement and accept it so that we can start your treatment,<br /><br /><a href='{inviteLink}'>Review Agreement</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.getDetails(token);
@@ -1335,7 +1358,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,cookieModel.userId, -1, true, retryCount);
+                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,cookieModel.userId, -1, true, retryCount,5);
                     break;
                 }
                 catch (Exception ex)
@@ -1343,13 +1366,102 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount);
+                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount,5);
+                    }
+                    retryCount++;
+                }
+            }
+
+            retryCount = 1;
+            success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
+            {
+
+                var user = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestClientId == adminDashboardViewModel.RequestId);
+                var platformTitle = "HalloDoc";
+                var inviteLink = $"https://localhost:7088/Agreement/Index/{adminDashboardViewModel.RequestId}";
+
+                var accountSid = _configuration["Twilio:accountSid"];
+                var authToken = _configuration["Twilio:authToken"];
+                var twilionumber = _configuration["Twilio:twilioNumber"];
+                var messageBody = $"Hello {user.RequestClient.FirstName} {user.RequestClient.LastName},\nPlease review agreement and accept it so that we can start your treatment,\n\n{inviteLink}\n\nRegards,\n{platformTitle}";
+
+                var request = _context.HttpContext.Request;
+                var token = request.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+                try
+                {
+
+                    TwilioClient.Init(accountSid, authToken);
+
+                    var message = MessageResource.Create(
+                        from: new Twilio.Types.PhoneNumber(twilionumber),
+                        body: messageBody,
+                        to: new Twilio.Types.PhoneNumber("+91" + adminDashboardViewModel.Mail_PhoneNumber)
+                    );
+
+
+                    success = true;
+                    LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, true, retryCount,5);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    if (retryCount >= 3)
+                    {
+                        LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount,5);
                     }
                     retryCount++;
                 }
             }
 
             return success;
+        }
+
+        void LogSMS(string SmsTemplate, string userPhone, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount,int role_id)
+        {
+            if (request_id != -1)
+            {
+                var smslog = new Smslog
+                {
+                    Smstemplate = SmsTemplate,
+                    MobileNumber = userPhone,
+                    ConfirmationNumber = confirmation_no,
+                    RequestId = request_id,
+                    AdminId = admin_id,
+                    IsSmssent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.Smslogs.Add(smslog);
+                _db.SaveChanges();
+            }
+            else
+            {
+                var smslog = new Smslog
+                {
+                    Smstemplate = SmsTemplate,
+                    MobileNumber = userPhone,
+                    ConfirmationNumber = confirmation_no,
+                    PhysicianId = physician_id,
+                    AdminId = admin_id,
+                    IsSmssent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.Smslogs.Add(smslog);
+                _db.SaveChanges();
+            }
+
+
         }
 
         bool IAdmin.blockCase(AdminDashboardViewModel adminDashboardViewModel)
@@ -1996,58 +2108,111 @@ namespace HalloDoc.Repository.Repository
             int retryCount = 1;
             bool success = false;
 
-            while (retryCount <= 3 && !success) // Set retry limit
+            if (providerViewModel.communication_type == "Email" || providerViewModel.communication_type == "Both")
             {
-
-                var physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == providerViewModel.ProviderId);
-                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
-                var platformTitle = "HalloDoc";
-                var subject = "Contact - HalloDoc";
-                var body = $"Hello {physician.FirstName} {physician.LastName},<br />{providerViewModel.message}<br /><br />Regards,<br/>{platformTitle}<br/>";
-                var request = _context.HttpContext.Request;
-                var token = request.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.getDetails(token);
-                try
+                while (retryCount <= 3 && !success) // Set retry limit
                 {
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    var physician = _db.Physicians.FirstOrDefault(p => p.PhysicianId == providerViewModel.ProviderId);
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                    var platformTitle = "HalloDoc";
+                    var subject = "Contact - HalloDoc";
+                    var body = $"Hello {physician.FirstName} {physician.LastName},<br />{providerViewModel.message}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                    var request = _context.HttpContext.Request;
+                    var token = request.Cookies["jwt"];
+                    CookieModel cookieModel = _jwt.getDetails(token);
+                    try
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
 
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = subject,
-                        IsBodyHtml = true,
-                        Body = body
-                    };
+                        SmtpClient client = new SmtpClient("smtp.office365.com")
+                        {
+                            Port = 587,
+                            Credentials = new NetworkCredential(senderEmail, senderPassword),
+                            EnableSsl = true,
+                            DeliveryMethod = SmtpDeliveryMethod.Network,
+                            UseDefaultCredentials = false
+                        };
 
-                    mailMessage.To.Add(physician.Email);
+                        MailMessage mailMessage = new MailMessage
+                        {
+                            From = new MailAddress(senderEmail, "HalloDoc"),
+                            Subject = subject,
+                            IsBodyHtml = true,
+                            Body = body
+                        };
+
+                        mailMessage.To.Add(physician.Email);
 
 
-                    await client.SendMailAsync(mailMessage);
+                        await client.SendMailAsync(mailMessage);
 
 
-                    success = true;
-                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount);
-                    break;
-                }
-                catch (Exception ex)
-                {
-
-                    if (retryCount >= 3)
-                    {
-                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount);
+                        success = true;
+                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount, (int)physician.RoleId);
+                        break;
                     }
-                    retryCount++;
+                    catch (Exception ex)
+                    {
+
+                        if (retryCount >= 3)
+                        {
+                            LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount, (int)physician.RoleId);
+                        }
+                        retryCount++;
+                    }
                 }
             }
+
+            if(providerViewModel.communication_type == "SMS" || providerViewModel.communication_type == "Both")
+            {
+                retryCount = 1;
+                success = false;
+
+                while (retryCount <= 3 && !success) // Set retry limit
+                {
+
+                    var physician = _db.Physicians.FirstOrDefault(p => p.PhysicianId == providerViewModel.ProviderId);
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                    var platformTitle = "HalloDoc";
+
+                    var accountSid = _configuration["Twilio:accountSid"];
+                    var authToken = _configuration["Twilio:authToken"];
+                    var twilionumber = _configuration["Twilio:twilioNumber"];
+                    var messageBody = $"Hello {physician.FirstName} {physician.LastName},\n{providerViewModel.message}\n\nRegards,\n{platformTitle}";
+
+                    var request = _context.HttpContext.Request;
+                    var token = request.Cookies["jwt"];
+                    CookieModel cookieModel = _jwt.getDetails(token);
+                    try
+                    {
+
+                        TwilioClient.Init(accountSid, authToken);
+
+                        var message = MessageResource.Create(
+                            from: new Twilio.Types.PhoneNumber(twilionumber),
+                            body: messageBody,
+                            to: new Twilio.Types.PhoneNumber("+91" + physician.Mobile)
+                        );
+
+
+                        success = true;
+                        LogSMS(messageBody, physician.Mobile , null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount, (int)physician.RoleId);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        if (retryCount >= 3)
+                        {
+                            LogSMS(messageBody, physician.Mobile, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount, (int)physician.RoleId);
+                        }
+                        retryCount++;
+                    }
+                }
+            }
+
 
             return success;
         }
@@ -2299,7 +2464,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount);
+                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount,(int)physician.RoleId);
                     break;
                 }
                 catch (Exception ex)
@@ -2307,7 +2472,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount);
+                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount,(int)physician.RoleId);
                     }
                     retryCount++;
                 }
@@ -3182,6 +3347,196 @@ namespace HalloDoc.Repository.Repository
             {
                 return false;
             }
+        }
+
+        EmailLogViewModel IAdmin.getEmailLogDetails(int? roleid, string? name, string? email, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record",
+                menus = cookieModel.menus
+            };
+
+            IQueryable<EmailLog> emailLogs = _db.EmailLogs.Where(r => r.AdminId == cookieModel.userId);
+
+            if(roleid!=null && roleid!=-1)
+            {
+                emailLogs = emailLogs.Where(r => r.RoleId == roleid);
+            }
+            if(email!=null)
+            {
+                emailLogs = emailLogs.Where(r=>r.EmailId.ToLower().Contains(email.ToLower()));
+            }
+            if(createddate != null)
+            {
+                emailLogs = emailLogs.Where(r => r.CreateDate.Date == createddate.Value.Date);
+            }
+            if(sentdate != null)
+            {
+                emailLogs = emailLogs.Where(r => r.SentDate.Value.Date == sentdate.Value.Date);
+            }
+
+            List<LogViewModel> logViewModels = new List<LogViewModel>();
+
+            for(var i=0;i< emailLogs.Count();++i)
+            {
+                var namee = "";
+                if (emailLogs.ToList()[i].PhysicianId == null)
+                {
+                    Request request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(r=>r.RequestId == emailLogs.ToList()[i].RequestId);
+                    namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
+                }
+                else
+                {
+                    Physician physician = _db.Physicians.FirstOrDefault(r=>r.PhysicianId == emailLogs.ToList()[i].PhysicianId);
+                    namee = string.Concat(physician.FirstName, ", ", physician.LastName);
+                }
+                Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == emailLogs.ToList()[i].RoleId);
+                logViewModels.Add(new LogViewModel
+                {
+                    Name = namee,
+                    EmailId = emailLogs.ToList()[i].EmailId,
+                    Action = "-",
+                    RoleName = role.Name,
+                    CreatedDate = emailLogs.ToList()[i].CreateDate,
+                    SentDate = emailLogs.ToList()[i].SentDate,
+                    Sent = emailLogs.ToList()[i].IsEmailSent[0] ? "Yes" : "No",
+                    SentTries = emailLogs.ToList()[i].SentTries,
+                    ConfirmationNumber = emailLogs.ToList()[i].ConfirmationNumber ?? "-"
+                });
+            }
+
+            List<LogViewModel> filteredlogViewModels = new List<LogViewModel>();
+
+            if(name!=null)
+            {
+                for (var i = 0; i < logViewModels.Count; ++i)
+                {
+                    if (logViewModels[i].Name.ToLower().Contains(name.ToLower()))
+                    {
+                        filteredlogViewModels.Add(logViewModels[i]);
+                    }
+                }
+            }
+            else
+            {
+                filteredlogViewModels = logViewModels;
+            }
+
+            List<Role> roles = _db.Roles.Where(r=>r.IsDeleted == new BitArray(new[] { false })).ToList();
+
+            EmailLogViewModel emailLogViewModel = new EmailLogViewModel
+            {
+                roles = roles,
+                adminNavbarViewModel = adminNavbarViewModel,
+                logViewModels = filteredlogViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = filteredlogViewModels.Count,
+                TotalPages = (int)Math.Ceiling((double)filteredlogViewModels.Count / pageSize)
+            };
+            return emailLogViewModel;
+        }
+        
+        EmailLogViewModel IAdmin.getSMSLogDetails(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Record",
+                menus = cookieModel.menus
+            };
+
+            IQueryable<Smslog> smslogs = _db.Smslogs.Where(r => r.AdminId == cookieModel.userId);
+
+            if(roleid!=null && roleid!=-1)
+            {
+                smslogs = smslogs.Where(r => r.RoleId == roleid);
+            }
+            if(phonenumber != null)
+            {
+                smslogs = smslogs.Where(r=>r.MobileNumber.ToLower().Contains(phonenumber.ToLower()));
+            }
+            if(createddate != null)
+            {
+                smslogs = smslogs.Where(r => r.CreateDate.Date == createddate.Value.Date);
+            }
+            if(sentdate != null)
+            {
+                smslogs = smslogs.Where(r => r.SentDate.Value.Date == sentdate.Value.Date);
+            }
+
+            List<LogViewModel> logViewModels = new List<LogViewModel>();
+
+            for(var i=0;i< smslogs.Count();++i)
+            {
+                var namee = "";
+                if (smslogs.ToList()[i].PhysicianId == null)
+                {
+                    Request request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(r=>r.RequestId == smslogs.ToList()[i].RequestId);
+                    namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
+                }
+                else
+                {
+                    Physician physician = _db.Physicians.FirstOrDefault(r=>r.PhysicianId == smslogs.ToList()[i].PhysicianId);
+                    namee = string.Concat(physician.FirstName, ", ", physician.LastName);
+                }
+                Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == smslogs.ToList()[i].RoleId);
+                logViewModels.Add(new LogViewModel
+                {
+                    Name = namee,
+                    PhoneNumber = smslogs.ToList()[i].MobileNumber,
+                    Action = "-",
+                    RoleName = role.Name,
+                    CreatedDate = smslogs.ToList()[i].CreateDate,
+                    SentDate = smslogs.ToList()[i].SentDate,
+                    Sent = smslogs.ToList()[i].IsSmssent[0] ? "Yes" : "No",
+                    SentTries = smslogs.ToList()[i].SentTries,
+                    ConfirmationNumber = smslogs.ToList()[i].ConfirmationNumber ?? "-"
+                });
+            }
+
+            List<LogViewModel> filteredlogViewModels = new List<LogViewModel>();
+
+            if(name!=null)
+            {
+                for (var i = 0; i < logViewModels.Count; ++i)
+                {
+                    if (logViewModels[i].Name.ToLower().Contains(name.ToLower()))
+                    {
+                        filteredlogViewModels.Add(logViewModels[i]);
+                    }
+                }
+            }
+            else
+            {
+                filteredlogViewModels = logViewModels;
+            }
+
+            List<Role> roles = _db.Roles.Where(r=>r.IsDeleted == new BitArray(new[] { false })).ToList();
+
+            EmailLogViewModel emailLogViewModel = new EmailLogViewModel
+            {
+                roles = roles,
+                adminNavbarViewModel = adminNavbarViewModel,
+                logViewModels = filteredlogViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = filteredlogViewModels.Count,
+                TotalPages = (int)Math.Ceiling((double)filteredlogViewModels.Count / pageSize)
+            };
+            return emailLogViewModel;
         }
 
 

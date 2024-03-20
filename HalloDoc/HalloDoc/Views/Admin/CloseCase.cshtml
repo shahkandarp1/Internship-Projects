@@ -31,7 +31,7 @@
             </div>
             <div class="wrapper">
 
-                <div id="Dashboard" class="main-content">
+                <div id="Dashboard" class="main-content bg-body">
                     <div class="top-flex">
                         <div>
                             <span class="pt-name-text dark-text">Patient Name</span>
@@ -44,7 +44,7 @@
                     </div>
 
                 </div>
-                <form class="desktop-table" asp-action="CloseCase" method="post">
+                <form class="desktop-table bg-body" asp-action="CloseCase" method="post">
                     <input type="hidden" asp-for="patient_name" />
                     <input type="hidden" asp-for="RequestId" />
                     <table class="table">
@@ -85,7 +85,7 @@
                                     <td>
                                         <div class="action-flex">
                                             <div class="outerr-div">
-                                                <a class="downld-btn" download href="~/uploads/@(row.FileName)">
+                                                <a class="downld-btn bg-body" download href="~/uploads/@(row.FileName)">
                                                     <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
                                                 </a>
                                             </div>
@@ -167,7 +167,7 @@
                             <a class="lower-custom-btn submit-btn" onclick="Edit()">Edit</a>
                             <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                             <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
-                            <a class="lower-custom-btn cancel-btn" asp-action="FinalCloseCase" asp-route-id="@Model.RequestId">Close Case</a>
+                            <a class="lower-custom-btn cancel-btn bg-body" asp-action="FinalCloseCase" asp-route-id="@Model.RequestId">Close Case</a>
                         </div>
                     </div>
                 </form>

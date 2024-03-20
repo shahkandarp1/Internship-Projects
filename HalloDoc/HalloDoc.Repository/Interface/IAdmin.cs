@@ -155,5 +155,8 @@ namespace HalloDoc.Repository.Interface
 
         public bool editRoleDetails(int? id, string? menus, string? role_name, int? account_type);
 
+        public EmailLogViewModel getEmailLogDetails(int? roleid,string? name,string? email,DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
+        public EmailLogViewModel getSMSLogDetails(int? roleid,string? name,string? phonenumber, DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
+
     }
 }

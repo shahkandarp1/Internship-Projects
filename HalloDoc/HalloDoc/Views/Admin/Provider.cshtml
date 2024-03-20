@@ -33,21 +33,22 @@
 
                     <div class="modal-body">
                         <input type="hidden" asp-for="ProviderId" id="req-provider-id" />
+                        @*<input type="hidden" asp-for="communication_type" id="req-communicaton-type" />*@
                         <span class="modal-head mb-3"><span class="contact-top">Choose communication to send message:</span></span>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="SMS" asp-for="communication_type" checked>
+                            <input class="form-check-input" type="radio" id="flexRadioDefault1" value="SMS" asp-for="communication_type" checked>
                             <label class="form-check-label" for="flexRadioDefault1">
                                 SMS
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" asp-for="communication_type" value="Email" id="flexRadioDefault2">
+                            <input class="form-check-input" type="radio" asp-for="communication_type" value="Email" asp-for="communication_type" id="flexRadioDefault2">
                             <label class="form-check-label" for="flexRadioDefault2">
                                 Email
                             </label>
                         </div>
                         <div class="form-check both-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" asp-for="communication_type" value="Both" id="flexRadioDefault3">
+                            <input class="form-check-input" type="radio" asp-for="communication_type" value="Both" asp-for="communication_type" id="flexRadioDefault3">
                             <label class="form-check-label" for="flexRadioDefault3">
                                 Both
                             </label>

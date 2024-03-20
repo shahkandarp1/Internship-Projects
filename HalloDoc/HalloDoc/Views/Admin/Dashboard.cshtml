@@ -251,11 +251,11 @@
 
                         <div class="disclaimer-agreement-font">To send agreement please make sure you are updating the correct contact information below for the responsible party</div>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="tel" class="form-control phone" id="agreement-phone" asp-for="Mail_PhoneNumber" required readonly>
+                            <input type="tel" class="form-control phone" id="agreement-phone" asp-for="Mail_PhoneNumber" required >
                         </div>
                         <span class="text-danger" asp-validation-for="Mail_PhoneNumber"></span>
                         <div class="form-floating mt-3 col-12 notes-text">
-                            <input type="email" class="form-control" id="agreement-email" placeholder="name@example.com" asp-for="Mail_Email" required readonly>
+                            <input type="email" class="form-control" id="agreement-email" placeholder="name@example.com" asp-for="Mail_Email" required >
                             <label for="agreement-email" class="form-label">Your email</label>
                         </div>
                         <span class="text-danger" asp-validation-for="Mail_Email"></span>
@@ -569,8 +569,6 @@
     </div>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="~/js/admin-dashboard.js"></script>
-<script src="~/js/admin-navbar.js"></script>
 <script>
 
     const filter = (page,pageSize) => {
@@ -773,27 +771,7 @@
         if(localStorage.getItem("status") == null)
         {
 
-            const states = document.getElementsByClassName("row-cards")
-            const current_state = "new"
-            for (let i = 0; i < states.length; ++i) {
-                if (states[i].classList.length == 3 && states[i].classList[1] == current_state) {
-                    break;
-                }
-                else if (states[i].classList[1] == current_state) {
-                    states[i].classList.add(`${states[i].classList[1]}-active`)
-                    document.getElementById(`${states[i].classList[1]}-active`).classList.remove('hidden')
-                    document.getElementById(`${states[i].classList[1]}`).classList.add('hidden')
-                    document.getElementById(`${states[i].classList[1]}-img`).classList.remove('hidden')
-                }
-                else if (states[i].classList.length == 3) {
-                    states[i].classList.remove(`${states[i].classList[1]}-active`)
-                    document.getElementById(`${states[i].classList[1]}-active`).classList.add('hidden')
-                    document.getElementById(`${states[i].classList[1]}`).classList.remove('hidden')
-                    document.getElementById(`${states[i].classList[1]}-img`).classList.add('hidden')
-                }
-            }
-            let name = current_state.split("-").length == 1 ? current_state.split("-")[0] : current_state.split("-")[1]
-            document.getElementById("status-text").innerHTML = `(${name.charAt(0).toUpperCase() + name.slice(1)})`
+            designStatus("new")
 
             $.ajax({
                 url: `/Admin/New`,
@@ -812,42 +790,9 @@
         else
         {
 
-            const states = document.getElementsByClassName("row-cards")
-            const current_state = localStorage.getItem("status").toLowerCase() == "close" ? "to-close" : localStorage.getItem("status").toLowerCase()
-            for (let i = 0; i < states.length; ++i) {
-                if (states[i].classList.length == 3 && states[i].classList[1] == current_state) {
-                    break;
-                }
-                else if (states[i].classList[1] == current_state) {
-                    states[i].classList.add(`${states[i].classList[1]}-active`)
-                    document.getElementById(`${states[i].classList[1]}-active`).classList.remove('hidden')
-                    document.getElementById(`${states[i].classList[1]}`).classList.add('hidden')
-                    document.getElementById(`${states[i].classList[1]}-img`).classList.remove('hidden')
-                }
-                else if (states[i].classList.length == 3) {
-                    states[i].classList.remove(`${states[i].classList[1]}-active`)
-                    document.getElementById(`${states[i].classList[1]}-active`).classList.add('hidden')
-                    document.getElementById(`${states[i].classList[1]}`).classList.remove('hidden')
-                    document.getElementById(`${states[i].classList[1]}-img`).classList.add('hidden')
-                }
-            }
-            let name = current_state.split("-").length == 1 ? current_state.split("-")[0] : current_state.split("-")[1]
-            document.getElementById("status-text").innerHTML = `(${name.charAt(0).toUpperCase() + name.slice(1)})`
+            designStatus(localStorage.getItem("status").toLowerCase() == "close" ? "to-close" : localStorage.getItem("status").toLowerCase())
 
-            const statess = document.getElementsByClassName("req-filter")
-            const current_statee = localStorage.getItem("requestor") ?? "All"
-
-            for (let i = 0; i < statess.length; ++i) {
-                if (statess[i].classList.length == 3 && statess[i].classList[1] == current_statee) {
-                    break;
-                }
-                else if (statess[i].classList[1] == current_statee) {
-                    statess[i].classList.add(`filter-active`)
-                }
-                else if (statess[i].classList.length == 3) {
-                    statess[i].classList.remove(`filter-active`)
-                }
-            }
+            designRequestor(localStorage.getItem("requestor") ?? "All")
 
             document.getElementById("search").value = localStorage.getItem("search")
             document.getElementById("region").value = localStorage.getItem("region") ?? -1
@@ -873,7 +818,8 @@
         
     }
 </script>
-
+<script src="~/js/admin-dashboard.js"></script>
+<script src="~/js/admin-navbar.js"></script>
 @section Scripts{
     @{
         <partial name="_ValidationScriptsPartial" />

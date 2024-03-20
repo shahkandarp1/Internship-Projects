@@ -248,8 +248,7 @@ namespace HalloDoc.Controllers
         public IActionResult DeleteSingle(int id)
         {
             int requestid = _admin.deleteSingleFile(id);
-            ViewDocumentModal viewDocumentModal = _admin.viewUploads(requestid);
-            return View("ViewUploads",viewDocumentModal);
+            return RedirectToAction("ViewUploads",new { id = requestid });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -528,11 +527,11 @@ namespace HalloDoc.Controllers
             Task<bool> isSent = _admin.contactProvider(providerViewModel);
             if (isSent.Result)
             {
-                TempData["success"] = "Mail Sent Successfully!!";
+                TempData["success"] = "Your Message Sent Successfully!!";
             }
             else
             {
-                TempData["error"] = "Mail Could not be sent!!";
+                TempData["error"] = "Your Message Could not be sent!!";
             }
             return RedirectToAction("Provider");
         }
@@ -796,6 +795,30 @@ namespace HalloDoc.Controllers
                 TempData["error"] = "Role could not be Editted!!";
             }
             return Json(new { isEditted = isEditted });
+        }
+
+        public IActionResult EmailLog()
+        {
+            EmailLogViewModel emailLogViewModel = _admin.getEmailLogDetails(-1,null,null,null,null);
+            return View(emailLogViewModel);
+        }
+        
+        public IActionResult EmailLogTable(int? roleid, string? name, string? email, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+        {
+            EmailLogViewModel emailLogViewModel = _admin.getEmailLogDetails(roleid,name,email,createddate,sentdate,page,pageSize);
+            return PartialView("_EmailLogTable",emailLogViewModel);
+        }
+
+        public IActionResult SMSLog()
+        {
+            EmailLogViewModel emailLogViewModel = _admin.getSMSLogDetails(-1, null, null, null, null);
+            return View(emailLogViewModel);
+        }
+
+        public IActionResult SMSLogTable(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+        {
+            EmailLogViewModel emailLogViewModel = _admin.getSMSLogDetails(roleid, name, phonenumber, createddate, sentdate, page, pageSize);
+            return PartialView("_SMSLogTable", emailLogViewModel);
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿@model EncounterFormViewModel
 @{
     ViewData["Title"] = "Encounter Form";
+    Layout = "_AdminLayout";
 }
 @section Styles {
     <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
@@ -24,10 +25,11 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form" asp-action="EncounterForm" asp-controller="Admin" method="post">
+            <form class="main-form bg-body" asp-action="EncounterForm" asp-controller="Admin" method="post">
 
                 <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                 <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                <input type="hidden" asp-for="adminNavbarViewModel.menus" />
                 <input type="hidden" asp-for="RequestId" />
 
                 <!-- Medical Report-Confidential  -->
@@ -223,7 +225,51 @@
 
 
 <script src="~/js/admin-navbar.js"></script>
-<script src="~/js/patient-profile.js"></script>
+<script>
+
+    const Edit = () => {
+        const editable = document.getElementsByClassName('editable')
+        for (let i = 0; i < editable.length; ++i) {
+            editable[i].disabled = false;
+        }
+        const btn = document.getElementsByClassName('lower-custom-btn')
+        for (let i = 0; i < btn.length; ++i) {
+            if (btn[i].classList.length == 3) {
+                btn[i].classList.remove("hidden");
+            }
+            else {
+                btn[i].classList.add("hidden");
+            }
+        }
+    }
+
+    const Cancel = () => {
+        location.reload()
+    }
+
+
+    window.onload = () => {
+        const inputDate = document.getElementById('dob');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('max', today);
+
+        //used in encounter form
+
+        const inputDatee = document.getElementById('date');
+        if (inputDatee) {
+            const todayy = new Date().toISOString().split('T')[0];
+            inputDatee.setAttribute('max', todayy);
+        }
+
+        const phoneInputField = document.getElementsByClassName("phone");
+        for (let i = 0; i < phoneInputField.length; ++i) {
+            const phoneInput = window.intlTelInput(phoneInputField[i], {
+                utilsScript:
+                    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            });
+        }
+    }
+</script>
 @section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />

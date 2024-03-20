@@ -107,8 +107,8 @@
         <button class="sidebar-tablinks accordion-mob-btn @recordM @recordrole" onclick="clearStorage()">Records</button>
         <div class="panel">
             <a class="mobile-sidebar-a accord-inner @searchrecordrole" asp-action="SearchRecord" asp-controller="Admin">Search Records</a>
-            <a class="mobile-sidebar-a accord-inner @emailrole">Email Logs</a>
-            <a class="mobile-sidebar-a accord-inner @smsrole">SMS Logs</a>
+            <a class="mobile-sidebar-a accord-inner @emailrole" asp-action="EmailLog" asp-controller="Admin">Email Logs</a>
+            <a class="mobile-sidebar-a accord-inner @smsrole" asp-action="SMSLog" asp-controller="Admin">SMS Logs</a>
             <a asp-action="PatientHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner @patienthistoryrole">Patient History</a>
             <a asp-action="BlockHistory" asp-controller="Admin" class="mobile-sidebar-a accord-inner @blockhistoryrole">Block History</a>
         </div>
@@ -163,8 +163,8 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="records">
                 <li><a class="navbar-dropdown-item dropdown-item @searchrecordrole" asp-action="SearchRecord" asp-controller="Admin">Search Records</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @emailrole" href="#">Email Logs</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @smsrole" href="#">SMS Logs</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @emailrole" asp-action="EmailLog" asp-controller="Admin">Email Logs</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @smsrole" asp-action="SMSLog" asp-controller="Admin">SMS Logs</a></li>
                 <li><a asp-action="PatientHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item @patienthistoryrole">Patient History</a></li>
                 <li><a asp-action="BlockHistory" asp-controller="Admin" class="navbar-dropdown-item dropdown-item @blockhistoryrole">Block History</a></li>
             </ul>

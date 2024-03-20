@@ -1,0 +1,140 @@
+﻿@model EmailLogViewModel
+@{
+    ViewData["Title"] = "Email Log";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-history.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Email Logs(Gmail)</span>
+            </div>
+            <div class="bottom-main-container bg-body mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="row symptoms-textarea">
+                                <div class="form-floating mt-3 inp col-lg col-md-6 col-sm-6 col-12">
+                                    <select class="form-control select select-dropdown top-most-editable" id="roleid" placeholder="name@example.com">
+                                        <option value="-1">All</option>
+                                        @foreach (var item in Model.roles)
+                                        {
+                                            <option value="@item.RoleId">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg col-md-6 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="reciever-name" placeholder="name@example.com">
+                                    <label for="reciever-name" class="form-label">Reciever Name</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg col-md-6 col-sm-6 col-12">
+                                    <input type="text" class="form-control" id="email" placeholder="name@example.com">
+                                    <label for="email" class="form-label">Email Id</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg col-md-6 col-sm-6 col-12">
+                                    <input type="date" class="form-control dob" id="created-date" placeholder="name@example.com">
+                                    <label for="created-date" class="form-label dob-label">Created Date</label>
+                                </div>
+                                <div class="form-floating mt-3 inp col-lg col-md-12 col-sm-12 col-12">
+                                    <input type="date" class="form-control dob" id="sent-date" placeholder="name@example.com">
+                                    <label for="sent-date" class="form-label dob-label">Sent Date</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lower-btn" id="top-most-edit">
+                        <a class="lower-custom-btn cancel-btn bg-body" onclick="erase()">Clear</a>
+                        <button class="lower-custom-btn submit-btn" onclick="filter(1,10)">Search</button>
+                    </div>
+                </div>
+
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/EmailLogTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { roleid: document.getElementById("roleid").value, name: document.getElementById("reciever-name").value, email: document.getElementById("email").value, sentdate: document.getElementById("sent-date").value, createddate: document.getElementById("created-date").value, page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    const erase = () => {
+        document.getElementById("roleid").value = -1
+        document.getElementById("reciever-name").value = ""
+        document.getElementById("email").value = ""
+        document.getElementById("sent-date").value = ""
+        document.getElementById("created-date").value = ""
+        filter(1, 10)
+    }
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/EmailLogTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { roleid: document.getElementById("roleid").value, name: document.getElementById("reciever-name").value, email: document.getElementById("email").value, sentdate: document.getElementById("sent-date").value, createddate: document.getElementById("created-date").value, page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

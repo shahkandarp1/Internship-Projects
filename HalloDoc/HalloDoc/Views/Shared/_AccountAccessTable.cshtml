@@ -26,6 +26,10 @@
                         {
                             <span>Provider</span>
                         }
+                        else
+                        {
+                            <span>Patient</span>
+                        }
                     </td>
                     <td>
                         <a class="back-btn reset-btn margin-right" id="edit-btn" asp-action="EditRole" asp-controller="Admin" asp-route-id="@item.RoleId"><span class="back-text">Edit</span></a>
@@ -54,6 +58,10 @@
                             else if (Model.roles[i].AccountType == 2)
                             {
                                 <span>Provider</span>
+                            }
+                            else
+                            {
+                                <span>Patient</span>
                             }
                         </span>
                     </div>
