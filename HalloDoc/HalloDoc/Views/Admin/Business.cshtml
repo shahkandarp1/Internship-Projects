@@ -1,0 +1,141 @@
+﻿@model BusinessViewModel
+@{
+    ViewData["Title"] = Model.page;
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/js/orders.js"></script>
+    <link href="~/css/orders.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">@Model.page</span>
+                <a class="back-btn" onclick="goBack()">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <form class="main-form bg-body" asp-action="@(string.Join("",Model.page.Split(" ")))" asp-controller="Admin" method="post">
+
+                <!-- General Information  -->
+                <div class="row">
+                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+                    <input type="hidden" asp-for="page" />
+                    <input type="hidden" asp-for="BusinessId" />
+
+                    @for (int i = 0; i < Model.healthProfessionalTypes.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.healthProfessionalTypes[i].HealthProfessionalId)
+                        @Html.HiddenFor(m => m.healthProfessionalTypes[i].ProfessionName)
+                    }
+
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="name" placeholder="name@example.com" asp-for="Name">
+                        <label for="name" class="form-label">Business Name</label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <select class="form-control select-order editable" id="Select-profession" placeholder="name@example.com" asp-for="ProfessionId">
+                            <option value="-1">Select Profession</option>
+                            @for (var i = 0; i < Model.healthProfessionalTypes.Count; ++i)
+                            {
+                                <option value="@Model.healthProfessionalTypes[i].HealthProfessionalId">@Model.healthProfessionalTypes[i].ProfessionName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProfessionId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="fax-number" placeholder="name@example.com" asp-for="FaxNumber">
+                        <label for="fax-number" class="form-label">Fax Number</label>
+                        <span asp-validation-for="FaxNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="tel" class="form-control phone" id="phone" asp-for="PhoneNumber">
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="email" class="form-control editable" id="email" placeholder="name@example.com" asp-for="Email">
+                        <label for="email" class="form-label">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control editable" id="contact" placeholder="name@example.com" asp-for="BusinessContact">
+                        <label for="contact" class="form-label">Business Contact</label>
+                        <span asp-validation-for="BusinessContact" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="street" placeholder="name@example.com" asp-for="Street">
+                        <label for="street" class="form-label">Street</label>
+                        <span asp-validation-for="Street" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="city" placeholder="name@example.com" asp-for="City">
+                        <label for="city" class="form-label">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="state" placeholder="name@example.com" asp-for="State">
+                        <label for="state" class="form-label">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                        <input type="text" class="form-control" id="zipcode" placeholder="name@example.com" asp-for="ZipCode">
+                        <label for="zipcode" class="form-label">Zipcode</label>
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Submit / Clear -->
+                <div class="lower-btn">
+                    <button class="lower-custom-btn submit-btn" type="submit">Save</button>
+                    <a class="lower-custom-btn cancel-btn bg-body" onclick="Cancel()">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+<script src="~/js/admin-navbar.js"></script>
+<script>
+
+    const Cancel = () => {
+        location.reload()
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    window.onload = () => {
+        const phoneInputField = document.getElementsByClassName("phone");
+        for (let i = 0; i < phoneInputField.length; ++i) {
+            const phoneInput = window.intlTelInput(phoneInputField[i], {
+                utilsScript:
+                    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            });
+        }
+    }
+</script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

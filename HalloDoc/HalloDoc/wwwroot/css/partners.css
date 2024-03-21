@@ -1,0 +1,38 @@
+﻿.flex-container {
+    width: 95%;
+}
+
+    @media screen and (max-width: 1155px) {
+        .inner-pt-container {
+            flex-direction: column;
+            align-items: flex-end;
+        }
+    }
+
+    @media screen and (max-width: 810px) {
+        .search-flex {
+            flex-direction: column;
+        }
+
+        .search {
+            width: 100%;
+            margin: 0px;
+        }
+
+            .search:first-child {
+                margin-bottom: 10px;
+            }
+
+        .search-inp {
+            width: 95%;
+        }
+
+        .back-btn {
+            padding: 7px;
+        }
+    }
+@media screen and (max-width: 490px) {
+    .search-inp {
+        width: 92%;
+    }
+}

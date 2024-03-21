@@ -158,5 +158,13 @@ namespace HalloDoc.Repository.Interface
         public EmailLogViewModel getEmailLogDetails(int? roleid,string? name,string? email,DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
         public EmailLogViewModel getSMSLogDetails(int? roleid,string? name,string? phonenumber, DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
 
+        public PartnerViewModal getPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10);
+
+        public BusinessViewModel getBusinessNavbar();
+        public BusinessViewModel getBusinessDetails(int id);
+        public bool createBusiness(BusinessViewModel businessViewModel);
+        public bool editBusiness(BusinessViewModel businessViewModel);
+        public bool deleteBusiness(int id);
+        public ProviderLocationViewModel getProviderLocation();
     }
 }

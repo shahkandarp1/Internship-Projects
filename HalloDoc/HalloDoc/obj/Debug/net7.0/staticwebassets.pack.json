@@ -65,6 +65,10 @@
       "PackagePath": "staticwebassets\\css\\orders.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\partners.css",
+      "PackagePath": "staticwebassets\\css\\partners.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-dashboard.css",
       "PackagePath": "staticwebassets\\css\\patient-dashboard.css"
     },
@@ -83,6 +87,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\patient-site.css",
       "PackagePath": "staticwebassets\\css\\patient-site.css"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\provider-location.css",
+      "PackagePath": "staticwebassets\\css\\provider-location.css"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\site.css",

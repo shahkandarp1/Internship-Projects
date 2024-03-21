@@ -85,7 +85,7 @@
             <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
         <button class="sidebar-tablinks @providerlocationM @providerlocationrole" onclick="clearStorage()">
-            <a class="mobile-sidebar-a"> Provider Location </a>
+            <a class="mobile-sidebar-a" asp-action="ProviderLocation" asp-controller="Admin"> Provider Location </a>
         </button>
         <button class="sidebar-tablinks @profileM @profilerole" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="Profile" asp-controller="Admin"> My Profile </a>
@@ -97,7 +97,7 @@
             <a class="mobile-sidebar-a accord-inner @invoicingrole"> Invoicing </a>
         </div>
         <button class="sidebar-tablinks @partnerM @partnerrole" onclick="clearStorage()">
-            <a class="mobile-sidebar-a"> Partners </a>
+            <a class="mobile-sidebar-a" asp-action="Partners" asp-controller="Admin"> Partners </a>
         </button>
         <button class="sidebar-tablinks accordion-mob-btn @accessM @accessrole" onclick="clearStorage()">Access</button>
         <div class="panel">
@@ -130,7 +130,7 @@
             <a asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
         <button class="navbar-btn bg-body @providerlocation @providerlocationrole" onclick="navbar(this)">
-            <a> Provider Location </a>
+            <a asp-action ="ProviderLocation" asp-controller="Admin"> Provider Location </a>
         </button>
         <button class="navbar-btn bg-body @profile @profilerole" onclick="navbar(this)">
             <a asp-action="Profile" asp-controller="Admin"> My Profile </a>
@@ -146,7 +146,7 @@
             </ul>
         </div>
         <button class="navbar-btn bg-body @partner @partnerrole" onclick="navbar(this)">
-            <a> Partners </a>
+            <a asp-action ="Partners" asp-controller="Admin"> Partners </a>
         </button>
         <div class="dropdown navbar-dropdown">
             <button class="navbar-btn bg-body dropdown-toggle @access @accessrole" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">

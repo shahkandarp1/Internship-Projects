@@ -821,5 +821,89 @@ namespace HalloDoc.Controllers
             return PartialView("_SMSLogTable", emailLogViewModel);
         }
 
+        public IActionResult Partners()
+        {
+            PartnerViewModal partnerViewModal = _admin.getPartnerDetails(null,-1);
+            return View(partnerViewModal);
+        }
+
+        public IActionResult PartnersTable(string? name,int? id,int page = 1,int pageSize = 10)
+        {
+            PartnerViewModal partnerViewModal = _admin.getPartnerDetails(name,id,page,pageSize);
+            return PartialView("_PartnersTable", partnerViewModal);
+        }
+
+        public IActionResult CreateBusiness()
+        {
+            BusinessViewModel businessViewModel = _admin.getBusinessNavbar();
+            return View("Business",businessViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddBusiness(BusinessViewModel businessViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+
+                bool isCreated = _admin.createBusiness(businessViewModel);
+                if(isCreated)
+                {
+                    TempData["success"] = "Vendor Added Successfully!!";
+                    return RedirectToAction("Partners");
+                }
+                else
+                {
+                    TempData["error"] = "Vendor could not be Added!!";
+                }
+            }
+            return View("Business", businessViewModel);
+        }
+
+        public IActionResult EditBusiness(int id)
+        {
+            BusinessViewModel businessViewModel = _admin.getBusinessDetails(id);
+            return View("Business", businessViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditBusiness(BusinessViewModel businessViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+
+                bool isEditted = _admin.editBusiness(businessViewModel);
+                if (isEditted)
+                {
+                    TempData["success"] = "Vendor Updated Successfully!!";
+                    return RedirectToAction("Partners");
+                }
+                else
+                {
+                    TempData["error"] = "Vendor could not be Updated!!";
+                }
+            }
+            return View("Business", businessViewModel);
+        }
+
+        public IActionResult DeleteBusiness(int id)
+        {
+            bool isDeleted = _admin.deleteBusiness(id);
+            if(isDeleted)
+            {
+                TempData["success"] = "Vendor Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Vendor could not be Deleted!!";
+            }
+            return RedirectToAction("Partners");
+        }
+
+        public IActionResult ProviderLocation()
+        {
+            ProviderLocationViewModel providerLocationViewModel = _admin.getProviderLocation();
+            return View(providerLocationViewModel);
+        }
+
     }
 }

@@ -46,6 +46,7 @@
     }
     </tbody>
 </table>
+<div class="accordion accordion-flush" id="accordionFlushExample">
 @for(var i=0;i<Model.physicianproviders.Count;++i)
 {
     var status = "";
@@ -61,7 +62,7 @@
     {
         status = "Pending";
     }
-    <div class="accordion accordion-flush" id="accordionFlushExample">
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-heading@(i)">
                 <button class="accordion-button collapsed"
@@ -106,9 +107,9 @@
                 </div>
             </div>
         </div>
-    </div>
-}
 
+}
+</div>
 <div class="pagination">
     @if (Model.CurrentPage > 1)
     {

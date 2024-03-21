@@ -37,6 +37,8 @@ using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Microsoft.Extensions.Configuration;
 using Twilio.Http;
+using Twilio.Types;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -1530,7 +1532,7 @@ namespace HalloDoc.Repository.Repository
 
         OrdersViewModel IAdmin.orders(int id)
         {
-            var healthProfessionals = _db.HealthProfessionalTypes.ToList();
+            var healthProfessionals = _db.HealthProfessionalTypes.Where(h=>h.IsDeleted == new BitArray(new[] { false })).ToList();
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
             CookieModel cookieModel = _jwt.getDetails(token);
@@ -1553,7 +1555,7 @@ namespace HalloDoc.Repository.Repository
 
         List<HealthProfessional> IAdmin.getBusiness(int professionid)
         {
-            return _db.HealthProfessionals.Where(h=>h.Profession == professionid).ToList();
+            return _db.HealthProfessionals.Where(h=>h.Profession == professionid && h.IsDeleted == new BitArray(new[] { false })).ToList();
         }
         
         HealthProfessional IAdmin.getBusinessData(int businessid)
@@ -3539,6 +3541,218 @@ namespace HalloDoc.Repository.Repository
             return emailLogViewModel;
         }
 
+        PartnerViewModal IAdmin.getPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Partner",
+                menus = cookieModel.menus
+            };
+
+            List<HealthProfessionalType> healthProfessionalTypes = _db.HealthProfessionalTypes.Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
+            IQueryable<HealthProfessional> healthProfessionals = _db.HealthProfessionals.Include(r=>r.ProfessionNavigation).Where(r => r.IsDeleted == new BitArray(new[] { false }));
+
+            if(name!=null)
+            {
+                healthProfessionals = healthProfessionals.Where(r=>r.VendorName.ToLower().Contains(name.ToLower()));
+            }
+            if(id!=null && id!=-1)
+            {
+                healthProfessionals = healthProfessionals.Where(r => r.Profession == id);
+            }
+
+            PartnerViewModal partnerViewModal = new PartnerViewModal
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                healthProfessionalTypes = healthProfessionalTypes,
+                healthProfessionals = healthProfessionals.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = healthProfessionals.Count(),
+                TotalPages = (int)Math.Ceiling((double)healthProfessionals.Count() / pageSize)
+            };
+            return partnerViewModal;
+        }
+
+        BusinessViewModel IAdmin.getBusinessNavbar()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            List<HealthProfessionalType> healthProfessionalTypes = _db.HealthProfessionalTypes.Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Partner",
+                menus = cookieModel.menus
+            };
+
+            BusinessViewModel businessViewModel = new BusinessViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                page = "Add Business",
+                healthProfessionalTypes = healthProfessionalTypes
+            };
+            return businessViewModel;
+        }
+
+        bool IAdmin.createBusiness(BusinessViewModel businessViewModel)
+        {
+            try
+            {
+                Region region = new Region();
+                if(businessViewModel.State != null)
+                {
+                    region = _db.Regions.FirstOrDefault(u => u.Name == businessViewModel.State.Trim().ToLower().Replace(" ", ""));
+                }
+
+                HealthProfessional healthProfessional = new HealthProfessional
+                {
+                    VendorName = businessViewModel.Name,
+                    IsDeleted = new BitArray(new[] { false }),
+                    Profession = businessViewModel.ProfessionId == -1 ? null : businessViewModel.ProfessionId,
+                    FaxNumber = businessViewModel.FaxNumber,
+                    PhoneNumber = businessViewModel.PhoneNumber,
+                    Email = businessViewModel.Email,
+                    BusinessContact = businessViewModel?.BusinessContact,
+                    State = businessViewModel?.State,
+                    Address = businessViewModel?.Street,
+                    Zip = businessViewModel?.ZipCode,
+                    City = businessViewModel?.City,
+                    RegionId = region?.RegionId,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.HealthProfessionals.Add(healthProfessional);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        BusinessViewModel IAdmin.getBusinessDetails(int id)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            List<HealthProfessionalType> healthProfessionalTypes = _db.HealthProfessionalTypes.Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
+
+            HealthProfessional healthProfessional = _db.HealthProfessionals.FirstOrDefault(h=>h.VendorId == id);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Partner",
+                menus = cookieModel.menus
+            };
+
+            BusinessViewModel businessViewModel = new BusinessViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                page = "Edit Business",
+                healthProfessionalTypes = healthProfessionalTypes,
+                Name = healthProfessional.VendorName,
+                BusinessId = healthProfessional.VendorId,
+                ProfessionId = healthProfessional.Profession,
+                FaxNumber = healthProfessional.FaxNumber,
+                PhoneNumber = healthProfessional.PhoneNumber,
+                Email = healthProfessional.Email,
+                BusinessContact = healthProfessional?.BusinessContact,
+                Street = healthProfessional?.Address,
+                City = healthProfessional?.City,
+                State = healthProfessional?.State,
+                ZipCode = healthProfessional?.Zip
+            };
+
+            return businessViewModel;
+        }
+
+        bool IAdmin.editBusiness(BusinessViewModel businessViewModel)
+        {
+            try
+            {
+                Region region = new Region();
+                if (businessViewModel.State != null)
+                {
+                    region = _db.Regions.FirstOrDefault(u => u.Name == businessViewModel.State.Trim().ToLower().Replace(" ", ""));
+                }
+
+                HealthProfessional healthProfessional = _db.HealthProfessionals.FirstOrDefault(h=>h.VendorId == businessViewModel.BusinessId);
+
+                healthProfessional.VendorName = businessViewModel.Name;
+                healthProfessional.Profession = businessViewModel.ProfessionId == -1 ? null : businessViewModel.ProfessionId;
+                healthProfessional.FaxNumber = businessViewModel.FaxNumber;
+                healthProfessional.PhoneNumber = businessViewModel.PhoneNumber;
+                healthProfessional.Email = businessViewModel.Email;
+                healthProfessional.BusinessContact = businessViewModel?.BusinessContact;
+                healthProfessional.State = businessViewModel?.State;
+                healthProfessional.Address = businessViewModel?.Street;
+                healthProfessional.Zip = businessViewModel?.ZipCode;
+                healthProfessional.City = businessViewModel?.City;
+                healthProfessional.RegionId = region?.RegionId;
+                healthProfessional.ModifiedDate = DateTime.Now;
+
+                _db.HealthProfessionals.Update(healthProfessional);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception exp)
+            {
+                return false;
+            }
+        }
+
+        bool IAdmin.deleteBusiness(int id)
+        {
+            try
+            {
+                HealthProfessional healthProfessional = _db.HealthProfessionals.FirstOrDefault(h => h.VendorId == id);
+                healthProfessional.IsDeleted = new BitArray(new[] { true });
+                healthProfessional.ModifiedDate = DateTime.Now;
+                _db.HealthProfessionals.Update(healthProfessional);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        ProviderLocationViewModel IAdmin.getProviderLocation()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "ProviderLocation",
+                menus = cookieModel.menus
+            };
+
+            List<PhysicianLocation> physicianLocations = _db.PhysicianLocations.ToList();
+
+            ProviderLocationViewModel providerLocationViewModel = new ProviderLocationViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                physicianLocations = physicianLocations
+            };
+
+            return providerLocationViewModel;
+
+        }
 
     }
 }

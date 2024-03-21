@@ -1,0 +1,126 @@
+﻿@model PartnerViewModal
+@{
+    ViewData["Title"] = "Partners";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/partners.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Vendor(s)</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="search-flex">
+                                <span class="search">
+                                    <img class="search-image"
+                                         src="../../images/search.svg"
+                                         alt="" />
+                                    <input class="search-inp"
+                                           id="search"
+                                           type="text"
+                                           placeholder="Search Vendors" 
+                                           onkeyup="filter(1,10)" />
+                                </span>
+                                <span class="search">
+                                    <img class="search-image"
+                                         src="../../images/search.svg"
+                                         alt="" />
+                                    <select name="" id="professions" class="search-inp" onchange="filter(1,10)">
+                                        <option value="-1">All Professions</option>
+                                        @foreach (var item in Model.healthProfessionalTypes)
+                                        {
+                                            <option value="@item.HealthProfessionalId">@item.ProfessionName</option>
+                                        }
+                                    </select>
+                                </span>
+                            </div>
+                                <a class="back-btn create-btn reset-btn" id="edit-btn" asp-action="CreateBusiness" asp-controller="Admin">
+                                    <img src="../../images/plus.svg" alt="" class="logout-img" />
+                                    <span class="back-text create-text d-none d-lg-inline-flex">Add Business</span>
+                                </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/PartnersTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { name: document.getElementById("search").value, id: document.getElementById("professions").value, page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/PartnersTable`,
+            type: 'POST',
+            dataType: 'html',
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
