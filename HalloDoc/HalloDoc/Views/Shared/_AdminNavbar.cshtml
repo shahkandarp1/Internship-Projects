@@ -58,7 +58,7 @@
 
 <!-- Roles -->
 @{
-    string dashboardrole, providerlocationrole, profilerole, providermainrole, providerrole, schedulingrole, invoicingrole, partnerrole, accessrole, accountaccessrole, useraccessrole, recordrole, searchrecordrole, emailrole, smsrole, patienthistoryrole, blockhistoryrole;
+    string dashboardrole, providerlocationrole, profilerole, providermainrole, providerrole, schedulingrole, invoicingrole, partnerrole, accessrole, accountaccessrole, useraccessrole,createadminaccount, recordrole, searchrecordrole, emailrole, smsrole, patienthistoryrole, blockhistoryrole;
     dashboardrole = Model.menus.Contains("Dashboard") ? "" : "hidden";
     providerlocationrole = Model.menus.Contains("Provider Location") ? "" : "hidden";
     profilerole = Model.menus.Contains("My Profile") ? "" : "hidden";
@@ -67,9 +67,10 @@
     invoicingrole = Model.menus.Contains("Invoicing") ? "" : "hidden";
     providermainrole = Model.menus.Contains("Provider") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "hidden";
     partnerrole = Model.menus.Contains("Partners") ? "" : "hidden";
-    accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") ? "" : "hidden";
+    accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") || Model.menus.Contains("Create Admin Account") ? "" : "hidden";
     accountaccessrole = Model.menus.Contains("Account Access") ? "" : "hidden";
     useraccessrole = Model.menus.Contains("User Access") ? "" : "hidden";
+    createadminaccount = Model.menus.Contains("Create Admin Account") ? "" : "hidden";
     recordrole = Model.menus.Contains("Search Records") || Model.menus.Contains("Email Logs") || Model.menus.Contains("SMS Logs") || Model.menus.Contains("Patient History") || Model.menus.Contains("Block History") ? "" : "hidden";
     searchrecordrole = Model.menus.Contains("Search Records") ? "" : "hidden";
     emailrole = Model.menus.Contains("Email Logs") ? "" : "hidden";
@@ -103,6 +104,7 @@
         <div class="panel">
             <a class="mobile-sidebar-a accord-inner @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a>
             <a class="mobile-sidebar-a accord-inner @useraccessrole">User Access</a>
+            <a class="mobile-sidebar-a accord-inner @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin Account</a>
         </div>
         <button class="sidebar-tablinks accordion-mob-btn @recordM @recordrole" onclick="clearStorage()">Records</button>
         <div class="panel">
@@ -155,6 +157,7 @@
             <ul class="dropdown-menu bg-body" aria-labelledby="access">
                 <li><a class="navbar-dropdown-item dropdown-item @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item @useraccessrole" href="#">User Access</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin Account</a></li>
             </ul>
         </div>
         <div class="dropdown navbar-dropdown">

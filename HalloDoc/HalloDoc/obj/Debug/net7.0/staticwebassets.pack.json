@@ -1349,6 +1349,14 @@
       "PackagePath": "staticwebassets\\provider_documents\\6\\paper.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\7\\1710246647876.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\7\\1710246647876.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\7\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\7\\1710313071690.JPEG"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\.net-Whole-Plane-2024.pdf",
       "PackagePath": "staticwebassets\\uploads\\.net-Whole-Plane-2024.pdf"
     },
@@ -1359,6 +1367,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\All Data (4).xlsx",
       "PackagePath": "staticwebassets\\uploads\\All Data (4).xlsx"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\All Data (5).xlsx",
+      "PackagePath": "staticwebassets\\uploads\\All Data (5).xlsx"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\All Data.xlsx",
@@ -1419,6 +1431,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-21Feb24.pdf",
       "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees-21Feb24.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-8March24.pdf",
+      "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees-8March24.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees.pdf",
@@ -1487,6 +1503,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\new.svg",
       "PackagePath": "staticwebassets\\uploads\\new.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\paper.svg",
+      "PackagePath": "staticwebassets\\uploads\\paper.svg"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\software-engineer.png",

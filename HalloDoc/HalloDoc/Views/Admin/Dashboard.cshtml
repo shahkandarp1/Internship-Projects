@@ -162,12 +162,12 @@
                         </div>
                         <span id="warning-assign-t" class="text-danger hidden">Please Select Physician</span>
                         <div class="form-floating mt-3 inp col-sm-12 notes-text">
-                            <textarea class="form-control text-area" id="transfer-notes" placeholder="name@example.com" required asp-for="Description"></textarea>
+                            <textarea class="form-control text-area" id="transfer-notes-t" placeholder="name@example.com" required asp-for="Description"></textarea>
                             <label for="admin_notes" class="form-label">Description</label>
                         </div>
                         <div class="lower-btn">
                             <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
-                            <a id="cancel-assign" class="btn cancel-btn">Cancel</a>
+                            <a id="cancel-transfer" class="btn cancel-btn">Cancel</a>
                         </div>
                     </div>
 
@@ -610,6 +610,8 @@
 
     $(document).ready(function () {
         $("#cancel").click(function () {
+            document.getElementById("admin-notes").value = ""
+            document.getElementById("Select-cancel").value = -1
             $("#myModal").modal("hide");
         });
     });
@@ -622,24 +624,33 @@
 
     $(document).ready(function () {
         $("#cancel-assign").click(function () {
+            document.getElementById("Select-physician").value = -1
+            document.getElementById("transfer-notes").value = ""
             $("#myModalAssign").modal("hide");
         });
     });
 
     $(document).ready(function () {
         $("#cancel-link").click(function () {
+            document.getElementById("business-phone").value = ""
+            document.getElementById("business-email").value = ""
+            document.getElementById("business-last-name").value = ""
+            document.getElementById("business-first-name").value = ""
             $("#myModalLink").modal("hide");
         });
     });
 
     $(document).ready(function () {
         $("#cancel-block").click(function () {
+            document.getElementById("block-reason").value = ""
             $("#myModalBlock").modal("hide");
         });
     });
 
     $(document).ready(function () {
         $("#cancel-transfer").click(function () {
+            document.getElementById("Select-physician-t").value = -1
+            document.getElementById("transfer-notes-t").value = ""
             $("#myModalTransfer").modal("hide");
         });
     });

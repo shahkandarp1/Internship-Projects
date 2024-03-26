@@ -108,6 +108,7 @@ namespace HalloDoc.Controllers
             if(status)
             {
                 TempData["success"] = "Data Editted Successfully!!";
+                return RedirectToAction("ViewCase", new { id = model.RequestId });
             }
             else
             {
@@ -129,8 +130,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Request could not be Cancelled!!";
             }
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard",adminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         [HttpPost]
@@ -146,8 +146,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Link could not be Sent!!";
             }
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", adminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         public IActionResult CreateRequest()
@@ -228,8 +227,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Admin Note Could not be updated!!";
             }
-            ViewNotesViewModel viewNoteViewModel = _admin.viewNotes(viewNotesViewModel.RequestId);
-            return View(viewNoteViewModel);
+            return RedirectToAction("ViewNotes",new { id = viewNotesViewModel.RequestId });
         }
 
         public IActionResult ViewUploads(int id)
@@ -290,8 +288,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Request could not be assigned!!";
             }
-            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", newAdminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
@@ -312,8 +309,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Request could not be transferred!!";
             }
-            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", newAdminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         public IActionResult SendAgreement(AdminDashboardViewModel adminDashboardViewModel)
@@ -341,8 +337,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Request could not be Blocked!!";
             }
-            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", newAdminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
 
         public IActionResult ClearCase(AdminDashboardViewModel adminDashboardViewModel)
@@ -452,6 +447,11 @@ namespace HalloDoc.Controllers
             return View(encounterFormViewModel);
         }
 
+        /// <summary>
+        /// Encounter Form Post Method
+        /// </summary>
+        /// <param name="encounterFormViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EncounterForm(EncounterFormViewModel encounterFormViewModel)
@@ -546,13 +546,25 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
-            if(physicianAccountViewModel.Signature == null || physicianAccountViewModel.Photo == null)
+            List<Role> roles = _admin.getPhysicianRoles();
+            physicianAccountViewModel.roles = roles;
+            if (physicianAccountViewModel.Password == null || physicianAccountViewModel.Password == "")
+            {
+                ModelState.AddModelError("Password", "Please Enter Password");
+                return View(physicianAccountViewModel);
+            }
+            if(physicianAccountViewModel.role_id == -1)
+            {
+                ModelState.AddModelError("role_id", "Please Select Role");
+                return View(physicianAccountViewModel);
+            }
+            if (physicianAccountViewModel.Signature == null || physicianAccountViewModel.Photo == null)
             {
                 TempData["error"] = "Please upload neccessarry documents!!";
                 return View(physicianAccountViewModel);
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if(_patient.getAspNetUser(physicianAccountViewModel.Email) != null)
                 {
@@ -903,6 +915,50 @@ namespace HalloDoc.Controllers
         {
             ProviderLocationViewModel providerLocationViewModel = _admin.getProviderLocation();
             return View(providerLocationViewModel);
+        }
+
+        public IActionResult CreateAdmin()
+        {
+            AdminProfileViewModel adminProfileViewModel = _admin.getCreateAdminProfilePageDetails();
+            return View(adminProfileViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateAdmin(AdminProfileViewModel adminProfileViewModel)
+        {
+            List<Role> roles = _admin.getAdminRoles();
+            adminProfileViewModel.roles = roles;
+            if (adminProfileViewModel.Password == null || adminProfileViewModel.Password == "")
+            {
+                ModelState.AddModelError("Password", "Please Enter Password");
+                return View(adminProfileViewModel);
+            }
+            if (adminProfileViewModel.role_id == -1)
+            {
+                ModelState.AddModelError("role_id", "Please Select Role");
+                return View(adminProfileViewModel);
+            }
+            if(ModelState.IsValid)
+            {
+                if (_patient.getAspNetUser(adminProfileViewModel.Email) != null)
+                {
+                    TempData["error"] = "This Email Id Already Exists!!";
+                    return View(adminProfileViewModel);
+                }
+                Task<bool> isCreated = _admin.createAdmin(adminProfileViewModel);
+                if(isCreated.Result)
+                {
+                    TempData["success"] = "Admin Created Successfully!!";
+                    return RedirectToAction("Dashboard");
+                }
+                else
+                {
+                    TempData["error"] = "Admin could not be Created!!";
+                }
+            }
+            return View(adminProfileViewModel);
+
         }
 
     }

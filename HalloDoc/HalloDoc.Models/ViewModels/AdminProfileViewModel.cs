@@ -9,14 +9,14 @@ namespace HalloDoc.ViewModels
 {
     public class AdminProfileViewModel
     {
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
             ErrorMessage = "Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string? Password { get; set; }
         public short? status { get; set; }
         public int? role_id { get; set; }
 
-        public List<Role> roles { get; set; }
+        public List<Role>? roles { get; set; }
 
         [Required]
         public string FirstName { get; set; }

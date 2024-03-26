@@ -112,6 +112,7 @@ namespace HalloDoc.Repository.Interface
         public Task<bool> contactProvider(ProviderViewModel providerViewModel);
 
         public PhysicianAccountViewModel getCreatePhysicianDetails();
+        public List<Role> getPhysicianRoles();
 
         public Task<bool> createPhysician(PhysicianAccountViewModel physicianAccountViewModel);
 
@@ -166,5 +167,9 @@ namespace HalloDoc.Repository.Interface
         public bool editBusiness(BusinessViewModel businessViewModel);
         public bool deleteBusiness(int id);
         public ProviderLocationViewModel getProviderLocation();
+
+        public AdminProfileViewModel getCreateAdminProfilePageDetails();
+        public List<Role> getAdminRoles();
+        public Task<bool> createAdmin(AdminProfileViewModel adminProfileViewModel);
     }
 }

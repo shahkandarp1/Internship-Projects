@@ -42,7 +42,6 @@
 
     @{
         var list = System.Text.Json.JsonSerializer.Serialize(Model.physicianLocations);
-        Debug.WriteLine(list);
     }
 
     var markersData = @Html.Raw(list);

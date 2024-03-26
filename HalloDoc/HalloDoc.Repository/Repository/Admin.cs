@@ -39,6 +39,7 @@ using Microsoft.Extensions.Configuration;
 using Twilio.Http;
 using Twilio.Types;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Twilio.Rest.Trusthub.V1.TrustProducts;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -57,7 +58,7 @@ namespace HalloDoc.Repository.Repository
             _configuration = configuration;
         }
 
-        AdminDashboardViewModel IAdmin.adminDashboardContent(string status, string? search, string? requestor, int? region,int page=1,int pageSize = 10)
+        public AdminDashboardViewModel adminDashboardContent(string status, string? search, string? requestor, int? region,int page=1,int pageSize = 10)
         {
             Expression<Func<Request, bool>> exp;
             if(status == "New")
@@ -162,8 +163,8 @@ namespace HalloDoc.Repository.Repository
         {
             try
             {
-                List<Request> data = new List<Request>();
-                data = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
+                //List<Request> data = new List<Request>();
+                var data = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("Export All");
 
@@ -411,13 +412,8 @@ namespace HalloDoc.Repository.Repository
             try
             {
                 RequestClient requestClient = _db.RequestClients.FirstOrDefault(r=>r.RequestClientId == model.RequestClientId);
-                requestClient.FirstName = model.FirstName;
-                requestClient.LastName = model.LastName;
-                requestClient.PhoneNumber = model.PhoneNumber;
-                requestClient.Email = model.Email;
-                requestClient.StrMonth = model.DateOfBirth.Month.ToString();
-                requestClient.IntYear = model.DateOfBirth.Year;
-                requestClient.IntDate = model.DateOfBirth.Day;
+                requestClient.PhoneNumber = model?.PhoneNumber ?? requestClient.PhoneNumber;
+                requestClient.Email = model?.Email ?? requestClient.Email;
                 _db.RequestClients.Update(requestClient);
                 _db.SaveChanges();
                 return true;
@@ -1137,7 +1133,7 @@ namespace HalloDoc.Repository.Repository
 
                     
                     success = true;
-                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, true, retryCount,5);
+                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, true, retryCount,1);
                     break;
                 }
                 catch (Exception ex)
@@ -1145,7 +1141,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3) 
                     {
-                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, cookieModel.userId, -1, false, retryCount,5);
+                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, false, retryCount,1);
                     }
                     retryCount++;
                 }
@@ -1157,7 +1153,7 @@ namespace HalloDoc.Repository.Repository
 
         void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id)
         {
-            if(request_id!=-1)
+            if(role_id == 1)
             {
                 var emailLog = new EmailLog
                 {
@@ -1166,12 +1162,30 @@ namespace HalloDoc.Repository.Repository
                     EmailId = userEmail,
                     ConfirmationNumber = confirmation_no,
                     RequestId = request_id,
-                    AdminId = admin_id,
                     IsEmailSent = new BitArray(new[] { success }) ,
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
                     SentDate = DateTime.Now,
+
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+            else if(role_id == 3)
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    PhysicianId = physician_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -1185,7 +1199,6 @@ namespace HalloDoc.Repository.Repository
                     SubjectName = subject,
                     EmailId = userEmail,
                     ConfirmationNumber = confirmation_no,
-                    PhysicianId = physician_id,
                     AdminId = admin_id,
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
@@ -1197,7 +1210,6 @@ namespace HalloDoc.Repository.Repository
                 _db.EmailLogs.Add(emailLog);
                 _db.SaveChanges();
             }
-
             
         }
 
@@ -1360,7 +1372,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,cookieModel.userId, -1, true, retryCount,5);
+                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,-1, -1, true, retryCount,1);
                     break;
                 }
                 catch (Exception ex)
@@ -1368,7 +1380,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount,5);
+                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1);
                     }
                     retryCount++;
                 }
@@ -1405,7 +1417,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, true, retryCount,5);
+                    LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, true, retryCount,1);
                     break;
                 }
                 catch (Exception ex)
@@ -1413,7 +1425,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, cookieModel.userId, -1, false, retryCount,5);
+                        LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1);
                     }
                     retryCount++;
                 }
@@ -2151,7 +2163,7 @@ namespace HalloDoc.Repository.Repository
 
 
                         success = true;
-                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount, (int)physician.RoleId);
+                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount, 3);
                         break;
                     }
                     catch (Exception ex)
@@ -2159,7 +2171,7 @@ namespace HalloDoc.Repository.Repository
 
                         if (retryCount >= 3)
                         {
-                            LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount, (int)physician.RoleId);
+                            LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount, 3);
                         }
                         retryCount++;
                     }
@@ -2200,7 +2212,7 @@ namespace HalloDoc.Repository.Repository
 
 
                         success = true;
-                        LogSMS(messageBody, physician.Mobile , null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount, (int)physician.RoleId);
+                        LogSMS(messageBody, physician.Mobile , null, -1, -1, physician.PhysicianId, true, retryCount, 3);
                         break;
                     }
                     catch (Exception ex)
@@ -2208,7 +2220,7 @@ namespace HalloDoc.Repository.Repository
 
                         if (retryCount >= 3)
                         {
-                            LogSMS(messageBody, physician.Mobile, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount, (int)physician.RoleId);
+                            LogSMS(messageBody, physician.Mobile, null, -1, -1, physician.PhysicianId, false, retryCount, 3);
                         }
                         retryCount++;
                     }
@@ -2234,6 +2246,8 @@ namespace HalloDoc.Repository.Repository
 
             List<Region> regions = _db.Regions.ToList();
 
+            List<Role> roles = _db.Roles.Where(r => r.AccountType == 2 && r.IsDeleted == new BitArray(new[] { false })).ToList();
+
             List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
 
             for(var i=0;i<regions.Count;++i)
@@ -2249,7 +2263,8 @@ namespace HalloDoc.Repository.Repository
             PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel()
             {
                 adminNavbarViewModel = adminNavbarViewModel,
-                checkboxViewModels = checkboxViewModels
+                checkboxViewModels = checkboxViewModels,
+                roles = roles
             };
             return physicianAccountViewModel;
         }
@@ -2264,8 +2279,7 @@ namespace HalloDoc.Repository.Repository
                 UserName = string.Concat("MD.", physicianAccountViewModel.LastName.Substring(0, 1).ToUpper() , physicianAccountViewModel.LastName.Substring(1).ToLower() , "." , physicianAccountViewModel.FirstName.Substring(0, 1).ToUpper()),
                 CreatedDate = DateTime.Now
             };
-            var password = string.Concat(aspNetUser.UserName, DateTime.Now.ToString("yyyyMMddHHmmss"));
-            aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, password);
+            aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, physicianAccountViewModel.Password);
             _db.AspNetUsers.Add(aspNetUser);
             _db.SaveChanges();
 
@@ -2308,7 +2322,7 @@ namespace HalloDoc.Repository.Repository
                 IsCredentialDoc = new BitArray(new[] { physicianAccountViewModel.IsCredentialDoc }),
                 IsDeleted = new BitArray(new[] { false }),
                 Status = 2,
-                RoleId = 1,
+                RoleId = physicianAccountViewModel.role_id,
                 CreatedDate = DateTime.Now,
                 CreatedBy = cookieModel.aspId
             };
@@ -2438,7 +2452,7 @@ namespace HalloDoc.Repository.Repository
                 string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
                 var platformTitle = "HalloDoc";
                 var subject = "Account Credentials - HalloDoc";
-                var body = $"Hello {physician.FirstName} {physician.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {physician.Email}<br />Password : {password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                var body = $"Hello {physician.FirstName} {physician.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {physician.Email}<br />Password : {physicianAccountViewModel.Password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
                 try
                 {
 
@@ -2466,7 +2480,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, true, retryCount,(int)physician.RoleId);
+                    LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount,3);
                     break;
                 }
                 catch (Exception ex)
@@ -2474,13 +2488,18 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, physician.Email, null, -1, cookieModel.userId, physician.PhysicianId, false, retryCount,(int)physician.RoleId);
+                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount,3);
                     }
                     retryCount++;
                 }
             }
 
             return success;
+        }
+
+        List<Role> IAdmin.getPhysicianRoles()
+        {
+            return _db.Roles.Where(r => r.AccountType == 2 && r.IsDeleted == new BitArray(new[] { false })).ToList();
         }
 
         PhysicianAccountViewModel IAdmin.getPhysicianDetails(int id)
@@ -3752,6 +3771,151 @@ namespace HalloDoc.Repository.Repository
 
             return providerLocationViewModel;
 
+        }
+
+        AdminProfileViewModel IAdmin.getCreateAdminProfilePageDetails()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access",
+                menus = cookieModel.menus
+            };
+
+            List<Region> regions = _db.Regions.ToList();
+
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+            List<Role> roles = _db.Roles.Where(r => r.AccountType == 1 && r.IsDeleted == new BitArray(new[] { false })).ToList();
+            for (var i = 0; i < regions.Count; i++)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel()
+                {
+                    Id = regions[i].RegionId,
+                    Name = regions[i].Name,
+                    isChecked = false
+                });
+            }
+
+            AdminProfileViewModel adminProfileViewModel = new AdminProfileViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                checkboxViewModels = checkboxViewModels,
+                roles = roles
+            };
+            return adminProfileViewModel;
+        }
+
+        List<Role> IAdmin.getAdminRoles()
+        {
+            return _db.Roles.Where(r => r.AccountType == 1 && r.IsDeleted == new BitArray(new[] { false })).ToList();
+        }
+
+        async Task<bool> IAdmin.createAdmin(AdminProfileViewModel adminProfileViewModel)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.getDetails(token);
+
+                var passwordHasher = new PasswordHasher<AspNetUser>();
+                Region region = _db.Regions.FirstOrDefault(r => r.RegionId == adminProfileViewModel.RegionId);
+
+                AspNetUser aspNetUser = new AspNetUser()
+                {
+                    Email = adminProfileViewModel.Email,
+                    UserName = string.Concat(adminProfileViewModel.LastName.Substring(0, 1).ToUpper(), adminProfileViewModel.LastName.Substring(1).ToLower(), adminProfileViewModel.FirstName.Substring(0, 1).ToUpper()),
+                    CreatedDate = DateTime.Now
+                };
+                aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, adminProfileViewModel.Password);
+                _db.AspNetUsers.Add(aspNetUser);
+                _db.SaveChanges();
+
+                AspNetUserRole aspNetUserRole = new AspNetUserRole
+                {
+                    UserId = aspNetUser.Id,
+                    RoleId = 2
+                };
+
+                _db.AspNetUserRoles.Add(aspNetUserRole);
+                _db.SaveChanges();
+
+                HalloDoc.Admin admin = new HalloDoc.Admin
+                {
+                    AspNetUserId = aspNetUser.Id,
+                    RoleId = adminProfileViewModel.role_id,
+                    FirstName = adminProfileViewModel.FirstName,
+                    LastName = adminProfileViewModel.LastName,
+                    Email = adminProfileViewModel.Email,
+                    Mobile = adminProfileViewModel.PhoneNumber,
+                    Address1 = adminProfileViewModel.Address1,
+                    Address2 = adminProfileViewModel.Address2,
+                    City = adminProfileViewModel.City,
+                    RegionId = adminProfileViewModel.RegionId,
+                    Zip = adminProfileViewModel.ZipCode,
+                    AltPhone = adminProfileViewModel.Alt_PhoneNumber,
+                    Status = 2,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = cookieModel.aspId,
+                    IsDeleted = false,
+                };
+
+                _db.Admins.Add(admin);
+                _db.SaveChanges();
+
+                for (var i = 0; i < adminProfileViewModel.checkboxViewModels.Count; ++i)
+                {
+                    if (adminProfileViewModel.checkboxViewModels[i].isChecked == true)
+                    {
+                        AdminRegion adminRegion = new AdminRegion()
+                        {
+                            AdminId = admin.AdminId,
+                            RegionId = (int)adminProfileViewModel.checkboxViewModels[i].Id
+                        };
+                        _db.AdminRegions.Add(adminRegion);
+                        _db.SaveChanges();
+                    }
+                }
+
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                var platformTitle = "HalloDoc";
+                var subject = "Account Credentials - HalloDoc";
+                var body = $"Hello {admin.FirstName} {admin.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {admin.Email}<br />Password : {adminProfileViewModel.Password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
+
+                SmtpClient client = new SmtpClient("smtp.office365.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(senderEmail, senderPassword),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false
+                };
+
+                MailMessage mailMessage = new MailMessage
+                {
+                    From = new MailAddress(senderEmail, "HalloDoc"),
+                    Subject = subject,
+                    IsBodyHtml = true,
+                    Body = body
+                };
+
+                mailMessage.To.Add(admin.Email);
+
+
+                await client.SendMailAsync(mailMessage);
+
+                return true;
+
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
         }
 
     }

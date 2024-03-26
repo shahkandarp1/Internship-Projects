@@ -25,6 +25,14 @@
     cursor:pointer;
 }
 
+/*Create Admin Account*/
+
+.create-account-btn {
+    background-color: #198754;
+    color: white;
+    width: 110px;
+}
+
 @media screen and (max-width:426px)
 {
     .form-floating > .select:not(:placeholder-shown) {

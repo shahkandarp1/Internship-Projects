@@ -107,7 +107,7 @@ namespace HalloDoc.ViewModels
 
         public int? role_id { get; set; }
 
-        public List<Role> roles { get; set; } 
+        public List<Role>? roles { get; set; } 
 
         public int? PhysicianId { get; set; }
 

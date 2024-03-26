@@ -74,6 +74,12 @@
     border-color: #7AD8EE;
 }
 
+.create-account-btn {
+    background-color: #198754;
+    color: white;
+    width: 110px;
+}
+
 
 @media screen and (max-width:625px) {
     .form-check {

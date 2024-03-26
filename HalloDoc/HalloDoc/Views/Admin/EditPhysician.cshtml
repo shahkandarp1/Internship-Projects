@@ -123,7 +123,7 @@
                         @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <input class="form-check-input top-editable" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" disabled>
                                 <label class="form-check-label" for="flexCheckDefault@(i)">
                                     @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
                                 </label>
