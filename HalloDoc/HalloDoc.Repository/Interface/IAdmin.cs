@@ -25,7 +25,7 @@ namespace HalloDoc.Repository.Interface
 
         public bool cancelRequest(int id, string notes, string select);
 
-        public bool sendLink(AdminDashboardViewModel dashboardViewModel);
+        public Task<bool> sendLink(AdminDashboardViewModel dashboardViewModel);
 
         public bool verifyRegion(string region);
 
@@ -33,7 +33,7 @@ namespace HalloDoc.Repository.Interface
 
         public PatientRequestViewModel createRequest();
 
-        public bool createRequest(PatientRequestViewModel model);
+        public Task<bool> createRequest(PatientRequestViewModel model);
 
         public ViewNotesViewModel viewNotes(int id);
 
@@ -171,5 +171,7 @@ namespace HalloDoc.Repository.Interface
         public AdminProfileViewModel getCreateAdminProfilePageDetails();
         public List<Role> getAdminRoles();
         public Task<bool> createAdmin(AdminProfileViewModel adminProfileViewModel);
+
+        public UserAccessViewModel GetUserAccessDetails(int? roleid, int page = 1, int pageSize = 10);
     }
 }

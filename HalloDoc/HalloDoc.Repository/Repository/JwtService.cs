@@ -30,7 +30,7 @@ namespace HalloDoc.Repository.Repository
         }
 
 
-        string IJwtService.GenerateJWTAuthetication(AspNetUser aspNetUser)
+        public string GenerateJWTAuthetication(AspNetUser aspNetUser)
         {
 
             AspNetUserRole aspNetRole = _db.AspNetUserRoles.Include(a=>a.Role).FirstOrDefault(a=>a.UserId == aspNetUser.Id);
@@ -99,7 +99,7 @@ namespace HalloDoc.Repository.Repository
         }
 
 
-        bool IJwtService.ValidateToken(string token,out JwtSecurityToken jwtSecurityToken)
+        public bool ValidateToken(string token,out JwtSecurityToken jwtSecurityToken)
         {
 
             jwtSecurityToken = null;
@@ -141,7 +141,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        CookieModel IJwtService.getDetails(string token)
+        public CookieModel getDetails(string token)
         {
             JwtSecurityToken jwtSecurityToken = null;
             var tokenHandler = new JwtSecurityTokenHandler();

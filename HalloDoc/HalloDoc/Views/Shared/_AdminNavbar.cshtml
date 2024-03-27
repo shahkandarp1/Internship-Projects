@@ -62,10 +62,10 @@
     dashboardrole = Model.menus.Contains("Dashboard") ? "" : "hidden";
     providerlocationrole = Model.menus.Contains("Provider Location") ? "" : "hidden";
     profilerole = Model.menus.Contains("My Profile") ? "" : "hidden";
-    providerrole = Model.menus.Contains("Provider") ? "" : "hidden";
+    providerrole = Model.menus.Contains("Providerr") ? "" : "hidden";
     schedulingrole = Model.menus.Contains("Scheduling") ? "" : "hidden";
     invoicingrole = Model.menus.Contains("Invoicing") ? "" : "hidden";
-    providermainrole = Model.menus.Contains("Provider") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "hidden";
+    providermainrole = Model.menus.Contains("Providerr") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "hidden";
     partnerrole = Model.menus.Contains("Partners") ? "" : "hidden";
     accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") || Model.menus.Contains("Create Admin Account") ? "" : "hidden";
     accountaccessrole = Model.menus.Contains("Account Access") ? "" : "hidden";
@@ -103,8 +103,8 @@
         <button class="sidebar-tablinks accordion-mob-btn @accessM @accessrole" onclick="clearStorage()">Access</button>
         <div class="panel">
             <a class="mobile-sidebar-a accord-inner @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a>
-            <a class="mobile-sidebar-a accord-inner @useraccessrole">User Access</a>
-            <a class="mobile-sidebar-a accord-inner @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin Account</a>
+            <a class="mobile-sidebar-a accord-inner @useraccessrole" asp-action="UserAccess" asp-controller="Admin">User Access</a>
+            <a class="mobile-sidebar-a accord-inner @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin</a>
         </div>
         <button class="sidebar-tablinks accordion-mob-btn @recordM @recordrole" onclick="clearStorage()">Records</button>
         <div class="panel">
@@ -156,8 +156,8 @@
             </button>
             <ul class="dropdown-menu bg-body" aria-labelledby="access">
                 <li><a class="navbar-dropdown-item dropdown-item @accountaccessrole" asp-action="AccountAccess" asp-controller="Admin">Account Access</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @useraccessrole" href="#">User Access</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin Account</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @useraccessrole" asp-action="UserAccess" asp-controller="Admin">User Access</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @createadminaccount" asp-action="CreateAdmin" asp-controller="Admin">Create Admin</a></li>
             </ul>
         </div>
         <div class="dropdown navbar-dropdown">

@@ -35,56 +35,114 @@ namespace HalloDoc.Controllers
             _jwt = jwt;
             _patient = patient;
         }
-
+        /// <summary>
+        /// Get Method for Admin Dashboard
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Dashboard()
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New",null,null,-1);
             return View(adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status New
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult New(string? search,string ?requestor,int? region,int page=1,int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable",adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status Pending
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult Pending(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Pending", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status Active
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult Active(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Active", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status Conclude
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult Conclude(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Conclude", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status To Close
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult Close(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("ToClose", search, requestor, region,page,pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Filter Method for Status Unpaid
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="requestor"></param>
+        /// <param name="region"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult Unpaid(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
             AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Unpaid", search, requestor, region, page, pageSize);
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
-
+        /// <summary>
+        /// Downloads Excel File with all request data
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ExportAll()
         {
             MemoryStream memoryStream = _admin.exportAll();
              return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "All Data.xlsx");
         }
 
-
+        /// <summary>
+        /// Downloads Excel File of the filtered data present in current page
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Dashboard(AdminDashboardViewModel model)
@@ -93,13 +151,22 @@ namespace HalloDoc.Controllers
             MemoryStream memoryStream = _admin.export(viewmodel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Data-{model.status}.xlsx");
         }
-
+        /// <summary>
+        /// Get Method for View Case Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult ViewCase(int id)
         {
             
             ViewCaseViewModel viewCaseViewModel= _admin.viewCase(id);
             return View(viewCaseViewModel);
         }
+        /// <summary>
+        /// Post Method for View Case that updates request client details
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ViewCase(ViewCaseViewModel model)
@@ -116,7 +183,11 @@ namespace HalloDoc.Controllers
             }
             return View(model);
         }
-
+        /// <summary>
+        /// This Method will cancel the request from view case page
+        /// </summary>
+        /// <param name="viewCaseViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CancelRequest(ViewCaseViewModel viewCaseViewModel)
@@ -132,13 +203,17 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// This will send link of submit request page in email and sms to the email and phonenumber specified by the admin in the sendlink modal present in admin dashboard 
+        /// </summary>
+        /// <param name="dashboardViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SendLink(AdminDashboardViewModel dashboardViewModel)
         {
-            bool isSent = _admin.sendLink(dashboardViewModel);
-            if (isSent)
+            Task<bool> isSent = _admin.sendLink(dashboardViewModel);
+            if (isSent.Result)
             {
                 TempData["success"] = "Link Sent Successfully!!";
             }
@@ -148,13 +223,20 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// This is get method for create request page in admin dashboard page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateRequest()
         {
             PatientRequestViewModel patientRequestViewModel = _admin.createRequest();
             return View(patientRequestViewModel);
         }
-
+        /// <summary>
+        /// This is a post method which will create patient request from admin dashboard
+        /// </summary>
+        /// <param name="patientRequestViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateRequest(PatientRequestViewModel? patientRequestViewModel)
@@ -175,8 +257,8 @@ namespace HalloDoc.Controllers
                     return View(patientRequestViewModel);
                 }
 
-                bool requestCreated = _admin.createRequest(patientRequestViewModel);
-                if(requestCreated)
+                Task<bool> requestCreated = _admin.createRequest(patientRequestViewModel);
+                if(requestCreated.Result)
                 {
                     TempData["success"] = "Request created Successfully!!";
                     return RedirectToAction("Dashboard");
@@ -189,7 +271,11 @@ namespace HalloDoc.Controllers
             }
             return View(patientRequestViewModel);
         }
-
+        /// <summary>
+        /// This will verify whether state specified in create request form is there in the region where currently this service is available 
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult VerifyRegion(string region)
         {
@@ -207,13 +293,21 @@ namespace HalloDoc.Controllers
                 return Json(new { isVerified = 3 });
             }
         }
-
+        /// <summary>
+        /// Get Method of View Note Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult ViewNotes(int id)
         {
             ViewNotesViewModel viewNotesViewModel = _admin.viewNotes(id);
             return View(viewNotesViewModel);
         }
-
+        /// <summary>
+        /// Post Method of View Notes which will update admin note
+        /// </summary>
+        /// <param name="viewNotesViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ViewNotes(ViewNotesViewModel viewNotesViewModel)
@@ -229,25 +323,43 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("ViewNotes",new { id = viewNotesViewModel.RequestId });
         }
-
+        /// <summary>
+        /// Get method of View Uploads Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult ViewUploads(int id)
         {
             ViewDocumentModal viewDocumentModal = _admin.viewUploads(id);
             return View(viewDocumentModal);
         }
-
+        /// <summary>
+        /// This method is used for uploading file in View Uploads action
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult FileUpload([FromForm] IFormFile file, [FromForm] int id)
         {
             Task<bool> isFileUploaded = _admin.fileUpload(file,id);
             return Json(new { isFileUploaded = isFileUploaded });
         }
-
+        /// <summary>
+        /// This method will delete single file in View Uploads Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DeleteSingle(int id)
         {
             int requestid = _admin.deleteSingleFile(id);
             return RedirectToAction("ViewUploads",new { id = requestid });
         }
+        /// <summary>
+        /// This method is used for downloading multiple files in View Uploads Action
+        /// </summary>
+        /// <param name="viewDocumentModal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ViewUploads(ViewDocumentModal viewDocumentModal)
@@ -258,25 +370,41 @@ namespace HalloDoc.Controllers
             Response.Headers.Add("Content-Disposition", $"attachment; filename={result.Result.Item2}");
             return File(result.Result.Item1.ToArray(), "application/zip", result.Result.Item2);
         }
-
+        /// <summary>
+        /// This method will delete selected files in View Uploads Action
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public IActionResult DeleteAll([FromForm]string filename)
         {
             int requestid = _admin.deleteAllFile(filename);
             return Json(new { isDeleted = true });
         }
-
+        /// <summary>
+        /// This method will send selected file as a attatchment in the mail to the patient in View Uploads Action
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public IActionResult SendMailDocuments([FromForm] string filename)
         {
             Task<bool> sentMail = _admin.sendDocumentsMail(filename);
             return Json(new { isSent = sentMail.Result });
         }
-
+        /// <summary>
+        /// This method will return all the physician present in a specific region in json format
+        /// </summary>
+        /// <param name="regionid"></param>
+        /// <returns></returns>
         public IActionResult GetPhysician(int regionid)
         {
             List<Physician> physician = _admin.getPhysician(regionid);
             return Json(new { data=physician});
         }
-
+        /// <summary>
+        /// It is a post method that will assign case of a specific request to the specified physician
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult AssignCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isAssigned = _admin.assignCase(adminDashboardViewModel);
@@ -290,7 +418,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// It is a post method that will transfer case of a specific request to the specified physician
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isExists = _admin.isSamePhysician(adminDashboardViewModel);
@@ -311,7 +443,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// This will send link of agreement to the patient in email and message
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult SendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
             Task<bool> isSent = _admin.sendAgreement(adminDashboardViewModel);
@@ -325,7 +461,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// This will block the specified request i.e. its status will be set to 11 and entry corresponding to that request will be added in BlockRequests table
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult BlockCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isBlocked = _admin.blockCase(adminDashboardViewModel);
@@ -339,7 +479,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// This will clear the specified request i.e. its status will be set to 10
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult ClearCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isCleared = _admin.clearCase(adminDashboardViewModel);
@@ -354,25 +498,41 @@ namespace HalloDoc.Controllers
             AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
             return View("Dashboard", newAdminDashboardViewModel);
         }
-
+        /// <summary>
+        /// This is the Get method of Orders Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult Orders(int id)
         {
             OrdersViewModel ordersViewModel = _admin.orders(id);
             return View(ordersViewModel);
         }
-
+        /// <summary>
+        /// It will return all Health Professionals of the specified Health Professional Type and will return data in Json 
+        /// </summary>
+        /// <param name="professionid"></param>
+        /// <returns></returns>
         public IActionResult GetBusiness(int professionid)
         {
             var business = _admin.getBusiness(professionid);
             return Json(new { data=business });
         }
-        
+        /// <summary>
+        /// It will return data of a specific Health Professionals and will return data in Json
+        /// </summary>
+        /// <param name="businessid"></param>
+        /// <returns></returns>
         public IActionResult GetBusinessData(int businessid)
         {
             var business = _admin.getBusinessData(businessid);
             return Json(new { data=business });
         }
-
+        /// <summary>
+        /// This is a post method of Orders action and it will place order for the specific request
+        /// </summary>
+        /// <param name="ordersViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Orders(OrdersViewModel ordersViewModel)
@@ -399,13 +559,20 @@ namespace HalloDoc.Controllers
             }
             return View(ordersViewModel);
         }
-
+        /// <summary>
+        /// It is a Get Method for Admin Profile Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Profile()
         {
             AdminProfileViewModel adminProfileViewModel = _admin.getAdmin();
             return View(adminProfileViewModel);
         }
-
+        /// <summary>
+        /// It is a post method that will update details in the admin profile page
+        /// </summary>
+        /// <param name="adminProfileViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Profile(AdminProfileViewModel adminProfileViewModel)
@@ -422,7 +589,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Profile");
         }
-
+        /// <summary>
+        /// This method will reset password for specific admin
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public IActionResult ResetPasswordProfile(string password)
         {
             if(password == null)
@@ -440,7 +611,11 @@ namespace HalloDoc.Controllers
                 return Json(new { isReseted = 3 });
             }
         }
-
+        /// <summary>
+        /// It is a Get method for Encounter Form for specific request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult EncounterForm(int id)
         {
             EncounterFormViewModel encounterFormViewModel = _admin.getEncounterFormDetails(id);
@@ -467,13 +642,21 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("EncounterForm",new { id = encounterFormViewModel.RequestId});
         }
-
+        /// <summary>
+        /// It is a Get Method for Close Case Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult CloseCase(int id)
         {
             CloseCaseViewModel closeCaseViewModel = _admin.getCloseCase(id);
             return View(closeCaseViewModel);
         }
-
+        /// <summary>
+        /// It is a Post Method of Close Case Action that will update Request Client details
+        /// </summary>
+        /// <param name="closeCaseViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CloseCase(CloseCaseViewModel closeCaseViewModel)
@@ -489,7 +672,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("CloseCase",new { id = closeCaseViewModel.RequestId});
         }
-
+        /// <summary>
+        /// It will close the case i.e. the status will be set to unpaid(9)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult FinalCloseCase(int id)
         {
             bool isClosed = _admin.closeCase(id);
@@ -503,25 +690,43 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// It is a get method for Provider Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Provider()
         {
             ProviderViewModel providerViewModel = _admin.getProviderPageDetails(-1);
             return View(providerViewModel);
         }
-
+        /// <summary>
+        /// It will return the filtered and paginated result in the provider page in the form of partial view
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult ProviderTable(int id = -1,int page=1,int pageSize = 10)
         {
             ProviderViewModel providerViewModel = _admin.getProviderPageDetails(id,page,pageSize);
             return PartialView("_AdminProviderTable", providerViewModel);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="update"></param>
+        /// <returns></returns>
         public IActionResult ChangeNotification(int id,bool update)
         {
             bool isUpdated = _admin.changeNotification(id,update);
             return Json(new {isUpdated = isUpdated });
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="providerViewModel"></param>
+        /// <returns></returns>
         public IActionResult ContactProvider(ProviderViewModel providerViewModel)
         {
             Task<bool> isSent = _admin.contactProvider(providerViewModel);
@@ -959,6 +1164,18 @@ namespace HalloDoc.Controllers
             }
             return View(adminProfileViewModel);
 
+        }
+
+        public IActionResult UserAccess()
+        {
+            var useraccess = _admin.GetUserAccessDetails(-1);
+            return View(useraccess);
+        }
+        
+        public IActionResult UserAccessTable(int? roleid,int page=1,int pageSize=10)
+        {
+            var useraccess = _admin.GetUserAccessDetails(roleid,page,pageSize);
+            return PartialView("_UserAccessTable",useraccess);
         }
 
     }

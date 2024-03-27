@@ -57,6 +57,10 @@ namespace HalloDoc.Controllers
                 {
                     TempData["error"] = "Your account is currently is not active!! Please Contact Your Admin.";
                 }
+                else if (result == 7)
+                {
+                    TempData["error"] = "Your account is deleted!! Please Contact Your Admin.";
+                }
                 else
                 {
                     TempData["error"] = "There was some issue in Log in!!";
@@ -74,8 +78,8 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
-            bool isSent = _patient.sendResetLink(forgotPasswordViewModel.email);
-            if(isSent)
+            Task<bool> isSent = _patient.sendResetLink(forgotPasswordViewModel.email);
+            if(isSent.Result)
             {
                 TempData["success"] = "Email Sent Successfully!!";
             }

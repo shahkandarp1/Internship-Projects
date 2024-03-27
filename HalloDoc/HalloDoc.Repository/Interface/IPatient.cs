@@ -16,7 +16,7 @@ namespace HalloDoc.Repository.Interface
 
         public bool resetPassword(ResetPasswordViewModel modal);
 
-        public bool sendResetLink(string email);
+        public Task<bool> sendResetLink(string email);
 
         public Task<bool> patientRequest(PatientRequestViewModel modal);
 

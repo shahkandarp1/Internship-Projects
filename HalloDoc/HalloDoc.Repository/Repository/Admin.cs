@@ -40,6 +40,8 @@ using Twilio.Http;
 using Twilio.Types;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Twilio.Rest.Trusthub.V1.TrustProducts;
+using DocumentFormat.OpenXml.Office2016.Excel;
+using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -159,7 +161,7 @@ namespace HalloDoc.Repository.Repository
             return adminDashboardViewModel;
         }
 
-        MemoryStream IAdmin.exportAll()
+        public MemoryStream exportAll()
         {
             try
             {
@@ -235,7 +237,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        MemoryStream IAdmin.export(AdminDashboardViewModel model)
+        public MemoryStream export(AdminDashboardViewModel model)
         {
             try
             {
@@ -424,7 +426,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-         bool IAdmin.cancelRequest(int id,string notes,string request)
+         public bool cancelRequest(int id,string notes,string request)
         {
             try
             {
@@ -452,60 +454,103 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.sendLink(AdminDashboardViewModel dashboardViewModel)
+        public async Task<bool> sendLink(AdminDashboardViewModel dashboardViewModel)
         {
-            try
+            int retryCount = 1;
+            bool success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
             {
+
                 string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                 string senderPassword = "shahkandarp2430";
                 var platformTitle = "HalloDoc";
                 var inviteLink = "https://localhost:7088/CreateRequest/SubmitRequest";
                 var subject = "Register - HalloDoc";
                 var body = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},<br />Click the following link to create new request in our portal,<br /><br /><a href='{inviteLink}'>Create Request</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-
-                SmtpClient client = new SmtpClient("smtp.office365.com")
+                try
                 {
-                    Port = 587,
-                    Credentials = new NetworkCredential(senderEmail, senderPassword),
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false
-                };
-                MailMessage mailMessage = new MailMessage
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = "Create New Request",
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    mailMessage.To.Add(dashboardViewModel.Mail_Email);
+
+                    await client.SendMailAsync(mailMessage);
+
+
+                    success = true;
+                    LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, true, retryCount, -1);
+                    break;
+                }
+                catch (Exception ex)
                 {
-                    From = new MailAddress(senderEmail, "HalloDoc"),
-                    Subject = "Create New Request",
-                    IsBodyHtml = true,
-                    Body = body
-                };
 
-                mailMessage.To.Add(dashboardViewModel.Mail_Email);
+                    if (retryCount >= 3)
+                    {
+                        LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, false, retryCount, -1);
+                    }
+                    retryCount++;
+                }
+            }
 
-                client.SendMailAsync(mailMessage);
+            retryCount = 1;
+            success = false;
+
+            while (retryCount <= 3 && !success) // Set retry limit
+            {
+                var platformTitle = "HalloDoc";
+                var inviteLink = "https://localhost:7088/CreateRequest/SubmitRequest";
 
                 var accountSid = _configuration["Twilio:accountSid"];
                 var authToken = _configuration["Twilio:authToken"];
                 var twilionumber = _configuration["Twilio:twilioNumber"];
 
                 var messageBody = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},\nClick the following link to create new request in our portal,\n\n{inviteLink}\n\nRegards,\n{platformTitle}";
+                try
+                {
 
-                TwilioClient.Init(accountSid, authToken);
+                    TwilioClient.Init(accountSid, authToken);
 
-                var message = MessageResource.Create(
-                    from: new Twilio.Types.PhoneNumber(twilionumber),
-                    body: messageBody,
-                    to: new Twilio.Types.PhoneNumber("+91" + dashboardViewModel.Mail_PhoneNumber)
-                );
+                    var message = MessageResource.Create(
+                        from: new Twilio.Types.PhoneNumber(twilionumber),
+                        body: messageBody,
+                        to: new Twilio.Types.PhoneNumber("+91" + dashboardViewModel.Mail_PhoneNumber)
+                    );
 
-                return true;
+
+                    success = true;
+                    LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, true, retryCount, -1);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    if (retryCount >= 3)
+                    {
+                        LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, false, retryCount, -1);
+                    }
+                    retryCount++;
+                }
             }
-            catch(Exception exp)
-            {
-                return false;
-            }
+
+            return success;
         }
 
-        bool IAdmin.verifyRegion(string region)
+        public bool verifyRegion(string region)
         {
             var region_check = _db.Regions.FirstOrDefault(u => u.Name == region.Trim().ToLower().Replace(" ", ""));
             if(region_check != null)
@@ -518,7 +563,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.verifyBlock(string Email)
+        public bool verifyBlock(string Email)
         {
             var user = _db.AspNetUsers.FirstOrDefault(u=>u.Email == Email); 
             if(user != null)
@@ -532,7 +577,7 @@ namespace HalloDoc.Repository.Repository
             return false;
         }
 
-        PatientRequestViewModel IAdmin.createRequest()
+        public PatientRequestViewModel createRequest()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -552,7 +597,7 @@ namespace HalloDoc.Repository.Repository
             return patientRequestViewModel;
         }
 
-        bool IAdmin.createRequest(PatientRequestViewModel modal)
+        public async Task<bool> createRequest(PatientRequestViewModel modal)
         {
             try
             {
@@ -754,34 +799,58 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                    int retryCount = 1;
+                    bool success = false;
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    while (retryCount <= 3 && !success) // Set retry limit
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
 
-                    mailMessage.To.Add(modal.Email);
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430";
+                        var platformTitle = "HalloDoc";
+                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var subject = "Register - HalloDoc";
+                        var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
 
-                    client.SendMailAsync(mailMessage);
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = "Set up your Account",
+                                IsBodyHtml = true,
+                                Body = body
+                            };
 
-                    return true;
+                            mailMessage.To.Add(modal.Email);
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber,req.RequestId , -1, -1, true, retryCount, 1);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                            }
+                            retryCount++;
+                        }
+                    }
+
+                    return success;
 
                 }
             }
@@ -791,7 +860,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        ViewNotesViewModel IAdmin.viewNotes(int id)
+        public ViewNotesViewModel viewNotes(int id)
         {
             RequestStatusLog patientcancel = _db.RequestStatusLogs.FirstOrDefault(r=>r.RequestId == id && r.Status == 7);
             RequestStatusLog admincancel = _db.RequestStatusLogs.FirstOrDefault(r => r.RequestId == id && r.Status == 6);
@@ -822,7 +891,7 @@ namespace HalloDoc.Repository.Repository
             return viewNotesViewModel;
         }
 
-        bool IAdmin.updateAdminNotes(ViewNotesViewModel viewNotesViewModel)
+        public bool updateAdminNotes(ViewNotesViewModel viewNotesViewModel)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -858,7 +927,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        int IAdmin.login(LoginViewModel loginViewModel)
+        public int login(LoginViewModel loginViewModel)
         {
             try
             {
@@ -893,7 +962,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        int IAdmin.forgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+        public int forgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
             var admin = _db.AspNetUsers.FirstOrDefault(a=>a.Email == forgotPasswordViewModel.email);
             if(admin == null)
@@ -951,7 +1020,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.logout()
+        public bool logout()
         {
             try
             {
@@ -963,7 +1032,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        ViewDocumentModal IAdmin.viewUploads(int id)
+        public ViewDocumentModal viewUploads(int id)
         {
             var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
             var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
@@ -989,7 +1058,7 @@ namespace HalloDoc.Repository.Repository
             return viewDocumentModal;
         }
 
-        async Task<bool> IAdmin.fileUpload(IFormFile file, int id)
+        public async Task<bool> fileUpload(IFormFile file, int id)
         {
             try
             {
@@ -1022,7 +1091,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        int IAdmin.deleteSingleFile(int id)
+        public int deleteSingleFile(int id)
         {
             RequestWiseFile requestWiseFile = _db.RequestWiseFiles.FirstOrDefault(r=>r.RequestWiseFileId == id);
             requestWiseFile.IsDeleted = new BitArray(new[] { true });
@@ -1031,7 +1100,7 @@ namespace HalloDoc.Repository.Repository
             return requestWiseFile.RequestId;
         }
 
-        async Task<Tuple<MemoryStream, string>> IAdmin.downloadMultipleFiles(ViewDocumentModal viewDocumentModal)
+        public async Task<Tuple<MemoryStream, string>> downloadMultipleFiles(ViewDocumentModal viewDocumentModal)
         {
             var zipName = $"{viewDocumentModal.patient_name}-documents.zip";
             string[] filenames = viewDocumentModal.filename.Split(',');
@@ -1059,7 +1128,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        int IAdmin.deleteAllFile(string filename)
+        public int deleteAllFile(string filename)
         {
             string[] documentid = filename.Split(",");
             int requestid = 0;
@@ -1074,7 +1143,7 @@ namespace HalloDoc.Repository.Repository
             return requestid;
         }
 
-        async Task<bool> IAdmin.sendDocumentsMail(string filename)
+        public async Task<bool> sendDocumentsMail(string filename)
         {
 
             int retryCount = 1;
@@ -1151,7 +1220,7 @@ namespace HalloDoc.Repository.Repository
             
         }
 
-        void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id)
+        public void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id)
         {
             if(role_id == 1)
             {
@@ -1161,7 +1230,7 @@ namespace HalloDoc.Repository.Repository
                     SubjectName = subject,
                     EmailId = userEmail,
                     ConfirmationNumber = confirmation_no,
-                    RequestId = request_id,
+                    RequestId = request_id == -1 ? null : request_id,
                     IsEmailSent = new BitArray(new[] { success }) ,
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
@@ -1180,7 +1249,26 @@ namespace HalloDoc.Repository.Repository
                     SubjectName = subject,
                     EmailId = userEmail,
                     ConfirmationNumber = confirmation_no,
-                    PhysicianId = physician_id,
+                    PhysicianId = physician_id == -1 ? null : physician_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+            else if(role_id == 2)
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    AdminId = admin_id == -1 ? null : admin_id,
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
@@ -1199,11 +1287,9 @@ namespace HalloDoc.Repository.Repository
                     SubjectName = subject,
                     EmailId = userEmail,
                     ConfirmationNumber = confirmation_no,
-                    AdminId = admin_id,
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    RoleId = role_id,
                     SentDate = DateTime.Now
 
                 };
@@ -1213,12 +1299,12 @@ namespace HalloDoc.Repository.Repository
             
         }
 
-        PasswordReset IAdmin.getPasswordReset(string token)
+        public PasswordReset getPasswordReset(string token)
         {
             return _db.PasswordResets.FirstOrDefault(u => u.Token == token); 
         }
 
-        bool IAdmin.resetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        public bool resetPassword(ResetPasswordViewModel resetPasswordViewModel)
         {
             try
             {
@@ -1239,12 +1325,12 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        List<Physician> IAdmin.getPhysician(int regionid)
+        public List<Physician> getPhysician(int regionid)
         {
             return _db.Physicians.Where( p=>p.RegionId == regionid && p.IsDeleted == new BitArray(new[] { false }) ).ToList();
         }
 
-        bool IAdmin.assignCase(AdminDashboardViewModel adminDashboardViewModel)
+        public bool assignCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             try
             {
@@ -1281,7 +1367,7 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
-        bool IAdmin.transferCase(AdminDashboardViewModel adminDashboardViewModel)
+        public bool transferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             try
             {
@@ -1317,7 +1403,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.isSamePhysician(AdminDashboardViewModel adminDashboardViewModel)
+        public bool isSamePhysician(AdminDashboardViewModel adminDashboardViewModel)
         {
             Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == adminDashboardViewModel.RequestId);
             if(request.PhysicianId == adminDashboardViewModel.PhysicianId)
@@ -1327,7 +1413,7 @@ namespace HalloDoc.Repository.Repository
             return false;
         }
 
-        async Task<bool> IAdmin.sendAgreement(AdminDashboardViewModel adminDashboardViewModel)
+        public async Task<bool> sendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
             int retryCount = 1;
             bool success = false;
@@ -1434,9 +1520,9 @@ namespace HalloDoc.Repository.Repository
             return success;
         }
 
-        void LogSMS(string SmsTemplate, string userPhone, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount,int role_id)
+        public void LogSMS(string SmsTemplate, string userPhone, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount,int role_id)
         {
-            if (request_id != -1)
+            if (role_id == 1)
             {
                 var smslog = new Smslog
                 {
@@ -1444,6 +1530,41 @@ namespace HalloDoc.Repository.Repository
                     MobileNumber = userPhone,
                     ConfirmationNumber = confirmation_no,
                     RequestId = request_id,
+                    IsSmssent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.Smslogs.Add(smslog);
+                _db.SaveChanges();
+            }
+            else if(role_id == 3)
+            {
+                var smslog = new Smslog
+                {
+                    Smstemplate = SmsTemplate,
+                    MobileNumber = userPhone,
+                    ConfirmationNumber = confirmation_no,
+                    PhysicianId = physician_id,
+                    IsSmssent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.Smslogs.Add(smslog);
+                _db.SaveChanges();
+            }
+            else if(role_id == 2)
+            {
+                var smslog = new Smslog
+                {
+                    Smstemplate = SmsTemplate,
+                    MobileNumber = userPhone,
+                    ConfirmationNumber = confirmation_no,
                     AdminId = admin_id,
                     IsSmssent = new BitArray(new[] { success }),
                     SentTries = retryCount,
@@ -1462,12 +1583,9 @@ namespace HalloDoc.Repository.Repository
                     Smstemplate = SmsTemplate,
                     MobileNumber = userPhone,
                     ConfirmationNumber = confirmation_no,
-                    PhysicianId = physician_id,
-                    AdminId = admin_id,
                     IsSmssent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    RoleId = role_id,
                     SentDate = DateTime.Now
 
                 };
@@ -1478,7 +1596,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        bool IAdmin.blockCase(AdminDashboardViewModel adminDashboardViewModel)
+        public bool blockCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             try
             {
@@ -1516,7 +1634,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.clearCase(AdminDashboardViewModel adminDashboardViewModel)
+        public bool clearCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             try
             {
@@ -1542,7 +1660,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        OrdersViewModel IAdmin.orders(int id)
+        public OrdersViewModel orders(int id)
         {
             var healthProfessionals = _db.HealthProfessionalTypes.Where(h=>h.IsDeleted == new BitArray(new[] { false })).ToList();
             var request = _context.HttpContext.Request;
@@ -1565,17 +1683,17 @@ namespace HalloDoc.Repository.Repository
             return ordersViewModel;
         }
 
-        List<HealthProfessional> IAdmin.getBusiness(int professionid)
+        public List<HealthProfessional> getBusiness(int professionid)
         {
             return _db.HealthProfessionals.Where(h=>h.Profession == professionid && h.IsDeleted == new BitArray(new[] { false })).ToList();
         }
         
-        HealthProfessional IAdmin.getBusinessData(int businessid)
+        public HealthProfessional getBusinessData(int businessid)
         {
             return _db.HealthProfessionals.FirstOrDefault(h=>h.VendorId == businessid);
         }
 
-        bool IAdmin.placeOrder(OrdersViewModel ordersViewModel)
+        public bool placeOrder(OrdersViewModel ordersViewModel)
         {
             try
             {
@@ -1606,7 +1724,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        AdminProfileViewModel IAdmin.getAdmin()
+        public AdminProfileViewModel getAdmin()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -1660,7 +1778,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        bool IAdmin.updateProfile(AdminProfileViewModel adminProfileViewModel)
+        public bool updateProfile(AdminProfileViewModel adminProfileViewModel)
         {
             try
             {
@@ -1713,7 +1831,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.resetPasswordProfile(string password)
+        public bool resetPasswordProfile(string password)
         {
             try
             {
@@ -1734,12 +1852,12 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        Request IAdmin.getRequest(int id)
+        public Request getRequest(int id)
         {
             return _db.Requests.FirstOrDefault(u => u.RequestId == id);
         }
 
-        bool IAdmin.agree(int id)
+        public bool agree(int id)
         {
             try
             {
@@ -1765,7 +1883,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.disagree(int id, string notes)
+        public bool disagree(int id, string notes)
         {
             try
             {
@@ -1792,7 +1910,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        EncounterFormViewModel IAdmin.getEncounterFormDetails(int id)
+        public EncounterFormViewModel getEncounterFormDetails(int id)
         {
             Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r=>r.RequestId == id);
             EncounterForm encounterForm = _db.EncounterForms.FirstOrDefault(r => r.RequestId == id);
@@ -1846,7 +1964,7 @@ namespace HalloDoc.Repository.Repository
             return encounterFormViewModel;
         }
 
-        bool IAdmin.updateEncounterForm(EncounterFormViewModel encounterFormViewModel)
+        public bool updateEncounterForm(EncounterFormViewModel encounterFormViewModel)
         {
             try
             {
@@ -1927,7 +2045,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        CloseCaseViewModel IAdmin.getCloseCase(int id)
+        public CloseCaseViewModel getCloseCase(int id)
         {
             var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
             var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
@@ -1959,7 +2077,7 @@ namespace HalloDoc.Repository.Repository
             return closeCaseViewModel;
         }
 
-        bool IAdmin.updateCloseCase(CloseCaseViewModel closeCaseViewModel)
+        public bool updateCloseCase(CloseCaseViewModel closeCaseViewModel)
         {
             try
             {
@@ -1977,7 +2095,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.closeCase(int id)
+        public bool closeCase(int id)
         {
             try
             {
@@ -2012,7 +2130,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        ProviderViewModel IAdmin.getProviderPageDetails(int id=-1,int page=1,int pageSize=10)
+        public ProviderViewModel getProviderPageDetails(int id=-1,int page=1,int pageSize=10)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -2089,7 +2207,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        bool IAdmin.changeNotification(int id,bool update)
+        public bool changeNotification(int id,bool update)
         {
             try
             {
@@ -2117,7 +2235,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        async Task<bool> IAdmin.contactProvider(ProviderViewModel providerViewModel)
+        public async Task<bool> contactProvider(ProviderViewModel providerViewModel)
         {
             int retryCount = 1;
             bool success = false;
@@ -2231,7 +2349,7 @@ namespace HalloDoc.Repository.Repository
             return success;
         }
 
-        PhysicianAccountViewModel IAdmin.getCreatePhysicianDetails()
+        public PhysicianAccountViewModel getCreatePhysicianDetails()
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -2269,7 +2387,7 @@ namespace HalloDoc.Repository.Repository
             return physicianAccountViewModel;
         }
 
-        async Task<bool> IAdmin.createPhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        public async Task<bool> createPhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
             var passwordHasher = new PasswordHasher<AspNetUser>();
             Region region = _db.Regions.FirstOrDefault(r=>r.RegionId == physicianAccountViewModel.RegionId);
@@ -2497,12 +2615,12 @@ namespace HalloDoc.Repository.Repository
             return success;
         }
 
-        List<Role> IAdmin.getPhysicianRoles()
+        public List<Role> getPhysicianRoles()
         {
             return _db.Roles.Where(r => r.AccountType == 2 && r.IsDeleted == new BitArray(new[] { false })).ToList();
         }
 
-        PhysicianAccountViewModel IAdmin.getPhysicianDetails(int id)
+        public PhysicianAccountViewModel getPhysicianDetails(int id)
         {
             Physician physician = _db.Physicians.Include(p=>p.AspNetUser).FirstOrDefault(p=>p.PhysicianId == id);
             PhysicianLocation physicianLocation = _db.PhysicianLocations.FirstOrDefault(p => p.PhysicianId == id);
@@ -2573,7 +2691,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        async Task<bool> IAdmin.fileUploadPhysician(IFormFile file, int id, string name)
+        public async Task<bool> fileUploadPhysician(IFormFile file, int id, string name)
         {
             try
             {
@@ -2647,7 +2765,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        async Task<bool> IAdmin.updatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
+        public async Task<bool> updatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
             try
             {
@@ -2729,7 +2847,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.resetPasswordPhysician(string password,int id)
+        public bool resetPasswordPhysician(string password,int id)
         {
             try
             {
@@ -2746,7 +2864,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.deletePhysician(int id)
+        public bool deletePhysician(int id)
         {
             try
             {
@@ -2769,7 +2887,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        PatientHistoryViewModel IAdmin.getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10)
+        public PatientHistoryViewModel getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -2815,7 +2933,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        PatientHistoryViewModel IAdmin.getAllPatientRecords(int id,int page = 1, int pageSize = 10)
+        public PatientHistoryViewModel getAllPatientRecords(int id,int page = 1, int pageSize = 10)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -2845,7 +2963,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        BlockHistoryViewModel IAdmin.getBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10)
+        public BlockHistoryViewModel getBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -2890,7 +3008,7 @@ namespace HalloDoc.Repository.Repository
             return blockHistoryViewModel;
         }
 
-        bool IAdmin.toggleActive(int blockrequestid, bool value)
+        public bool toggleActive(int blockrequestid, bool value)
         {
             try
             {
@@ -2907,7 +3025,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.restoreBlock(int blockrequestid)
+        public bool restoreBlock(int blockrequestid)
         {
             try
             {
@@ -2941,7 +3059,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        SearchRecordViewModel IAdmin.getSearchedData(int? status, string? name, int? requesttypeid, DateTime? fromdos, DateTime? todos, string? providername, string? email, string? phonenumber, int page = 1, int pageSize = 10)
+        public SearchRecordViewModel getSearchedData(int? status, string? name, int? requesttypeid, DateTime? fromdos, DateTime? todos, string? providername, string? email, string? phonenumber, int page = 1, int pageSize = 10)
         {
 
             var requestt = _context.HttpContext.Request;
@@ -3011,7 +3129,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        bool IAdmin.deleteRequest(int id)
+        public bool deleteRequest(int id)
         {
             try
             {
@@ -3029,7 +3147,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        MemoryStream IAdmin.exportSearchedData(SearchRecordViewModel model)
+        public MemoryStream exportSearchedData(SearchRecordViewModel model)
         {
             try
             {
@@ -3115,7 +3233,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        AccountAccessViewModel IAdmin.getAllRolesDetails(int page=1,int pageSize=10)
+        public AccountAccessViewModel getAllRolesDetails(int page=1,int pageSize=10)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3144,7 +3262,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        AdminNavbarViewModel IAdmin.getCreateAccessNavbar()
+        public AdminNavbarViewModel getCreateAccessNavbar()
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3159,7 +3277,7 @@ namespace HalloDoc.Repository.Repository
             return adminNavbarViewModel;
         }
 
-        List<Menu> IAdmin.getMenus(int? id)
+        public List<Menu> getMenus(int? id)
         {
             if(id==-1)
             {
@@ -3169,7 +3287,7 @@ namespace HalloDoc.Repository.Repository
             return _db.Menus.Where(m => m.AccountType == id).ToList();
         }
 
-        bool IAdmin.createRole(string? menus, string? role_name, int? account_type)
+        public bool createRole(string? menus, string? role_name, int? account_type)
         {
             try
             {
@@ -3210,7 +3328,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.deleteRole(int? id)
+        public bool deleteRole(int? id)
         {
             try
             {
@@ -3234,7 +3352,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        EditAccessViewModel IAdmin.getRoleDetails(int? id)
+        public EditAccessViewModel getRoleDetails(int? id)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3284,7 +3402,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        bool IAdmin.editRoleDetails(int? id, string? menus, string? role_name, int? account_type)
+        public bool editRoleDetails(int? id, string? menus, string? role_name, int? account_type)
         {
             try
             {
@@ -3370,7 +3488,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        EmailLogViewModel IAdmin.getEmailLogDetails(int? roleid, string? name, string? email, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+        public EmailLogViewModel getEmailLogDetails(int? roleid, string? name, string? email, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
         {
 
             var requestt = _context.HttpContext.Request;
@@ -3384,7 +3502,7 @@ namespace HalloDoc.Repository.Repository
                 menus = cookieModel.menus
             };
 
-            IQueryable<EmailLog> emailLogs = _db.EmailLogs.Where(r => r.AdminId == cookieModel.userId);
+            IQueryable<EmailLog> emailLogs = _db.EmailLogs;
 
             if(roleid!=null && roleid!=-1)
             {
@@ -3407,24 +3525,56 @@ namespace HalloDoc.Repository.Repository
 
             for(var i=0;i< emailLogs.Count();++i)
             {
-                var namee = "";
-                if (emailLogs.ToList()[i].PhysicianId == null)
+                var namee = "-";
+                if (emailLogs.ToList()[i].RoleId == 1)
                 {
-                    Request request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(r=>r.RequestId == emailLogs.ToList()[i].RequestId);
-                    namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
+                    if (emailLogs.ToList()[i].RequestId != null)
+                    {
+                        Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == emailLogs.ToList()[i].RequestId);
+                        namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
+                    }
+                    else
+                    {
+                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
+                        User user = _db.Users.FirstOrDefault(u=>u.AspNetUserId == aspNetUser.Id);
+                        namee = string.Concat(user.FirstName, ", ", user.LastName);
+                    }
                 }
-                else
+                else if(emailLogs.ToList()[i].RoleId == 3)
                 {
-                    Physician physician = _db.Physicians.FirstOrDefault(r=>r.PhysicianId == emailLogs.ToList()[i].PhysicianId);
-                    namee = string.Concat(physician.FirstName, ", ", physician.LastName);
+                    if(emailLogs.ToList()[i].PhysicianId != null)
+                    {
+                        Physician physician = _db.Physicians.FirstOrDefault(r => r.PhysicianId == emailLogs.ToList()[i].PhysicianId);
+                        namee = string.Concat(physician.FirstName, ", ", physician.LastName);
+                    }
+                    else
+                    {
+                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
+                        Physician physician = _db.Physicians.FirstOrDefault(r => r.AspNetUserId == aspNetUser.Id);
+                        namee = string.Concat(physician.FirstName, ", ", physician.LastName);
+                    }
                 }
-                Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == emailLogs.ToList()[i].RoleId);
+                else if(emailLogs.ToList()[i].RoleId == 2)
+                {
+                    if(emailLogs.ToList()[i].AdminId != null)
+                    {
+                        HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AdminId == emailLogs.ToList()[i].AdminId);
+                        namee = string.Concat(admin.FirstName, ", ", admin.LastName);
+                    }
+                    else
+                    {
+                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
+                        HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AspNetUserId == aspNetUser.Id);
+                        namee = string.Concat(admin.FirstName, ", ", admin.LastName);
+                    }
+                }
+                AspNetRole role = _db.AspNetRoles.FirstOrDefault(r=>r.Id == emailLogs.ToList()[i].RoleId);
                 logViewModels.Add(new LogViewModel
                 {
                     Name = namee,
                     EmailId = emailLogs.ToList()[i].EmailId,
                     Action = "-",
-                    RoleName = role.Name,
+                    RoleName = role?.Name ?? "-",
                     CreatedDate = emailLogs.ToList()[i].CreateDate,
                     SentDate = emailLogs.ToList()[i].SentDate,
                     Sent = emailLogs.ToList()[i].IsEmailSent[0] ? "Yes" : "No",
@@ -3450,7 +3600,7 @@ namespace HalloDoc.Repository.Repository
                 filteredlogViewModels = logViewModels;
             }
 
-            List<Role> roles = _db.Roles.Where(r=>r.IsDeleted == new BitArray(new[] { false })).ToList();
+            List<AspNetRole> roles = _db.AspNetRoles.ToList();
 
             EmailLogViewModel emailLogViewModel = new EmailLogViewModel
             {
@@ -3464,8 +3614,8 @@ namespace HalloDoc.Repository.Repository
             };
             return emailLogViewModel;
         }
-        
-        EmailLogViewModel IAdmin.getSMSLogDetails(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
+
+        public EmailLogViewModel getSMSLogDetails(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
         {
 
             var requestt = _context.HttpContext.Request;
@@ -3479,7 +3629,7 @@ namespace HalloDoc.Repository.Repository
                 menus = cookieModel.menus
             };
 
-            IQueryable<Smslog> smslogs = _db.Smslogs.Where(r => r.AdminId == cookieModel.userId);
+            IQueryable<Smslog> smslogs = _db.Smslogs;
 
             if(roleid!=null && roleid!=-1)
             {
@@ -3502,24 +3652,30 @@ namespace HalloDoc.Repository.Repository
 
             for(var i=0;i< smslogs.Count();++i)
             {
-                var namee = "";
-                if (smslogs.ToList()[i].PhysicianId == null)
+                var namee = "-";
+                if (smslogs.ToList()[i].RoleId == 1)
                 {
-                    Request request = _db.Requests.Include(r=>r.RequestClient).FirstOrDefault(r=>r.RequestId == smslogs.ToList()[i].RequestId);
+                    Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == smslogs.ToList()[i].RequestId);
                     namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
+
                 }
-                else
+                else if (smslogs.ToList()[i].RoleId == 3)
                 {
-                    Physician physician = _db.Physicians.FirstOrDefault(r=>r.PhysicianId == smslogs.ToList()[i].PhysicianId);
+                    Physician physician = _db.Physicians.FirstOrDefault(r => r.PhysicianId == smslogs.ToList()[i].PhysicianId);
                     namee = string.Concat(physician.FirstName, ", ", physician.LastName);
                 }
-                Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == smslogs.ToList()[i].RoleId);
+                else if (smslogs.ToList()[i].RoleId == 2)
+                {
+                    HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AdminId == smslogs.ToList()[i].AdminId);
+                    namee = string.Concat(admin.FirstName, ", ", admin.LastName);
+                }
+                AspNetRole role = _db.AspNetRoles.FirstOrDefault(r=>r.Id == smslogs.ToList()[i].RoleId);
                 logViewModels.Add(new LogViewModel
                 {
                     Name = namee,
                     PhoneNumber = smslogs.ToList()[i].MobileNumber,
                     Action = "-",
-                    RoleName = role.Name,
+                    RoleName = role?.Name ?? "-",
                     CreatedDate = smslogs.ToList()[i].CreateDate,
                     SentDate = smslogs.ToList()[i].SentDate,
                     Sent = smslogs.ToList()[i].IsSmssent[0] ? "Yes" : "No",
@@ -3545,7 +3701,7 @@ namespace HalloDoc.Repository.Repository
                 filteredlogViewModels = logViewModels;
             }
 
-            List<Role> roles = _db.Roles.Where(r=>r.IsDeleted == new BitArray(new[] { false })).ToList();
+            List<AspNetRole> roles = _db.AspNetRoles.ToList();
 
             EmailLogViewModel emailLogViewModel = new EmailLogViewModel
             {
@@ -3560,7 +3716,7 @@ namespace HalloDoc.Repository.Repository
             return emailLogViewModel;
         }
 
-        PartnerViewModal IAdmin.getPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10)
+        public PartnerViewModal getPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3598,7 +3754,7 @@ namespace HalloDoc.Repository.Repository
             return partnerViewModal;
         }
 
-        BusinessViewModel IAdmin.getBusinessNavbar()
+        public BusinessViewModel getBusinessNavbar()
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3622,7 +3778,7 @@ namespace HalloDoc.Repository.Repository
             return businessViewModel;
         }
 
-        bool IAdmin.createBusiness(BusinessViewModel businessViewModel)
+        public bool createBusiness(BusinessViewModel businessViewModel)
         {
             try
             {
@@ -3658,7 +3814,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        BusinessViewModel IAdmin.getBusinessDetails(int id)
+        public BusinessViewModel getBusinessDetails(int id)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3696,7 +3852,7 @@ namespace HalloDoc.Repository.Repository
             return businessViewModel;
         }
 
-        bool IAdmin.editBusiness(BusinessViewModel businessViewModel)
+        public bool editBusiness(BusinessViewModel businessViewModel)
         {
             try
             {
@@ -3731,7 +3887,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IAdmin.deleteBusiness(int id)
+        public bool deleteBusiness(int id)
         {
             try
             {
@@ -3748,7 +3904,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        ProviderLocationViewModel IAdmin.getProviderLocation()
+        public ProviderLocationViewModel getProviderLocation()
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3773,7 +3929,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        AdminProfileViewModel IAdmin.getCreateAdminProfilePageDetails()
+        public AdminProfileViewModel getCreateAdminProfilePageDetails()
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -3809,12 +3965,12 @@ namespace HalloDoc.Repository.Repository
             return adminProfileViewModel;
         }
 
-        List<Role> IAdmin.getAdminRoles()
+        public List<Role> getAdminRoles()
         {
             return _db.Roles.Where(r => r.AccountType == 1 && r.IsDeleted == new BitArray(new[] { false })).ToList();
         }
 
-        async Task<bool> IAdmin.createAdmin(AdminProfileViewModel adminProfileViewModel)
+        public async Task<bool> createAdmin(AdminProfileViewModel adminProfileViewModel)
         {
             try
             {
@@ -3881,35 +4037,60 @@ namespace HalloDoc.Repository.Repository
                     }
                 }
 
-                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
-                var platformTitle = "HalloDoc";
-                var subject = "Account Credentials - HalloDoc";
-                var body = $"Hello {admin.FirstName} {admin.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {admin.Email}<br />Password : {adminProfileViewModel.Password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                int retryCount = 1;
+                bool success = false;
 
-                SmtpClient client = new SmtpClient("smtp.office365.com")
+                while (retryCount <= 3 && !success) // Set retry limit
                 {
-                    Port = 587,
-                    Credentials = new NetworkCredential(senderEmail, senderPassword),
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false
-                };
 
-                MailMessage mailMessage = new MailMessage
-                {
-                    From = new MailAddress(senderEmail, "HalloDoc"),
-                    Subject = subject,
-                    IsBodyHtml = true,
-                    Body = body
-                };
-
-                mailMessage.To.Add(admin.Email);
+                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                    string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                    var platformTitle = "HalloDoc";
+                    var subject = "Account Credentials - HalloDoc";
+                    var body = $"Hello {admin.FirstName} {admin.LastName},<br />We welcome you onboard on HalloDoc, Here are your credentials to login,<br />Email : {admin.Email}<br />Password : {adminProfileViewModel.Password}<br />Username : {aspNetUser.UserName}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                    try
+                    {
 
 
-                await client.SendMailAsync(mailMessage);
+                        SmtpClient client = new SmtpClient("smtp.office365.com")
+                        {
+                            Port = 587,
+                            Credentials = new NetworkCredential(senderEmail, senderPassword),
+                            EnableSsl = true,
+                            DeliveryMethod = SmtpDeliveryMethod.Network,
+                            UseDefaultCredentials = false
+                        };
 
-                return true;
+                        MailMessage mailMessage = new MailMessage
+                        {
+                            From = new MailAddress(senderEmail, "HalloDoc"),
+                            Subject = subject,
+                            IsBodyHtml = true,
+                            Body = body
+                        };
+
+                        mailMessage.To.Add(admin.Email);
+
+
+                        await client.SendMailAsync(mailMessage);
+
+
+                        success = true;
+                        LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, true, retryCount, 2);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        if (retryCount >= 3)
+                        {
+                            LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, false, retryCount, 2);
+                        }
+                        retryCount++;
+                    }
+                }
+
+                return success;
 
             }
             catch(Exception ex)
@@ -3917,6 +4098,68 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
+
+        public UserAccessViewModel GetUserAccessDetails(int? roleid,int page = 1,int pageSize = 10)
+        {
+            var query = from an in _db.AspNetUsers
+                                    join anr in _db.AspNetUserRoles on an.Id equals anr.UserId
+                                    join ar in _db.AspNetRoles on anr.RoleId equals ar.Id
+                                    join ph in _db.Physicians on an.Id equals ph.AspNetUserId into phJoin
+                                    from ph in phJoin.DefaultIfEmpty()
+                                    join ad in _db.Admins on an.Id equals ad.AspNetUserId into adJoin
+                                    from ad in adJoin.DefaultIfEmpty()
+                                    where anr.RoleId != 1 &&
+                                          (ad.AdminId == null || (ad.AdminId != null && ad.IsDeleted == false)) &&
+                                          (ph.PhysicianId == null || (ph.PhysicianId != null && ph.IsDeleted == new BitArray(new[] { false })))
+                                    select new UserAccessData
+                                    {
+                                        AccountType = ar.Name,
+                                        Name = anr.RoleId == 2 ? ad.FirstName + ", " + ad.LastName :
+                                               anr.RoleId == 3 ? ph.FirstName + ", " + ph.LastName : null,
+                                        PhoneNumber = anr.RoleId == 2 ? ad.Mobile :
+                                                       anr.RoleId == 3 ? ph.Mobile : null,
+                                        Status = anr.RoleId == 2 ? ad.Status :
+                                                 anr.RoleId == 3 ? ph.Status : null,
+                                        OpenRequest = anr.RoleId == 2 ? _db.Requests.Count(r => r.Status != 10 && r.Status != 11 && r.IsDeleted == new BitArray(new[] { false })) :
+                                                      anr.RoleId == 3 ? _db.Requests.Count(r => r.Status != 10 && r.Status != 11 && r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == ph.PhysicianId) : 0,
+                                        PhysicianId = ph.PhysicianId == null ? -1 : ph.PhysicianId,
+                                        AdminId = ad.AdminId == null ? -1 : ad.AdminId,
+                                    };
+
+        
+            if(roleid==1)
+            {
+                query = query.Where(r=>r.AccountType == "Admin");
+            }
+            else if(roleid == 2)
+            {
+                query = query.Where(r => r.AccountType == "Provider");
+            }
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.getDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access",
+                menus = cookieModel.menus
+            };
+
+            UserAccessViewModel userAccessViewModel = new UserAccessViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                userAccessData = query.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = query.Count(),
+                TotalPages = (int)Math.Ceiling((double)query.Count() / pageSize)
+            };
+
+            return userAccessViewModel;
+        }
+
 
     }
 }

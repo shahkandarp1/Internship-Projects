@@ -32,7 +32,7 @@ namespace HalloDoc.Repository.Repository
             _jwt = jwt;
         }
 
-        int IPatient.login(LoginViewModel model)
+        public int login(LoginViewModel model)
         {
             try
             {
@@ -72,6 +72,10 @@ namespace HalloDoc.Repository.Repository
                             {
                                 return 6;
                             }
+                            if(admin?.IsDeleted == true)
+                            {
+                                return 7;
+                            }
                         }
                         if(role.RoleId == 3)
                         {
@@ -79,6 +83,10 @@ namespace HalloDoc.Repository.Repository
                             if(physician?.Status == null || physician?.Status != 2)
                             {
                                 return 6;
+                            }
+                            if (physician?.IsDeleted == new BitArray(new[] { true }))
+                            {
+                                return 7;
                             }
                         }
                         var passwordHasher = new PasswordHasher<AspNetUser>();
@@ -105,12 +113,12 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        PasswordReset IPatient.getResetPassword(string Token)
+        public PasswordReset getResetPassword(string Token)
         {
             return _db.PasswordResets.FirstOrDefault(u => u.Token == Token); 
         }
 
-        bool IPatient.resetPassword(ResetPasswordViewModel modal)
+        public bool resetPassword(ResetPasswordViewModel modal)
         {
             try
             {
@@ -131,53 +139,156 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        bool IPatient.sendResetLink(string email)
+        public async Task<bool> sendResetLink(string email)
         {
             var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == email);
+            var role = _db.AspNetUserRoles.FirstOrDefault(r=>r.UserId == user.Id);
             if (user == null)
             {
                 return false;
             }
-            string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-            string senderPassword = "shahkandarp2430";
-            string platformTitle = "HalloDoc";
-            string Token = Guid.NewGuid().ToString();
-            PasswordReset passwordReset = new PasswordReset
-            {
-                Token = Token,
-                Email = email,
-                CreatedDate = DateTime.Now
-            };
-            _db.PasswordResets.Add(passwordReset);
-            _db.SaveChanges();
-            var inviteLink = $"https://localhost:7088/Login/ResetPassword/?token={Token}";
-            var subject = "Reset Password - HalloDoc";
-            var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
-            MailMessage mailMessage = new MailMessage
-            {
-                From = new MailAddress(senderEmail, "HalloDoc"),
-                Subject = subject,
-                IsBodyHtml = true,
-                Body = body
-            };
+            int retryCount = 1;
+            bool success = false;
 
-            SmtpClient client = new SmtpClient("smtp.office365.com")
+            while (retryCount <= 3 && !success) // Set retry limit
             {
-                Port = 587,
-                Credentials = new NetworkCredential(senderEmail, senderPassword),
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false
-            };
-            mailMessage.To.Add(email);
 
-            client.SendMailAsync(mailMessage);
+                string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                string senderPassword = "shahkandarp2430";
+                string platformTitle = "HalloDoc";
+                string Token = Guid.NewGuid().ToString();
+                PasswordReset passwordReset = new PasswordReset
+                {
+                    Token = Token,
+                    Email = email,
+                    CreatedDate = DateTime.Now
+                };
+                _db.PasswordResets.Add(passwordReset);
+                _db.SaveChanges();
+                var inviteLink = $"https://localhost:7088/Login/ResetPassword/?token={Token}";
+                var subject = "Reset Password - HalloDoc";
+                var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                try
+                {
 
+                    MailMessage mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail, "HalloDoc"),
+                        Subject = subject,
+                        IsBodyHtml = true,
+                        Body = body
+                    };
+
+                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential(senderEmail, senderPassword),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false
+                    };
+                    mailMessage.To.Add(email);
+
+                    await client.SendMailAsync(mailMessage);
+
+
+                    success = true;
+                    LogEmail(body, subject, email, null, -1, -1, -1, true, retryCount, role.RoleId);
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    if (retryCount >= 3)
+                    {
+                        LogEmail(body, subject, email, null, -1, -1, -1, false, retryCount, role.RoleId);
+                    }
+                    retryCount++;
+                }
+            }
             return true;
         }
 
+        public void LogEmail(string emailTemplate, string subject, string userEmail, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount, int role_id)
+        {
+            if (role_id == 1)
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    RequestId = request_id == -1 ? null : request_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now,
 
-        async Task<bool> IPatient.patientRequest(PatientRequestViewModel modal)
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+            else if (role_id == 3)
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    PhysicianId = physician_id == -1? null : physician_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+            else if (role_id == 2)
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    AdminId = admin_id == -1 ? null : admin_id,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    RoleId = role_id,
+                    SentDate = DateTime.Now
+
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+            else
+            {
+                var emailLog = new EmailLog
+                {
+                    EmailTemplate = emailTemplate,
+                    SubjectName = subject,
+                    EmailId = userEmail,
+                    ConfirmationNumber = confirmation_no,
+                    IsEmailSent = new BitArray(new[] { success }),
+                    SentTries = retryCount,
+                    CreateDate = DateTime.Now,
+                    SentDate = DateTime.Now
+
+                };
+                _db.EmailLogs.Add(emailLog);
+                _db.SaveChanges();
+            }
+
+        }
+
+        public async Task<bool> patientRequest(PatientRequestViewModel modal)
         {
             try
             {
@@ -389,7 +500,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        async Task<bool> IPatient.businessRequest(BusinessRequestViewModel modal)
+        public async Task<bool> businessRequest(BusinessRequestViewModel modal)
         {
             try
             {
@@ -594,32 +705,57 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestBusinesses.Add(requestbusiness);
                     _db.SaveChanges();
 
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                    int retryCount = 1;
+                    bool success = false;
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    while (retryCount <= 3 && !success) // Set retry limit
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
 
-                    mailMessage.To.Add(modal.Email);
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430";
+                        var platformTitle = "HalloDoc";
+                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var subject = "Register - HalloDoc";
+                        var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
 
-                    client.SendMailAsync(mailMessage);
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = "Set up your Account",
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(modal.Email);
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    return success;
                 }
                 return true;
             }
@@ -628,8 +764,8 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
-        
-        async Task<bool> IPatient.familyRequest(FamilyRequestViewModel modal)
+
+        public async Task<bool> familyRequest(FamilyRequestViewModel modal)
         {
             try
             {
@@ -832,32 +968,57 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                    int retryCount = 1;
+                    bool success = false;
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    while (retryCount <= 3 && !success) // Set retry limit
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
 
-                    mailMessage.To.Add(modal.Email);
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430";
+                        var platformTitle = "HalloDoc";
+                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var subject = "Register - HalloDoc";
+                        var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
 
-                    client.SendMailAsync(mailMessage);
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = "Set up your Account",
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(modal.Email);
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    return success;
 
                 }
                 return true;
@@ -867,8 +1028,8 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
-        
-        async Task<bool> IPatient.conciergeRequest(ConciergeRequestViewModel modal)
+
+        public async Task<bool> conciergeRequest(ConciergeRequestViewModel modal)
         {
             try
             {
@@ -1079,32 +1240,57 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestConcierges.Add(requestconcierge);
                     _db.SaveChanges();
 
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";   
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                    int retryCount = 1;
+                    bool success = false;
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    while (retryCount <= 3 && !success) // Set retry limit
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
 
-                    mailMessage.To.Add(modal.Email);
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430";
+                        var platformTitle = "HalloDoc";
+                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var subject = "Register - HalloDoc";
+                        var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
 
-                    client.SendMailAsync(mailMessage);
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = "Set up your Account",
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(modal.Email);
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    return success;
                 }
                 return true;
             }
@@ -1114,11 +1300,11 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        AspNetUser IPatient.getAspNetUser(string email)
+        public AspNetUser getAspNetUser(string email)
         {
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
-        AspNetUser IPatient.getAspNetUserLogin(string email)
+        public AspNetUser getAspNetUserLogin(string email)
         {
             if(_db.AspNetUsers.SingleOrDefault(u => u.Email == email) == null)
             {
@@ -1127,7 +1313,7 @@ namespace HalloDoc.Repository.Repository
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
 
-        DashboardViewModel IPatient.getDashboardData(int page = 1, int pageSize = 10)
+        public DashboardViewModel getDashboardData(int page = 1, int pageSize = 10)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -1147,12 +1333,12 @@ namespace HalloDoc.Repository.Repository
             return dashboardViewModel;
         }
 
-        AspNetUser IPatient.getAspNetUserById(int id)
+        public AspNetUser getAspNetUserById(int id)
         {
             return _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
         }
 
-        bool IPatient.register(RegisterViewModel modal)
+        public bool register(RegisterViewModel modal)
         {
             try
             {
@@ -1171,7 +1357,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        FamilyRequestViewModel IPatient.getFamilyRequest()
+        public FamilyRequestViewModel getFamilyRequest()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -1187,7 +1373,7 @@ namespace HalloDoc.Repository.Repository
             return familyRequestViewModel;
         }
 
-        async Task<bool> IPatient.someoneElseRequest(FamilyRequestViewModel modal)
+        public async Task<bool> someoneElseRequest(FamilyRequestViewModel modal)
         {
             try
             {
@@ -1390,32 +1576,57 @@ namespace HalloDoc.Repository.Repository
                     _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
-                    string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                    string senderPassword = "shahkandarp2430";
-                    var platformTitle = "HalloDoc";
-                    var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";   
-                    var subject = "Register - HalloDoc";
-                    var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                    int retryCount = 1;
+                    bool success = false;
 
-                    SmtpClient client = new SmtpClient("smtp.office365.com")
+                    while (retryCount <= 3 && !success) // Set retry limit
                     {
-                        Port = 587,
-                        Credentials = new NetworkCredential(senderEmail, senderPassword),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false
-                    };
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(senderEmail, "HalloDoc"),
-                        Subject = "Set up your Account",
-                        IsBodyHtml = true,
-                        Body = body
-                    };
 
-                    mailMessage.To.Add(modal.Email);
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430";
+                        var platformTitle = "HalloDoc";
+                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var subject = "Register - HalloDoc";
+                        var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
 
-                    client.SendMailAsync(mailMessage);
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = "Set up your Account",
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(modal.Email);
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    return success;
                 }
                 return true;
             }
@@ -1425,7 +1636,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        PatientRequestViewModel IPatient.getPatientRequest()
+        public PatientRequestViewModel getPatientRequest()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -1443,7 +1654,7 @@ namespace HalloDoc.Repository.Repository
             return patientRequestViewModel;
         }
 
-        async Task<bool> IPatient.selfRequest(PatientRequestViewModel modal)
+        public async Task<bool> selfRequest(PatientRequestViewModel modal)
         {
             try
             {
@@ -1539,7 +1750,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        PatientRequestViewModel IPatient.getPatientProfile()
+        public PatientRequestViewModel getPatientProfile()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
@@ -1560,7 +1771,7 @@ namespace HalloDoc.Repository.Repository
             return patientRequestViewModel;
         }
 
-        int IPatient.updatePatientProfile(PatientRequestViewModel modal)
+        public int updatePatientProfile(PatientRequestViewModel modal)
         {
             try
             {
@@ -1604,7 +1815,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        ViewDocumentModal IPatient.getViewDocument(int id)
+        public ViewDocumentModal getViewDocument(int id)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
@@ -1623,7 +1834,7 @@ namespace HalloDoc.Repository.Repository
             return viewDocumentModal;
         }
 
-        async Task<bool> IPatient.fileUpload(IFormFile file, int id)
+        public async Task<bool> fileUpload(IFormFile file, int id)
         {
             try
             {

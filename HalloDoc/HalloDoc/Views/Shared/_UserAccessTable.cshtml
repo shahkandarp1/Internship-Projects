@@ -1,0 +1,81 @@
+﻿@model UserAccessViewModel
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Account Type</th>
+                <th>Account POC</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Open Requests</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.userAccessData)
+            {
+                <tr>
+                    <td>@item.AccountType</td>
+                    <td>@item.Name</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>
+                        @if(item.Status == 1)
+                        {
+                            <span>Pending</span>
+                        }
+                        else if (item.Status == 2)
+                        {
+                            <span>Active</span>
+                            
+                        }
+                        else
+                        {
+                            <span>In-Active</span>
+                        }
+                    </td>
+                    <td>@item.OpenRequest</td>
+                    <td>
+                        @if (item.AccountType == "Provider")
+                        {
+                            <a class="btn contact-btn contact-provider mb-1" asp-action="EditPhysician" asp-controller="Admin" asp-route-id="@item.PhysicianId">Edit</a>
+                        }
+                        else
+                        {
+                            <a class="btn contact-btn contact-provider mb-1" asp-action="EditAdmin" asp-controller="Admin" asp-route-id="@item.AdminId">Edit</a>
+                        }
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a data-page="@(Model.CurrentPage - 1)" href="#">Previous</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a data-page="@i" href="#" class="@(i == Model.CurrentPage ? "pagination-active" : "")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a data-page="@(Model.CurrentPage + 1)" href="#">Next</a>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.pagination a').click(function (e) {
+            e.preventDefault();
+            var page = $(this).attr('data-page');
+
+            filter(page, 10)
+        });
+    });
+</script>

@@ -27,7 +27,7 @@
         <div class="flex-container">
             <div class="top-text">
                 <span class="submit-text" id="submit-text">Edit Physician Account</span>
-                <a class="back-btn" asp-controller="Admin" asp-action="Provider">
+                <a class="back-btn" onclick="goBack()">
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
@@ -398,6 +398,10 @@
             });
         });
     });
+
+    function goBack() {
+        window.history.back();
+    }
 
     const viewDoc = (filename) => {
         var pdfPath = "@Url.Content($"~/provider_documents/{Model.PhysicianId}/")";
