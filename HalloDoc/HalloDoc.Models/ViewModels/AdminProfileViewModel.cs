@@ -15,6 +15,7 @@ namespace HalloDoc.ViewModels
         public string? Password { get; set; }
         public short? status { get; set; }
         public int? role_id { get; set; }
+        public int? admin_id { get; set; }
 
         public List<Role>? roles { get; set; }
 

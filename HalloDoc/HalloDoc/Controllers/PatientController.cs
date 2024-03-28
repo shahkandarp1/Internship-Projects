@@ -30,63 +30,73 @@ namespace HaloDocMVC.NET.Controllers
     public class PatientController : Controller
     {
         private readonly ILogger<PatientController> _logger;
-        private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _context;
         private readonly IPatient _patient;
         private readonly IAdmin _admin;
 
-        public PatientController(ILogger<PatientController> logger, ApplicationDbContext db,IHttpContextAccessor context,IPatient patient,IAdmin admin)
+        public PatientController(ILogger<PatientController> logger,IHttpContextAccessor context,IPatient patient,IAdmin admin)
         {
             _logger = logger;
-            _db = db;
             _context = context;
             _patient = patient;
             _admin = admin;
         }
-
-
-        
-
+        /// <summary>
+        /// It is Get Method for Patient Dashboard Page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> PatientDashboard()
         {
-            DashboardViewModel dashboardViewModel = _patient.getDashboardData(1,10);
+            DashboardViewModel dashboardViewModel = _patient.GetDashboardData(1,10);
             return View(dashboardViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Patient Dashboard Page as Partial View
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<IActionResult> PatientDashboardTable(int page=1,int pageSize=10)
         {
-            DashboardViewModel dashboardViewModel = _patient.getDashboardData(page,pageSize);
+            DashboardViewModel dashboardViewModel = _patient.GetDashboardData(page,pageSize);
             return PartialView("_PatientDashboard",dashboardViewModel);
         }
-
+        /// <summary>
+        /// It is Get method for Submit Request for Someone else Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult SubmitSomeoneElse()
         {
 
-            FamilyRequestViewModel familyRequestViewModel = _patient.getFamilyRequest();
+            FamilyRequestViewModel familyRequestViewModel = _patient.GetFamilyRequest();
             return View(familyRequestViewModel);
         }
-
+        /// <summary>
+        /// It is post method for Submit Request for Someone else Page
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitSomeoneElse(FamilyRequestViewModel modal)
         {
             if(ModelState.IsValid)
             {
-                bool isVerified = _admin.verifyRegion(modal.State);
+                bool isVerified = _admin.VerifyRegion(modal.State);
                 if (!isVerified)
                 {
                     TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
 
-                bool isBlocked = _admin.verifyBlock(modal.Email);
+                bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {
                     TempData["error"] = "Patient with this email is blocked!!!";
                     return View(modal);
                 }
 
-                var isCreated = _patient.someoneElseRequest(modal);
+                var isCreated = _patient.SomeoneElseRequest(modal);
                 if (isCreated.Result)
                 {
                     TempData["success"] = "Request Created Successfully!!!";
@@ -100,34 +110,41 @@ namespace HaloDocMVC.NET.Controllers
             
             return View(modal);
         }
-
+        /// <summary>
+        /// It is Get method for Submit Request for Me Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult SubmitForMe()
         {
-            PatientRequestViewModel patientRequestViewModel = _patient.getPatientRequest();
+            PatientRequestViewModel patientRequestViewModel = _patient.GetPatientRequest();
             return View(patientRequestViewModel);
         }
-
+        /// <summary>
+        /// It is Post method for Submit for Me Page
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitForMe(PatientRequestViewModel modal)
         {
             if (ModelState.IsValid)
             {
-                bool isVerified = _admin.verifyRegion(modal.State);
+                bool isVerified = _admin.VerifyRegion(modal.State);
                 if (!isVerified)
                 {
                     TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
 
-                bool isBlocked = _admin.verifyBlock(modal.Email);
+                bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {
                     TempData["error"] = "Patient with this email is blocked!!!";
                     return View(modal);
                 }
 
-                var isCreated = _patient.selfRequest(modal);
+                var isCreated = _patient.SelfRequest(modal);
                 if (isCreated.Result)
                 {
                     TempData["success"] = "Request Created Successfully!!!";
@@ -140,27 +157,38 @@ namespace HaloDocMVC.NET.Controllers
             }
             return View(modal);
         }
-
+        /// <summary>
+        /// It is Get method for Patient Profile Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult PatientProfile()
         {
-            PatientRequestViewModel patientRequestViewModel = _patient.getPatientProfile();
+            PatientRequestViewModel patientRequestViewModel = _patient.GetPatientProfile();
+            if(patientRequestViewModel == null)
+            {
+                return NotFound();
+            }
             return View(patientRequestViewModel);
         }
-
+        /// <summary>
+        /// It is Post method for Patient Profile Page
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult PatientProfile(PatientRequestViewModel modal)
         {
             if (ModelState.IsValid)
             {
-                bool isVerified = _admin.verifyRegion(modal.State);
+                bool isVerified = _admin.VerifyRegion(modal.State);
                 if (!isVerified)
                 {
                     TempData["error"] = "We are currently not serving this region!!!";
                     return View(modal);
                 }
 
-                int isUpdated = _patient.updatePatientProfile(modal);
+                int isUpdated = _patient.UpdatePatientProfile(modal);
                 if(isUpdated == 1)
                 {
                     TempData["success"] = "Information updated successfully!!!";
@@ -170,6 +198,10 @@ namespace HaloDocMVC.NET.Controllers
                 {
                     TempData["error"] = "This email already exists!!!";
                     return View(modal);
+                }
+                else if(isUpdated == 4)
+                {
+                    return NotFound();
                 }
                 else
                 {
@@ -181,26 +213,43 @@ namespace HaloDocMVC.NET.Controllers
             }
             return View(modal);
         }
-
+        /// <summary>
+        /// It is Get method for View Document Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult ViewDocument(int id)
         {
-            ViewDocumentModal viewDocumentModal = _patient.getViewDocument(id);
+            ViewDocumentModal viewDocumentModal = _patient.GetViewDocument(id);
+            if(viewDocumentModal == null)
+            {
+                return NotFound();
+            }
             return View(viewDocumentModal);
         }
-
+        /// <summary>
+        /// It will upload file for specified request
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> FileUpload([FromForm]IFormFile file, [FromForm] int id)
         {
-            Task<bool> isFileUploaded = _patient.fileUpload(file, id);
+            Task<bool> isFileUploaded = _patient.FileUpload(file, id);
             return Json(new { isFileUploaded = isFileUploaded });
         }
-
+        /// <summary>
+        /// It will download all the files selected in the form of zip file
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ViewDocument(ViewDocumentModal modal)
         {
-            var result = _admin.downloadMultipleFiles(modal);
+            var result = _admin.DownloadMultipleFiles(modal);
             await result;
             Response.ContentType = "application/zip";
             Response.Headers.Add("Content-Disposition", $"attachment; filename={result.Result.Item2}");

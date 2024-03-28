@@ -16,25 +16,32 @@ namespace HalloDoc.Controllers
             _admin = admin;
             _patient = patient;
         }
-
+        /// <summary>
+        /// It is Get Method for Login Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult PatientLogin()
         {
             return View();
         }
-
+        /// <summary>
+        /// It is post Method for Login Page
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult PatientLogin(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = _patient.login(model);
+                var result = _patient.Login(model);
                 if (result == 2)
                 {
                     TempData["success"] = "Loged in Successfully!!";
-                    AspNetUser user = _patient.getAspNetUserLogin(model.Email);
+                    AspNetUser user = _patient.GetAspNetUserLogin(model.Email);
                     var jwtToken = _jwt.GenerateJWTAuthetication(user);
-                    CookieModel cookieModel = _jwt.getDetails(jwtToken);
+                    CookieModel cookieModel = _jwt.GetDetails(jwtToken);
                     Response.Cookies.Append("jwt", jwtToken);
                     if(cookieModel.role == "Patient")
                     {
@@ -68,17 +75,24 @@ namespace HalloDoc.Controllers
             }
             return View();
         }
-
+        /// <summary>
+        /// It is Get method for Forgot Password Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ForgotPassword()
         {
             return View();
         }
-
+        /// <summary>
+        /// It is Post Method for Forgot Password Page
+        /// </summary>
+        /// <param name="forgotPasswordViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
-            Task<bool> isSent = _patient.sendResetLink(forgotPasswordViewModel.email);
+            Task<bool> isSent = _patient.SendResetLink(forgotPasswordViewModel.email);
             if(isSent.Result)
             {
                 TempData["success"] = "Email Sent Successfully!!";
@@ -89,10 +103,14 @@ namespace HalloDoc.Controllers
             }
             return View();
         }
-
+        /// <summary>
+        /// It is Get Method for Reset Password Page
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns></returns>
         public IActionResult ResetPassword(string Token)
         {
-            PasswordReset passwordReset = _patient.getResetPassword(Token);
+            PasswordReset passwordReset = _patient.GetResetPassword(Token);
             if (passwordReset == null)
             {
                 return NotFound();
@@ -111,14 +129,18 @@ namespace HalloDoc.Controllers
             resetPasswordViewModel.Token = Token;
             return View(resetPasswordViewModel);
         }
-
+        /// <summary>
+        /// It is Post Method for Reset Password Page
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel modal)
         {
             if (ModelState.IsValid)
             {
-                bool isReseted = _patient.resetPassword(modal);
+                bool isReseted = _patient.ResetPassword(modal);
                 if (isReseted)
                 {
                     TempData["success"] = "Password Reseted successfully!!!";
@@ -131,7 +153,10 @@ namespace HalloDoc.Controllers
             return View(modal);
         }
 
-
+        /// <summary>
+        /// It is method for logging out from an account
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Logout()
         {
             var cookieOptions = new CookieOptions
@@ -144,23 +169,31 @@ namespace HalloDoc.Controllers
             Response.Cookies.Delete("jwt", cookieOptions);
             return Json(new { isLogout = true });
         }
-
+        /// <summary>
+        /// It is Get method of Register Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult Register(int id)
         {
             RegisterViewModel modal = new RegisterViewModel();
-            AspNetUser aspNetUser = _patient.getAspNetUserById(id);
+            AspNetUser aspNetUser = _patient.GetAspNetUserById(id);
             modal.Id = id;
             modal.Email = aspNetUser.Email;
             return View(modal);
         }
-
+        /// <summary>
+        /// It is post method for Register Page
+        /// </summary>
+        /// <param name="modal"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel modal)
         {
             if (ModelState.IsValid)
             {
-                var isRegistered = _patient.register(modal);
+                var isRegistered = _patient.Register(modal);
                 if (isRegistered)
                 {
                     TempData["success"] = "Registered successfully!!!";
@@ -173,7 +206,10 @@ namespace HalloDoc.Controllers
             }
             return View(modal);
         }
-
+        /// <summary>
+        /// It is Get method for AccessDenied Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult AccessDenied()
         {
             return View();

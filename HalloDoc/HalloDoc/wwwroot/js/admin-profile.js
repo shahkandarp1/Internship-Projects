@@ -1,4 +1,22 @@
 ﻿
+const top_most_edit = () => {
+    const editable = document.getElementsByClassName('top-most-editable')
+    for (let i = 0; i < editable.length; ++i) {
+        editable[i].disabled = false;
+    }
+    const topbtn = document.getElementById("top-most-edit")
+    const btn = topbtn.getElementsByClassName('lower-custom-btn')
+    for (let i = 0; i < btn.length; ++i) {
+        if (btn[i].classList.length == 3) {
+            btn[i].classList.remove("hidden");
+        }
+        else {
+            btn[i].classList.add("hidden");
+        }
+    }
+}
+
+
 const top_edit = () => {
     const editable = document.getElementsByClassName('top-editable')
     for (let i = 0; i < editable.length; ++i) {

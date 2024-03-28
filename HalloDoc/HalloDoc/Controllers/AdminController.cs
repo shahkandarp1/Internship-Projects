@@ -41,7 +41,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Dashboard()
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New",null,null,-1);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("New",null,null,-1);
+            if(adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return View(adminDashboardViewModel);
         }
         /// <summary>
@@ -55,7 +59,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult New(string? search,string ?requestor,int? region,int page=1,int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("New", search, requestor, region,page,pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("New", search, requestor, region,page,pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable",adminDashboardViewModel);
         }
         /// <summary>
@@ -69,7 +77,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Pending(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Pending", search, requestor, region,page,pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("Pending", search, requestor, region,page,pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
         /// <summary>
@@ -83,7 +95,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Active(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Active", search, requestor, region, page, pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("Active", search, requestor, region, page, pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
         /// <summary>
@@ -97,7 +113,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Conclude(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Conclude", search, requestor, region, page, pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("Conclude", search, requestor, region, page, pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
         /// <summary>
@@ -111,7 +131,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Close(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("ToClose", search, requestor, region,page,pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("ToClose", search, requestor, region,page,pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
         /// <summary>
@@ -125,7 +149,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Unpaid(string? search, string? requestor, int? region, int page = 1, int pageSize = 10)
         {
-            AdminDashboardViewModel adminDashboardViewModel = _admin.adminDashboardContent("Unpaid", search, requestor, region, page, pageSize);
+            AdminDashboardViewModel adminDashboardViewModel = _admin.AdminDashboardContent("Unpaid", search, requestor, region, page, pageSize);
+            if (adminDashboardViewModel == null)
+            {
+                return NotFound();
+            }
             return PartialView("_AdminDashboardTable", adminDashboardViewModel);
         }
         /// <summary>
@@ -134,8 +162,8 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult ExportAll()
         {
-            MemoryStream memoryStream = _admin.exportAll();
-             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "All Data.xlsx");
+            MemoryStream memoryStream = _admin.ExportAll();
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "All Data.xlsx");
         }
 
         /// <summary>
@@ -147,8 +175,8 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Dashboard(AdminDashboardViewModel model)
         {
-            AdminDashboardViewModel viewmodel = _admin.adminDashboardContent(model.status, model.search, model.requestor, model.RegionId, (int)model.CurrentPage, (int)model.PageSize);
-            MemoryStream memoryStream = _admin.export(viewmodel);
+            AdminDashboardViewModel viewmodel = _admin.AdminDashboardContent(model.status, model.search, model.requestor, model.RegionId, (int)model.CurrentPage, (int)model.PageSize);
+            MemoryStream memoryStream = _admin.Export(viewmodel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Data-{model.status}.xlsx");
         }
         /// <summary>
@@ -159,7 +187,11 @@ namespace HalloDoc.Controllers
         public IActionResult ViewCase(int id)
         {
             
-            ViewCaseViewModel viewCaseViewModel= _admin.viewCase(id);
+            ViewCaseViewModel viewCaseViewModel= _admin.ViewCase(id);
+            if (viewCaseViewModel == null)
+            {
+                return NotFound();
+            }
             return View(viewCaseViewModel);
         }
         /// <summary>
@@ -171,7 +203,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ViewCase(ViewCaseViewModel model)
         {
-            bool status = _admin.viewCase(model);
+            bool status = _admin.ViewCase(model);
             if(status)
             {
                 TempData["success"] = "Data Editted Successfully!!";
@@ -192,7 +224,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CancelRequest(ViewCaseViewModel viewCaseViewModel)
         {
-            bool isUpdated = _admin.cancelRequest(viewCaseViewModel.RequestId,viewCaseViewModel.Admin_notes,viewCaseViewModel.CaseTag);
+            bool isUpdated = _admin.CancelRequest(viewCaseViewModel.RequestId,viewCaseViewModel.Admin_notes,viewCaseViewModel.CaseTag);
             if (isUpdated)
             {
                 TempData["success"] = "Request Cancelled Successfully!!";
@@ -212,7 +244,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SendLink(AdminDashboardViewModel dashboardViewModel)
         {
-            Task<bool> isSent = _admin.sendLink(dashboardViewModel);
+            Task<bool> isSent = _admin.SendLink(dashboardViewModel);
             if (isSent.Result)
             {
                 TempData["success"] = "Link Sent Successfully!!";
@@ -229,7 +261,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult CreateRequest()
         {
-            PatientRequestViewModel patientRequestViewModel = _admin.createRequest();
+            PatientRequestViewModel patientRequestViewModel = _admin.CreateRequest();
             return View(patientRequestViewModel);
         }
         /// <summary>
@@ -243,21 +275,21 @@ namespace HalloDoc.Controllers
         {
             if(ModelState.IsValid)
             {
-                bool isVerified = _admin.verifyRegion(patientRequestViewModel.State);
+                bool isVerified = _admin.VerifyRegion(patientRequestViewModel.State);
                 if(!isVerified)
                 {
                     TempData["error"] = "We are currently not serving this region!!!";
                     return View(patientRequestViewModel);
                 }
 
-                bool isBlocked = _admin.verifyBlock(patientRequestViewModel.Email);
+                bool isBlocked = _admin.VerifyBlock(patientRequestViewModel.Email);
                 if (isBlocked)
                 {
                     TempData["error"] = "Patient with this email is blocked!!!";
                     return View(patientRequestViewModel);
                 }
 
-                Task<bool> requestCreated = _admin.createRequest(patientRequestViewModel);
+                Task<bool> requestCreated = _admin.CreateRequest(patientRequestViewModel);
                 if(requestCreated.Result)
                 {
                     TempData["success"] = "Request created Successfully!!";
@@ -283,7 +315,7 @@ namespace HalloDoc.Controllers
             {
                 return Json(new { isVerified=2 });
             }
-            bool isVerified = _admin.verifyRegion(region);
+            bool isVerified = _admin.VerifyRegion(region);
             if (isVerified)
             {
                 return Json(new { isVerified = 1 });
@@ -300,7 +332,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult ViewNotes(int id)
         {
-            ViewNotesViewModel viewNotesViewModel = _admin.viewNotes(id);
+            ViewNotesViewModel viewNotesViewModel = _admin.ViewNotes(id);
+            if(viewNotesViewModel == null)
+            {
+                return NotFound();
+            }
             return View(viewNotesViewModel);
         }
         /// <summary>
@@ -312,7 +348,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ViewNotes(ViewNotesViewModel viewNotesViewModel)
         {
-            bool isUpdated = _admin.updateAdminNotes(viewNotesViewModel);
+            bool isUpdated = _admin.UpdateAdminNotes(viewNotesViewModel);
             if(isUpdated)
             {
                 TempData["success"] = "Admin Note Updated Successfully!!";
@@ -330,7 +366,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult ViewUploads(int id)
         {
-            ViewDocumentModal viewDocumentModal = _admin.viewUploads(id);
+            ViewDocumentModal viewDocumentModal = _admin.ViewUploads(id);
+            if(viewDocumentModal == null)
+            {
+                return NotFound();
+            }
             return View(viewDocumentModal);
         }
         /// <summary>
@@ -342,7 +382,7 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public IActionResult FileUpload([FromForm] IFormFile file, [FromForm] int id)
         {
-            Task<bool> isFileUploaded = _admin.fileUpload(file,id);
+            Task<bool> isFileUploaded = _admin.FileUpload(file,id);
             return Json(new { isFileUploaded = isFileUploaded });
         }
         /// <summary>
@@ -352,7 +392,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult DeleteSingle(int id)
         {
-            int requestid = _admin.deleteSingleFile(id);
+            int requestid = _admin.DeleteSingleFile(id);
+            if(requestid == -1)
+            {
+                TempData["error"] = "File could not be Deleted!!";
+            }
             return RedirectToAction("ViewUploads",new { id = requestid });
         }
         /// <summary>
@@ -364,7 +408,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ViewUploads(ViewDocumentModal viewDocumentModal)
         {
-            var result = _admin.downloadMultipleFiles(viewDocumentModal);
+            var result = _admin.DownloadMultipleFiles(viewDocumentModal);
             await result;
             Response.ContentType = "application/zip";
             Response.Headers.Add("Content-Disposition", $"attachment; filename={result.Result.Item2}");
@@ -377,7 +421,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult DeleteAll([FromForm]string filename)
         {
-            int requestid = _admin.deleteAllFile(filename);
+            int requestid = _admin.DeleteAllFile(filename);
+            if (requestid == -1)
+            {
+                TempData["error"] = "Files could not be Deleted!!";
+            }
             return Json(new { isDeleted = true });
         }
         /// <summary>
@@ -387,7 +435,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult SendMailDocuments([FromForm] string filename)
         {
-            Task<bool> sentMail = _admin.sendDocumentsMail(filename);
+            Task<bool> sentMail = _admin.SendDocumentsMail(filename);
             return Json(new { isSent = sentMail.Result });
         }
         /// <summary>
@@ -397,7 +445,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult GetPhysician(int regionid)
         {
-            List<Physician> physician = _admin.getPhysician(regionid);
+            List<Physician> physician = _admin.GetPhysician(regionid);
             return Json(new { data=physician});
         }
         /// <summary>
@@ -407,7 +455,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult AssignCase(AdminDashboardViewModel adminDashboardViewModel)
         {
-            bool isAssigned = _admin.assignCase(adminDashboardViewModel);
+            bool isAssigned = _admin.AssignCase(adminDashboardViewModel);
             if(isAssigned)
             {
                 TempData["success"] = "Request Assigned Successfully!!";
@@ -425,14 +473,14 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
-            bool isExists = _admin.isSamePhysician(adminDashboardViewModel);
+            bool isExists = _admin.IsSamePhysician(adminDashboardViewModel);
             if(isExists)
             {
                 TempData["error"] = "This doctor already has the same case!!";
                 return RedirectToAction("Dashboard");
             }
 
-            bool isTransfered = _admin.transferCase(adminDashboardViewModel);
+            bool isTransfered = _admin.TransferCase(adminDashboardViewModel);
             if (isTransfered)
             {
                 TempData["success"] = "Request Transferred Successfully!!";
@@ -450,7 +498,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult SendAgreement(AdminDashboardViewModel adminDashboardViewModel)
         {
-            Task<bool> isSent = _admin.sendAgreement(adminDashboardViewModel);
+            Task<bool> isSent = _admin.SendAgreement(adminDashboardViewModel);
             if (isSent.Result)
             {
                 TempData["success"] = "Agreement Sent Successfully!!";
@@ -468,7 +516,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult BlockCase(AdminDashboardViewModel adminDashboardViewModel)
         {
-            bool isBlocked = _admin.blockCase(adminDashboardViewModel);
+            bool isBlocked = _admin.BlockCase(adminDashboardViewModel);
             if (isBlocked)
             {
                 TempData["success"] = "Request Blocked Successfully!!";
@@ -486,7 +534,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult ClearCase(AdminDashboardViewModel adminDashboardViewModel)
         {
-            bool isCleared = _admin.clearCase(adminDashboardViewModel);
+            bool isCleared = _admin.ClearCase(adminDashboardViewModel);
             if (isCleared)
             {
                 TempData["success"] = "Request Cleared Successfully!!";
@@ -495,8 +543,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Request could not be Cleared!!";
             }
-            AdminDashboardViewModel newAdminDashboardViewModel = _admin.adminDashboardContent("New", null, null, -1);
-            return View("Dashboard", newAdminDashboardViewModel);
+            return RedirectToAction("Dashboard");
         }
         /// <summary>
         /// This is the Get method of Orders Action
@@ -505,7 +552,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Orders(int id)
         {
-            OrdersViewModel ordersViewModel = _admin.orders(id);
+            OrdersViewModel ordersViewModel = _admin.Orders(id);
+            if(ordersViewModel == null)
+            {
+                return NotFound();
+            }
             return View(ordersViewModel);
         }
         /// <summary>
@@ -515,7 +566,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult GetBusiness(int professionid)
         {
-            var business = _admin.getBusiness(professionid);
+            var business = _admin.GetBusiness(professionid);
             return Json(new { data=business });
         }
         /// <summary>
@@ -525,7 +576,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult GetBusinessData(int businessid)
         {
-            var business = _admin.getBusinessData(businessid);
+            var business = _admin.GetBusinessData(businessid);
             return Json(new { data=business });
         }
         /// <summary>
@@ -546,7 +597,7 @@ namespace HalloDoc.Controllers
                     return View(ordersViewModel);
                 }
 
-                bool isOrdered = _admin.placeOrder(ordersViewModel);
+                bool isOrdered = _admin.PlaceOrder(ordersViewModel);
                 if(isOrdered)
                 {
                     TempData["success"] = "Order Placed Successfully!!";
@@ -565,7 +616,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Profile()
         {
-            AdminProfileViewModel adminProfileViewModel = _admin.getAdmin();
+            AdminProfileViewModel adminProfileViewModel = _admin.GetAdmin(-1,"Profile");
+            if(adminProfileViewModel == null)
+            {
+                return NotFound();
+            }
             return View(adminProfileViewModel);
         }
         /// <summary>
@@ -578,7 +633,7 @@ namespace HalloDoc.Controllers
         public IActionResult Profile(AdminProfileViewModel adminProfileViewModel)
         {
             
-            bool isUpdated = _admin.updateProfile(adminProfileViewModel);
+            bool isUpdated = _admin.UpdateProfile(adminProfileViewModel);
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
@@ -594,14 +649,14 @@ namespace HalloDoc.Controllers
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
-        public IActionResult ResetPasswordProfile(string password)
+        public IActionResult ResetPasswordProfile(string password,int id=-1)
         {
             if(password == null)
             {
                 return Json(new { isReseted = 1 });
             }
 
-            bool isReseted = _admin.resetPasswordProfile(password);
+            bool isReseted = _admin.ResetPasswordProfile(password,id);
             if (isReseted)
             {
                 return Json(new { isReseted = 2 });
@@ -618,7 +673,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult EncounterForm(int id)
         {
-            EncounterFormViewModel encounterFormViewModel = _admin.getEncounterFormDetails(id);
+            EncounterFormViewModel encounterFormViewModel = _admin.GetEncounterFormDetails(id);
+            if(encounterFormViewModel == null)
+            {
+                return NotFound();
+            }
             return View(encounterFormViewModel);
         }
 
@@ -631,7 +690,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EncounterForm(EncounterFormViewModel encounterFormViewModel)
         {
-            bool isUpdated = _admin.updateEncounterForm(encounterFormViewModel);
+            bool isUpdated = _admin.UpdateEncounterForm(encounterFormViewModel);
             if(isUpdated)
             {
                 TempData["success"] = "Encounter Form Updated Successfully!!";
@@ -649,7 +708,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult CloseCase(int id)
         {
-            CloseCaseViewModel closeCaseViewModel = _admin.getCloseCase(id);
+            CloseCaseViewModel closeCaseViewModel = _admin.GetCloseCase(id);
+            if(closeCaseViewModel == null)
+            {
+                return NotFound();
+            }
             return View(closeCaseViewModel);
         }
         /// <summary>
@@ -661,7 +724,7 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CloseCase(CloseCaseViewModel closeCaseViewModel)
         {
-            bool isUpdated = _admin.updateCloseCase(closeCaseViewModel);
+            bool isUpdated = _admin.UpdateCloseCase(closeCaseViewModel);
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
@@ -679,7 +742,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult FinalCloseCase(int id)
         {
-            bool isClosed = _admin.closeCase(id);
+            bool isClosed = _admin.CloseCase(id);
             if (isClosed)
             {
                 TempData["success"] = "Case Closed!!";
@@ -696,7 +759,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Provider()
         {
-            ProviderViewModel providerViewModel = _admin.getProviderPageDetails(-1);
+            ProviderViewModel providerViewModel = _admin.GetProviderPageDetails(-1);
             return View(providerViewModel);
         }
         /// <summary>
@@ -708,28 +771,28 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult ProviderTable(int id = -1,int page=1,int pageSize = 10)
         {
-            ProviderViewModel providerViewModel = _admin.getProviderPageDetails(id,page,pageSize);
+            ProviderViewModel providerViewModel = _admin.GetProviderPageDetails(id,page,pageSize);
             return PartialView("_AdminProviderTable", providerViewModel);
         }
         /// <summary>
-        /// 
+        /// It is used to toggle change notification field in Providers page
         /// </summary>
         /// <param name="id"></param>
         /// <param name="update"></param>
         /// <returns></returns>
         public IActionResult ChangeNotification(int id,bool update)
         {
-            bool isUpdated = _admin.changeNotification(id,update);
+            bool isUpdated = _admin.ChangeNotification(id,update);
             return Json(new {isUpdated = isUpdated });
         }
         /// <summary>
-        /// 
+        /// It will either mail or message or both to provider
         /// </summary>
         /// <param name="providerViewModel"></param>
         /// <returns></returns>
         public IActionResult ContactProvider(ProviderViewModel providerViewModel)
         {
-            Task<bool> isSent = _admin.contactProvider(providerViewModel);
+            Task<bool> isSent = _admin.ContactProvider(providerViewModel);
             if (isSent.Result)
             {
                 TempData["success"] = "Your Message Sent Successfully!!";
@@ -740,18 +803,25 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
-
+        /// <summary>
+        /// It is Get method for CreatePhysician
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreatePhysician()
         {
-            PhysicianAccountViewModel physicianAccountViewModel = _admin.getCreatePhysicianDetails();
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetCreatePhysicianDetails();
             return View(physicianAccountViewModel);
         }
-
+        /// <summary>
+        /// It is a post method of Create Physician that will Create Physician
+        /// </summary>
+        /// <param name="physicianAccountViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreatePhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
-            List<Role> roles = _admin.getPhysicianRoles();
+            List<Role> roles = _admin.GetPhysicianRoles();
             physicianAccountViewModel.roles = roles;
             if (physicianAccountViewModel.Password == null || physicianAccountViewModel.Password == "")
             {
@@ -771,13 +841,13 @@ namespace HalloDoc.Controllers
 
             if (ModelState.IsValid)
             {
-                if(_patient.getAspNetUser(physicianAccountViewModel.Email) != null)
+                if(_patient.GetAspNetUser(physicianAccountViewModel.Email) != null)
                 {
                     TempData["error"] = "This Email Id Already Exists!!";
                     return View(physicianAccountViewModel);
                 }
 
-                Task<bool> isCreated = _admin.createPhysician(physicianAccountViewModel);
+                Task<bool> isCreated = _admin.CreatePhysician(physicianAccountViewModel);
                 if(isCreated.Result)
                 {
                     TempData["success"] = "Account Created Successfully!!";
@@ -790,24 +860,38 @@ namespace HalloDoc.Controllers
             }
             return View(physicianAccountViewModel);
         }
-
+        /// <summary>
+        /// It is Get method of Edit Physician
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult EditPhysician(int id)
         {
-            PhysicianAccountViewModel physicianAccountViewModel = _admin.getPhysicianDetails(id);
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(id);
             return View(physicianAccountViewModel);
         }
-
+        /// <summary>
+        /// It will upload files that are present in onboarding section in Edit Physician Page
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public IActionResult FileUploadPhysician([FromForm] IFormFile file, [FromForm] int id, [FromForm] string name)
         {
-            Task<bool> isUploaded = _admin.fileUploadPhysician(file, id, name);
+            Task<bool> isUploaded = _admin.FileUploadPhysician(file, id, name);
             return Json(new { isUploaded = isUploaded.Result });
         }
-
+        /// <summary>
+        /// It is post method of Edit Physician Page
+        /// </summary>
+        /// <param name="physicianAccountViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditPhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
-            Task<bool> isUpdated = _admin.updatePhysician(physicianAccountViewModel);
+            Task<bool> isUpdated = _admin.UpdatePhysician(physicianAccountViewModel);
             if (isUpdated.Result)
             {
                 TempData["success"] = "Information Updated Successfully!!";
@@ -818,7 +902,12 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("EditPhysician",new { id=physicianAccountViewModel.PhysicianId });
         }
-
+        /// <summary>
+        /// It will reset password in Edit Physician Page
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult ResetPasswordPhysician(string password, int id)
         {
             int isreset = 0;
@@ -828,7 +917,7 @@ namespace HalloDoc.Controllers
                 return Json(new { isReseted = isreset });
             }
 
-            bool isReseted = _admin.resetPasswordPhysician(password, id);
+            bool isReseted = _admin.ResetPasswordPhysician(password, id);
             if(isReseted)
             {
                 isreset = 2;
@@ -839,10 +928,14 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isReseted  = isreset });
         }
-
+        /// <summary>
+        /// It will delete the specified physician from edit physician page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DeletePhysician(int id)
         {
-            bool isDeleted = _admin.deletePhysician(id);
+            bool isDeleted = _admin.DeletePhysician(id);
             if (isDeleted)
             {
                 TempData["success"] = "Account Deleted!!";
@@ -853,51 +946,97 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
-
+        /// <summary>
+        /// It is Get Method of Patient History Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult PatientHistory()
         {
-            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatients(null,null,null,null);
+            PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatients(null,null,null,null);
             return View(patientHistoryViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Patient History Page as Partial View
+        /// </summary>
+        /// <param name="firstname"></param>
+        /// <param name="lastname"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult PatientHistoryTable(string? firstname,string? lastname,string? email,string? phone,int page=1,int pageSize = 10)
         {
-            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatients(firstname,lastname,email,phone,page,pageSize);
+            PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatients(firstname,lastname,email,phone,page,pageSize);
             return PartialView("_PatientHistoryTable", patientHistoryViewModel);
         }
-
+        /// <summary>
+        /// It is a Get method for Patient Record Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult PatientRecord(int id, int page = 1, int pageSize = 10)
         {
-            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatientRecords(id,page,pageSize);
+            PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatientRecords(id,page,pageSize);
             return View(patientHistoryViewModel);
         }
+        /// <summary>
+        /// It will return filtered and paginated data for Patient Record Page as Partial View
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult PatientRecordTable(int id, int page = 1, int pageSize = 10)
         {
-            PatientHistoryViewModel patientHistoryViewModel = _admin.getAllPatientRecords(id,page,pageSize);
+            PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatientRecords(id,page,pageSize);
             return PartialView("_PatientRecordTable", patientHistoryViewModel);
         }
-
+        /// <summary>
+        /// It is a Get method for Block History Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult BlockHistory()
         {
-            BlockHistoryViewModel blockHistoryViewModel = _admin.getBlockHistoryData(null, null, null, null);
+            BlockHistoryViewModel blockHistoryViewModel = _admin.GetBlockHistoryData(null, null, null, null);
             return View(blockHistoryViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Block History Page as Partial View
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="date"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult BlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10)
         {
-            BlockHistoryViewModel blockHistoryViewModel = _admin.getBlockHistoryData(name, date, email, phone, page, pageSize);
+            BlockHistoryViewModel blockHistoryViewModel = _admin.GetBlockHistoryData(name, date, email, phone, page, pageSize);
             return PartialView("_RequestBlockHistory", blockHistoryViewModel);
         }
-
+        /// <summary>
+        /// It will toggle is active checkbox in Block Request page
+        /// </summary>
+        /// <param name="blockrequestid"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public IActionResult ToggleActive(int blockrequestid,bool value)
         {
-            bool isToggled = _admin.toggleActive(blockrequestid, value);
+            bool isToggled = _admin.ToggleActive(blockrequestid, value);
             return Json(new { isToggled = isToggled });
         }
-
+        /// <summary>
+        /// It will Unblock the Blocked Request from Block Request Page
+        /// </summary>
+        /// <param name="blockrequestid"></param>
+        /// <returns></returns>
         public IActionResult RestoreBlock(int blockrequestid)
         {
-            bool isRestored = _admin.restoreBlock(blockrequestid);
+            bool isRestored = _admin.RestoreBlock(blockrequestid);
             if(isRestored)
             {
                 TempData["success"] = "Request Restored Successfully!!";
@@ -908,22 +1047,42 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-
+        /// <summary>
+        /// It is Get method for Search Record Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult SearchRecord()
         {
-            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(null, null, null, null, null, null, null, null);
+            SearchRecordViewModel searchRecordViewModel = _admin.GetSearchedData(null, null, null, null, null, null, null, null);
             return View(searchRecordViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Search Record Page as Partial View
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="name"></param>
+        /// <param name="requesttypeid"></param>
+        /// <param name="fromdos"></param>
+        /// <param name="todos"></param>
+        /// <param name="providername"></param>
+        /// <param name="email"></param>
+        /// <param name="phonenumber"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult SearchRecordTable(int? status, string? name, int? requesttypeid, DateTime? fromdos, DateTime? todos, string? providername, string? email, string? phonenumber, int page = 1, int pageSize = 10)
         {
-            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(status, name, requesttypeid, fromdos, todos, providername, email, phonenumber, page, pageSize);
+            SearchRecordViewModel searchRecordViewModel = _admin.GetSearchedData(status, name, requesttypeid, fromdos, todos, providername, email, phonenumber, page, pageSize);
             return PartialView("_SearchRecordTable",searchRecordViewModel);
         }
-
+        /// <summary>
+        /// It will delete specific request from Search Records Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DeleteRequest(int id)
         {
-            bool isDeleted = _admin.deleteRequest(id);
+            bool isDeleted = _admin.DeleteRequest(id);
             if(isDeleted)
             {
                 TempData["success"] = "Request Deleted Successfully!!";
@@ -933,41 +1092,66 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("SearchRecord");
         }
-
+        /// <summary>
+        /// It will Export Filtered Data into Excel in Seacxrh Record Page
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IActionResult ExportSearchedData(SearchRecordViewModel model)
         {
-            SearchRecordViewModel searchRecordViewModel = _admin.getSearchedData(model.status,  model.name, model.requesttypeid, model.fromdos, model.todos, model.providername, model.email, model.phonenumber, (int)model.CurrentPage, (int)model.PageSize);
-            MemoryStream memoryStream = _admin.exportSearchedData(searchRecordViewModel);
+            SearchRecordViewModel searchRecordViewModel = _admin.GetSearchedData(model.status,  model.name, model.requesttypeid, model.fromdos, model.todos, model.providername, model.email, model.phonenumber, (int)model.CurrentPage, (int)model.PageSize);
+            MemoryStream memoryStream = _admin.ExportSearchedData(searchRecordViewModel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Filtered-Data.xlsx");
         }
-
+        /// <summary>
+        /// It is Get Method of Account Access Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult AccountAccess()
         {
-            AccountAccessViewModel accountAccessViewModel = _admin.getAllRolesDetails();
+            AccountAccessViewModel accountAccessViewModel = _admin.GetAllRolesDetails();
             return View(accountAccessViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Account Access Page as Partial View
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult AccountAccessTable(int page = 1, int pageSize = 10)
         {
-            AccountAccessViewModel accountAccessViewModel = _admin.getAllRolesDetails();
+            AccountAccessViewModel accountAccessViewModel = _admin.GetAllRolesDetails(page,pageSize);
             return PartialView("_AccountAccessTable",accountAccessViewModel);
         }
-
+        /// <summary>
+        /// It is a get method for Create Access Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateAccess()
         {
-            AdminNavbarViewModel adminNavbarViewModel = _admin.getCreateAccessNavbar();
+            AdminNavbarViewModel adminNavbarViewModel = _admin.GetCreateAccessNavbar();
             return View(adminNavbarViewModel);
         }
-
+        /// <summary>
+        /// It will return Menus for the specified Account Type
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult GetMenus(int? id)
         {
-            List<Menu> menu = _admin.getMenus(id);
+            List<Menu> menu = _admin.GetMenus(id);
             return Json(new { data = menu });
         }
-
+        /// <summary>
+        /// It is a post method for Create Role Page
+        /// </summary>
+        /// <param name="menus"></param>
+        /// <param name="role_name"></param>
+        /// <param name="account_type"></param>
+        /// <returns></returns>
         public IActionResult CreateRole(string? menus,string? role_name,int? account_type)
         {
-            bool isCreated = _admin.createRole(menus, role_name, account_type);
+            bool isCreated = _admin.CreateRole(menus, role_name, account_type);
             if(isCreated)
             {
                 TempData["success"] = "Role Created Successfully!!";
@@ -978,10 +1162,14 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isCreated  = isCreated });
         }
-
+        /// <summary>
+        /// It will delete specific role from Account Access Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DeleteRole(int? id)
         {
-            bool isDeleted = _admin.deleteRole(id);
+            bool isDeleted = _admin.DeleteRole(id);
             if(isDeleted)
             {
                 TempData["success"] = "Role Deleted Successfully!!";
@@ -992,17 +1180,32 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("AccountAccess");
         }
-
+        /// <summary>
+        /// It is a Get method for Edit Role page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult EditRole(int? id)
         {
-            EditAccessViewModel editAccessViewModel = _admin.getRoleDetails(id);
+            EditAccessViewModel editAccessViewModel = _admin.GetRoleDetails(id);
+            if(editAccessViewModel == null)
+            {
+                return NotFound();
+            }
             return View(editAccessViewModel);
         }
-
+        /// <summary>
+        /// It is a post method for Edit Role Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="menus"></param>
+        /// <param name="role_name"></param>
+        /// <param name="account_type"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult EditRole(int? id, string? menus, string? role_name, int? account_type)
         {
-            bool isEditted = _admin.editRoleDetails(id,menus,role_name,account_type);
+            bool isEditted = _admin.EditRoleDetails(id,menus,role_name,account_type);
             if(isEditted)
             {
                 TempData["success"] = "Role Editted Successfully!!";
@@ -1013,56 +1216,99 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isEditted = isEditted });
         }
-
+        /// <summary>
+        /// It is a Get method for Email Log Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult EmailLog()
         {
-            EmailLogViewModel emailLogViewModel = _admin.getEmailLogDetails(-1,null,null,null,null);
+            EmailLogViewModel emailLogViewModel = _admin.GetEmailLogDetails(-1,null,null,null,null);
             return View(emailLogViewModel);
         }
-        
+        /// <summary>
+        /// It will return filtered and paginated data for Email Log Page as Partial View
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="createddate"></param>
+        /// <param name="sentdate"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult EmailLogTable(int? roleid, string? name, string? email, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
         {
-            EmailLogViewModel emailLogViewModel = _admin.getEmailLogDetails(roleid,name,email,createddate,sentdate,page,pageSize);
+            EmailLogViewModel emailLogViewModel = _admin.GetEmailLogDetails(roleid,name,email,createddate,sentdate,page,pageSize);
             return PartialView("_EmailLogTable",emailLogViewModel);
         }
-
+        /// <summary>
+        /// It is a Get method for SMS Log Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult SMSLog()
         {
-            EmailLogViewModel emailLogViewModel = _admin.getSMSLogDetails(-1, null, null, null, null);
+            EmailLogViewModel emailLogViewModel = _admin.GetSMSLogDetails(-1, null, null, null, null);
             return View(emailLogViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for SMS Log Page as Partial View
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <param name="name"></param>
+        /// <param name="phonenumber"></param>
+        /// <param name="createddate"></param>
+        /// <param name="sentdate"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult SMSLogTable(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
         {
-            EmailLogViewModel emailLogViewModel = _admin.getSMSLogDetails(roleid, name, phonenumber, createddate, sentdate, page, pageSize);
+            EmailLogViewModel emailLogViewModel = _admin.GetSMSLogDetails(roleid, name, phonenumber, createddate, sentdate, page, pageSize);
             return PartialView("_SMSLogTable", emailLogViewModel);
         }
-
+        /// <summary>
+        /// It is a Get method for Partners Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Partners()
         {
-            PartnerViewModal partnerViewModal = _admin.getPartnerDetails(null,-1);
+            PartnerViewModal partnerViewModal = _admin.GetPartnerDetails(null,-1);
             return View(partnerViewModal);
         }
-
+        /// <summary>
+        /// It will return filtered and paginated data for Partners Page as Partial View
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="id"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult PartnersTable(string? name,int? id,int page = 1,int pageSize = 10)
         {
-            PartnerViewModal partnerViewModal = _admin.getPartnerDetails(name,id,page,pageSize);
+            PartnerViewModal partnerViewModal = _admin.GetPartnerDetails(name,id,page,pageSize);
             return PartialView("_PartnersTable", partnerViewModal);
         }
-
+        /// <summary>
+        /// It is a Get Method for Create Business
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateBusiness()
         {
-            BusinessViewModel businessViewModel = _admin.getBusinessNavbar();
+            BusinessViewModel businessViewModel = _admin.GetBusinessNavbar();
             return View("Business",businessViewModel);
         }
-
+        /// <summary>
+        /// It is a Post method for Create Business
+        /// </summary>
+        /// <param name="businessViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AddBusiness(BusinessViewModel businessViewModel)
         {
             if(ModelState.IsValid)
             {
 
-                bool isCreated = _admin.createBusiness(businessViewModel);
+                bool isCreated = _admin.CreateBusiness(businessViewModel);
                 if(isCreated)
                 {
                     TempData["success"] = "Vendor Added Successfully!!";
@@ -1075,20 +1321,32 @@ namespace HalloDoc.Controllers
             }
             return View("Business", businessViewModel);
         }
-
+        /// <summary>
+        /// It is a Get method for Edit Business
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult EditBusiness(int id)
         {
-            BusinessViewModel businessViewModel = _admin.getBusinessDetails(id);
+            BusinessViewModel businessViewModel = _admin.GetBusinessDetails(id);
+            if(businessViewModel == null)
+            {
+                return NotFound();
+            }
             return View("Business", businessViewModel);
         }
-
+        /// <summary>
+        /// It is a Post method for Edit Business
+        /// </summary>
+        /// <param name="businessViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult EditBusiness(BusinessViewModel businessViewModel)
         {
             if (ModelState.IsValid)
             {
 
-                bool isEditted = _admin.editBusiness(businessViewModel);
+                bool isEditted = _admin.EditBusiness(businessViewModel);
                 if (isEditted)
                 {
                     TempData["success"] = "Vendor Updated Successfully!!";
@@ -1101,10 +1359,14 @@ namespace HalloDoc.Controllers
             }
             return View("Business", businessViewModel);
         }
-
+        /// <summary>
+        /// It will delete specified Business from Partners Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DeleteBusiness(int id)
         {
-            bool isDeleted = _admin.deleteBusiness(id);
+            bool isDeleted = _admin.DeleteBusiness(id);
             if(isDeleted)
             {
                 TempData["success"] = "Vendor Deleted Successfully!!";
@@ -1115,24 +1377,34 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Partners");
         }
-
+        /// <summary>
+        /// It is a get method for Provider Location Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ProviderLocation()
         {
-            ProviderLocationViewModel providerLocationViewModel = _admin.getProviderLocation();
+            ProviderLocationViewModel providerLocationViewModel = _admin.GetProviderLocation();
             return View(providerLocationViewModel);
         }
-
+        /// <summary>
+        /// It is a Get Method for Create Admin
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateAdmin()
         {
-            AdminProfileViewModel adminProfileViewModel = _admin.getCreateAdminProfilePageDetails();
+            AdminProfileViewModel adminProfileViewModel = _admin.GetCreateAdminProfilePageDetails();
             return View(adminProfileViewModel);
         }
-
+        /// <summary>
+        /// It is a post method for Create Admin Page 
+        /// </summary>
+        /// <param name="adminProfileViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateAdmin(AdminProfileViewModel adminProfileViewModel)
         {
-            List<Role> roles = _admin.getAdminRoles();
+            List<Role> roles = _admin.GetAdminRoles();
             adminProfileViewModel.roles = roles;
             if (adminProfileViewModel.Password == null || adminProfileViewModel.Password == "")
             {
@@ -1146,12 +1418,12 @@ namespace HalloDoc.Controllers
             }
             if(ModelState.IsValid)
             {
-                if (_patient.getAspNetUser(adminProfileViewModel.Email) != null)
+                if (_patient.GetAspNetUser(adminProfileViewModel.Email) != null)
                 {
                     TempData["error"] = "This Email Id Already Exists!!";
                     return View(adminProfileViewModel);
                 }
-                Task<bool> isCreated = _admin.createAdmin(adminProfileViewModel);
+                Task<bool> isCreated = _admin.CreateAdmin(adminProfileViewModel);
                 if(isCreated.Result)
                 {
                     TempData["success"] = "Admin Created Successfully!!";
@@ -1165,17 +1437,77 @@ namespace HalloDoc.Controllers
             return View(adminProfileViewModel);
 
         }
-
+        /// <summary>
+        /// It is a Get method for User Access Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult UserAccess()
         {
             var useraccess = _admin.GetUserAccessDetails(-1);
             return View(useraccess);
         }
-        
+        /// <summary>
+        /// It will return filtered and paginated data for User Access Page as Partial View
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IActionResult UserAccessTable(int? roleid,int page=1,int pageSize=10)
         {
             var useraccess = _admin.GetUserAccessDetails(roleid,page,pageSize);
             return PartialView("_UserAccessTable",useraccess);
+        }
+        /// <summary>
+        /// It is a Get method for Edit Admin Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult EditAdmin(int id)
+        {
+            AdminProfileViewModel adminProfileViewModel = _admin.GetAdmin(id, "Access");
+            if(adminProfileViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(adminProfileViewModel);
+        }
+        /// <summary>
+        /// It is a Post Method for Edit Admin Page
+        /// </summary>
+        /// <param name="adminProfileViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditAdmin(AdminProfileViewModel adminProfileViewModel) {
+            bool isUpdated = _admin.UpdateProfile(adminProfileViewModel);
+            if (isUpdated)
+            {
+                TempData["success"] = "Information Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Information could not be Updated!!";
+            }
+            return RedirectToAction("UserAccess");
+        }
+        /// <summary>
+        /// It will delete specified Admin from Edit Admin Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult DeleteAdmin(int id)
+        {
+            bool isDeleted = _admin.DeleteAdmin(id);
+            if (isDeleted)
+            {
+                TempData["success"] = "Admin Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Information could not be Deleted!!";
+            }
+            return RedirectToAction("UserAccess");
         }
 
     }

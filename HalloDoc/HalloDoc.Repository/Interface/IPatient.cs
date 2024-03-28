@@ -10,45 +10,45 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IPatient
     {
-        public int login(LoginViewModel loginViewModel);
+        public int Login(LoginViewModel loginViewModel);
 
-        public PasswordReset getResetPassword(string Token);
+        public PasswordReset GetResetPassword(string Token);
 
-        public bool resetPassword(ResetPasswordViewModel modal);
+        public bool ResetPassword(ResetPasswordViewModel modal);
 
-        public Task<bool> sendResetLink(string email);
+        public Task<bool> SendResetLink(string email);
 
-        public Task<bool> patientRequest(PatientRequestViewModel modal);
+        public Task<bool> PatientRequest(PatientRequestViewModel modal);
 
-        public Task<bool> businessRequest(BusinessRequestViewModel modal);
+        public Task<bool> BusinessRequest(BusinessRequestViewModel modal);
 
-        public Task<bool> familyRequest(FamilyRequestViewModel modal);
+        public Task<bool> FamilyRequest(FamilyRequestViewModel modal);
 
-        public Task<bool> conciergeRequest(ConciergeRequestViewModel modal);
+        public Task<bool> ConciergeRequest(ConciergeRequestViewModel modal);
 
-        public AspNetUser getAspNetUser(string email);
-        public AspNetUser getAspNetUserLogin(string email);
+        public AspNetUser GetAspNetUser(string email);
+        public AspNetUser GetAspNetUserLogin(string email);
 
-        public DashboardViewModel getDashboardData(int page = 1, int pageSize = 10);
+        public DashboardViewModel GetDashboardData(int page = 1, int pageSize = 10);
 
-        public AspNetUser getAspNetUserById(int id);
+        public AspNetUser GetAspNetUserById(int id);
 
-        public bool register(RegisterViewModel modal);
+        public bool Register(RegisterViewModel modal);
 
-        public FamilyRequestViewModel getFamilyRequest();
+        public FamilyRequestViewModel GetFamilyRequest();
 
-        public PatientRequestViewModel getPatientRequest();
+        public PatientRequestViewModel GetPatientRequest();
 
-        public Task<bool> someoneElseRequest(FamilyRequestViewModel familyRequestViewModel);
+        public Task<bool> SomeoneElseRequest(FamilyRequestViewModel familyRequestViewModel);
 
-        public Task<bool> selfRequest(PatientRequestViewModel patientRequestViewModel);
+        public Task<bool> SelfRequest(PatientRequestViewModel patientRequestViewModel);
 
-        public PatientRequestViewModel getPatientProfile();
+        public PatientRequestViewModel GetPatientProfile();
 
-        public int updatePatientProfile(PatientRequestViewModel patientRequestViewModel);
+        public int UpdatePatientProfile(PatientRequestViewModel patientRequestViewModel);
 
-        public ViewDocumentModal getViewDocument(int id);
+        public ViewDocumentModal GetViewDocument(int id);
 
-        public Task<bool> fileUpload(IFormFile file, int id);
+        public Task<bool> FileUpload(IFormFile file, int id);
     }
 }

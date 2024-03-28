@@ -13,165 +13,166 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IAdmin
     {
-        public AdminDashboardViewModel adminDashboardContent(string? status, string? search, string? requestor, int? region,int page = 1,int pageSize = 10);
+        public AdminDashboardViewModel AdminDashboardContent(string? status, string? search, string? requestor, int? region,int page = 1,int pageSize = 10);
 
-        public MemoryStream exportAll();
+        public MemoryStream ExportAll();
 
-        public MemoryStream export(AdminDashboardViewModel adminDashboardViewModel);
+        public MemoryStream Export(AdminDashboardViewModel adminDashboardViewModel);
 
-        public ViewCaseViewModel viewCase(int id);
+        public ViewCaseViewModel ViewCase(int id);
 
-        public bool viewCase(ViewCaseViewModel model);
+        public bool ViewCase(ViewCaseViewModel model);
 
-        public bool cancelRequest(int id, string notes, string select);
+        public bool CancelRequest(int id, string notes, string select);
 
-        public Task<bool> sendLink(AdminDashboardViewModel dashboardViewModel);
+        public Task<bool> SendLink(AdminDashboardViewModel dashboardViewModel);
 
-        public bool verifyRegion(string region);
+        public bool VerifyRegion(string region);
 
-        public bool verifyBlock(string Email);
+        public bool VerifyBlock(string Email);
 
-        public PatientRequestViewModel createRequest();
+        public PatientRequestViewModel CreateRequest();
 
-        public Task<bool> createRequest(PatientRequestViewModel model);
+        public Task<bool> CreateRequest(PatientRequestViewModel model);
 
-        public ViewNotesViewModel viewNotes(int id);
+        public ViewNotesViewModel ViewNotes(int id);
 
-        public bool updateAdminNotes(ViewNotesViewModel viewNotesViewModel);
+        public bool UpdateAdminNotes(ViewNotesViewModel viewNotesViewModel);
 
-        public int login(LoginViewModel loginViewModel);
+        public int Login(LoginViewModel loginViewModel);
 
-        public int forgotPassword(ForgotPasswordViewModel forgotPasswordViewModel);
+        public int ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel);
 
-        public bool logout();
+        public bool Logout();
 
-        public ViewDocumentModal viewUploads(int id);
+        public ViewDocumentModal ViewUploads(int id);
 
-        public Task<bool> fileUpload(IFormFile file,int id);
+        public Task<bool> FileUpload(IFormFile file,int id);
 
-        public int deleteSingleFile(int id);
+        public int DeleteSingleFile(int id);
 
-        public Task<Tuple<MemoryStream, string>> downloadMultipleFiles(ViewDocumentModal viewDocumentModal);
+        public Task<Tuple<MemoryStream, string>> DownloadMultipleFiles(ViewDocumentModal viewDocumentModal);
 
-        public int deleteAllFile(string filename);
+        public int DeleteAllFile(string filename);
 
-        public Task<bool> sendDocumentsMail(string filename);
+        public Task<bool> SendDocumentsMail(string filename);
 
-        public PasswordReset getPasswordReset(string token);
+        public PasswordReset GetPasswordReset(string token);
 
-        public bool resetPassword(ResetPasswordViewModel resetPasswordViewModel);
+        public bool ResetPassword(ResetPasswordViewModel resetPasswordViewModel);
 
-        public List<Physician> getPhysician(int regionid);
+        public List<Physician> GetPhysician(int regionid);
 
-        public bool assignCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool AssignCase(AdminDashboardViewModel adminDashboardViewModel);
 
-        public bool transferCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
 
-        public bool isSamePhysician(AdminDashboardViewModel adminDashboardViewModel);
+        public bool IsSamePhysician(AdminDashboardViewModel adminDashboardViewModel);
 
-        public Task<bool> sendAgreement(AdminDashboardViewModel adminDashboardViewModel);
+        public Task<bool> SendAgreement(AdminDashboardViewModel adminDashboardViewModel);
 
-        public bool blockCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool BlockCase(AdminDashboardViewModel adminDashboardViewModel);
 
-        public bool clearCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool ClearCase(AdminDashboardViewModel adminDashboardViewModel);
 
-        public OrdersViewModel orders(int id);
+        public OrdersViewModel Orders(int id);
 
-        public List<HealthProfessional> getBusiness(int professionid);
+        public List<HealthProfessional> GetBusiness(int professionid);
 
-        public HealthProfessional getBusinessData(int businessid);
+        public HealthProfessional GetBusinessData(int businessid);
 
-        public bool placeOrder(OrdersViewModel ordersViewModel);
+        public bool PlaceOrder(OrdersViewModel ordersViewModel);
 
-        public AdminProfileViewModel getAdmin();
+        public AdminProfileViewModel GetAdmin(int id,string active);
 
-        public bool updateProfile(AdminProfileViewModel adminProfileViewModel);
+        public bool UpdateProfile(AdminProfileViewModel adminProfileViewModel);
 
-        public bool resetPasswordProfile(string password);
+        public bool ResetPasswordProfile(string password,int id);
 
-        public Request getRequest(int id);
+        public Request GetRequest(int id);
 
-        public bool agree(int id);
+        public bool Agree(int id);
 
-        public bool disagree(int id,string notes);
+        public bool Disagree(int id,string notes);
 
-        public EncounterFormViewModel getEncounterFormDetails(int id);
+        public EncounterFormViewModel GetEncounterFormDetails(int id);
 
-        public bool updateEncounterForm(EncounterFormViewModel encounterFormViewModel);
+        public bool UpdateEncounterForm(EncounterFormViewModel encounterFormViewModel);
 
-        public CloseCaseViewModel getCloseCase(int id);
+        public CloseCaseViewModel GetCloseCase(int id);
 
-        public bool updateCloseCase(CloseCaseViewModel closeCaseViewModel);
+        public bool UpdateCloseCase(CloseCaseViewModel closeCaseViewModel);
 
-        public bool closeCase(int id);
+        public bool CloseCase(int id);
 
-        public ProviderViewModel getProviderPageDetails(int id=-1, int page = 1, int pageSize = 10);
+        public ProviderViewModel GetProviderPageDetails(int id=-1, int page = 1, int pageSize = 10);
 
-        public bool changeNotification(int id, bool update);
+        public bool ChangeNotification(int id, bool update);
 
-        public Task<bool> contactProvider(ProviderViewModel providerViewModel);
+        public Task<bool> ContactProvider(ProviderViewModel providerViewModel);
 
-        public PhysicianAccountViewModel getCreatePhysicianDetails();
-        public List<Role> getPhysicianRoles();
+        public PhysicianAccountViewModel GetCreatePhysicianDetails();
+        public List<Role> GetPhysicianRoles();
 
-        public Task<bool> createPhysician(PhysicianAccountViewModel physicianAccountViewModel);
+        public Task<bool> CreatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
 
-        public PhysicianAccountViewModel getPhysicianDetails(int id);
+        public PhysicianAccountViewModel GetPhysicianDetails(int id);
 
-        public Task<bool> fileUploadPhysician(IFormFile file, int id, string name);
+        public Task<bool> FileUploadPhysician(IFormFile file, int id, string name);
 
-        public Task<bool> updatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
+        public Task<bool> UpdatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
 
-        public bool resetPasswordPhysician(string password, int id);
+        public bool ResetPasswordPhysician(string password, int id);
 
-        public bool deletePhysician(int id);
+        public bool DeletePhysician(int id);
 
-        public PatientHistoryViewModel getAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10);
+        public PatientHistoryViewModel GetAllPatients(string? firstname, string? lastname, string? email, string? phone, int page = 1, int pageSize = 10);
 
-        public PatientHistoryViewModel getAllPatientRecords(int id,int page = 1, int pageSize = 10);
+        public PatientHistoryViewModel GetAllPatientRecords(int id,int page = 1, int pageSize = 10);
 
-        public BlockHistoryViewModel getBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10);
+        public BlockHistoryViewModel GetBlockHistoryData(string? name, DateTime? date, string? email, string? phone, int page = 1, int pageSize = 10);
 
-        public bool toggleActive(int blockrequestid, bool value);
+        public bool ToggleActive(int blockrequestid, bool value);
 
-        public bool restoreBlock(int blockrequestid);
+        public bool RestoreBlock(int blockrequestid);
 
-        public SearchRecordViewModel getSearchedData(int? status,string? name,int? requesttypeid,DateTime? fromdos,DateTime? todos,string? providername,string? email,string? phonenumber, int page = 1, int pageSize = 10);
+        public SearchRecordViewModel GetSearchedData(int? status,string? name,int? requesttypeid,DateTime? fromdos,DateTime? todos,string? providername,string? email,string? phonenumber, int page = 1, int pageSize = 10);
 
-        public bool deleteRequest(int id);
+        public bool DeleteRequest(int id);
 
-        public MemoryStream exportSearchedData(SearchRecordViewModel searchRecordViewModel);
+        public MemoryStream ExportSearchedData(SearchRecordViewModel searchRecordViewModel);
 
-        public AccountAccessViewModel getAllRolesDetails(int page = 1, int pageSize = 10);
+        public AccountAccessViewModel GetAllRolesDetails(int page = 1, int pageSize = 10);
 
-        public AdminNavbarViewModel getCreateAccessNavbar();
+        public AdminNavbarViewModel GetCreateAccessNavbar();
 
-        public List<Menu> getMenus(int? id);
+        public List<Menu> GetMenus(int? id);
 
-        public bool createRole(string? menus, string? role_name, int? account_type);
+        public bool CreateRole(string? menus, string? role_name, int? account_type);
 
-        public bool deleteRole(int? id);
+        public bool DeleteRole(int? id);
 
-        public EditAccessViewModel getRoleDetails(int? id);
+        public EditAccessViewModel GetRoleDetails(int? id);
 
-        public bool editRoleDetails(int? id, string? menus, string? role_name, int? account_type);
+        public bool EditRoleDetails(int? id, string? menus, string? role_name, int? account_type);
 
-        public EmailLogViewModel getEmailLogDetails(int? roleid,string? name,string? email,DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
-        public EmailLogViewModel getSMSLogDetails(int? roleid,string? name,string? phonenumber, DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
+        public EmailLogViewModel GetEmailLogDetails(int? roleid,string? name,string? email,DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
+        public EmailLogViewModel GetSMSLogDetails(int? roleid,string? name,string? phonenumber, DateTime? createddate,DateTime? sentdate,int page = 1,int pageSize = 10);
 
-        public PartnerViewModal getPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10);
+        public PartnerViewModal GetPartnerDetails(string? name, int? id, int page = 1, int pageSize = 10);
 
-        public BusinessViewModel getBusinessNavbar();
-        public BusinessViewModel getBusinessDetails(int id);
-        public bool createBusiness(BusinessViewModel businessViewModel);
-        public bool editBusiness(BusinessViewModel businessViewModel);
-        public bool deleteBusiness(int id);
-        public ProviderLocationViewModel getProviderLocation();
+        public BusinessViewModel GetBusinessNavbar();
+        public BusinessViewModel GetBusinessDetails(int id);
+        public bool CreateBusiness(BusinessViewModel businessViewModel);
+        public bool EditBusiness(BusinessViewModel businessViewModel);
+        public bool DeleteBusiness(int id);
+        public ProviderLocationViewModel GetProviderLocation();
 
-        public AdminProfileViewModel getCreateAdminProfilePageDetails();
-        public List<Role> getAdminRoles();
-        public Task<bool> createAdmin(AdminProfileViewModel adminProfileViewModel);
+        public AdminProfileViewModel GetCreateAdminProfilePageDetails();
+        public List<Role> GetAdminRoles();
+        public Task<bool> CreateAdmin(AdminProfileViewModel adminProfileViewModel);
 
         public UserAccessViewModel GetUserAccessDetails(int? roleid, int page = 1, int pageSize = 10);
+        public bool DeleteAdmin(int id);
     }
 }

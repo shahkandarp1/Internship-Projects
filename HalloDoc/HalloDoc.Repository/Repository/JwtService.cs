@@ -141,7 +141,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public CookieModel getDetails(string token)
+        public CookieModel GetDetails(string token)
         {
             JwtSecurityToken jwtSecurityToken = null;
             var tokenHandler = new JwtSecurityTokenHandler();

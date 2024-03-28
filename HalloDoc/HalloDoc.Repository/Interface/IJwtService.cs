@@ -15,6 +15,6 @@ namespace HalloDoc.Repository.Interface
 
         public bool ValidateToken(string token,out JwtSecurityToken jwtSecurityToken);
 
-        CookieModel getDetails(string token);
+        CookieModel GetDetails(string token);
     }
 }

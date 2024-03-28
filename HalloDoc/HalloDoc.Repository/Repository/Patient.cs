@@ -32,7 +32,7 @@ namespace HalloDoc.Repository.Repository
             _jwt = jwt;
         }
 
-        public int login(LoginViewModel model)
+        public int Login(LoginViewModel model)
         {
             try
             {
@@ -113,16 +113,20 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public PasswordReset getResetPassword(string Token)
+        public PasswordReset GetResetPassword(string Token)
         {
             return _db.PasswordResets.FirstOrDefault(u => u.Token == Token); 
         }
 
-        public bool resetPassword(ResetPasswordViewModel modal)
+        public bool ResetPassword(ResetPasswordViewModel modal)
         {
             try
             {
                 PasswordReset passwordReset = _db.PasswordResets.FirstOrDefault(u => u.Token == modal.Token);
+                if(passwordReset == null)
+                {
+                    return false;
+                }
                 AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Email == passwordReset.Email);
                 var passwordHasher = new PasswordHasher<AspNetUser>();
                 aspNetUser.PasswordHash = passwordHasher.HashPassword(aspNetUser, modal.Password);
@@ -139,14 +143,14 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public async Task<bool> sendResetLink(string email)
+        public async Task<bool> SendResetLink(string email)
         {
             var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == email);
-            var role = _db.AspNetUserRoles.FirstOrDefault(r=>r.UserId == user.Id);
             if (user == null)
             {
                 return false;
             }
+            var role = _db.AspNetUserRoles.FirstOrDefault(r=>r.UserId == user.Id);
             int retryCount = 1;
             bool success = false;
 
@@ -288,7 +292,7 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        public async Task<bool> patientRequest(PatientRequestViewModel modal)
+        public async Task<bool> PatientRequest(PatientRequestViewModel modal)
         {
             try
             {
@@ -500,7 +504,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public async Task<bool> businessRequest(BusinessRequestViewModel modal)
+        public async Task<bool> BusinessRequest(BusinessRequestViewModel modal)
         {
             try
             {
@@ -765,7 +769,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public async Task<bool> familyRequest(FamilyRequestViewModel modal)
+        public async Task<bool> FamilyRequest(FamilyRequestViewModel modal)
         {
             try
             {
@@ -1029,7 +1033,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public async Task<bool> conciergeRequest(ConciergeRequestViewModel modal)
+        public async Task<bool> ConciergeRequest(ConciergeRequestViewModel modal)
         {
             try
             {
@@ -1300,11 +1304,11 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public AspNetUser getAspNetUser(string email)
+        public AspNetUser GetAspNetUser(string email)
         {
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
-        public AspNetUser getAspNetUserLogin(string email)
+        public AspNetUser GetAspNetUserLogin(string email)
         {
             if(_db.AspNetUsers.SingleOrDefault(u => u.Email == email) == null)
             {
@@ -1313,11 +1317,11 @@ namespace HalloDoc.Repository.Repository
             return _db.AspNetUsers.SingleOrDefault(u => u.Email == email); 
         }
 
-        public DashboardViewModel getDashboardData(int page = 1, int pageSize = 10)
+        public DashboardViewModel GetDashboardData(int page = 1, int pageSize = 10)
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.getDetails(token);
+            CookieModel cookieModel = _jwt.GetDetails(token);
             int count = _db.Requests.Where(u => u.UserId == cookieModel.userId).Count();
             List<RequestViewModel> data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({cookieModel.userId},{pageSize},{((page - 1) * pageSize)})").ToList();
             var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
@@ -1333,16 +1337,20 @@ namespace HalloDoc.Repository.Repository
             return dashboardViewModel;
         }
 
-        public AspNetUser getAspNetUserById(int id)
+        public AspNetUser GetAspNetUserById(int id)
         {
             return _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
         }
 
-        public bool register(RegisterViewModel modal)
+        public bool Register(RegisterViewModel modal)
         {
             try
             {
                 AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(u => u.Id == modal.Id);
+                if(aspNetUser == null)
+                {
+                    return false;
+                }
                 aspNetUser.Email = modal.Email;
                 aspNetUser.UserName = modal.Email;
                 var passwordHasher = new PasswordHasher<AspNetUser>();
@@ -1357,11 +1365,11 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public FamilyRequestViewModel getFamilyRequest()
+        public FamilyRequestViewModel GetFamilyRequest()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.getDetails(token);
+            CookieModel cookieModel = _jwt.GetDetails(token);
             var session_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             FamilyRequestViewModel familyRequestViewModel = new FamilyRequestViewModel()
             {
@@ -1373,7 +1381,7 @@ namespace HalloDoc.Repository.Repository
             return familyRequestViewModel;
         }
 
-        public async Task<bool> someoneElseRequest(FamilyRequestViewModel modal)
+        public async Task<bool> SomeoneElseRequest(FamilyRequestViewModel modal)
         {
             try
             {
@@ -1636,11 +1644,11 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public PatientRequestViewModel getPatientRequest()
+        public PatientRequestViewModel GetPatientRequest()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.getDetails(token);
+            CookieModel cookieModel = _jwt.GetDetails(token);
             var user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
             {
@@ -1654,13 +1662,13 @@ namespace HalloDoc.Repository.Repository
             return patientRequestViewModel;
         }
 
-        public async Task<bool> selfRequest(PatientRequestViewModel modal)
+        public async Task<bool> SelfRequest(PatientRequestViewModel modal)
         {
             try
             {
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.getDetails(token);
+                CookieModel cookieModel = _jwt.GetDetails(token);
                 var user = _db.AspNetUsers.FirstOrDefault(u => u.Id == cookieModel.aspId);
                 if (modal.ImageContent != null && modal.ImageContent.Length > 0)
                 {
@@ -1750,12 +1758,16 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public PatientRequestViewModel getPatientProfile()
+        public PatientRequestViewModel GetPatientProfile()
         {
             var request = _context.HttpContext.Request;
             var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.getDetails(token);
+            CookieModel cookieModel = _jwt.GetDetails(token);
             var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
+            if(curr_user == null)
+            {
+                return null;
+            }
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel
             {
                 FirstName = curr_user.FirstName,
@@ -1771,16 +1783,21 @@ namespace HalloDoc.Repository.Repository
             return patientRequestViewModel;
         }
 
-        public int updatePatientProfile(PatientRequestViewModel modal)
+        public int UpdatePatientProfile(PatientRequestViewModel modal)
         {
             try
             {
                 var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.getDetails(token);
+                CookieModel cookieModel = _jwt.GetDetails(token);
 
                 User user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
+
+                if(user == null)
+                {
+                    return 4;
+                }
 
                 if (user.Email != modal.Email)
                 {
@@ -1815,14 +1832,22 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public ViewDocumentModal getViewDocument(int id)
+        public ViewDocumentModal GetViewDocument(int id)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.getDetails(token);
+            CookieModel cookieModel = _jwt.GetDetails(token);
             var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
+            if(request == null)
+            {
+                return null;
+            }
             var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
             var user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
+            if(user == null)
+            {
+                return null;
+            }
             ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
             {
                 patient_name = string.Concat(request.RequestClient.FirstName, ' ', request.RequestClient.LastName),
@@ -1834,7 +1859,7 @@ namespace HalloDoc.Repository.Repository
             return viewDocumentModal;
         }
 
-        public async Task<bool> fileUpload(IFormFile file, int id)
+        public async Task<bool> FileUpload(IFormFile file, int id)
         {
             try
             {

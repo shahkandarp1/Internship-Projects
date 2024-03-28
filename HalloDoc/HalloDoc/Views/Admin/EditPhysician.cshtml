@@ -31,7 +31,7 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form bg-body" asp-action="EditPhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form">
+            <form class="main-form bg-body" asp-action="EditPhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form" onsubmit="@Html.Raw("return openCheckBox()")">
 
                 <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                 <input type="hidden" asp-for="PhysicianId" />
@@ -408,6 +408,13 @@
         pdfPath += `${filename}.pdf`
         console.log(pdfPath)
         window.open(pdfPath, '_blank');
+    }
+
+    const openCheckBox = () => {
+        const check = document.getElementsByClassName("form-check-input")
+        for (let i = 0; i < check.length; ++i) {
+            check[i].disabled = false;
+        }
     }
 
     const fileUpload = (element) => {

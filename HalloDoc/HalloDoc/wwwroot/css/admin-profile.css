@@ -43,3 +43,14 @@
         width:120px;
     }
 }
+
+/*Edit Admin*/
+.delete-btn
+{
+    width:160px;
+    margin-top:10px;
+}
+.reset-admin-btn
+{
+    height:40px;
+}

@@ -851,6 +851,10 @@ input[type="date" i] {
     margin-bottom:10px;
 }
 
+.dropdown-item:focus, .dropdown-item:hover {
+    --bs-dropdown-link-hover-color: black;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
     0% {
