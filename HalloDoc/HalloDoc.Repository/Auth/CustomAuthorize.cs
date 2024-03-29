@@ -17,10 +17,12 @@ namespace HalloDoc.Repository.Auth
     public class CustomAuthorize : Attribute, IAuthorizationFilter
     {
         private readonly string _role;
+        private readonly string _page;
 
-        public CustomAuthorize(string role = "")
+        public CustomAuthorize(string role = "", string page = null)
         {
             _role = role;
+            _page = page;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -43,8 +45,9 @@ namespace HalloDoc.Repository.Auth
             }
 
             var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+            var menu = jwtToken.Claims.FirstOrDefault(c => c.Type == "Menus").Value;
 
-            if(role == null)
+            if (role == null)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
                 return;
@@ -54,6 +57,15 @@ namespace HalloDoc.Repository.Auth
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "AccessDenied" }));
                 return;
+            }
+            
+            if(_page!=null)
+            {
+                if(!menu.Contains(_page))
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "AccessDenied" }));
+                    return;
+                }
             }
         }
 

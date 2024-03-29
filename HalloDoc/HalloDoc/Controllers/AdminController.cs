@@ -17,6 +17,7 @@ using HalloDoc.Repository.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.CompilerServices;
 using HalloDoc.Models;
+using Newtonsoft.Json.Linq;
 
 namespace HalloDoc.Controllers
 {
@@ -27,14 +28,16 @@ namespace HalloDoc.Controllers
         private readonly IAdmin _admin;
         private readonly IPatient _patient;
         private readonly IJwtService _jwt;
-        
+        private readonly IHttpContextAccessor _context;
 
-        public AdminController(IAdmin admin,IJwtService jwt, IPatient patient)
+        public AdminController(IAdmin admin,IJwtService jwt, IPatient patient, IHttpContextAccessor context)
         {
             _admin = admin;
             _jwt = jwt;
             _patient = patient;
+            _context = context;
         }
+        [CustomAuthorize("Admin", "Dashboard")]
         /// <summary>
         /// Get Method for Admin Dashboard
         /// </summary>
@@ -610,6 +613,7 @@ namespace HalloDoc.Controllers
             }
             return View(ordersViewModel);
         }
+        [CustomAuthorize("Admin", "My Profile")]
         /// <summary>
         /// It is a Get Method for Admin Profile Page
         /// </summary>
@@ -753,6 +757,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
+        [CustomAuthorize("Admin", "Providerr")]
         /// <summary>
         /// It is a get method for Provider Page
         /// </summary>
@@ -803,6 +808,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
+        [CustomAuthorize("Admin", "Providerr")]
         /// <summary>
         /// It is Get method for CreatePhysician
         /// </summary>
@@ -860,6 +866,7 @@ namespace HalloDoc.Controllers
             }
             return View(physicianAccountViewModel);
         }
+        [CustomAuthorize("Admin", "Providerr")]
         /// <summary>
         /// It is Get method of Edit Physician
         /// </summary>
@@ -928,6 +935,7 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isReseted  = isreset });
         }
+        [CustomAuthorize("Admin", "Providerr")]
         /// <summary>
         /// It will delete the specified physician from edit physician page
         /// </summary>
@@ -946,6 +954,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
+        [CustomAuthorize("Admin", "Patient History")]
         /// <summary>
         /// It is Get Method of Patient History Page
         /// </summary>
@@ -970,6 +979,7 @@ namespace HalloDoc.Controllers
             PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatients(firstname,lastname,email,phone,page,pageSize);
             return PartialView("_PatientHistoryTable", patientHistoryViewModel);
         }
+        [CustomAuthorize("Admin", "Patient History")]
         /// <summary>
         /// It is a Get method for Patient Record Page
         /// </summary>
@@ -994,6 +1004,7 @@ namespace HalloDoc.Controllers
             PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatientRecords(id,page,pageSize);
             return PartialView("_PatientRecordTable", patientHistoryViewModel);
         }
+        [CustomAuthorize("Admin", "Block History")]
         /// <summary>
         /// It is a Get method for Block History Page
         /// </summary>
@@ -1047,6 +1058,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
+        [CustomAuthorize("Admin", "Search Records")]
         /// <summary>
         /// It is Get method for Search Record Page
         /// </summary>
@@ -1103,6 +1115,7 @@ namespace HalloDoc.Controllers
             MemoryStream memoryStream = _admin.ExportSearchedData(searchRecordViewModel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Filtered-Data.xlsx");
         }
+        [CustomAuthorize("Admin", "Account Access")]
         /// <summary>
         /// It is Get Method of Account Access Page
         /// </summary>
@@ -1123,6 +1136,7 @@ namespace HalloDoc.Controllers
             AccountAccessViewModel accountAccessViewModel = _admin.GetAllRolesDetails(page,pageSize);
             return PartialView("_AccountAccessTable",accountAccessViewModel);
         }
+        [CustomAuthorize("Admin", "Account Access")]
         /// <summary>
         /// It is a get method for Create Access Page
         /// </summary>
@@ -1180,6 +1194,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("AccountAccess");
         }
+        [CustomAuthorize("Admin", "Account Access")]
         /// <summary>
         /// It is a Get method for Edit Role page
         /// </summary>
@@ -1209,6 +1224,13 @@ namespace HalloDoc.Controllers
             if(isEditted)
             {
                 TempData["success"] = "Role Editted Successfully!!";
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+                AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
+                string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
+                Response.Cookies.Append("jwt", jwtToken);
+
             }
             else
             {
@@ -1216,6 +1238,7 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isEditted = isEditted });
         }
+        [CustomAuthorize("Admin", "Email Logs")]
         /// <summary>
         /// It is a Get method for Email Log Page
         /// </summary>
@@ -1241,6 +1264,7 @@ namespace HalloDoc.Controllers
             EmailLogViewModel emailLogViewModel = _admin.GetEmailLogDetails(roleid,name,email,createddate,sentdate,page,pageSize);
             return PartialView("_EmailLogTable",emailLogViewModel);
         }
+        [CustomAuthorize("Admin", "SMS Logs")]
         /// <summary>
         /// It is a Get method for SMS Log Page
         /// </summary>
@@ -1266,6 +1290,7 @@ namespace HalloDoc.Controllers
             EmailLogViewModel emailLogViewModel = _admin.GetSMSLogDetails(roleid, name, phonenumber, createddate, sentdate, page, pageSize);
             return PartialView("_SMSLogTable", emailLogViewModel);
         }
+        [CustomAuthorize("Admin", "Partners")]
         /// <summary>
         /// It is a Get method for Partners Page
         /// </summary>
@@ -1288,6 +1313,7 @@ namespace HalloDoc.Controllers
             PartnerViewModal partnerViewModal = _admin.GetPartnerDetails(name,id,page,pageSize);
             return PartialView("_PartnersTable", partnerViewModal);
         }
+        [CustomAuthorize("Admin", "Partners")]
         /// <summary>
         /// It is a Get Method for Create Business
         /// </summary>
@@ -1321,6 +1347,7 @@ namespace HalloDoc.Controllers
             }
             return View("Business", businessViewModel);
         }
+        [CustomAuthorize("Admin", "Partners")]
         /// <summary>
         /// It is a Get method for Edit Business
         /// </summary>
@@ -1377,6 +1404,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Partners");
         }
+        [CustomAuthorize("Admin", "Provider Location")]
         /// <summary>
         /// It is a get method for Provider Location Page
         /// </summary>
@@ -1386,6 +1414,7 @@ namespace HalloDoc.Controllers
             ProviderLocationViewModel providerLocationViewModel = _admin.GetProviderLocation();
             return View(providerLocationViewModel);
         }
+        [CustomAuthorize("Admin", "Create Admin Account")]
         /// <summary>
         /// It is a Get Method for Create Admin
         /// </summary>
@@ -1437,6 +1466,7 @@ namespace HalloDoc.Controllers
             return View(adminProfileViewModel);
 
         }
+        [CustomAuthorize("Admin", "User Access")]
         /// <summary>
         /// It is a Get method for User Access Page
         /// </summary>
@@ -1458,6 +1488,7 @@ namespace HalloDoc.Controllers
             var useraccess = _admin.GetUserAccessDetails(roleid,page,pageSize);
             return PartialView("_UserAccessTable",useraccess);
         }
+        [CustomAuthorize("Admin", "User Access")]
         /// <summary>
         /// It is a Get method for Edit Admin Page
         /// </summary>
@@ -1484,6 +1515,12 @@ namespace HalloDoc.Controllers
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+                AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
+                string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
+                Response.Cookies.Append("jwt", jwtToken);
             }
             else
             {

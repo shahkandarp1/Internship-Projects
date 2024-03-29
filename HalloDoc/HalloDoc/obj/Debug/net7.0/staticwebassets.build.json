@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "iXAHFDIQBLBuQ8YGV03OOHnF/7ecHD1qrD39dbr6L2A=",
+  "Hash": "o6JzyV0vaaPUZNYjZLMzzkYPng5YbfJZS6AQaTSiFGs=",
   "Source": "HalloDoc",
   "BasePath": "_content/HalloDoc",
   "Mode": "Default",
@@ -6135,6 +6135,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\Filtered-Data (3).xlsx"
+    },
+    {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Filtered-Data (4).xlsx",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "uploads/Filtered-Data (4).xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\Filtered-Data (4).xlsx"
     },
     {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\HalloDoc - DB (1).xlsx",

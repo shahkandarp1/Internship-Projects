@@ -1838,7 +1838,7 @@ namespace HalloDoc.Repository.Repository
             AdminProfileViewModel adminProfile = new AdminProfileViewModel()
             { 
                 UserName = admin.AspNetUser.UserName,
-                status = 1,
+                status = admin.Status,
                 role_id = admin.RoleId,
                 FirstName = admin.FirstName,
                 LastName = admin.LastName,

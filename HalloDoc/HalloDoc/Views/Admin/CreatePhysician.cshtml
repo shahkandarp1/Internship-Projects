@@ -377,15 +377,12 @@
                     if (status == "OK") {
                         var latitude = results[0].geometry.location.lat();
                         var longitude = results[0].geometry.location.lng();
-                        console.log(document.getElementById('lat'))
-                        console.log(document.getElementById('long'))
                         document.getElementById('lat').value = latitude;
                         document.getElementById('long').value = longitude;
                         console.log(document.getElementById('lat').value);
                         console.log(document.getElementById('long').value);
                         document.getElementById("main-form").submit();
                     } else {
-                        console.log("Geocoding failed: " + status);
                         document.getElementById("main-form").submit();
                     }
                 });

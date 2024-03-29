@@ -123,8 +123,9 @@
             console.log(document.getElementById("roles").value)
         }
         else{
-            var substringToRemove = element.value + ","
-            document.getElementById("roles").value = document.getElementById("roles").value.replace(substringToRemove, "")
+            var arr = document.getElementById("roles").value.split(",");
+            arr = arr.filter(el=>el != element.value)
+            document.getElementById("roles").value = arr.join(",")
             console.log(document.getElementById("roles").value);
         }
     }
