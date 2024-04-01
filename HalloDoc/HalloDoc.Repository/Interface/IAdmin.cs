@@ -174,5 +174,7 @@ namespace HalloDoc.Repository.Interface
 
         public UserAccessViewModel GetUserAccessDetails(int? roleid, int page = 1, int pageSize = 10);
         public bool DeleteAdmin(int id);
+
+        public SchedulingViewModel GetAllShiftDetails();
     }
 }

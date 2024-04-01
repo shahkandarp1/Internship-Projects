@@ -94,7 +94,7 @@
         <button class="sidebar-tablinks accordion-mob-btn @providerM @providermainrole" onclick="clearStorage()">Providers</button>
         <div class="panel">
             <a class="mobile-sidebar-a accord-inner @providerrole" asp-action="Provider" asp-controller="Admin"> Provider </a>
-            <a class="mobile-sidebar-a accord-inner @schedulingrole"> Scheduling </a>
+            <a class="mobile-sidebar-a accord-inner @schedulingrole" asp-action="Scheduling" asp-controller="Admin"> Scheduling </a>
             <a class="mobile-sidebar-a accord-inner @invoicingrole"> Invoicing </a>
         </div>
         <button class="sidebar-tablinks @partnerM @partnerrole" onclick="clearStorage()">
@@ -143,7 +143,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="provider">
                 <li><a class="navbar-dropdown-item dropdown-item @providerrole" asp-action="Provider" asp-controller="Admin">Provider</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @schedulingrole" href="#">Scheduling</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @schedulingrole" asp-action="Scheduling" asp-controller="Admin">Scheduling</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item @invoicingrole" href="#">Invoicing</a></li>
             </ul>
         </div>

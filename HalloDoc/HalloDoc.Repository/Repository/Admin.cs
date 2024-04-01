@@ -4382,5 +4382,30 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        public SchedulingViewModel GetAllShiftDetails()
+        {
+            List<Region> regions = _db.Regions.ToList();
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Dashboard",
+                menus = cookieModel.menus
+            };
+
+            SchedulingViewModel schedulingViewModel = new SchedulingViewModel()
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                regions = regions
+            };
+
+            return schedulingViewModel;
+
+        }
+
     }
 }

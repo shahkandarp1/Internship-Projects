@@ -1546,6 +1546,15 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("UserAccess");
         }
+        /// <summary>
+        /// It is a get method for Scheduling
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Scheduling()
+        {
+            SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails();
+            return View(schedulingViewModel);
+        }
 
     }
 }

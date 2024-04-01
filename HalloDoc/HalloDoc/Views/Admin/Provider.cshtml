@@ -137,6 +137,7 @@
 
         $(document).ready(function () {
             $("#cancel-provider").click(function () {
+                document.getElementById("block-reason").value = "";
                 $("#myModalProvider").modal("hide");
             });
         });

@@ -1,0 +1,119 @@
+﻿@model SchedulingViewModel
+@{
+    ViewData["Title"] = "Scheduling";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/scheduling.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Scheduling</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex mb-4">
+                        <div class="inner-pt-container">
+                            <span class="search">
+                                <img class="search-image"
+                                     src="../../images/search.svg"
+                                     alt="" />
+                                <select name="" id="region" class="search-inp" onchange="filter(1,10)">
+                                    <option value="-1">All Regions</option>
+                                    @foreach (var item in Model.regions)
+                                    {
+                                        <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </span>
+                            <div>
+                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                    <span>Providers On Call</span>
+                                </a>
+                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                    <span>Shifts For Review</span>
+                                </a>
+                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                    <span>Add New Shift</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-date mb-3" id="main-date">
+                        April 1 , 2023
+                    </div>
+                    <div class="color-shift-flex mb-3">
+                        <div class="shift-color">
+                            <span class="shift-type-flex margin-right">
+                                <span class="shift pending-shift margin-right"></span>
+                                <span class="shift-text">Pending Shifts</span>
+                            </span>
+                            <span class="shift-type-flex">
+                                <span class="shift active-shift margin-right"></span>
+                                <span class="shift-text">Active Shifts</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="shift-date-handler mb-4">
+                        <div>
+                            <img src="~/images/back.svg" class="back-direction-btn" id="previous" />
+                            <button id="DatePickerButton" class="datepicker-native-button btn btn-secondary btn-sm">
+                                <i class="bi bi-calendar3 date-calendar"></i>
+                                <input id="DatePickerButtonInput" type="date" class="datepicker-native-button-input"
+                                       onchange="changeStartDate(this.value)" />
+                            </button>
+                            <img src="~/images/next.svg" class="direction-btn" id="next" />
+                        </div>
+                        <div>
+                            <a class="btn contact-btn contact-provider calendar-view-active" id="button-day">Day</a>
+                            <a class="btn contact-btn contact-provider" id="button-week">Week</a>
+                            <a class="btn contact-btn contact-provider" id="button-month">Month</a>
+                        </div>
+                    </div>
+
+                    <div id="dp"></div>
+                    <div id="dp-month"></div>
+
+                </div>
+
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#cancel-provider").click(function () {
+            $("#myModalProvider").modal("hide");
+        });
+    });
+
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+<script src="~/js/daypilot.js"></script>
