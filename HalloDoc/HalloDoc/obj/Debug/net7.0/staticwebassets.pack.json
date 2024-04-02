@@ -989,6 +989,10 @@
       "PackagePath": "staticwebassets\\images\\upload.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user (1).png",
+      "PackagePath": "staticwebassets\\images\\user (1).png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user.png",
       "PackagePath": "staticwebassets\\images\\user.png"
     },
@@ -1375,6 +1379,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\7\\1710313071690.JPEG",
       "PackagePath": "staticwebassets\\provider_documents\\7\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\7\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\7\\Agreement.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\.net-Whole-Plane-2024.pdf",

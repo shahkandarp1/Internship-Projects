@@ -4397,13 +4397,160 @@ namespace HalloDoc.Repository.Repository
                 menus = cookieModel.menus
             };
 
+            List<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false })).ToList();
+
+            var query = from s in _db.Shifts
+                        join sd in _db.ShiftDetails on s.ShiftId equals sd.ShiftId
+                        join r in _db.Regions on sd.RegionId equals r.RegionId into regionGroup
+                        from r in regionGroup.DefaultIfEmpty()
+                        join p in _db.Physicians on s.PhysicianId equals p.PhysicianId
+                        where sd.IsDeleted == new BitArray(new[] { false })
+                        select new ShiftViewModel
+                        {
+                            PhysicianId = s.PhysicianId,
+                            RegionId = (int)sd.RegionId,
+                            PhysicianName = p.LastName.ToUpper() + ", " + p.FirstName.ToUpper()[0] + ".",
+                            RegionAbbreviation = r.Abbreviation,
+                            ShiftDate = sd.ShiftDate,
+                            StartTime = sd.StartTime,
+                            EndTime = sd.EndTime,
+                            Status = sd.Status,
+                            ShiftDetailId = sd.ShiftDetailId
+                        };
+
+
+            string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+
+            List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
+
+            for (var i = 0; i < days.Length; ++i)
+            {
+                checkboxViewModels.Add(new CheckboxViewModel
+                {
+                    Id = i,
+                    Name = days[i],
+                    isChecked = false
+                });
+            }
+
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel()
             {
                 adminNavbarViewModel = adminNavbarViewModel,
-                regions = regions
+                regions = regions,
+                checkboxViewModels = checkboxViewModels,
+                IsRepeat = false,
+                physicians = physicians,
+                shiftViewModels = query.ToList()
             };
 
             return schedulingViewModel;
+
+        }
+
+        public int CreateShift(SchedulingViewModel schedulingViewModel)
+        {
+            try
+            {
+                List<Shift> shifts = _db.Shifts.Include(r => r.ShiftDetails).Where(r => r.PhysicianId == schedulingViewModel.PhysicianId && r.StartDate <= DateOnly.FromDateTime(schedulingViewModel.StartDate)).ToList();
+                for (var i = 0; i < shifts.Count; ++i)
+                {
+                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == schedulingViewModel.StartDate && ((s.StartTime <= schedulingViewModel.StartTime && s.EndTime >= schedulingViewModel.StartTime) || (s.StartTime <= schedulingViewModel.EndTime && s.EndTime >= schedulingViewModel.EndTime)) && s.IsDeleted == new BitArray(new[] { false })).ToList();
+                    if (shiftDetails.Count > 0)
+                    {
+                        return 1;
+                    }
+                }
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                var weekDays = "";
+
+                for (var i = 0; i < schedulingViewModel.checkboxViewModels.Count; ++i)
+                {
+                    if (schedulingViewModel.checkboxViewModels[i].isChecked)
+                    {
+                        weekDays += "1";
+                    }
+                    else
+                    {
+                        weekDays += "0";
+                    }
+                }
+
+                Shift shift = new Shift
+                {
+                    PhysicianId = (int)schedulingViewModel.PhysicianId,
+                    StartDate = DateOnly.FromDateTime(schedulingViewModel.StartDate),
+                    IsRepeat = new BitArray(new[] { (bool)schedulingViewModel.IsRepeat }),
+                    RepeatUpto = schedulingViewModel.Repeat,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = cookieModel.aspId,
+                    WeekDays = weekDays
+                };
+
+                _db.Shifts.Add(shift);
+                _db.SaveChanges();
+
+                ShiftDetail shiftDetail = new ShiftDetail
+                {
+                    ShiftId = shift.ShiftId,
+                    ShiftDate = schedulingViewModel.StartDate,
+                    RegionId = schedulingViewModel.RegionId,
+                    StartTime = schedulingViewModel.StartTime,
+                    EndTime = schedulingViewModel.EndTime,
+                    Status = 1,
+                    IsDeleted = new BitArray(new[] { false }),
+                };
+                _db.ShiftDetails.Add(shiftDetail);
+                _db.SaveChanges();
+
+                ShiftDetailRegion shiftDetailRegion = new ShiftDetailRegion
+                {
+                    ShiftDetailId = shiftDetail.ShiftDetailId,
+                    RegionId = (int)schedulingViewModel.RegionId
+                };
+                _db.ShiftDetailRegions.Add(shiftDetailRegion);
+                _db.SaveChanges();
+
+                for (var i = 0; i < schedulingViewModel.checkboxViewModels.Count; ++i)
+                {
+                    if (schedulingViewModel.checkboxViewModels[i].isChecked)
+                    {
+                        for (var j = 0; j < schedulingViewModel.Repeat - 1; ++j)
+                        {
+                            ShiftDetail shiftDetail1 = new ShiftDetail
+                            {
+                                ShiftId = shiftDetail.ShiftId,
+                                ShiftDate = DateTime.Today.AddDays(7 * (j + 1) - (int)DateTime.Today.DayOfWeek + (int)schedulingViewModel.checkboxViewModels[i].Id),
+                                RegionId = schedulingViewModel.RegionId,
+                                StartTime = schedulingViewModel.StartTime,
+                                EndTime = schedulingViewModel.EndTime,
+                                Status = 1,
+                                IsDeleted = new BitArray(new[] { false }),
+                            };
+                            _db.ShiftDetails.Add(shiftDetail1);
+                            _db.SaveChanges();
+
+                            ShiftDetailRegion shiftDetailRegion1 = new ShiftDetailRegion
+                            {
+                                ShiftDetailId = shiftDetail1.ShiftDetailId,
+                                RegionId = (int)schedulingViewModel.RegionId
+                            };
+                            _db.ShiftDetailRegions.Add(shiftDetailRegion1);
+                            _db.SaveChanges();
+
+                        }
+                    }
+                }
+
+                return 3;
+            }
+            catch(Exception exp)
+            {
+                return 2;
+            }
 
         }
 

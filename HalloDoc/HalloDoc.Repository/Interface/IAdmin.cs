@@ -176,5 +176,6 @@ namespace HalloDoc.Repository.Interface
         public bool DeleteAdmin(int id);
 
         public SchedulingViewModel GetAllShiftDetails();
+        public int CreateShift(SchedulingViewModel schedulingViewModel);
     }
 }

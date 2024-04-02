@@ -1556,5 +1556,27 @@ namespace HalloDoc.Controllers
             return View(schedulingViewModel);
         }
 
+        public IActionResult CreateShift(SchedulingViewModel schedulingViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                int isCreated = _admin.CreateShift(schedulingViewModel);
+                if(isCreated == 1)
+                {
+                    TempData["error"] = "Physician is already scheduled in this slot!!";
+                }
+                else if(isCreated == 2)
+                {
+                    TempData["error"] = "Shift could not be created!!";
+                }
+                else
+                {
+                    TempData["success"] = "Shift Created Successfully!!";
+                    return RedirectToAction("Scheduling");
+                }
+            }
+            return View("Scheduling", schedulingViewModel);
+        }
+
     }
 }

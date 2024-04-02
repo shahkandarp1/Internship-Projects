@@ -21,6 +21,109 @@
     <!-- Toaster -->
     <partial name="Toast" />
 
+    <!-- Add New Shift Modal -->
+    <form asp-action="CreateShift" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssign()")">
+        <div class="modal fade" id="myModalCreateShift" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Create Shift</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+
+                    @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                    }
+
+                    @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.regions[i].Name)
+                        @Html.HiddenFor(m => m.regions[i].RegionId)
+                    }
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
+                                    @foreach (var items in Model.regions)
+                                    {
+                                        <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control physician-assign select-label editable" id="Select-physician" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssign(this)">
+                                    <option class="option-modal" value="-1">Select Physician</option>
+                                </select>
+                                <label for="Select-region" class="form-label">Physician</label>
+                            </div>
+                            <span id="warning-assign" class="text-danger hidden">Please Select Physician</span>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <input type="date" class="form-control dob" id="startdate" placeholder="name@example.com" asp-for="StartDate" value="yyyy-mm-dd">
+                                <label for="startdate" class="form-label dob-label">Start Date</label>
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control dob" id="starttime" placeholder="name@example.com" asp-for="StartTime" onchange="checkTime()">
+                                <label for="starttime" class="form-label dob-label">Start Time</label>
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control dob" id="endtime" placeholder="name@example.com" asp-for="EndTime" onchange="checkTime()">
+                                <label for="endtime" class="form-label dob-label">End Time</label>
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                            <span id="warning-time" class="text-danger hidden">Start and End time cannot be same</span>
+                            <div class="col-12 mt-3 repeat-btn">
+                                <span class="repeat-text">Repeat</span>
+                                <label class="switch">
+                                    <input type="checkbox" class="hidden-checkbox" id="hidden-checkbox" asp-for="IsRepeat">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="hidden" id="repeated-content">
+                                <div class="repeat-font">Repeat Days</div>
+                                <div class="mt-3 inp col-12">
+                                    @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" onchange="IsChecked()">
+                                            <label class="form-check-label repeat-font" for="flexCheckDefault@(i)">
+                                                Every @Model.checkboxViewModels[i].Name
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <span id="warning-repeat" class="text-danger hidden">Please Select Atleast One Day</span>
+                                <div class="form-floating mt-3 inp col-12 notes-text repeat-floating">
+                                    <select class="form-control physician-assign select-label editable" id="Select-repeat" placeholder="name@example.com" asp-for="Repeat" onchange="selectAssign(this)">
+                                        <option class="option-modal" value="2">2-times</option>
+                                        <option class="option-modal" value="3">3-times</option>
+                                        <option class="option-modal" value="4">4-times</option>
+                                        <option class="option-modal" value="5">5-times</option>
+                                    </select>
+                                    <label for="Select-repeat" class="form-label">Repeat End</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Save</button>
+                            <a id="cancel-shift" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
 
     <div class="main-container">
         <div class="flex-container">
@@ -52,7 +155,7 @@
                                 <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
                                     <span>Shifts For Review</span>
                                 </a>
-                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                <a class="btn btn-info text-white patient-text-btn" id="open-new-shift">
                                     <span>Add New Shift</span>
                                 </a>
                             </div>
@@ -105,15 +208,449 @@
 <script>
 
     $(document).ready(function () {
-        $("#cancel-provider").click(function () {
-            $("#myModalProvider").modal("hide");
+        $("#open-new-shift").click(function () {
+            $("#myModalCreateShift").modal("show");
+            const selectphysician = document.getElementById("Select-physician");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            $.get('/Admin/GetPhysician', { regionid: 1 }, function (response) {
+                for (let i = 0; i < response.data.length; ++i) {
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
+                }
+            });
         });
     });
 
+    $(document).ready(function () {
+        $("#cancel-shift").click(function () {
+            $("#myModalCreateShift").modal("hide");
+        });
+    });
+
+    const checkbox = document.getElementById('hidden-checkbox');
+
+    checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+            document.getElementById("repeated-content").style.display = "block";
+        } else {
+            document.getElementById("repeated-content").style.display = "none";
+        }
+    });
+
+    const changePhysician = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physician");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+    }
+
+    const selectAssign = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assign").style.display = "none";
+        }
+    }
+
+    const checkAssign = () => {
+        const select = document.getElementById("Select-physician")
+        if (select.value == -1) {
+            document.getElementById("warning-assign").style.display = "block";
+            return false;
+        }
+        const days = document.getElementsByClassName("form-check-input");
+
+        const starttime = document.getElementById("starttime");
+        const endtime = document.getElementById("endtime");
+
+        if(starttime.value == endtime.value)
+        {
+            document.getElementById("warning-time").style.display = "block";
+            return false;
+        }
+
+        const checkbox = document.getElementById("hidden-checkbox");
+        if(checkbox.checked == true)
+        {
+            let flag = 0
+            for (let i = 0; i < days.length; ++i) {
+                if (days[i].checked == true) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                document.getElementById("warning-repeat").style.display = "block";
+                return false;
+            }
+        }
+    }
+
+    const IsChecked = () => {
+        const days = document.getElementsByClassName("form-check-input");
+        let flag = 0
+        for (let i = 0; i < days.length; ++i) {
+            if (days[i].checked == true) {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 1) {
+            document.getElementById("warning-repeat").style.display = "none";
+        }
+    }
+
+    const checkTime = () => {
+        const starttime = document.getElementById("starttime");
+        const endtime = document.getElementById("endtime");
+
+        if (starttime.value != endtime.value) {
+            document.getElementById("warning-time").style.display = "none";
+        }
+    }
+
+    window.onload = () => {
+        const inputDate = document.getElementById('startdate');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('min', today);
+    }
+
+
+    //Daypilot js
+    @{
+        var list = System.Text.Json.JsonSerializer.Serialize(Model.physicians);
+        var events = System.Text.Json.JsonSerializer.Serialize(Model.shiftViewModels);
+    }
+
+    var resourcess = @Html.Raw(list);
+
+    var eventss = @Html.Raw(events);
+
+    var event = []
+
+    for (let i = 0; i < eventss.length; ++i) {
+        let obj = {
+            id: eventss[i].ShiftDetailId,
+            text: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].PhysicianName} , ${eventss[i].RegionAbbreviation}`,
+            start: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
+            end: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
+            resource: eventss[i].PhysicianId,
+            backColor: eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4"
+        }
+        event.push(obj)
+    }
+
+    var dp = new DayPilot.Scheduler("dp", {
+        timeHeaders: [{ "groupBy": "Month" }, { "groupBy": "Day", "format": "d" }],
+        scale: "Day",
+        days: DayPilot.Date.today().daysInMonth(),
+        startDate: DayPilot.Date.today().firstDayOfMonth(),
+        timeRangeSelectedHandling: "Enabled",
+        eventMoveHandling: "Disabled",
+        onBeforeCellRender: function (args) {
+            if (dp.zoom.active == 0) {
+                for (let i = 0; i < 24; ++i) {
+                    if (args.cell.x === i && args.cell.y === 0) {
+                        args.cell.properties.html = `<div style="padding-top:7px;text-align:center;">${dp.events.list.filter(e => (new Date(e.start).getHours() == i || new Date(e.end).getHours() == i && new Date(e.end).getMinutes() > 0) && new Date(e.start).toDateString() == new Date(dp.zoomLevels[0].properties.startDate).toDateString()).length}</div>`;
+                        args.cell.properties.backColor = "#FEADF9";
+                    }
+                }
+            }
+            else if (dp.zoom.active == 1) {
+                for (let i = 0; i < 7; ++i) {
+                    if (args.cell.x === i && args.cell.y === 0) {
+                        args.cell.properties.html = `<div style="padding-top:7px;text-align:center;">${dp.events.list.filter(e => new Date(e.start).toDateString() == new Date(args.cell.start).toDateString()).length}</div>`;
+                        args.cell.properties.backColor = "#FEADF9";
+                    }
+                }
+            }
+        },
+        zoomLevels: [
+            {
+                name: "Day",
+                properties: {
+                    scale: "CellDuration",
+                    cellDuration: 60,
+                    cellWidth: 59,
+                    timeHeaders: [{ groupBy: "Hour", format: "htt" }],
+                    startDate: DayPilot.Date.today(),
+                    days: function () { return 1; }
+                }
+            },
+            {
+                name: "Week",
+                properties: {
+                    scale: "Day",
+                    cellWidth: 200,
+                    timeHeaders: [{ groupBy: "Day", format: "ddd d" }],
+                    startDate: DayPilot.Date.today(),
+                    days: function () { return 7; },
+                }
+            },
+            {
+                name: "Month",
+                properties: {
+                    scale: "CellDuration",
+                    cellDuration: 720,
+                    cellWidth: 40,
+                    timeHeaders: [{ groupBy: "Month" }, { groupBy: "Day", format: "ddd d" }, { groupBy: "Cell", format: "tt" }],
+                    startDate: function (args) { return args.date.firstDayOfMonth(); },
+                    days: function (args) { return args.date.daysInMonth(); },
+                }
+            },
+        ],
+        treeEnabled: true,
+        eventHeight:45
+    });
+    dp.zoom.setActive(0);
+    dp.init();
+
+    const monthCalendar = new DayPilot.Month("dp-month", {
+        cellMarginBottom: 20,
+        startDate: DayPilot.Date.today(),
+        eventMoveHandling: "Disabled",
+        onEventResized: (args) => {
+            dp.message("Resized: " + args.e.text());
+        },
+        onEventClicked: (args) => {
+            DayPilot.Modal.alert(args.e.text());
+        },
+        events : event,
+        eventHeight: 35
+
+
+    });
+    monthCalendar.init();
+
+    
+
+    const appp = {
+        loadData: function () {
+
+            const resources = [{ html: "<b>Coverage</b>", id: "R0" }]
+            for (let i = 0; i < resourcess.length;++i)
+            {
+                let path = resourcess[i].Photo == null ? "/images/user (1).png" : `/provider_documents/${resourcess[i].PhysicianId}/${resourcess[i].Photo}`
+                let obj = {
+                    html: `<div class='coverage-flex'><div class='coverage-inner-flex'><img src='${path}' class='coverage-img' /><span>${resourcess[i].LastName.charAt(0).toUpperCase() + resourcess[i].LastName.slice(1) + ", " + resourcess[i].FirstName.charAt(0).toUpperCase() + "."}</span></div></div>`,
+                    id : resourcess[i].PhysicianId
+                }
+                resources.push(obj)
+            }
+
+            const events = []
+
+            for(let i=0;i<eventss.length;++i)
+            {
+                let obj = {
+                    id : eventss[i].ShiftDetailId,
+                    text: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].RegionAbbreviation}`,
+                    start : eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
+                    end : eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
+                    resource : eventss[i].PhysicianId,
+                    backColor : eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4"
+                }
+                events.push(obj)
+            }
+
+            dp.update({ resources, events });
+        },
+        init() {
+            this.loadData();
+        }
+    };
+    appp.init();
+
+    var elements = {
+        day: document.getElementById("button-day"),
+        week: document.getElementById("button-week"),
+        month: document.getElementById("button-month")
+    };
+
+    const schedulerElement = document.getElementById("dp");
+    const monthCalendarElement = document.getElementById("dp-month");
+
+
+    elements.day.addEventListener("click", function (ev) {
+        dp.zoom.setActive(0);
+        loadHeading();
+
+        const buttons = document.getElementsByClassName("contact-provider");
+        for (let i = 0; i < buttons.length; ++i) {
+            buttons[i].classList.remove("calendar-view-active");
+        }
+
+        elements.day.classList.add("calendar-view-active")
+
+        schedulerElement.style.display = "block";
+        monthCalendarElement.style.display = "none";
+
+
+        document.getElementById("main-date").innerHTML = new DayPilot.Date(dp.zoomLevels[0].properties.startDate).toString("dddd, MMM d, yyyy")
+
+    });
+
+    elements.week.addEventListener("click", function (ev) {
+        dp.zoom.setActive(1);
+        loadHeading();
+
+        const buttons = document.getElementsByClassName("contact-provider");
+        for (let i = 0; i < buttons.length; ++i) {
+            buttons[i].classList.remove("calendar-view-active");
+        }
+
+        elements.week.classList.add("calendar-view-active")
+
+        schedulerElement.style.display = "block";
+        monthCalendarElement.style.display = "none";
+
+
+
+        document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+
+
+    });
+
+    elements.month.addEventListener("click", function (ev) {
+        dp.zoom.setActive(2);
+
+        const buttons = document.getElementsByClassName("contact-provider");
+        for (let i = 0; i < buttons.length; ++i) {
+            buttons[i].classList.remove("calendar-view-active");
+        }
+
+        elements.month.classList.add("calendar-view-active")
+
+        schedulerElement.style.display = "none";
+        monthCalendarElement.style.display = "block";
+
+
+        document.getElementById("main-date").innerHTML = new DayPilot.Date(monthCalendar.startDate).toString("MMM yyyy")
+
+
+    });
+
+    const loadHeading = () => {
+        const heading = document.getElementsByClassName("scheduler_default_corner_inner")
+        for (let i = 0; i < heading.length; ++i) {
+            heading[0].innerHTML = "Staff";
+        }
+    }
+
+    loadHeading()
+
+    function changeStartDate(selectedDate) {
+        console.log(selectedDate)
+        const startDate = new DayPilot.Date(selectedDate);
+        const givenDate = new Date(selectedDate);
+        const mondayOfWeek = getMondayOfWeek(givenDate);
+        dp.zoomLevels[0].properties.startDate = startDate;
+        dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
+        if (dp.zoom.active == 0) {
+            dp.startDate = startDate;
+        }
+        else if (dp.zoom.active == 1) {
+            dp.startDate = new DayPilot.Date(mondayOfWeek);
+        }
+        dp.update();
+        monthCalendar.update({ startDate: startDate });
+        if (dp.zoom.active == 0) {
+            document.getElementById("main-date").innerHTML = dp.zoomLevels[0].properties.startDate.toString("dddd, MMM d, yyyy")
+        }
+        else if (dp.zoom.active == 1) {
+            document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+        }
+        else if (dp.zoom.active == 2) {
+            document.getElementById("main-date").innerHTML = monthCalendar.startDate.toString("MMM yyyy")
+        }
+        if (dp.zoom.active == 2) {
+            monthCalendarElement.style.display = "block";
+        }
+    }
+
+
+    function getMondayOfWeek(date) {
+        const dayOfWeek = date.getDay();
+        const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        return new Date(date.setDate(diff));
+    }
+
+    const app = {
+        elements: {
+            previous: document.getElementById("previous"),
+            next: document.getElementById("next")
+        },
+        init() {
+            app.elements.previous.addEventListener("click", (e) => {
+                e.preventDefault();
+                app.changeDate(monthCalendar.startDate.addMonths(-1), dp.zoomLevels[0].properties.startDate.addDays(-1), dp.zoomLevels[1].properties.startDate.addDays(-7));
+            });
+            app.elements.next.addEventListener("click", (e) => {
+                e.preventDefault();
+                app.changeDate(monthCalendar.startDate.addMonths(1), dp.zoomLevels[0].properties.startDate.addDays(1), dp.zoomLevels[1].properties.startDate.addDays(7));
+            });
+        },
+        changeDate(dateM, dateD, dateW) {
+            const mondayOfWeek = getMondayOfWeek(new Date(dateW));
+            var startDate = dateM.firstDayOfMonth();
+            const weekStartDate = new Date(mondayOfWeek);
+            const days = dp.startDate.daysInMonth();
+
+            if (dp.zoom.active == 0) {
+                dp.startDate = dateD;
+                dp.zoomLevels[0].properties.startDate = dateD;
+            }
+            else if (dp.zoom.active == 1) {
+                dp.startDate = new DayPilot.Date(mondayOfWeek);
+                dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
+            }
+            else if (dp.zoom.active == 2) {
+                monthCalendar.startDate = startDate;
+            }
+
+            monthCalendar.update();
+            dp.update();
+
+            if (dp.zoom.active == 0) {
+                document.getElementById("main-date").innerHTML = dp.zoomLevels[0].properties.startDate.toString("dddd, MMM d, yyyy")
+            }
+            else if (dp.zoom.active == 1) {
+                document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+            }
+            else if (dp.zoom.active == 2) {
+                document.getElementById("main-date").innerHTML = monthCalendar.startDate.toString("MMM yyyy")
+            }
+
+            if (dp.zoom.active == 2) {
+                monthCalendarElement.style.display = "block";
+            }
+        }
+    }
+    app.init();
+
+    document.getElementById("main-date").innerHTML = DayPilot.Date.today().toString("dddd, MMM d, yyyy")
 
 </script>
 
 
 <script src="~/js/admin-navbar.js"></script>
 <script src="~/js/admin-dashboard.js"></script>
-<script src="~/js/daypilot.js"></script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -9,7 +9,7 @@
         if (dp.zoom.active == 0) {
             for (let i = 0; i < 24; ++i) {
                 if (args.cell.x === i && args.cell.y === 0) {
-                    args.cell.properties.html = `<div style="padding-top:7px;text-align:center;">${dp.events.list.filter(e => (new Date(e.start).getHours() == i || new Date(e.end).getHours() == i && new Date(e.end).getMinutes() > 0) && new Date(e.start).toDateString() == new Date().toDateString()).length}</div>`;
+                    args.cell.properties.html = `<div style="padding-top:7px;text-align:center;">${dp.events.list.filter(e => (new Date(e.start).getHours() == i || new Date(e.end).getHours() == i && new Date(e.end).getMinutes() > 0) && new Date(e.start).toDateString() == new Date(dp.zoomLevels[0].properties.startDate).toDateString()).length}</div>`;
                     args.cell.properties.backColor = "#FEADF9";
                 }
             }
@@ -30,7 +30,7 @@
                 scale: "CellDuration",
                 cellDuration: 60,
                 cellWidth: 59,
-                timeHeaders: [{ groupBy: "Hour" }],
+                timeHeaders: [{ groupBy: "Hour", format:"htt" }],
                 startDate: DayPilot.Date.today(),
                 days: function () { return 1; }
             }
@@ -40,7 +40,7 @@
             properties: {
                 scale: "Day",
                 cellWidth: 200,
-                timeHeaders: [{ groupBy: "Day", format: "dddd d" }],
+                timeHeaders: [{ groupBy: "Day", format: "ddd d" }],
                 startDate: DayPilot.Date.today(),
                 days: function () { return 7; },
             }
@@ -107,6 +107,14 @@ const appp = {
                 text: "Event 2",
                 start: "2024-04-03T13:00:00",
                 end: "2024-04-03T14:00:00",
+                resource: "R4",
+                backColor: "#FEADF9"
+            },
+            {
+                id: 4,
+                text: "Event 4",
+                start: "2024-04-03T14:00:00",
+                end: "2024-04-03T15:00:00",
                 resource: "R4",
                 backColor: "#FEADF9"
             },
@@ -262,16 +270,19 @@ const app = {
         var startDate = dateM.firstDayOfMonth();
         const weekStartDate = new Date(mondayOfWeek);
         const days = dp.startDate.daysInMonth();
-
-        monthCalendar.startDate = startDate;
-        dp.zoomLevels[0].properties.startDate = dateD;
-        dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
+        
         if (dp.zoom.active == 0) {
             dp.startDate = dateD;
+            dp.zoomLevels[0].properties.startDate = dateD;
         }
         else if (dp.zoom.active == 1) {
             dp.startDate = new DayPilot.Date(mondayOfWeek);
+            dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
         }
+        else if (dp.zoom.active == 2) {
+            monthCalendar.startDate = startDate;
+        }
+
         monthCalendar.update();
         dp.update();
 

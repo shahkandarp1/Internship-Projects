@@ -233,3 +233,140 @@
     opacity: 0;
     cursor: pointer;
 }
+
+.scheduler_default_corner_inner + div {
+    display:none;
+}
+
+.month_default_loading + div {
+    display: none;
+}
+
+.coverage-img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.coverage-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.coverage-inner-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scheduler_default_tree_image_no_children {
+    display: none;
+}
+
+.scheduler_default_rowheader_inner_text {
+    margin-left: 6px !important;
+}
+.scheduler_default_event {
+    display: inline-block;
+    overflow: hidden;
+    word-wrap: break-word;
+    white-space: break-spaces!important;
+    text-overflow: ellipsis;
+}
+.scheduler_default_event_inner {
+    font-size: 11px;
+}
+/*Switch*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-top: 14px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e5e4e2;
+    -webkit-transition: .4s;
+    transition: .4s;
+    height: 17px;
+    width: 25px;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: -12px;
+        bottom: -1px;
+        background-color: #0dcaf0;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+.hidden-checkbox {
+    opacity: 0;
+}
+
+    .hidden-checkbox:checked + .slider {
+        background-color: #7EDEF4;
+    }
+
+        .hidden-checkbox:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+/* Add New Shift */
+.modal-body .form-floating > .select:not(:placeholder-shown) {
+    padding-top:0.625rem!important;
+}
+.modal-body .form-floating > .select-label:not(:placeholder-shown) {
+    padding-top: 1.30rem!important;
+}
+
+.modal-body .form-floating > label {
+     left: 13px; 
+}
+.modal-body .repeat-floating > label {
+    left: 1px;
+}
+
+.modal-body .time{
+    width:50%;
+}
+
+.repeat-btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 17px;
+}
+.repeat-text{
+    margin-right:20px;
+}
+.form-check {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+.repeat-font{
+    font-size:1.0rem;
+}
