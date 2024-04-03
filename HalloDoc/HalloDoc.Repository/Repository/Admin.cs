@@ -4382,7 +4382,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public SchedulingViewModel GetAllShiftDetails()
+        public SchedulingViewModel GetAllShiftDetails(int? regionid)
         {
             List<Region> regions = _db.Regions.ToList();
 
@@ -4393,7 +4393,7 @@ namespace HalloDoc.Repository.Repository
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "Dashboard",
+                curr_active = "Provider",
                 menus = cookieModel.menus
             };
 
@@ -4417,6 +4417,11 @@ namespace HalloDoc.Repository.Repository
                             Status = sd.Status,
                             ShiftDetailId = sd.ShiftDetailId
                         };
+
+            if(regionid!=null && regionid!=-1)
+            {
+                query = query.Where(r => r.RegionId == regionid);
+            }
 
 
             string[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
@@ -4518,12 +4523,12 @@ namespace HalloDoc.Repository.Repository
                 {
                     if (schedulingViewModel.checkboxViewModels[i].isChecked)
                     {
-                        for (var j = 0; j < schedulingViewModel.Repeat - 1; ++j)
+                        for (var j = 0; j < schedulingViewModel.Repeat; ++j)
                         {
                             ShiftDetail shiftDetail1 = new ShiftDetail
                             {
                                 ShiftId = shiftDetail.ShiftId,
-                                ShiftDate = DateTime.Today.AddDays(7 * (j + 1) - (int)DateTime.Today.DayOfWeek + (int)schedulingViewModel.checkboxViewModels[i].Id),
+                                ShiftDate = schedulingViewModel.StartDate.AddDays(7 * (j + 1) - (int)schedulingViewModel.StartDate.DayOfWeek + (int)schedulingViewModel.checkboxViewModels[i].Id),
                                 RegionId = schedulingViewModel.RegionId,
                                 StartTime = schedulingViewModel.StartTime,
                                 EndTime = schedulingViewModel.EndTime,
@@ -4552,6 +4557,121 @@ namespace HalloDoc.Repository.Repository
                 return 2;
             }
 
+        }
+
+        public bool EditShift(SchedulingViewModel schedulingViewModel)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s=>s.ShiftDetailId == schedulingViewModel.ShiftDetailId);
+                if(shiftDetail == null)
+                {
+                    return false;
+                }
+                shiftDetail.StartTime = schedulingViewModel.StartTime;
+                shiftDetail.EndTime = schedulingViewModel.EndTime;
+                shiftDetail.ShiftDate = schedulingViewModel.StartDate;
+                shiftDetail.ModifiedBy = cookieModel.aspId;
+                shiftDetail.ModifiedDate = DateTime.Now;
+
+                _db.ShiftDetails.Update(shiftDetail);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteShift(int? id)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s => s.ShiftDetailId == id);
+                if (shiftDetail == null)
+                {
+                    return false;
+                }
+                shiftDetail.IsDeleted = new BitArray(new[] { true });
+                shiftDetail.ModifiedBy = cookieModel.aspId;
+                shiftDetail.ModifiedDate = DateTime.Now;
+
+                _db.ShiftDetails.Update(shiftDetail);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public MDOnCallViewModel GetMdOnCallDetails()
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider",
+                menus = cookieModel.menus
+            };
+
+            var currentDate = DateTime.Now.Date;
+            var currentTime = DateTime.Now.TimeOfDay;
+
+            var notactive = from p in _db.Physicians
+                        join pr in _db.PhysicianRegions on p.PhysicianId equals pr.PhysicianId
+                        where !_db.Shifts.Any(s => s.PhysicianId == p.PhysicianId &&
+                                                         _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
+                                                                                       sd.ShiftDate.Date == currentDate &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                              p.IsDeleted == new BitArray(new[] { false })
+                        select new MDOnCallPhysicians
+                        {
+                            PhysicianId = p.PhysicianId,
+                            Name = p.FirstName + ", " + p.LastName,
+                            Photo = p.Photo,
+                            RegionId = pr.RegionId
+                        };
+
+            var active = from p in _db.Physicians
+                        join pr in _db.PhysicianRegions on p.PhysicianId equals pr.PhysicianId
+                        where _db.Shifts.Any(s => s.PhysicianId == p.PhysicianId &&
+                                                         _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
+                                                                                       sd.ShiftDate.Date == currentDate &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                              p.IsDeleted == new BitArray(new[] { false })
+                        select new MDOnCallPhysicians
+                        {
+                            PhysicianId = p.PhysicianId,
+                            Name = p.FirstName + ", " + p.LastName,
+                            Photo = p.Photo,
+                            RegionId = pr.RegionId
+                        };
+
+            MDOnCallViewModel mDOnCallViewModel = new MDOnCallViewModel
+            {
+                notActivePhysicians = notactive.ToList(),
+                activePhysicians = active.ToList(),
+                adminNavbarViewModel = adminNavbarViewModel
+            };
+
+            return mDOnCallViewModel;
         }
 
     }

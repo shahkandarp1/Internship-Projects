@@ -1552,10 +1552,21 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Scheduling()
         {
-            SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails();
+            SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(-1);
             return View(schedulingViewModel);
         }
 
+        public IActionResult SchedulingTable(int regionid = -1)
+        {
+            SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(regionid);
+            return Json(new { data = schedulingViewModel.shiftViewModels });
+        }
+
+        /// <summary>
+        /// It is a post method for create shift which will create shift for the specified physician if he/she is not already having any shift at that time
+        /// </summary>
+        /// <param name="schedulingViewModel"></param>
+        /// <returns></returns>
         public IActionResult CreateShift(SchedulingViewModel schedulingViewModel)
         {
             if(ModelState.IsValid)
@@ -1572,10 +1583,52 @@ namespace HalloDoc.Controllers
                 else
                 {
                     TempData["success"] = "Shift Created Successfully!!";
-                    return RedirectToAction("Scheduling");
                 }
+                return RedirectToAction("Scheduling");
             }
             return View("Scheduling", schedulingViewModel);
+        }
+        /// <summary>
+        /// It is a post method for editting shift
+        /// </summary>
+        /// <param name="schedulingViewModel"></param>
+        /// <returns></returns>
+        public IActionResult EditShift(SchedulingViewModel schedulingViewModel)
+        {
+            bool isEditted = _admin.EditShift(schedulingViewModel);
+            if(isEditted)
+            {
+                TempData["success"] = "Shift Editted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Shift could not be Editted!!";
+            }
+            return RedirectToAction("Scheduling");
+        }
+        /// <summary>
+        /// This method will delete shift of the specified Shift Detail Id
+        /// </summary>
+        /// <param name="schedulingViewModel"></param>
+        /// <returns></returns>
+        public IActionResult DeleteShift(SchedulingViewModel schedulingViewModel)
+        {
+            bool isDeleted = _admin.DeleteShift(schedulingViewModel.ShiftDetailId);
+            if (isDeleted)
+            {
+                TempData["success"] = "Shift Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Shift could not be Deleted!!";
+            }
+            return RedirectToAction("Scheduling");
+        }
+
+        public IActionResult MdOnCall()
+        {
+            MDOnCallViewModel mDOnCallViewModel = _admin.GetMdOnCallDetails();
+            return View();
         }
 
     }

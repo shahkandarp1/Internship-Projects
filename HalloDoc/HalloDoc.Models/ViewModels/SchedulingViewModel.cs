@@ -16,6 +16,7 @@ namespace HalloDoc.ViewModels
 
         public int? RegionId { get; set; }
         public int? PhysicianId { get; set; }
+        public int? ShiftDetailId { get; set; }
         [Required]
         public DateTime StartDate { get; set; } = DateTime.Today;
         [Required]

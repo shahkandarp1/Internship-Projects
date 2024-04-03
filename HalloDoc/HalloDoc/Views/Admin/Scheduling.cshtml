@@ -47,6 +47,28 @@
                         @Html.HiddenFor(m => m.regions[i].Name)
                         @Html.HiddenFor(m => m.regions[i].RegionId)
                     }
+                    @for (int i = 0; i < Model.physicians.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.physicians[i].PhysicianId)
+                        @Html.HiddenFor(m => m.physicians[i].FirstName)
+                        @Html.HiddenFor(m => m.physicians[i].LastName)
+                        @Html.HiddenFor(m => m.physicians[i].Photo)
+                        @Html.HiddenFor(m => m.physicians[i].Email)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessName)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessWebsite)
+                    }
+                    @for (int i = 0; i < Model.shiftViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianName)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionAbbreviation)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDate)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].EndTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].StartTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].Status)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDetailId)
+                    }
 
                     <div class="modal-body">
                         <div class="row">
@@ -62,7 +84,7 @@
                                 <select class="form-control physician-assign select-label editable" id="Select-physician" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssign(this)">
                                     <option class="option-modal" value="-1">Select Physician</option>
                                 </select>
-                                <label for="Select-region" class="form-label">Physician</label>
+                                <label for="Select-physician" class="form-label">Physician</label>
                             </div>
                             <span id="warning-assign" class="text-danger hidden">Please Select Physician</span>
                             <div class="form-floating mt-3 inp col-12 notes-text">
@@ -125,6 +147,105 @@
     </form>
 
 
+    <!-- View Shift Modal -->
+    <form asp-action="EditShift" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssignV()")">
+        <div class="modal fade" id="myModalViewShift" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Create Shift</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+                    <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId" />
+
+                    @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                    }
+
+                    @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.regions[i].Name)
+                        @Html.HiddenFor(m => m.regions[i].RegionId)
+                    }
+                    @for (int i = 0; i < Model.physicians.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.physicians[i].PhysicianId)
+                        @Html.HiddenFor(m => m.physicians[i].FirstName)
+                        @Html.HiddenFor(m => m.physicians[i].LastName)
+                        @Html.HiddenFor(m => m.physicians[i].Photo)
+                        @Html.HiddenFor(m => m.physicians[i].Email)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessName)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessWebsite)
+                    }
+                    @for (int i = 0; i < Model.shiftViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianName)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionAbbreviation)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDate)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].EndTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].StartTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].Status)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDetailId)
+                    }
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control select " id="Select-regionV" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysicianV(this)" disabled>
+                                    @foreach (var items in Model.regions)
+                                    {
+                                        <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control physician-assign select-label " id="Select-physicianV" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssignV(this)" disabled>
+                                    <option class="option-modal" value="-1">Select Physician</option>
+                                </select>
+                                <label for="Select-physicianV" class="form-label">Physician</label>
+                            </div>
+                            <span id="warning-assignV" class="text-danger hidden">Please Select Physician</span>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <input type="date" class="form-control editable dob" id="startdateV" placeholder="name@example.com" asp-for="StartDate" value="yyyy-mm-dd" disabled>
+                                <label for="startdateV" class="form-label dob-label">Start Date</label>
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control editable dob" id="starttimeV" placeholder="name@example.com" asp-for="StartTime" onchange="checkTimeV()" disabled>
+                                <label for="starttimeV" class="form-label dob-label">Start Time</label>
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control editable dob" id="endtimeV" placeholder="name@example.com" asp-for="EndTime" onchange="checkTimeV()" disabled>
+                                <label for="endtimeV" class="form-label dob-label">End Time</label>
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                            <span id="warning-timeV" class="text-danger hidden">Start and End time cannot be same</span>
+                            
+                        </div>
+                        <div class="lower-btn" id="edit">
+                            <a id="cancel-shiftV" class="btn submit-btn mar-top">Return</a>
+                            <a class="lower-custom-btn submit-btn" onclick="Edit()" id="edit-btn">Edit</a>
+                            <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                            <a class="btn submit-btn btn-danger delete-btn mar-top" id="delete-btn">Delete</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
     <div class="main-container">
         <div class="flex-container">
             <div class="top-text">
@@ -140,7 +261,7 @@
                                 <img class="search-image"
                                      src="../../images/search.svg"
                                      alt="" />
-                                <select name="" id="region" class="search-inp" onchange="filter(1,10)">
+                                <select name="" id="region" class="search-inp" onchange="filter()">
                                     <option value="-1">All Regions</option>
                                     @foreach (var item in Model.regions)
                                     {
@@ -177,7 +298,7 @@
                         </div>
                     </div>
                     <div class="shift-date-handler mb-4">
-                        <div>
+                        <div class="calendar-left-right">
                             <img src="~/images/back.svg" class="back-direction-btn" id="previous" />
                             <button id="DatePickerButton" class="datepicker-native-button btn btn-secondary btn-sm">
                                 <i class="bi bi-calendar3 date-calendar"></i>
@@ -204,6 +325,11 @@
         </div>
     </div>
 </div>
+
+<form asp-action="DeleteShift" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId1" />
+    <button type="submit" id="submit-delete"></button>
+</form>
 
 <script>
 
@@ -232,6 +358,25 @@
             $("#myModalCreateShift").modal("hide");
         });
     });
+    
+    $(document).ready(function () {
+        $("#cancel-shiftV").click(function () {
+            $("#myModalViewShift").modal("hide");
+            const editable = document.getElementsByClassName('editable')
+            for (let i = 0; i < editable.length; ++i) {
+                editable[i].disabled = true;
+            }
+            const btn = document.getElementsByClassName('lower-custom-btn')
+            for (let i = 0; i < btn.length; ++i) {
+                if (btn[i].classList.length == 3) {
+                    btn[i].classList.remove("hidden");
+                }
+                else {
+                    btn[i].classList.add("hidden");
+                }
+            }
+        });
+    });
 
     const checkbox = document.getElementById('hidden-checkbox');
 
@@ -258,6 +403,29 @@
                 selectphysician.append(newOption);
             }
         });
+    }
+
+    const changePhysicianV = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physicianV");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+    }
+
+    const selectAssignV = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assignV").style.display = "none";
+        }
     }
 
     const selectAssign = (text) => {
@@ -300,6 +468,42 @@
         }
     }
 
+    const checkAssignV = () => {
+        const select = document.getElementById("Select-physicianV")
+        if (select.value == -1) {
+            document.getElementById("warning-assignV").style.display = "block";
+            return false;
+        }
+
+        const starttime = document.getElementById("starttimeV");
+        const endtime = document.getElementById("endtimeV");
+
+        if (starttime.value == endtime.value) {
+            document.getElementById("warning-timeV").style.display = "block";
+            return false;
+        }
+    }
+
+    const Edit = () => {
+        const editable = document.getElementsByClassName('editable')
+        for (let i = 0; i < editable.length; ++i) {
+            editable[i].disabled = false;
+        }
+        const btn = document.getElementsByClassName('lower-custom-btn')
+        for (let i = 0; i < btn.length; ++i) {
+            if (btn[i].classList.length == 3) {
+                btn[i].classList.remove("hidden");
+            }
+            else {
+                btn[i].classList.add("hidden");
+            }
+        }
+    }
+
+    const Cancel = () => {
+        location.reload()
+    }
+
     const IsChecked = () => {
         const days = document.getElementsByClassName("form-check-input");
         let flag = 0
@@ -322,12 +526,31 @@
             document.getElementById("warning-time").style.display = "none";
         }
     }
+    
+    const checkTimeV = () => {
+        const starttime = document.getElementById("starttimeV");
+        const endtime = document.getElementById("endtimeV");
+
+        if (starttime.value != endtime.value) {
+            document.getElementById("warning-timeV").style.display = "none";
+        }
+    }
 
     window.onload = () => {
         const inputDate = document.getElementById('startdate');
         const today = new Date().toISOString().split('T')[0];
         inputDate.setAttribute('min', today);
+
+        const inputDatee = document.getElementById('startdateV');
+        const todayy = new Date().toISOString().split('T')[0];
+        inputDatee.setAttribute('min', todayy);
     }
+
+    $(document).ready(function () {
+        $("#delete-btn").click(function () {
+            document.getElementById("submit-delete").click()
+        });
+    });
 
 
     //Daypilot js
@@ -336,7 +559,7 @@
         var events = System.Text.Json.JsonSerializer.Serialize(Model.shiftViewModels);
     }
 
-    var resourcess = @Html.Raw(list);
+        var resourcess = @Html.Raw(list);
 
     var eventss = @Html.Raw(events);
 
@@ -349,7 +572,9 @@
             start: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
             end: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
             resource: eventss[i].PhysicianId,
-            backColor: eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4"
+            regionid: eventss[i].RegionId,
+            backColor: eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4",
+            bubbleHtml: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].PhysicianName} , ${eventss[i].RegionAbbreviation}`
         }
         event.push(obj)
     }
@@ -397,7 +622,7 @@
                     scale: "Day",
                     cellWidth: 200,
                     timeHeaders: [{ groupBy: "Day", format: "ddd d" }],
-                    startDate: DayPilot.Date.today(),
+                    startDate: new DayPilot.Date(getMondayOfWeek(DayPilot.Date.today())),
                     days: function () { return 7; },
                 }
             },
@@ -414,10 +639,78 @@
             },
         ],
         treeEnabled: true,
-        eventHeight:45
+        eventHeight: 45,
+        onEventClicked: (args) => {
+
+            const selectphysician = document.getElementById("Select-physicianV");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            $.get('/Admin/GetPhysician', { regionid: args.e.data.regionid }, function (response) {
+                for (let i = 0; i < response.data.length; ++i) {
+                    console.log(response.data)
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
+                }
+
+                const region = document.getElementById("Select-regionV")
+
+                for (let i = 0; i < region.options.length; ++i) {
+                    if (region.options[i].value == args.e.data.regionid) {
+                        region.options[i].selected = true;
+                        break;
+                    }
+                }
+
+                for (let i = 0; i < selectphysician.options.length; ++i) {
+                    console.log(selectphysician.options[i].value)
+                    console.log(selectphysician.options[i].text)
+                    if (selectphysician.options[i].value == args.e.data.resource) {
+                        console.log("Hello")
+                        selectphysician.options[i].selected = true;
+                        break;
+                    }
+                }
+
+                document.getElementById("endtimeV").value = args.e.data.end.split("T")[1]
+                document.getElementById("starttimeV").value = args.e.data.start.split("T")[1]
+                document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
+                document.getElementById("shiftDetailId").value = args.e.data.id
+                document.getElementById("shiftDetailId1").value = args.e.data.id
+
+                const currentyear = new Date().getFullYear()
+                const currentmonth = new Date().getMonth() + 1
+                const currentdate = new Date().getDate()
+
+                const startyear = new Date(args.e.data.start).getFullYear()
+                const startmonth = new Date(args.e.data.start).getMonth() + 1
+                const startdate = new Date(args.e.data.start).getDate()
+
+                if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
+                    document.getElementById("delete-btn").style.display = "none";
+                    document.getElementById("edit-btn").style.display = "none";
+                }
+                else {
+                    document.getElementById("delete-btn").style.display = "inline-block";
+                    document.getElementById("edit-btn").style.display = "flex";
+                }
+
+                $("#myModalViewShift").modal("show");
+
+            });
+
+            
+        }
     });
     dp.zoom.setActive(0);
+    dp.bubble = new DayPilot.Bubble();
     dp.init();
+
+    console.log(new DayPilot.Date(getMondayOfWeek(DayPilot.Date.today())))
 
     const monthCalendar = new DayPilot.Month("dp-month", {
         cellMarginBottom: 20,
@@ -427,42 +720,102 @@
             dp.message("Resized: " + args.e.text());
         },
         onEventClicked: (args) => {
-            DayPilot.Modal.alert(args.e.text());
+
+            const selectphysician = document.getElementById("Select-physicianV");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            $.get('/Admin/GetPhysician', { regionid: args.e.data.regionid }, function (response) {
+                for (let i = 0; i < response.data.length; ++i) {
+                    console.log(response.data)
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
+                }
+
+                const region = document.getElementById("Select-regionV")
+
+                for (let i = 0; i < region.options.length; ++i) {
+                    if (region.options[i].value == args.e.data.regionid) {
+                        region.options[i].selected = true;
+                        break;
+                    }
+                }
+
+                for (let i = 0; i < selectphysician.options.length; ++i) {
+                    console.log(selectphysician.options[i].value)
+                    console.log(selectphysician.options[i].text)
+                    if (selectphysician.options[i].value == args.e.data.resource) {
+                        console.log("Hello")
+                        selectphysician.options[i].selected = true;
+                        break;
+                    }
+                }
+
+                document.getElementById("endtimeV").value = args.e.data.end.split("T")[1]
+                document.getElementById("starttimeV").value = args.e.data.start.split("T")[1]
+                document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
+                document.getElementById("shiftDetailId").value = args.e.data.id
+                document.getElementById("shiftDetailId1").value = args.e.data.id
+
+                const currentyear = new Date().getFullYear()
+                const currentmonth = new Date().getMonth() + 1
+                const currentdate = new Date().getDate()
+
+                const startyear = new Date(args.e.data.start).getFullYear()
+                const startmonth = new Date(args.e.data.start).getMonth() + 1
+                const startdate = new Date(args.e.data.start).getDate()
+
+                if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
+                    document.getElementById("delete-btn").style.display = "none";
+                    document.getElementById("edit-btn").style.display = "none";
+                }
+                else
+                {
+                    document.getElementById("delete-btn").style.display = "inline-block";
+                    document.getElementById("edit-btn").style.display = "flex";
+                }
+
+                $("#myModalViewShift").modal("show");
+
+            });
         },
-        events : event,
+        events: event,
         eventHeight: 35
 
 
     });
     monthCalendar.init();
 
-    
+
 
     const appp = {
         loadData: function () {
 
             const resources = [{ html: "<b>Coverage</b>", id: "R0" }]
-            for (let i = 0; i < resourcess.length;++i)
-            {
+            for (let i = 0; i < resourcess.length; ++i) {
                 let path = resourcess[i].Photo == null ? "/images/user (1).png" : `/provider_documents/${resourcess[i].PhysicianId}/${resourcess[i].Photo}`
                 let obj = {
                     html: `<div class='coverage-flex'><div class='coverage-inner-flex'><img src='${path}' class='coverage-img' /><span>${resourcess[i].LastName.charAt(0).toUpperCase() + resourcess[i].LastName.slice(1) + ", " + resourcess[i].FirstName.charAt(0).toUpperCase() + "."}</span></div></div>`,
-                    id : resourcess[i].PhysicianId
+                    id: resourcess[i].PhysicianId
                 }
                 resources.push(obj)
             }
 
             const events = []
 
-            for(let i=0;i<eventss.length;++i)
-            {
+            for (let i = 0; i < eventss.length; ++i) {
                 let obj = {
-                    id : eventss[i].ShiftDetailId,
+                    id: eventss[i].ShiftDetailId,
                     text: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].RegionAbbreviation}`,
-                    start : eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
-                    end : eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
-                    resource : eventss[i].PhysicianId,
-                    backColor : eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4"
+                    start: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
+                    end: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
+                    resource: eventss[i].PhysicianId,
+                    regionid: eventss[i].RegionId,
+                    backColor: eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4"
                 }
                 events.push(obj)
             }
@@ -520,7 +873,7 @@
 
 
 
-        document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+        document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(6).toString("MMM d, yyyy")}`
 
 
     });
@@ -554,17 +907,15 @@
     loadHeading()
 
     function changeStartDate(selectedDate) {
-        console.log(selectedDate)
         const startDate = new DayPilot.Date(selectedDate);
-        const givenDate = new Date(selectedDate);
-        const mondayOfWeek = getMondayOfWeek(givenDate);
+        const mondayOfWeek = getMondayOfWeek(startDate);
         dp.zoomLevels[0].properties.startDate = startDate;
-        dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
+        dp.zoomLevels[1].properties.startDate = mondayOfWeek;
         if (dp.zoom.active == 0) {
             dp.startDate = startDate;
         }
         else if (dp.zoom.active == 1) {
-            dp.startDate = new DayPilot.Date(mondayOfWeek);
+            dp.startDate = mondayOfWeek;
         }
         dp.update();
         monthCalendar.update({ startDate: startDate });
@@ -572,7 +923,7 @@
             document.getElementById("main-date").innerHTML = dp.zoomLevels[0].properties.startDate.toString("dddd, MMM d, yyyy")
         }
         else if (dp.zoom.active == 1) {
-            document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+            document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(6).toString("MMM d, yyyy")}`
         }
         else if (dp.zoom.active == 2) {
             document.getElementById("main-date").innerHTML = monthCalendar.startDate.toString("MMM yyyy")
@@ -584,9 +935,10 @@
 
 
     function getMondayOfWeek(date) {
-        const dayOfWeek = date.getDay();
-        const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-        return new Date(date.setDate(diff));
+        const dayOfWeek = date.dayOfWeek();
+        const difference = (dayOfWeek === 0) ? 0 : (0 - dayOfWeek);
+        const sunday = date.addDays(difference);
+        return sunday;
     }
 
     const app = {
@@ -605,9 +957,8 @@
             });
         },
         changeDate(dateM, dateD, dateW) {
-            const mondayOfWeek = getMondayOfWeek(new Date(dateW));
+            const mondayOfWeek = getMondayOfWeek(dateW);
             var startDate = dateM.firstDayOfMonth();
-            const weekStartDate = new Date(mondayOfWeek);
             const days = dp.startDate.daysInMonth();
 
             if (dp.zoom.active == 0) {
@@ -615,8 +966,8 @@
                 dp.zoomLevels[0].properties.startDate = dateD;
             }
             else if (dp.zoom.active == 1) {
-                dp.startDate = new DayPilot.Date(mondayOfWeek);
-                dp.zoomLevels[1].properties.startDate = new DayPilot.Date(mondayOfWeek);
+                dp.startDate = mondayOfWeek;
+                dp.zoomLevels[1].properties.startDate = mondayOfWeek;
             }
             else if (dp.zoom.active == 2) {
                 monthCalendar.startDate = startDate;
@@ -629,7 +980,7 @@
                 document.getElementById("main-date").innerHTML = dp.zoomLevels[0].properties.startDate.toString("dddd, MMM d, yyyy")
             }
             else if (dp.zoom.active == 1) {
-                document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(7).toString("MMM d, yyyy")}`
+                document.getElementById("main-date").innerHTML = `${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).toString("MMM d")} - ${new DayPilot.Date(dp.zoomLevels[1].properties.startDate).addDays(6).toString("MMM d, yyyy")}`
             }
             else if (dp.zoom.active == 2) {
                 document.getElementById("main-date").innerHTML = monthCalendar.startDate.toString("MMM yyyy")
@@ -643,6 +994,47 @@
     app.init();
 
     document.getElementById("main-date").innerHTML = DayPilot.Date.today().toString("dddd, MMM d, yyyy")
+
+    const filter = () => {
+        $.post('/Admin/SchedulingTable', { regionid: document.getElementById("region").value }, function (response) {
+            console.log(response)
+            console.log(response.data)
+            const events = []
+
+            for (let i = 0; i < response.data.length; ++i) {
+                let obj = {
+                    id: response.data[i].shiftDetailId,
+                    text: `${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].startTime).toString("h:mm tt")} - ${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].endTime).toString("h:mm tt")} , ${response.data[i].regionAbbreviation}`,
+                    start: response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].startTime,
+                    end: response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].endTime,
+                    resource: response.data[i].physicianId,
+                    regionid: response.data[i].regionId,
+                    backColor: response.data[i].status == 0 ? "#FEADF9" : "#A5CEA4"
+                }
+                events.push(obj)
+            }
+            dp.update({events})
+            var event = []
+
+            for (let i = 0; i < response.data.length; ++i) {
+                let obj = {
+                    id: response.data[i].shiftDetailId,
+                    text: `${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].startTime).toString("h:mm tt")} - ${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].endTime).toString("h:mm tt")} , ${response.data[i].physicianName} , ${response.data[i].regionAbbreviation}`,
+                    start: response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].startTime,
+                    end: response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].endTime,
+                    resource: response.data[i].physicianId,
+                    backColor: response.data[i].status == 0 ? "#FEADF9" : "#A5CEA4",
+                    regionid: response.data[i].regionId,
+                    bubbleHtml: `${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].startTime).toString("h:mm tt")} - ${new DayPilot.Date(response.data[i].shiftDate.split("T")[0] + "T" + response.data[i].endTime).toString("h:mm tt")} , ${response.data[i].physicianName} , ${response.data[i].regionAbbreviation}`
+                }
+                event.push(obj)
+            }
+            monthCalendar.update({events:event})
+            if (dp.zoom.active == 2) {
+                monthCalendarElement.style.display = "block";
+            }
+        });
+    }
 
 </script>
 

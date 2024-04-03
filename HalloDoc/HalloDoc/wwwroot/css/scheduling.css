@@ -370,3 +370,65 @@
 .repeat-font{
     font-size:1.0rem;
 }
+.delete-btn {
+    background-color: #dc3545;
+}
+.mar-top {
+    margin-top: 20px;
+    width: 83px;
+    height: 40px;
+    font-size: 13px;
+}
+#cancel-shiftV:hover {
+    color: white;
+    background-color: #0dcaf0!important;
+}
+#submit-delete{
+    opacity:0;
+    width:0px;
+    height:0px;
+}
+
+@media screen and (max-width: 1155px) {
+    .search {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 940px) {
+    .inner-pt-container {
+        flex-direction:column;
+    }
+    .search {
+        width: 100%;
+        margin-bottom:20px;
+    }
+    .color-shift-flex{
+        justify-content:center;
+    }
+}
+
+@media screen and (max-width: 556px) {
+    .patient-text-btn{
+        width:90px;
+    }
+    .shift-date-handler{
+        flex-direction:column;
+    }
+    .calendar-left-right{
+        margin-bottom:10px;
+    }
+}
+@media screen and (max-width: 556px) {
+    .patient-text-btn {
+        font-size: 13px;
+        padding: 7px;
+        width: 75px;
+        height: 55px;
+    }
+}
+@media screen and (max-width: 426px) {
+    .form-control {
+         height: 50px !important; 
+    }
+}
