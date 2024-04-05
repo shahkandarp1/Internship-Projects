@@ -1,0 +1,195 @@
+﻿@model ShiftsForReviewViewModel
+@{
+    ViewData["Title"] = "Shifts For Review";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/scheduling.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mdoncall.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/shiftforreview.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Requested Shifts</span>
+                <a class="back-btn" asp-action="Scheduling" asp-controller="Admin">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+           
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex mb-4">
+                        <div class="inner-pt-container">
+                            <span class="search">
+                                <img class="search-image"
+                                     src="../../images/search.svg"
+                                     alt="" />
+                                <select name="" id="region" class="search-inp" onchange="filter()">
+                                    <option value="-1">All Regions</option>
+                                    @foreach (var item in Model.regions)
+                                    {
+                                        <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </span>
+                            <div class="review-shift-btns">
+                                <a class="btn btn-success text-white patient-text-btn review-shift-btns-margin rs-margin" id="current-month">
+                                    <span>View Current Month Shifts</span>
+                                </a>
+                                <form class="review-shift-btns-margin rs-margin" asp-action="AprooveShifts" asp-controller="Admin" method="post" id="aproove-form">
+                                    <input type="hidden" asp-for="ShiftDetailIds" id="shiftDetailIds" />
+                                    <button class="btn btn-success text-white patient-text-btn" id="aproove-shift-btn">
+                                        <span>Approved Selected</span>
+                                    </button>
+                                </form>
+                                <form asp-action="DeleteShifts" asp-controller="Admin" method="post" id="delete-form" class="rs-margin">
+                                    <input type="hidden" asp-for="ShiftDetailIds" id="ShiftDetailIds1" />
+                                    <button class="btn btn-danger text-white patient-text-btn" id="delete-shift-btn">
+                                        <span>Delete Selected</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var currMonth = false
+    const filter = (page,pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/ShiftsForReviewTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { regionid: document.getElementById("region").value,currMonth:currMonth,page:page,pageSize:pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#current-month").click(function () {
+            currMonth = true
+            filter(1,10)
+        });
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/ShiftsForReviewTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { regionid: -1, currMonth: false, page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+
+    const submitButton = document.getElementById("delete-shift-btn");
+    submitButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        var cansubmit = assignShiftDetailId("ShiftDetailIds1")
+        if(cansubmit)
+        {
+            document.getElementById("delete-form").submit();
+        }
+
+    });
+
+    const submitButton1 = document.getElementById("aproove-shift-btn");
+    submitButton1.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        var cansubmit = assignShiftDetailId("shiftDetailIds")
+        if (cansubmit) {
+            document.getElementById("aproove-form").submit();
+        }
+        
+
+    });
+
+    const assignShiftDetailId = (id) => {
+        const checks = document.getElementsByClassName("check")
+        var ids = ""
+        var flag = 0
+        for (let i = 0; i < checks.length; ++i) {
+            if (checks[i].checked == true) {
+                ids += checks[i].value + ","
+                flag = 1
+            }
+
+        }
+        if (flag == 0) {
+            toastr.error("Select atleast one shift!!")
+            return false;
+        }
+
+        document.getElementById(id).value = ids
+        return true;
+    }
+
+</script>
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

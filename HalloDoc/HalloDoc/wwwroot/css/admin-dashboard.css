@@ -855,6 +855,19 @@ input[type="date" i] {
     --bs-dropdown-link-hover-color: black;
 }
 
+.status-doctor-btn{
+    width:100px;
+    height:40px;
+    border-radius:2px;
+    background-color:#0dcaf0;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    cursor:pointer;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
     0% {

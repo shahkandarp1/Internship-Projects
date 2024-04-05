@@ -1,0 +1,31 @@
+﻿@model MDOnCallViewModel
+<div class="mdoncall">
+    <span class="submit-text md-text" id="submit-text">MD's On Call</span>
+    <div class="row physician-row">
+        @foreach(var item in Model.activePhysicians)
+        {
+            var url = item.Photo == null ? "/images/user (1).png" : $"/provider_documents/{item.PhysicianId}/{item.Photo}";
+
+            <div class="physician-main-card col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="physician-card">
+                    <img src=@(url) class="physician-image" />
+                    <div class="physician-name">Dr. @item.Name</div>
+                </div>
+            </div>
+        }
+    </div>
+    <span class="submit-text md-text" id="submit-text">Physicians Off Duty</span>
+    <div class="row physician-row">
+        @foreach (var item in Model.notActivePhysicians)
+        {
+            var url = item.Photo == null ? "/images/user (1).png" : $"/provider_documents/{item.PhysicianId}/{item.Photo}";
+
+            <div class="physician-main-card col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="physician-card">
+                    <img src=@(url) class="physician-image" />
+                    <div class="physician-name">Dr. @item.Name</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

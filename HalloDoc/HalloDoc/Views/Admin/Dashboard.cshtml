@@ -10,7 +10,9 @@
 
 }
 <div id="body">
-   
+    @{
+        var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+    }
     <!-- Navbar -->
 
     <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
@@ -80,6 +82,34 @@
                         <div class="lower-btn">
                             <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Confirm</button>
                             <a id="cancel-block" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Request DTY Support -->
+    <form asp-action="RequestDTYSupport" asp-controller="Admin" method="post">
+        <div class="modal fade" id="myModalDTY" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Request Support</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="disclaimer-agreement-font assign-transfer-modal">To all unscheduled Physicians: We are on coverage and needs needs additional support on Call to respond to Requests.</div>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="request-reason" placeholder="name@example.com" required asp-for="BlockReason"></textarea>
+                            <label for="admin_notes" class="form-label">Message</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
+                            <a id="cancel-dty" class="btn cancel-btn">Cancel</a>
                         </div>
                     </div>
 
@@ -410,7 +440,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                <div class="col-lg-2 col-md-4 col-4 mb-2 @admin">
                     <div class="row-cards to-close"
                          id="card5"
                          onclick="changeStatus(this)">
@@ -434,7 +464,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-4 col-4 mb-2">
+                <div class="col-lg-2 col-md-4 col-4 mb-2 @admin">
                     <div class="row-cards unpaid"
                          id="card6"
                          onclick="changeStatus(this)">
@@ -476,19 +506,19 @@
                 <i class="bi bi-pencil-square"></i>
                 <span class="d-none d-lg-inline-flex">Create Request</span>
               </a>
-              
-            <div class="btn btn-info text-white patient-text-btn" onclick="submit()">
+
+            <div class="btn btn-info text-white patient-text-btn @admin" onclick="submit()">
                 <i class="bi bi-arrow-90deg-right"></i>
                 <span class="d-none d-lg-inline-flex">Export</span>
             </div>
-              
-              <a class="btn btn-info text-white patient-text-btn" asp-action="ExportAll" asp-controller="Admin">
+
+               <a class="btn btn-info text-white patient-text-btn @admin" asp-action="ExportAll" asp-controller="Admin">
                 <i class="bi bi-arrow-90deg-right"></i>
                 <span class="d-none d-lg-inline-flex">Export All</span>
               </a>
-              <div class="btn btn-info text-white patient-text-btn">
+                <div class="btn btn-info text-white patient-text-btn @admin">
                 <i class="bi bi-person-fill"></i>
-                <span class="d-none d-lg-inline-flex">Request DIY Support</span>
+                <span class="d-none d-lg-inline-flex" id="request-dty-support">Request DTY Support</span>
               </div>
             </div>
           </div>
@@ -619,6 +649,19 @@
     $(document).ready(function () {
         $("#cancel-agreement").click(function () {
             $("#myModalAgreement").modal("hide");
+        });
+    });
+    
+    $(document).ready(function () {
+        $("#request-dty-support").click(function () {
+            $("#myModalDTY").modal("show");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-dty").click(function () {
+            document.getElementById("request-reason").value = ""
+            $("#myModalDTY").modal("hide");
         });
     });
 

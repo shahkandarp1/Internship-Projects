@@ -61,7 +61,7 @@ namespace HalloDoc.Repository.Interface
 
         public bool ResetPassword(ResetPasswordViewModel resetPasswordViewModel);
 
-        public List<Physician> GetPhysician(int regionid);
+        public List<RegionSpecificPhysician> GetPhysician(int regionid);
 
         public bool AssignCase(AdminDashboardViewModel adminDashboardViewModel);
 
@@ -116,7 +116,7 @@ namespace HalloDoc.Repository.Interface
 
         public Task<bool> CreatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
 
-        public PhysicianAccountViewModel GetPhysicianDetails(int id);
+        public PhysicianAccountViewModel GetPhysicianDetails(int id,AdminNavbarViewModel adminNavbarViewModel);
 
         public Task<bool> FileUploadPhysician(IFormFile file, int id, string name);
 
@@ -178,9 +178,16 @@ namespace HalloDoc.Repository.Interface
         public SchedulingViewModel GetAllShiftDetails(int? regionid);
         public int CreateShift(SchedulingViewModel schedulingViewModel);
 
-        public bool EditShift(SchedulingViewModel schedulingViewModel);
+        public int EditShift(SchedulingViewModel schedulingViewModel);
         public bool DeleteShift(int? id);
-        public MDOnCallViewModel GetMdOnCallDetails();
+        public MDOnCallViewModel GetMdOnCallDetails(int regionid = -1);
+        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1, bool currMonth = false, int page = 1, int pageSize = 10);
+        public bool AprooveShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
+        public bool DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
+        public bool ToggleShiftStatus(int? id);
+        public Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel);
+        public bool AcceptCase(int? id);
+        public Task<bool> RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel);
 
     }
 }

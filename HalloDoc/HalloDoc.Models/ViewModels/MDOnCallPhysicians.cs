@@ -11,6 +11,7 @@ namespace HalloDoc.ViewModels
         public int  PhysicianId { get; set; }
         public string Name { get; set; }   
         public string Photo { get; set; }   
-        public int RegionId { get; set; }   
+        public int? RegionId { get; set; }   
+        public string? Email { get; set; }   
     }
 }

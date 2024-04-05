@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8HCLJxYHTulNUKD+z3ttcdaokpi8NMjldfiw0MAY7Zk=",
+  "Hash": "8ePiIbZIIn3j6WShfj1hCr8PdOzHDhIBz0bLcwBOTbQ=",
   "Source": "HalloDoc",
   "BasePath": "_content/HalloDoc",
   "Mode": "Default",
@@ -289,6 +289,23 @@
       "OriginalItemSpec": "wwwroot\\css\\map.css"
     },
     {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\mdoncall.css",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "css/mdoncall.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\mdoncall.css"
+    },
+    {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\orders.css",
       "SourceId": "HalloDoc",
       "SourceType": "Discovered",
@@ -440,6 +457,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\scheduling.css"
+    },
+    {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\shiftforreview.css",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "css/shiftforreview.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\shiftforreview.css"
     },
     {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\site.css",
@@ -3602,6 +3636,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\header-logo.svg"
+    },
+    {
+      "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\heart-rate.png",
+      "SourceId": "HalloDoc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\",
+      "BasePath": "_content/HalloDoc",
+      "RelativePath": "images/heart-rate.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\heart-rate.png"
     },
     {
       "Identity": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\hide.png",

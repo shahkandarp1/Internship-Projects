@@ -1,0 +1,125 @@
+﻿@model MDOnCallViewModel
+@{
+    ViewData["Title"] = "MD's On Call";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/scheduling.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mdoncall.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">MD's On Call</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Scheduling">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <!-- Filter Section -->
+
+            <div class="filter-section">
+                <div class="inner-filter-flex mb-4">
+                    <div class="inner-pt-container">
+                        <span class="search">
+                            <img class="search-image"
+                                 src="../../images/search.svg"
+                                 alt="" />
+                            <select name="" id="region" class="search-inp" onchange="filter()">
+                                <option value="-1">All Regions</option>
+                                @foreach (var item in Model.regions)
+                                {
+                                    <option value="@item.RegionId">@(item.Name.Substring(0, 1).ToUpper() + item.Name.Substring(1).ToLower())</option>
+                                }
+                            </select>
+                        </span>
+                        <div>
+                            <a class="btn btn-info text-white patient-text-btn" asp-action="Scheduling" asp-controller="Admin">
+                                <span>Calendar View</span>
+                            </a>
+                            <a class="btn btn-info text-white patient-text-btn" asp-action="ShiftsForReview" asp-controller="Admin">
+                                <span>Shifts For Review</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+
+                <!--Loader-->
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const filter = () => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Admin/MdOnCallTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { regionid: document.getElementById("region").value },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+    }
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Admin/MdOnCallTable`,
+            type: 'POST',
+            dataType: 'html',
+            data: { regionid: -1 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function () {
+                alert('An error occurred.');
+            }
+        });
+
+    }
+</script>
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

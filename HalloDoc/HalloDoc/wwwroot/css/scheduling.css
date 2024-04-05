@@ -379,14 +379,17 @@
     height: 40px;
     font-size: 13px;
 }
-#cancel-shiftV:hover {
+#return-shift:hover {
     color: white;
-    background-color: #0dcaf0!important;
+    background-color: #0dcaf0 !important;
 }
 #submit-delete{
     opacity:0;
     width:0px;
     height:0px;
+}
+.hiddenn{
+    display:none!important;
 }
 
 @media screen and (max-width: 1155px) {

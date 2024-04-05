@@ -62,6 +62,12 @@ namespace HalloDoc.Repository.Repository
 
         public AdminDashboardViewModel AdminDashboardContent(string status, string? search, string? requestor, int? region,int page=1,int pageSize = 10)
         {
+
+
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
             Expression<Func<Request, bool>> exp;
             if(status == "New")
             {
@@ -103,6 +109,15 @@ namespace HalloDoc.Repository.Repository
             var count_unpaid = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false })).Count(r => r.Status == 9);
             var casetag = _db.CaseTags.ToList();
 
+            if(cookieModel.role == "Provider")
+            {
+                count_new = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == cookieModel.userId).Count(r => r.Status == 1);
+                count_pending = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == cookieModel.userId).Count(r => r.Status == 2);
+                count_active = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == cookieModel.userId).Count(r => r.Status == 3 || r.Status == 4);
+                count_conclude = _db.Requests.Where(r => r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == cookieModel.userId).Count(r => r.Status == 5);
+                _query = _query.Where(r=>r.PhysicianId == cookieModel.userId);
+            }
+
             if (search != null)
             {
                 _query = _query.Where(r => r.RequestClient.FirstName.ToLower().Contains(search.ToLower()) || r.RequestClient.LastName.ToLower().Contains(search.ToLower()));
@@ -132,16 +147,12 @@ namespace HalloDoc.Repository.Repository
                 _query = _query.Where(r => r.RequestClient.RegionId == region);
             }
 
-
-            var request = _context.HttpContext.Request;
-            var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.GetDetails(token);
-
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
 
@@ -391,7 +402,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             ViewCaseViewModel viewCaseViewModel = new ViewCaseViewModel()
@@ -606,7 +618,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel()
@@ -672,17 +685,6 @@ namespace HalloDoc.Repository.Repository
                     };
 
                     _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
                     if(modal.Admin_notes != null)
@@ -794,16 +796,6 @@ namespace HalloDoc.Repository.Repository
                     _db.Requests.Add(req);
                     _db.SaveChanges();
 
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
                     if (modal.Admin_notes != null)
                     {
                         RequestNote requestNote = new RequestNote
@@ -888,7 +880,7 @@ namespace HalloDoc.Repository.Repository
             }
             RequestStatusLog patientcancel = _db.RequestStatusLogs.FirstOrDefault(r=>r.RequestId == id && r.Status == 7);
             RequestStatusLog admincancel = _db.RequestStatusLogs.FirstOrDefault(r => r.RequestId == id && r.Status == 6);
-            List<RequestStatusLog> transfernotes = _db.RequestStatusLogs.Where(r => r.RequestId == id && r.Status == 2).ToList();
+            List<RequestStatusLog> transfernotes = _db.RequestStatusLogs.Where(r => r.RequestId == id && (r.Status == 1)).ToList();
             RequestNote requestNotes = _db.RequestNotes.FirstOrDefault(r=>r.RequestId == id);
 
             var requestt = _context.HttpContext.Request;
@@ -899,7 +891,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             ViewNotesViewModel viewNotesViewModel = new ViewNotesViewModel
@@ -1072,7 +1065,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             ViewDocumentModal viewDocumentModal = new ViewDocumentModal()
@@ -1365,9 +1359,19 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public List<Physician> GetPhysician(int regionid)
+        public List<RegionSpecificPhysician> GetPhysician(int regionid)
         {
-            return _db.Physicians.Where( p=>p.RegionId == regionid && p.IsDeleted == new BitArray(new[] { false }) ).ToList();
+            var query = from p in _db.Physicians
+                        join pr in _db.PhysicianRegions on p.PhysicianId equals pr.PhysicianId
+                        where pr.RegionId == regionid && p.IsDeleted == new BitArray(new[] { false })
+                        select new RegionSpecificPhysician
+                        {
+                            PhysicianId = p.PhysicianId,
+                            FirstName = p.FirstName,
+                            LastName = p.LastName
+                        };
+
+            return query.ToList();
         }
 
         public bool AssignCase(AdminDashboardViewModel adminDashboardViewModel)
@@ -1384,10 +1388,8 @@ namespace HalloDoc.Repository.Repository
                 {
                     return false;
                 }
-                request.Status = 2;
                 request.ModifiedDate = DateTime.Now;
                 request.PhysicianId = adminDashboardViewModel.PhysicianId;
-                request.AcceptedDate = DateTime.Now;
                 _db.Requests.Update(request);
 
                 Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == adminDashboardViewModel.PhysicianId);
@@ -1398,7 +1400,7 @@ namespace HalloDoc.Repository.Repository
                 RequestStatusLog requestStatusLog = new RequestStatusLog
                 {
                     RequestId = (int)adminDashboardViewModel.RequestId,
-                    Status = 2,
+                    Status = 1,
                     Notes = $"Admin transferred to Dr. {physician.FirstName} on {DateTime.Now.ToString("MMMM dd,yyyy")} at {string.Format("{0:hh:mm:ss tt}", DateTime.Now)} : {adminDashboardViewModel.Description}",
                     CreatedDate = DateTime.Now,
                     TransToPhysicianId = adminDashboardViewModel.PhysicianId,
@@ -1423,7 +1425,7 @@ namespace HalloDoc.Repository.Repository
                 {
                     return false;
                 }
-                request.Status = 2;
+                request.Status = 1;
                 request.ModifiedDate = DateTime.Now;
                 request.PhysicianId = adminDashboardViewModel.PhysicianId;
                 _db.Requests.Update(request);
@@ -1440,7 +1442,7 @@ namespace HalloDoc.Repository.Repository
                 RequestStatusLog requestStatusLog = new RequestStatusLog
                 {
                     RequestId = (int)adminDashboardViewModel.RequestId,
-                    Status = 2,
+                    Status = 1,
                     Notes = $"Admin transferred to Dr. {physician.FirstName} on {DateTime.Now.ToString("MMMM dd,yyyy")} at {string.Format("{0:hh:mm:ss tt}", DateTime.Now)} : {adminDashboardViewModel.Description}",
                     CreatedDate = DateTime.Now,
                     TransToPhysicianId = adminDashboardViewModel.PhysicianId,
@@ -1745,7 +1747,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             OrdersViewModel ordersViewModel = new OrdersViewModel()
@@ -1832,7 +1835,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = active,
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             AdminProfileViewModel adminProfile = new AdminProfileViewModel()
@@ -2031,7 +2035,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             EncounterFormViewModel encounterFormViewModel = new EncounterFormViewModel()
@@ -2170,7 +2175,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             CloseCaseViewModel closeCaseViewModel = new CloseCaseViewModel()
@@ -2310,7 +2316,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Provider",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             ProviderViewModel providerViewModel = new ProviderViewModel()
@@ -2492,7 +2499,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Provider",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<Region> regions = _db.Regions.ToList();
@@ -2757,7 +2765,7 @@ namespace HalloDoc.Repository.Repository
             return _db.Roles.Where(r => r.AccountType == 2 && r.IsDeleted == new BitArray(new[] { false })).ToList();
         }
 
-        public PhysicianAccountViewModel GetPhysicianDetails(int id)
+        public PhysicianAccountViewModel GetPhysicianDetails(int id,AdminNavbarViewModel adminNavbarViewModel)
         {
             Physician physician = _db.Physicians.Include(p=>p.AspNetUser).FirstOrDefault(p=>p.PhysicianId == id);
             if(physician == null)
@@ -2767,10 +2775,6 @@ namespace HalloDoc.Repository.Repository
             PhysicianLocation physicianLocation = _db.PhysicianLocations.FirstOrDefault(p => p.PhysicianId == id);
             IQueryable<PhysicianRegion> physicianRegion = _db.PhysicianRegions.Where(p => p.PhysicianId == id);
             List<Region> regions = _db.Regions.ToList();
-
-            var request = _context.HttpContext.Request;
-            var token = request.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.GetDetails(token);
 
             List<CheckboxViewModel> checkboxViewModels = new List<CheckboxViewModel>();
 
@@ -2785,13 +2789,6 @@ namespace HalloDoc.Repository.Repository
                     isChecked = physicianRegion.FirstOrDefault(a => a.RegionId == regions[i].RegionId) == null ? false : true
                 });
             }
-
-            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
-            {
-                Name = cookieModel.name,
-                curr_active = "Provider",
-                menus = cookieModel.menus
-            };
 
 
             PhysicianAccountViewModel physicianAccountViewModel = new PhysicianAccountViewModel()
@@ -3054,7 +3051,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             IQueryable<User> users = _db.Users;
@@ -3102,7 +3100,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             PatientHistoryViewModel patientHistoryViewModel = new PatientHistoryViewModel
@@ -3129,7 +3128,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             IQueryable<BlockRequest> blockRequests = _db.BlockRequests;
@@ -3238,7 +3238,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<RequestType> requestTypes = _db.RequestTypes.ToList();
@@ -3414,7 +3415,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Access",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             IQueryable<Role> roles = _db.Roles.Where(r => r.IsDeleted == new BitArray(new[] { false }));
@@ -3443,7 +3445,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Access",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
             return adminNavbarViewModel;
         }
@@ -3537,7 +3540,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Access",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             Role role = _db.Roles.FirstOrDefault(r=>r.RoleId == id);
@@ -3682,7 +3686,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             IQueryable<EmailLog> emailLogs = _db.EmailLogs;
@@ -3809,7 +3814,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Record",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             IQueryable<Smslog> smslogs = _db.Smslogs;
@@ -3909,7 +3915,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Partner",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<HealthProfessionalType> healthProfessionalTypes = _db.HealthProfessionalTypes.Where(r => r.IsDeleted == new BitArray(new[] { false })).ToList();
@@ -3949,7 +3956,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Partner",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             BusinessViewModel businessViewModel = new BusinessViewModel
@@ -4015,7 +4023,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Partner",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             BusinessViewModel businessViewModel = new BusinessViewModel
@@ -4110,7 +4119,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "ProviderLocation",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<PhysicianLocation> physicianLocations = _db.PhysicianLocations.ToList();
@@ -4135,7 +4145,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Access",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<Region> regions = _db.Regions.ToList();
@@ -4317,7 +4328,7 @@ namespace HalloDoc.Repository.Repository
                                         Status = anr.RoleId == 2 ? ad.Status :
                                                  anr.RoleId == 3 ? ph.Status : null,
                                         OpenRequest = anr.RoleId == 2 ? _db.Requests.Count(r => r.Status != 10 && r.Status != 11 && r.IsDeleted == new BitArray(new[] { false })) :
-                                                      anr.RoleId == 3 ? _db.Requests.Count(r => r.Status != 10 && r.Status != 11 && r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == ph.PhysicianId) : 0,
+                                                      anr.RoleId == 3 ? _db.Requests.Count(r => (r.Status == 1 || r.Status == 2 || r.Status == 3 || r.Status == 4 || r.Status == 5) && r.IsDeleted == new BitArray(new[] { false }) && r.PhysicianId == ph.PhysicianId) : 0,
                                         PhysicianId = ph.PhysicianId == null ? -1 : ph.PhysicianId,
                                         AdminId = ad.AdminId == null ? -1 : ad.AdminId,
                                     };
@@ -4340,7 +4351,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Access",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             UserAccessViewModel userAccessViewModel = new UserAccessViewModel
@@ -4394,7 +4406,8 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Provider",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
 
             List<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false })).ToList();
@@ -4459,7 +4472,7 @@ namespace HalloDoc.Repository.Repository
                 List<Shift> shifts = _db.Shifts.Include(r => r.ShiftDetails).Where(r => r.PhysicianId == schedulingViewModel.PhysicianId && r.StartDate <= DateOnly.FromDateTime(schedulingViewModel.StartDate)).ToList();
                 for (var i = 0; i < shifts.Count; ++i)
                 {
-                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == schedulingViewModel.StartDate && ((s.StartTime <= schedulingViewModel.StartTime && s.EndTime >= schedulingViewModel.StartTime) || (s.StartTime <= schedulingViewModel.EndTime && s.EndTime >= schedulingViewModel.EndTime)) && s.IsDeleted == new BitArray(new[] { false })).ToList();
+                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == schedulingViewModel.StartDate && ((s.StartTime <= schedulingViewModel.StartTime && s.EndTime > schedulingViewModel.StartTime) || (s.StartTime < schedulingViewModel.EndTime && s.EndTime >= schedulingViewModel.EndTime)) && s.IsDeleted == new BitArray(new[] { false })).ToList();
                     if (shiftDetails.Count > 0)
                     {
                         return 1;
@@ -4559,10 +4572,20 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        public bool EditShift(SchedulingViewModel schedulingViewModel)
+        public int EditShift(SchedulingViewModel schedulingViewModel)
         {
             try
             {
+                List<Shift> shifts = _db.Shifts.Include(r => r.ShiftDetails).Where(r => r.PhysicianId == schedulingViewModel.PhysicianId && r.StartDate <= DateOnly.FromDateTime(schedulingViewModel.StartDate)).ToList();
+                for (var i = 0; i < shifts.Count; ++i)
+                {
+                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == schedulingViewModel.StartDate && ((s.StartTime <= schedulingViewModel.StartTime && s.EndTime > schedulingViewModel.StartTime) || (s.StartTime < schedulingViewModel.EndTime && s.EndTime >= schedulingViewModel.EndTime)) && s.IsDeleted == new BitArray(new[] { false }) && schedulingViewModel.ShiftDetailId != s.ShiftDetailId).ToList();
+                    if (shiftDetails.Count > 0)
+                    {
+                        return 1;
+                    }
+                }
+
                 var requestt = _context.HttpContext.Request;
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
@@ -4570,7 +4593,7 @@ namespace HalloDoc.Repository.Repository
                 ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s=>s.ShiftDetailId == schedulingViewModel.ShiftDetailId);
                 if(shiftDetail == null)
                 {
-                    return false;
+                    return 2;
                 }
                 shiftDetail.StartTime = schedulingViewModel.StartTime;
                 shiftDetail.EndTime = schedulingViewModel.EndTime;
@@ -4580,11 +4603,11 @@ namespace HalloDoc.Repository.Repository
 
                 _db.ShiftDetails.Update(shiftDetail);
                 _db.SaveChanges();
-                return true;
+                return 3;
             }
             catch(Exception exp)
             {
-                return false;
+                return 2;
             }
         }
 
@@ -4615,7 +4638,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public MDOnCallViewModel GetMdOnCallDetails()
+        public MDOnCallViewModel GetMdOnCallDetails(int regionid = -1)
         {
 
             var requestt = _context.HttpContext.Request;
@@ -4626,8 +4649,11 @@ namespace HalloDoc.Repository.Repository
             {
                 Name = cookieModel.name,
                 curr_active = "Provider",
-                menus = cookieModel.menus
+                menus = cookieModel.menus,
+                role = cookieModel.role
             };
+
+            List<Region> regions = _db.Regions.ToList();
 
             var currentDate = DateTime.Now.Date;
             var currentTime = DateTime.Now.TimeOfDay;
@@ -4643,10 +4669,20 @@ namespace HalloDoc.Repository.Repository
                         select new MDOnCallPhysicians
                         {
                             PhysicianId = p.PhysicianId,
-                            Name = p.FirstName + ", " + p.LastName,
+                            Name = p.FirstName + ", " + p.LastName.ToUpper()[0],
                             Photo = p.Photo,
-                            RegionId = pr.RegionId
+                            RegionId = pr.RegionId,
+                            Email = p.Email
                         };
+
+            if(regionid != -1)
+            {
+                notactive = notactive.Where(r=>r.RegionId == regionid);
+            }
+            else
+            {
+                notactive = notactive.GroupBy(r=>r.PhysicianId).Select(r=>r.FirstOrDefault());
+            }
 
             var active = from p in _db.Physicians
                         join pr in _db.PhysicianRegions on p.PhysicianId equals pr.PhysicianId
@@ -4659,19 +4695,408 @@ namespace HalloDoc.Repository.Repository
                         select new MDOnCallPhysicians
                         {
                             PhysicianId = p.PhysicianId,
-                            Name = p.FirstName + ", " + p.LastName,
+                            Name = p.FirstName + ", " + p.LastName.ToUpper()[0] ,
                             Photo = p.Photo,
-                            RegionId = pr.RegionId
+                            RegionId = pr.RegionId,
+                            Email = p.Email
                         };
+
+            if (regionid != -1)
+            {
+                active = active.Where(r => r.RegionId == regionid);
+            }
+            else
+            {
+                active = active.GroupBy(r => r.PhysicianId).Select(r => r.FirstOrDefault());
+            }
 
             MDOnCallViewModel mDOnCallViewModel = new MDOnCallViewModel
             {
                 notActivePhysicians = notactive.ToList(),
                 activePhysicians = active.ToList(),
-                adminNavbarViewModel = adminNavbarViewModel
+                adminNavbarViewModel = adminNavbarViewModel,
+                regions = regions
             };
 
             return mDOnCallViewModel;
+        }
+
+        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1,bool currMonth = false,int page = 1,int pageSize = 10)
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            List<Region> regions = _db.Regions.ToList();
+
+            var result = from s in _db.Shifts
+                         join sd in _db.ShiftDetails on s.ShiftId equals sd.ShiftId
+                         join p in _db.Physicians on s.PhysicianId equals p.PhysicianId
+                         join r in _db.Regions on sd.RegionId equals r.RegionId
+                         where sd.Status == 0 && sd.IsDeleted == new BitArray(new[] { false })
+                         select new RequestedShifts
+                         {
+                             FirstName = p.FirstName,
+                             LastName = p.LastName,
+                             ShiftDate = sd.ShiftDate,
+                             StartTime = sd.StartTime,
+                             EndTime = sd.EndTime,
+                             RegionId = r.RegionId,
+                             RegionName = r.Name,
+                             ShiftDetailId = sd.ShiftDetailId
+                         };
+
+            if(regionid != -1)
+            {
+                result = result.Where(r => r.RegionId == regionid);
+            }
+            if(currMonth)
+            {
+                result = result.Where(r => r.ShiftDate.Month == DateTime.Now.Month);
+            }
+
+            ShiftsForReviewViewModel shiftsForReviewViewModel = new ShiftsForReviewViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                requestedShifts = result.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                regions = regions,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = result.Count(),
+                TotalPages = (int)Math.Ceiling((double)result.Count() / pageSize)
+            };
+
+            return shiftsForReviewViewModel;
+
+        }
+
+        public bool AprooveShifts(ShiftsForReviewViewModel shiftsForReviewViewModel)
+        {
+            try
+            {
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                string[] shiftDetailIds = shiftsForReviewViewModel.ShiftDetailIds.Split(",");
+                for(var i=0;i<shiftDetailIds.Length - 1;++i)
+                {
+                    ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s => s.ShiftDetailId == int.Parse(shiftDetailIds[i]));
+                    if(shiftDetail == null)
+                    {
+                        return false;
+                    }
+                    shiftDetail.Status = 1;
+                    shiftDetail.ModifiedDate = DateTime.Now;
+                    shiftDetail.ModifiedBy = cookieModel.aspId;
+                    _db.ShiftDetails.Update(shiftDetail);
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel)
+        {
+            try
+            {
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                string[] shiftDetailIds = shiftsForReviewViewModel.ShiftDetailIds.Split(",");
+                for (var i = 0; i < shiftDetailIds.Length - 1; ++i)
+                {
+                    ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s => s.ShiftDetailId == int.Parse(shiftDetailIds[i]));
+                    if (shiftDetail == null)
+                    {
+                        return false;
+                    }
+                    shiftDetail.IsDeleted = new BitArray(new[] { true });
+                    shiftDetail.ModifiedDate = DateTime.Now;
+                    shiftDetail.ModifiedBy = cookieModel.aspId;
+                    _db.ShiftDetails.Update(shiftDetail);
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool ToggleShiftStatus(int? id)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s => s.ShiftDetailId == id);
+                if (shiftDetail == null)
+                {
+                    return false;
+                }
+                int status = shiftDetail.Status == 0 ? 1 : 0;
+                shiftDetail.Status = (short)status;
+                shiftDetail.ModifiedDate = DateTime.Now;
+                shiftDetail.ModifiedBy = cookieModel.aspId;
+                _db.ShiftDetails.Update(shiftDetail);
+
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                var currentDate = DateTime.Now.Date;
+                var currentTime = DateTime.Now.TimeOfDay;
+
+                var notactive = from p in _db.Physicians
+                                where !_db.Shifts.Any(s => s.PhysicianId == p.PhysicianId &&
+                                                                 _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
+                                                                                               sd.ShiftDate.Date == currentDate &&
+                                                                                               new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
+                                                                                               new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                                      p.IsDeleted == new BitArray(new[] { false })
+                                select new MDOnCallPhysicians
+                                {
+                                    PhysicianId = p.PhysicianId,
+                                    Name = p.FirstName + ", " + p.LastName.ToUpper()[0],
+                                    Photo = p.Photo,
+                                    Email = p.Email
+                                };
+
+                int retryCount = 1;
+                bool success = false;
+
+                for (var i=0;i<notactive.Count();++i)
+                {
+                    while (retryCount <= 3 && !success) // Set retry limit
+                    {
+
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                        var platformTitle = "HalloDoc";
+                        var subject = "Request Support - HalloDoc";
+                        var body = $"Hello {notactive.ToList()[i].Name},<br />{adminDashboardViewModel.BlockReason}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
+
+
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = subject,
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(notactive.ToList()[i].Email);
+
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, true, retryCount, 3);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, false, retryCount, 3);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    retryCount = 1;
+                    success = false;
+                }
+
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool AcceptCase(int? id)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r => r.RequestId == id);
+                if (request == null)
+                {
+                    return false;
+                }
+                request.Status = 2;
+                request.ModifiedDate = DateTime.Now;
+                request.AcceptedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    RequestId = (int)id,
+                    Status = 2,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            try
+            {
+                List<HalloDoc.Admin> admin = _db.Admins.Where(a => a.IsDeleted == false).ToList();
+                var retryCount = 1;
+                var success = false;
+                for (var i = 0; i < admin.Count; i++)
+                {
+                    while (retryCount <= 3 && !success) // Set retry limit
+                    {
+
+                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
+                        string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
+                        var platformTitle = "HalloDoc";
+                        var subject = "Request Profile Edit - HalloDoc";
+                        var body = $"Hello {admin[i].FirstName} {admin[i].LastName},<br />{physicianAccountViewModel.editReason}<br /><br />Regards,<br/>{platformTitle}<br/>";
+                        try
+                        {
+
+
+                            SmtpClient client = new SmtpClient("smtp.office365.com")
+                            {
+                                Port = 587,
+                                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                                EnableSsl = true,
+                                DeliveryMethod = SmtpDeliveryMethod.Network,
+                                UseDefaultCredentials = false
+                            };
+
+                            MailMessage mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail, "HalloDoc"),
+                                Subject = subject,
+                                IsBodyHtml = true,
+                                Body = body
+                            };
+
+                            mailMessage.To.Add(admin[i].Email);
+
+
+                            await client.SendMailAsync(mailMessage);
+
+
+                            success = true;
+                            LogEmail(body, subject, admin[i].Email, null, -1, admin[i].AdminId, -1, true, retryCount, 2);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogEmail(body, subject, admin[i].Email, null, -1, admin[i].AdminId, -1, false, retryCount, 2);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    retryCount = 1;
+                    success = false;
+
+                    while (retryCount <= 3 && !success) // Set retry limit
+                    {
+                        var platformTitle = "HalloDoc";
+
+                        var accountSid = _configuration["Twilio:accountSid"];
+                        var authToken = _configuration["Twilio:authToken"];
+                        var twilionumber = _configuration["Twilio:twilioNumber"];
+
+                        var messageBody = $"Hello {admin[i].FirstName} {admin[i].LastName},\n{physicianAccountViewModel.editReason}\n\nRegards,\n{platformTitle}";
+                        try
+                        {
+
+                            TwilioClient.Init(accountSid, authToken);
+
+                            var message = MessageResource.Create(
+                                from: new Twilio.Types.PhoneNumber(twilionumber),
+                                body: messageBody,
+                                to: new Twilio.Types.PhoneNumber("+91" + admin[i].Mobile)
+                            );
+
+
+                            success = true;
+                            LogSMS(messageBody, admin[i].Mobile, null, -1, admin[i].AdminId, -1, true, retryCount, 2);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            if (retryCount >= 3)
+                            {
+                                LogSMS(messageBody, admin[i].Mobile, null, -1, admin[i].AdminId, -1, false, retryCount, 2);
+                            }
+                            retryCount++;
+                        }
+                    }
+                    retryCount = 1;
+                    success = false;
+
+                }
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
         }
 
     }

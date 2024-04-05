@@ -5,6 +5,7 @@
 }
 @section Styles {
     <link href="~/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
     <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
     <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
     <link href="~/css/admin-profile.css" rel="stylesheet" type="text/css" />
@@ -16,6 +17,40 @@
 
 
 <div id="body">
+    @{
+        var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+        var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
+    }
+
+
+    <!-- Request To Admin -->
+    <form asp-action="RequestAdmin" asp-controller="Admin" method="post">
+        <div class="modal fade" id="myModalRequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Request To Administrator</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="disclaimer-agreement-font assign-transfer-modal">Need to send message to edit</div>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="request-reason" placeholder="name@example.com" required asp-for="editReason"></textarea>
+                            <label for="admin_notes" class="form-label">Message</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
+                            <a id="cancel-request" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
 
     <!-- Navbar -->
     <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
@@ -26,7 +61,8 @@
     <div class="main-container">
         <div class="flex-container">
             <div class="top-text">
-                <span class="submit-text" id="submit-text">Edit Physician Account</span>
+                <span class="submit-text @admin" id="submit-text">Edit Physician Account</span>
+                <span class="submit-text @physician" id="submit-text">My Profile</span>
                 <a class="back-btn" onclick="goBack()">
                     &lt; <span class="back-text">Back</span>
                 </a>
@@ -38,8 +74,13 @@
                 <input type="hidden" asp-for="AspId" />
                 <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
                 <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+                <input type="hidden" asp-for="adminNavbarViewModel.role" />
                 <input type="hidden" asp-for="lat" id="lat" />
                 <input type="hidden" asp-for="lng" id="long" />
+
+                <div class="lower-btn @physician" id="request-to-edit">
+                    <a class="back-btn reset-btn"><span class="back-text">Request To Admin</span></a>
+                </div>
 
                 <!-- Account Information  -->
                 <div class="upper-text">
@@ -74,7 +115,7 @@
                     </div>
                 </div>
                 <div class="lower-btn" id="top-most-edit">
-                    <a class="lower-custom-btn submit-btn" onclick="top_most_edit()">Edit</a>
+                    <a class="lower-custom-btn submit-btn @admin" onclick="top_most_edit()">Edit</a>
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
                     <a class="back-btn reset-btn" id="reset-password"><span class="back-text">Reset Password</span></a>
@@ -132,7 +173,7 @@
                     </div>
                 </div>
 
-                <div class="lower-btn" id="top-edit">
+                <div class="lower-btn @admin" id="top-edit">
                     <a class="lower-custom-btn submit-btn" onclick="top_edit()">Edit</a>
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
@@ -184,7 +225,7 @@
                     </div>
                 </div>
 
-                <div class="lower-btn" id="bottom-edit">
+                <div class="lower-btn @admin" id="bottom-edit">
                     <a class="lower-custom-btn submit-btn" onclick="bottom_edit()">Edit</a>
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
@@ -242,7 +283,7 @@
                     </div>
                 </div>
 
-                <div class="lower-btn" id="bottom-most-edit">
+                <div class="lower-btn @admin" id="bottom-most-edit">
                     <a class="lower-custom-btn submit-btn" onclick="bottom_most_edit()">Edit</a>
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
@@ -265,13 +306,13 @@
 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
+                        <input class="form-check-input @admin" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Independent Contractor Agreement
                         </label>
                     </div>
                     <div class="document-inner-flex">
-                        <label class="submit-btn upload-doc-btn">
+                        <label class="submit-btn upload-doc-btn @admin">
                             <input type="file" id="agreement" onchange="fileUpload(this)" asp-for="AgreementDoc" />
                             <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
                             <span class="upload-text">
@@ -284,13 +325,13 @@
 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
+                        <input class="form-check-input @admin" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Background Check
                         </label>
                     </div>
                     <div class="document-inner-flex">
-                        <label class="submit-btn upload-doc-btn">
+                        <label class="submit-btn upload-doc-btn @admin">
                             <input type="file" id="background" onchange="fileUpload(this)" asp-for="BackgroundDoc" />
                             <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
                             <span class="upload-text">
@@ -303,13 +344,13 @@
 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
+                        <input class="form-check-input @admin" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             HIPAA Compliance
                         </label>
                     </div>
                     <div class="document-inner-flex">
-                        <label class="submit-btn upload-doc-btn">
+                        <label class="submit-btn upload-doc-btn @admin">
                             <input type="file" id="hipaa" onchange="fileUpload(this)" asp-for="CredentialDoc" />
                             <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
                             <span class="upload-text">
@@ -322,13 +363,13 @@
 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
+                        <input class="form-check-input @admin" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Non-Disclosure Agreement
                         </label>
                     </div>
                     <div class="document-inner-flex">
-                        <label class="submit-btn upload-doc-btn">
+                        <label class="submit-btn upload-doc-btn @admin">
                             <input type="file" id="nondisclosure" onchange="fileUpload(this)" asp-for="NonDisclosureDoc" />
                             <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
                             <span class="upload-text">
@@ -341,13 +382,13 @@
 
                 <div class="mt-3 document-outer-flex bottom-border">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
+                        <input class="form-check-input @admin" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             License Document
                         </label>
                     </div>
                     <div class="document-inner-flex">
-                        <label class="submit-btn upload-doc-btn">
+                        <label class="submit-btn upload-doc-btn @admin">
                             <input type="file" id="license" onchange="fileUpload(this)" asp-for="LicenseDoc" />
                             <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img bottom-physician-upload">
                             <span class="upload-text">
@@ -359,7 +400,7 @@
                 </div>
 
                 <!-- Submit / Clear -->
-                <div class="lower-btn">
+                <div class="lower-btn @admin">
                     <a asp-controller="Admin" asp-action="Provider" class="lower-custom-btn submit-btn">Back</a>
                     <a asp-action="DeletePhysician" asp-controller="Admin" asp-route-id="@Model.PhysicianId" class="btn btn-danger delete-btn">Delete Account</a>
                 </div>
@@ -396,6 +437,19 @@
                     toastr.error("Password could not be reseted!!")
                 }
             });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#request-to-edit").click(function () {
+            $("#myModalRequest").modal("show");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-request").click(function () {
+            document.getElementById("request-reason").value = ""
+            $("#myModalRequest").modal("hide");
         });
     });
 
@@ -443,6 +497,14 @@
         );
     }
 
+    const input = document.getElementById("password")
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("reset-password").click();
+        }
+    });
 
 </script>
 @section Scripts {

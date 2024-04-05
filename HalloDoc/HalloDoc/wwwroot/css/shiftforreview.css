@@ -1,0 +1,32 @@
+﻿.filter-section {
+    padding: 20px;
+}
+.flex-container {
+    width: 90%;
+}
+.review-shift-btns{
+    display:flex;
+}
+.review-shift-btns-margin{
+    margin-right:5px;
+}
+.mob-shift-margin{
+    margin-right:10px;
+    display:inline-block;
+}
+@media screen and (max-width:580px) {
+    .review-shift-btns{
+        flex-direction:column;
+        width:100%;
+    }
+    .patient-text-btn {
+        width: 100%;
+        height: auto;
+    }
+    .review-shift-btns-margin{
+        margin:0px;
+    }
+    .rs-margin{
+        margin-bottom:10px;
+    }
+}

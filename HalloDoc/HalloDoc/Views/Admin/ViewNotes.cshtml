@@ -40,9 +40,12 @@
                                 @if(Model.Transfer_Notes.Count>0)
                                 {
                                     @foreach(var item in Model.Transfer_Notes)
+                                    {
+                                        @if(item.Notes!=null)
                                         {
                                             <div class="notes-content">@item.Notes</div>
                                         }
+                                    }
                                 }
                                 else{
                                     <div class="notes-content">-</div>

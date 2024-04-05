@@ -35,6 +35,7 @@
                     <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                     <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
                     <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.role" />
 
                     @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
                     {
@@ -154,48 +155,12 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="modal-title" id="exampleModalLongTitle">Create Shift</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <div class="modal-title" id="exampleModalLongTitle">View Shift</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-shiftV">&times;</span>
                     </div>
 
-                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
-                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
-                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
                     <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId" />
-
-                    @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
-                    {
-                        @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
-                        @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
-                    }
-
-                    @for (int i = 0; i < Model.regions.Count; i++)
-                    {
-                        @Html.HiddenFor(m => m.regions[i].Name)
-                        @Html.HiddenFor(m => m.regions[i].RegionId)
-                    }
-                    @for (int i = 0; i < Model.physicians.Count; i++)
-                    {
-                        @Html.HiddenFor(m => m.physicians[i].PhysicianId)
-                        @Html.HiddenFor(m => m.physicians[i].FirstName)
-                        @Html.HiddenFor(m => m.physicians[i].LastName)
-                        @Html.HiddenFor(m => m.physicians[i].Photo)
-                        @Html.HiddenFor(m => m.physicians[i].Email)
-                        @Html.HiddenFor(m => m.physicians[i].BusinessName)
-                        @Html.HiddenFor(m => m.physicians[i].BusinessWebsite)
-                    }
-                    @for (int i = 0; i < Model.shiftViewModels.Count; i++)
-                    {
-                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianId)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianName)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionAbbreviation)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDate)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].EndTime)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].StartTime)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].Status)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionId)
-                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDetailId)
-                    }
+                    <input type="hidden" asp-for="PhysicianId" id="physicianId" />
 
                     <div class="modal-body">
                         <div class="row">
@@ -233,9 +198,9 @@
                             
                         </div>
                         <div class="lower-btn" id="edit">
-                            <a id="cancel-shiftV" class="btn submit-btn mar-top">Return</a>
+                            <a id="return-shift" class="btn submit-btn mar-top" onclick="changeShiftStatus()">Return</a>
                             <a class="lower-custom-btn submit-btn" onclick="Edit()" id="edit-btn">Edit</a>
-                            <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                            <button class="lower-custom-btn submit-btn hiddenn" id="save-btn" type="submit">Save</button>
                             <a class="btn submit-btn btn-danger delete-btn mar-top" id="delete-btn">Delete</a>
                         </div>
                     </div>
@@ -270,10 +235,10 @@
                                 </select>
                             </span>
                             <div>
-                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                <a class="btn btn-info text-white patient-text-btn" asp-action="MdOnCall" asp-controller="Admin">
                                     <span>Providers On Call</span>
                                 </a>
-                                <a class="btn btn-info text-white patient-text-btn" asp-action="CreatePhysician" asp-controller="Admin">
+                                <a class="btn btn-info text-white patient-text-btn" asp-action="ShiftsForReview" asp-controller="Admin">
                                     <span>Shifts For Review</span>
                                 </a>
                                 <a class="btn btn-info text-white patient-text-btn" id="open-new-shift">
@@ -367,14 +332,8 @@
                 editable[i].disabled = true;
             }
             const btn = document.getElementsByClassName('lower-custom-btn')
-            for (let i = 0; i < btn.length; ++i) {
-                if (btn[i].classList.length == 3) {
-                    btn[i].classList.remove("hidden");
-                }
-                else {
-                    btn[i].classList.add("hidden");
-                }
-            }
+            document.getElementById("edit-btn").classList.remove("hiddenn")
+            document.getElementById("save-btn").classList.add("hiddenn")
         });
     });
 
@@ -489,15 +448,8 @@
         for (let i = 0; i < editable.length; ++i) {
             editable[i].disabled = false;
         }
-        const btn = document.getElementsByClassName('lower-custom-btn')
-        for (let i = 0; i < btn.length; ++i) {
-            if (btn[i].classList.length == 3) {
-                btn[i].classList.remove("hidden");
-            }
-            else {
-                btn[i].classList.add("hidden");
-            }
-        }
+        document.getElementById("edit-btn").classList.add("hiddenn")
+        document.getElementById("save-btn").classList.remove("hiddenn")
     }
 
     const Cancel = () => {
@@ -681,6 +633,7 @@
                 document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
                 document.getElementById("shiftDetailId").value = args.e.data.id
                 document.getElementById("shiftDetailId1").value = args.e.data.id
+                document.getElementById("physicianId").value = args.e.data.resource
 
                 const currentyear = new Date().getFullYear()
                 const currentmonth = new Date().getMonth() + 1
@@ -693,10 +646,12 @@
                 if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
                     document.getElementById("delete-btn").style.display = "none";
                     document.getElementById("edit-btn").style.display = "none";
+                    document.getElementById("return-shift").style.display = "none";
                 }
                 else {
                     document.getElementById("delete-btn").style.display = "inline-block";
                     document.getElementById("edit-btn").style.display = "flex";
+                    document.getElementById("return-shift").style.display = "block";
                 }
 
                 $("#myModalViewShift").modal("show");
@@ -709,8 +664,6 @@
     dp.zoom.setActive(0);
     dp.bubble = new DayPilot.Bubble();
     dp.init();
-
-    console.log(new DayPilot.Date(getMondayOfWeek(DayPilot.Date.today())))
 
     const monthCalendar = new DayPilot.Month("dp-month", {
         cellMarginBottom: 20,
@@ -760,6 +713,7 @@
                 document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
                 document.getElementById("shiftDetailId").value = args.e.data.id
                 document.getElementById("shiftDetailId1").value = args.e.data.id
+                document.getElementById("physicianId").value = args.e.data.resource
 
                 const currentyear = new Date().getFullYear()
                 const currentmonth = new Date().getMonth() + 1
@@ -772,11 +726,13 @@
                 if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
                     document.getElementById("delete-btn").style.display = "none";
                     document.getElementById("edit-btn").style.display = "none";
+                    document.getElementById("return-shift").style.display = "none";
                 }
                 else
                 {
                     document.getElementById("delete-btn").style.display = "inline-block";
                     document.getElementById("edit-btn").style.display = "flex";
+                    document.getElementById("return-shift").style.display = "flex";
                 }
 
                 $("#myModalViewShift").modal("show");
@@ -1034,6 +990,33 @@
                 monthCalendarElement.style.display = "block";
             }
         });
+    }
+
+    function changeShiftStatus(){
+        $.get('/Admin/ToggleShiftStatus', { id: document.getElementById("shiftDetailId").value}, function (response) {
+            if (response.isToggled) {
+                for (let i = 0; i < monthCalendar.events.list.length; ++i) {
+                    if (monthCalendar.events.list[i].id == document.getElementById("shiftDetailId").value) {
+                        monthCalendar.events.list[i].backColor = monthCalendar.events.list[i].backColor == "#FEADF9" ? "#A5CEA4" : "#FEADF9";
+                        console.log(monthCalendar.events.list[i].backColor)
+                    }
+                }
+                for (let i = 0; i < dp.events.list.length; ++i) {
+                    if (dp.events.list[i].id == document.getElementById("shiftDetailId").value) {
+                        dp.events.list[i].backColor = dp.events.list[i].backColor == "#FEADF9" ? "#A5CEA4" : "#FEADF9";
+                    }
+                }
+                monthCalendar.update()
+                dp.update()
+                $("#myModalViewShift").modal("hide");
+                toastr.success("Shift Status Changed Successfully!!")
+            }
+            else
+            {
+                toastr.error("Shift Status could not be Changed!!")
+            }
+        });
+        
     }
 
 </script>

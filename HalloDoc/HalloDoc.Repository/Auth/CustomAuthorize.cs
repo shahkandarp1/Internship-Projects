@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -53,7 +54,7 @@ namespace HalloDoc.Repository.Auth
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_role) || role.Value != _role)
+            if (string.IsNullOrWhiteSpace(_role) || !_role.Contains(role.Value) )
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "AccessDenied" }));
                 return;

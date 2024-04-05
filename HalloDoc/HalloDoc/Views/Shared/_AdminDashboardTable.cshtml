@@ -13,42 +13,54 @@
         <tr>
             <th>Name</th>
             <th></th>
-            @if (Model.status != "Unpaid")
+            @if(Model.adminNavbarViewModel.role == "Admin")
             {
-                <th>Date Of Birth</th>
-            }
-            @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
-            {
-                <th>Requestor</th>
-            }
-            @if (Model.status != "New")
-            {
-                <th>Physician Name</th>
-                <th>Date Of Service</th>
-            }
-            @if (Model.status == "New")
-            {
-                <th>Requested Date</th>
-            }
-            @if (Model.status != "ToClose")
-            {
-                <th style="min-width: 175px;">Phone</th>
-            }
-            <th>Address</th>
-            @if (Model.status != "Conclude" || Model.status != "Unpaid")
-            {
-                <th>Notes</th>
-            }
-            <th>Actions</th>
-        </tr>
+                    
+                    @if (Model.status != "Unpaid")
+                    {
+                        <th>Date Of Birth</th>
+                    }
+                    @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
+                    {
+                        <th>Requestor</th>
+                    }
+                    @if (Model.status != "New")
+                    {
+                        <th>Physician Name</th>
+                        <th>Date Of Service</th>
+                    }
+                    @if (Model.status == "New")
+                    {
+                        <th>Requested Date</th>
+                    }
+                    @if (Model.status != "ToClose")
+                    {
+                        <th style="min-width: 175px;">Phone</th>
+                    }
+                    <th>Address</th>
+                    @if (Model.status != "Conclude" || Model.status != "Unpaid")
+                    {
+                        <th>Notes</th>
+                    }
+                }
+                else if (Model.adminNavbarViewModel.role == "Provider")
+                {
+                    <th style="min-width: 175px;">Phone</th>
+                    <th>Address</th>
+                    @if(Model.status == "Active")
+                    {
+                        <th>Status</th>
+                    }
+                }
+                <th>Actions</th>
+            </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.requests)
         {
 
-
+            var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
             var statusClass = "";
-            var dos = "";
             List<string> notes = new List<string>();
             @if (item.RequestTypeId == 1)
             {
@@ -68,10 +80,12 @@
             }
             foreach (var stat in item.RequestStatusLogs)
             {
-                if (stat.Status == 2)
+                if (stat.Status == 1)
                 {
-                    dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
-                    notes.Add(stat.Notes);
+                    if (stat.Notes != null)
+                    {
+                        notes.Add(stat.Notes);
+                    }
                 }
             }
             <tr class="@statusClass">
@@ -81,70 +95,108 @@
                         <img src="../../images/envelope.svg" alt="" />
                     </span>
                 </td>
-                @if (Model.status != "Unpaid")
+                @if(Model.adminNavbarViewModel.role == "Admin")
                 {
-
-                    DateTime now = DateTime.Today;
-                    int age = now.Year - DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").Year;
-                    if (DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}") > now.AddYears(-age))
-                        age--;
-
-                    <td>@(DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</td>
-                }
-                @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
-                {
-                    <td>@(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(item.FirstName, ',', item.LastName))</td>
-                }
-                @if (Model.status != "New")
-                {
-                    <td>Dr. @(item.Physician == null ? "" : item.Physician.FirstName)</td>
-                }
-                @if (Model.status == "New")
-                {
-                        
-                    int hoursDifference = (int)(DateTime.Now - item.CreatedDate).TotalHours;
-                    int minutesDifference = (DateTime.Now - item.CreatedDate).Minutes;
-
-                    <td><span>@(item.CreatedDate.ToString("MMMM dd,yyyy"))</span><br /><span>@hoursDifference</span>h <span>@minutesDifference</span>m</td>
-                }
-                @if (Model.status != "New")
-                {
-                        <td>@item.AcceptedDate?.ToString("MMMM dd,yyyy")</td>
-                }
-                @if (Model.status != "ToClose")
-                {
-                    <td>
-                        <span class="phone-container">
-                            <img src="../../images/telephone.svg"
-                                 class=""
-                                 alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
-                        </span><br />
-                        (Patient)<br />
-                        @if (item.RequestTypeId != 2)
+                        @if (Model.status != "Unpaid")
                         {
-                            <span class="phone-container mt-2">
+
+                            DateTime now = DateTime.Today;
+                            int age = now.Year - DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").Year;
+                            if (DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}") > now.AddYears(-age))
+                                age--;
+
+                            <td>@(DateTime.Parse($"{item.RequestClient.IntYear}-{item.RequestClient.StrMonth}-{item.RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</td>
+                        }
+                        @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active")
+                        {
+                            <td>@(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(item.FirstName, ',', item.LastName))</td>
+                        }
+                        @if (Model.status != "New")
+                        {
+                            <td>Dr. @(item.Physician == null ? "" : item.Physician.FirstName)</td>
+                        }
+                        @if (Model.status == "New")
+                        {
+
+                            int hoursDifference = (int)(DateTime.Now - item.CreatedDate).TotalHours;
+                            int minutesDifference = (DateTime.Now - item.CreatedDate).Minutes;
+
+                            <td><span>@(item.CreatedDate.ToString("MMMM dd,yyyy"))</span><br /><span>@hoursDifference</span>h <span>@minutesDifference</span>m</td>
+                        }
+                        @if (Model.status != "New")
+                        {
+                            <td>@item.AcceptedDate?.ToString("MMMM dd,yyyy")</td>
+                        }
+                        @if (Model.status != "ToClose")
+                        {
+                            <td>
+                                <span class="phone-container">
+                                    <img src="../../images/telephone.svg"
+                                         class=""
+                                         alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
+                                </span><br />
+                                (Patient)<br />
+                                @if (item.RequestTypeId != 2)
+                                {
+                                    <span class="phone-container mt-2">
+                                        <img src="../../images/telephone.svg"
+                                             class=""
+                                             alt="" /><span class="phone-number">@item.PhoneNumber</span>
+                                    </span>
+
+                                    <br />
+                                    @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")
+                                }
+
+                            </td>
+                        }
+                        <td>@(item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
+                        @if (Model.status != "Conclude" || Model.status != "Unpaid")
+                        {
+                            <td>
+                                @for (var j = 0; j < notes.Count; ++j)
+                                {
+                                    <div>@notes[j]</div>
+                                }
+                            </td>
+                        }
+                    }
+                    else if (Model.adminNavbarViewModel.role == "Provider")
+                    {
+                        <td>
+                            <span class="phone-container">
                                 <img src="../../images/telephone.svg"
                                      class=""
-                                     alt="" /><span class="phone-number">@item.PhoneNumber</span>
-                            </span>
-
-                            <br />
-                            @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")
-                        }
-
-                    </td>
-                }
-                <td>@(item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
-                @if (Model.status != "Conclude" || Model.status != "Unpaid")
-                {
-                    <td>
-                        @for(var j=0;j<notes.Count;++j)
+                                     alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
+                            </span><br />
+                            (Patient)<br />
+                            @if (item.RequestTypeId != 2)
                             {
-                                <div>@notes[j]</div>
+                                <span class="phone-container mt-2">
+                                    <img src="../../images/telephone.svg"
+                                         class=""
+                                         alt="" /><span class="phone-number">@item.PhoneNumber</span>
+                                </span>
+
+                                <br />
+                                @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")
                             }
+
                         </td>
-                }
-                <td>
+                        <td>@(item.RequestClient.Address != null ? string.Concat(item.RequestClient.Address, ',', item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode) : string.Concat(item.RequestClient.Street, ',', item.RequestClient.City, ',', item.RequestClient.State, ',', item.RequestClient.ZipCode))</td>
+                        @if (Model.status == "Active")
+                        {
+                            if(item.Status == 4)
+                            {
+                                <td><a class="status-doctor-btn"><span>House Call</span></a></td>
+                            }
+                            else
+                            {
+                                <td></td>                                
+                            }
+                        }
+                    }
+                    <td>
                     <div class="dropdown show">
                         <button class="btn action-btn"
                                 role="button"
@@ -158,8 +210,8 @@
                              aria-labelledby="dropdownMenuLink">
                             @if (Model.status == "New")
                             {
-                                    <a class="dropdown-item assign-case" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
-                                <a class="dropdown-item cancel-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
+                                    <a class="dropdown-item assign-case @admin" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Assign Case</span></div></a>
+                                <a class="dropdown-item cancel-case @admin" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Cancel Case</span></div></a>
                             }
                             @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -171,7 +223,7 @@
                             }
                             @if (Model.status == "New")
                             {
-                                    <a class="dropdown-item block-case" href="#" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
+                                    <a class="dropdown-item block-case @admin" data-id="@item.RequestId" data-name="@(string.Concat(item.RequestClient.FirstName, ' ', item.RequestClient.LastName))"><div class="action-item"><img src="../../images/blocked.png" alt="" class="action-img"><span>Block Patient</span></div></a>
                             }
                             @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                             {
@@ -183,7 +235,7 @@
                             }
                             @if (Model.status == "Pending" || Model.status == "ToClose")
                             {
-                                    <a class="dropdown-item clear-case" href="#" data-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
+                                    <a class="dropdown-item clear-case @admin" href="#" data-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Clear Case</span></div></a>
                             }
                             @if (Model.status == "Pending")
                             {
@@ -191,12 +243,24 @@
                             }
                             @if (Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Active")
                             {
-                                    <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
+                                    <a class="dropdown-item @admin" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
                                     <a class="dropdown-item" asp-action="EncounterForm" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                             }
                             @if (Model.status == "ToClose")
                             {
-                                    <a class="dropdown-item" asp-action="CloseCase" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Close Case</span></div></a>
+                                    <a class="dropdown-item @admin" asp-action="CloseCase" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/x-mark.png" alt="" class="action-img"><span>Close Case</span></div></a>
+                            }
+                            @if (Model.status == "New" && Model.adminNavbarViewModel.role == "Provider")
+                            {
+                                    <a class="dropdown-item" asp-action="AcceptCase" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Accept</span></div></a>
+                            }
+                            @if (Model.status == "Active" && Model.adminNavbarViewModel.role == "Provider")
+                            {
+                                    <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Orders</span></div></a>
+                            }
+                            @if (Model.status == "Conclude" && Model.adminNavbarViewModel.role == "Provider")
+                            {
+                                <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/heart-rate.png" alt="" class="action-img"><span>Conclude Care</span></div></a>
                             }
 
                         </div>
@@ -209,8 +273,8 @@
 
 @for(var i=0;i<Model.requests.Count;++i)
 {
+    var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
     var statusClass = "";
-    var dos = "";
     List<string> notes = new List<string>();
     @if (Model.requests[i].RequestTypeId == 1)
     {
@@ -227,14 +291,16 @@
     else
     {
         statusClass = "concierge";
-    }
-    foreach (var stat in Model.requests[i].RequestStatusLogs)
-    {
-        if (stat.Status == 2)
-        {
-            dos = stat.CreatedDate.ToString("MMMM dd,yyyy");
-                notes.Add(stat.Notes);
         }
+        foreach (var stat in Model.requests[i].RequestStatusLogs)
+        {
+            if (stat.Status == 1)
+            {
+                if(stat.Notes!=null)
+                {
+                    notes.Add(stat.Notes);
+                }
+            }
     }
     <div class="accordion accordion-flush" id="accordionFlushExample">
         <div class="accordion-item">
@@ -280,7 +346,7 @@
                         <div class="accordion-value mob-address">@(Model.requests[i].RequestClient.Address != null ? string.Concat(Model.requests[i].RequestClient.Address, ',', Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode) : string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))</div>
                             <div class="map-btn map-abs-btn" data-address="@(string.Concat(Model.requests[i].RequestClient.Street, ',', Model.requests[i].RequestClient.City, ',', Model.requests[i].RequestClient.State, ',', Model.requests[i].RequestClient.ZipCode))">Map Location</div>
                     </div>
-                    @if(Model.status == "New")
+                    @if(Model.status == "New" && Model.adminNavbarViewModel.role == "Admin")
                     {
                         <div class="mt-1">
                             <img src="../../images/clock.svg" alt="" class="accordion-img"> <span class="accordion-value">
@@ -297,110 +363,150 @@
                  data-bs-parent="#accordionFlushExample">
                     <a class="map-btn view-case-btn" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@(Model.requests[i].RequestId)">View Case</a>
                 <div class="accordion-body main-flex">
-                    @if(Model.status != "Unpaid")
-                    {
-                        DateTime now = DateTime.Today;
-                        int age = now.Year - DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").Year;
-                        if (DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}") > now.AddYears(-age))
-                            age--;
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/calendar.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Date Of Birth :
-                                <span class="accordion-value-inner">@(DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</span>
-                            </span>
-                        </div>
-                    }
-                    <div class="inner-flex">
-                        <div class="outer-img-circle">
-                            <img src="../../images/envelope-black.svg" alt="" class="inner-img">
-                        </div>
-                        <span class="accordion-heading-inner">
-                            Email :
-                            <span class="accordion-value-inner">@Model.requests[i].Email</span>
-                        </span>
-                    </div>
-                    @if (Model.status != "ToClose")
-                    {
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/telephone-black.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Patient :
-                                <span class="accordion-value-inner">@Model.requests[i].PhoneNumber</span>
-                            </span>
-                        </div>
-                    }
-
-                    @if (Model.status != "ToClose" || Model.status != "Conclude" || Model.status != "Unpaid")
-                    {
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/person.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Requestor :
-                                <span class="accordion-value-inner">
-                                    @(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(Model.requests[i].FirstName, ',', Model.requests[i].LastName))
-                                </span>
-                            </span>
-                        </div>
-                    }
-
-                    @if (Model.status != "New" || Model.status != "Conclude" || Model.status != "Unpaid")
-                    {
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/file-earmark-text.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Transfer Notes :
-                                <span class="accordion-value-inner">
-                                        @for (var k = 0; k < notes.Count; ++k)
-                                        {
-                                            <div>@notes[k]</div>
-                                        }
-                                </span>
-                            </span>
-                        </div>
-                    }
-
-                    @if (Model.status != "New")
-                    {
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/calendar.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Date Of Service :
-                                <span class="accordion-value-inner">
-                                        @Model.requests[i].AcceptedDate?.ToString("MMMM dd,yyyy")
-                                </span>
-                            </span>
-                        </div>
-                        <div class="inner-flex">
-                            <div class="outer-img-circle">
-                                <img src="../../images/person.svg" alt="" class="inner-img">
-                            </div>
-                            <span class="accordion-heading-inner">
-                                Physician :
-                                <span class="accordion-value-inner">
-                                    Dr. @(Model.requests[i].Physician == null ? "" : Model.requests[i].Physician.FirstName)
-                                </span>
-                            </span>
-                        </div>
-
-                    }
-
                     
+                    @if(Model.adminNavbarViewModel.role == "Admin")
+                        {
+                            @if (Model.status != "Unpaid")
+                            {
+                                DateTime now = DateTime.Today;
+                                int age = now.Year - DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").Year;
+                                if (DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}") > now.AddYears(-age))
+                                    age--;
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/calendar.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Date Of Birth :
+                                        <span class="accordion-value-inner">@(DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</span>
+                                    </span>
+                                </div>
+                            }
+                            <div class="inner-flex">
+                                <div class="outer-img-circle">
+                                    <img src="../../images/envelope-black.svg" alt="" class="inner-img">
+                                </div>
+                                <span class="accordion-heading-inner">
+                                    Email :
+                                    <span class="accordion-value-inner">@Model.requests[i].Email</span>
+                                </span>
+                            </div>
+                            @if (Model.status != "ToClose")
+                            {
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/telephone-black.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Patient :
+                                        <span class="accordion-value-inner">@Model.requests[i].PhoneNumber</span>
+                                    </span>
+                                </div>
+                            }
+
+                            @if (Model.status != "ToClose" || Model.status != "Conclude" || Model.status != "Unpaid")
+                            {
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/person.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Requestor :
+                                        <span class="accordion-value-inner">
+                                            @(statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()) @(string.Concat(Model.requests[i].FirstName, ',', Model.requests[i].LastName))
+                                        </span>
+                                    </span>
+                                </div>
+                            }
+
+                            @if (Model.status != "New" || Model.status != "Conclude" || Model.status != "Unpaid")
+                            {
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/file-earmark-text.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Transfer Notes :
+                                        <span class="accordion-value-inner">
+                                            @for (var k = 0; k < notes.Count; ++k)
+                                            {
+                                                <div>@notes[k]</div>
+                                            }
+                                        </span>
+                                    </span>
+                                </div>
+                            }
+
+                            @if (Model.status != "New")
+                            {
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/calendar.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Date Of Service :
+                                        <span class="accordion-value-inner">
+                                            @Model.requests[i].AcceptedDate?.ToString("MMMM dd,yyyy")
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/person.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Physician :
+                                        <span class="accordion-value-inner">
+                                            Dr. @(Model.requests[i].Physician == null ? "" : Model.requests[i].Physician.FirstName)
+                                        </span>
+                                    </span>
+                                </div>
+
+                            }
+                        }
+                        else if (Model.adminNavbarViewModel.role == "Provider")
+                        {
+                            @if(Model.status == "New")
+                            {
+                                DateTime now = DateTime.Today;
+                                int age = now.Year - DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").Year;
+                                if (DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}") > now.AddYears(-age))
+                                    age--;
+                                <div class="inner-flex">
+                                    <div class="outer-img-circle">
+                                        <img src="../../images/calendar.svg" alt="" class="inner-img">
+                                    </div>
+                                    <span class="accordion-heading-inner">
+                                        Date Of Birth :
+                                        <span class="accordion-value-inner">@(DateTime.Parse($"{Model.requests[i].RequestClient.IntYear}-{Model.requests[i].RequestClient.StrMonth}-{Model.requests[i].RequestClient.IntDate}").ToString("MMMM dd,yyyy"))(@age)</span>
+                                    </span>
+                                </div>
+                            }
+                            <div class="inner-flex">
+                                <div class="outer-img-circle">
+                                    <img src="../../images/envelope-black.svg" alt="" class="inner-img">
+                                </div>
+                                <span class="accordion-heading-inner">
+                                    Email :
+                                    <span class="accordion-value-inner">@Model.requests[i].Email</span>
+                                </span>
+                            </div>
+                            <div class="inner-flex">
+                                <div class="outer-img-circle">
+                                    <img src="../../images/telephone-black.svg" alt="" class="inner-img">
+                                </div>
+                                <span class="accordion-heading-inner">
+                                    Patient :
+                                    <span class="accordion-value-inner">@Model.requests[i].PhoneNumber</span>
+                                </span>
+                            </div>
+                        }
+
                     <div class="row">
                         @if (Model.status == "New")
                         {
-                                <a class="col-md-3 col-sm-6 col-6 assign-case" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Assign Case</div></a>
-                                <a class="col-md-3 col-sm-6 col-6 cancel-case" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Cancel Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 assign-case @admin" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Assign Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 cancel-case @admin" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Cancel Case</div></a>
                         }
                         @if (Model.status == "New" || Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
@@ -408,7 +514,7 @@
                         }
                         @if (Model.status == "New")
                         {
-                                <a class="col-md-3 col-sm-6 col-6 block-case" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Block Patient</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 block-case @admin" data-id="@Model.requests[i].RequestId" data-name="@(string.Concat(Model.requests[i].RequestClient.FirstName, ' ', Model.requests[i].RequestClient.LastName))"><div class="action-mob-btn">Block Patient</div></a>
                         }
                         @if (Model.status == "Pending" || Model.status == "Active" || Model.status == "Conclude" || Model.status == "ToClose" || Model.status == "Unpaid")
                         {
@@ -420,7 +526,7 @@
                         }
                         @if (Model.status == "Pending" || Model.status == "ToClose")
                         {
-                                <a class="col-md-3 col-sm-6 col-6 clear-case" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Clear Case</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 clear-case @admin" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Clear Case</div></a>
                         }
                         @if (Model.status == "Pending")
                         {
@@ -432,11 +538,27 @@
                         }
                         @if (Model.status == "Conclude" || Model.status == "Active")
                         {
-                                <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Orders</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 @admin" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Orders</div></a>
                         }
                         @if (Model.status == "ToClose")
                         {
                                 <a class="col-md-3 col-sm-6 col-6" asp-action="CloseCase" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Close Case</div></a>
+                        }
+                        @if (Model.status == "Active" && Model.adminNavbarViewModel.role == "Provider")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Orders</div></a>
+                        }
+                        @if (Model.status == "Active" && Model.adminNavbarViewModel.role == "Provider" && Model.requests[i].Status == 4)
+                        {
+                            <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">House Call</div></a>
+                        }
+                        @if (Model.status == "New" && Model.adminNavbarViewModel.role == "Provider")
+                        {
+                                <a class="col-md-3 col-sm-6 col-6" asp-action="AcceptCase" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Accept</div></a>
+                        }
+                        @if (Model.status == "Conclude" && Model.adminNavbarViewModel.role == "Provider")
+                        {
+                            <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Conclude Care</div></a>
                         }
                         <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
                     </div>

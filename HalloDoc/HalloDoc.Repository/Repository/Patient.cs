@@ -368,17 +368,6 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
                 }
                 else
                 {
@@ -485,16 +474,6 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
                 }
                 return true;
             }
@@ -556,16 +535,6 @@ namespace HalloDoc.Repository.Repository
                     };
 
                     _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
                     Business business = new Business
@@ -677,16 +646,6 @@ namespace HalloDoc.Repository.Repository
                     };
 
                     _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
                     Business business = new Business
@@ -845,16 +804,6 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
                 }
                 else
                 {
@@ -960,17 +909,6 @@ namespace HalloDoc.Repository.Repository
                         _db.RequestWiseFiles.Add(rfile);
                         _db.SaveChanges();
                     }
-
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
 
                     int retryCount = 1;
                     bool success = false;
@@ -1087,16 +1025,6 @@ namespace HalloDoc.Repository.Repository
                     _db.Requests.Add(req);
                     _db.SaveChanges();
 
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
-
                     Concierge concierge = new Concierge
                     {
                         ConciergeName = string.Concat(modal.ConciergeFirstName, ' ', modal.ConciergeLastName),
@@ -1209,16 +1137,6 @@ namespace HalloDoc.Repository.Repository
                     };
 
                     _db.Requests.Add(req);
-                    _db.SaveChanges();
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
                     _db.SaveChanges();
 
                     Concierge concierge = new Concierge
@@ -1457,16 +1375,6 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
                 }
                 else
                 {
@@ -1573,16 +1481,6 @@ namespace HalloDoc.Repository.Repository
                         _db.SaveChanges();
                     }
 
-
-                    RequestStatusLog rst = new RequestStatusLog
-                    {
-                        RequestId = req.RequestId,
-                        Status = 1,
-                        CreatedDate = DateTime.Now
-                    };
-
-                    _db.RequestStatusLogs.Add(rst);
-                    _db.SaveChanges();
 
                     int retryCount = 1;
                     bool success = false;
@@ -1740,16 +1638,6 @@ namespace HalloDoc.Repository.Repository
                     _db.SaveChanges();
                 }
 
-
-                RequestStatusLog rst = new RequestStatusLog
-                {
-                    RequestId = req.RequestId,
-                    Status = 1,
-                    CreatedDate = DateTime.Now
-                };
-
-                _db.RequestStatusLogs.Add(rst);
-                _db.SaveChanges();
                 return true;
             }
             catch(Exception exp)

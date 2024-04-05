@@ -61,6 +61,10 @@
       "PackagePath": "staticwebassets\\css\\map.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\mdoncall.css",
+      "PackagePath": "staticwebassets\\css\\mdoncall.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\orders.css",
       "PackagePath": "staticwebassets\\css\\orders.css"
     },
@@ -95,6 +99,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\scheduling.css",
       "PackagePath": "staticwebassets\\css\\scheduling.css"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\shiftforreview.css",
+      "PackagePath": "staticwebassets\\css\\shiftforreview.css"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\site.css",
@@ -843,6 +851,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\header-logo.svg",
       "PackagePath": "staticwebassets\\images\\header-logo.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\heart-rate.png",
+      "PackagePath": "staticwebassets\\images\\heart-rate.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\hide.png",

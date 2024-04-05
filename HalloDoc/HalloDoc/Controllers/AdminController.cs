@@ -22,7 +22,7 @@ using Newtonsoft.Json.Linq;
 namespace HalloDoc.Controllers
 {
 
-    [CustomAuthorize("Admin")]
+    [CustomAuthorize("Admin,Provider")]
     public class AdminController : Controller
     {
         private readonly IAdmin _admin;
@@ -37,7 +37,7 @@ namespace HalloDoc.Controllers
             _patient = patient;
             _context = context;
         }
-        [CustomAuthorize("Admin", "Dashboard")]
+        [CustomAuthorize("Admin,Provider", "Dashboard")]
         /// <summary>
         /// Get Method for Admin Dashboard
         /// </summary>
@@ -448,7 +448,7 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult GetPhysician(int regionid)
         {
-            List<Physician> physician = _admin.GetPhysician(regionid);
+            List<RegionSpecificPhysician> physician = _admin.GetPhysician(regionid);
             return Json(new { data=physician});
         }
         /// <summary>
@@ -613,7 +613,7 @@ namespace HalloDoc.Controllers
             }
             return View(ordersViewModel);
         }
-        [CustomAuthorize("Admin", "My Profile")]
+        [CustomAuthorize("Admin,Provider", "My Profile")]
         /// <summary>
         /// It is a Get Method for Admin Profile Page
         /// </summary>
@@ -757,7 +757,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-        [CustomAuthorize("Admin", "Providerr")]
+        [CustomAuthorize("Admin,Provider", "Providerr")]
         /// <summary>
         /// It is a get method for Provider Page
         /// </summary>
@@ -808,7 +808,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
-        [CustomAuthorize("Admin", "Providerr")]
+        [CustomAuthorize("Admin,Provider", "Providerr")]
         /// <summary>
         /// It is Get method for CreatePhysician
         /// </summary>
@@ -866,7 +866,7 @@ namespace HalloDoc.Controllers
             }
             return View(physicianAccountViewModel);
         }
-        [CustomAuthorize("Admin", "Providerr")]
+        [CustomAuthorize("Admin,Provider", "Providerr")]
         /// <summary>
         /// It is Get method of Edit Physician
         /// </summary>
@@ -874,7 +874,19 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult EditPhysician(int id)
         {
-            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(id);
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(id,adminNavbarViewModel);
             return View(physicianAccountViewModel);
         }
         /// <summary>
@@ -935,7 +947,7 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isReseted  = isreset });
         }
-        [CustomAuthorize("Admin", "Providerr")]
+        [CustomAuthorize("Admin,Provider", "Providerr")]
         /// <summary>
         /// It will delete the specified physician from edit physician page
         /// </summary>
@@ -954,7 +966,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Provider");
         }
-        [CustomAuthorize("Admin", "Patient History")]
+        [CustomAuthorize("Admin,Provider", "Patient History")]
         /// <summary>
         /// It is Get Method of Patient History Page
         /// </summary>
@@ -979,7 +991,7 @@ namespace HalloDoc.Controllers
             PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatients(firstname,lastname,email,phone,page,pageSize);
             return PartialView("_PatientHistoryTable", patientHistoryViewModel);
         }
-        [CustomAuthorize("Admin", "Patient History")]
+        [CustomAuthorize("Admin,Provider", "Patient History")]
         /// <summary>
         /// It is a Get method for Patient Record Page
         /// </summary>
@@ -1004,7 +1016,7 @@ namespace HalloDoc.Controllers
             PatientHistoryViewModel patientHistoryViewModel = _admin.GetAllPatientRecords(id,page,pageSize);
             return PartialView("_PatientRecordTable", patientHistoryViewModel);
         }
-        [CustomAuthorize("Admin", "Block History")]
+        [CustomAuthorize("Admin,Provider", "Block History")]
         /// <summary>
         /// It is a Get method for Block History Page
         /// </summary>
@@ -1058,7 +1070,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-        [CustomAuthorize("Admin", "Search Records")]
+        [CustomAuthorize("Admin,Provider", "Search Records")]
         /// <summary>
         /// It is Get method for Search Record Page
         /// </summary>
@@ -1115,7 +1127,7 @@ namespace HalloDoc.Controllers
             MemoryStream memoryStream = _admin.ExportSearchedData(searchRecordViewModel);
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Filtered-Data.xlsx");
         }
-        [CustomAuthorize("Admin", "Account Access")]
+        [CustomAuthorize("Admin,Provider", "Account Access")]
         /// <summary>
         /// It is Get Method of Account Access Page
         /// </summary>
@@ -1136,7 +1148,7 @@ namespace HalloDoc.Controllers
             AccountAccessViewModel accountAccessViewModel = _admin.GetAllRolesDetails(page,pageSize);
             return PartialView("_AccountAccessTable",accountAccessViewModel);
         }
-        [CustomAuthorize("Admin", "Account Access")]
+        [CustomAuthorize("Admin,Provider", "Account Access")]
         /// <summary>
         /// It is a get method for Create Access Page
         /// </summary>
@@ -1194,7 +1206,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("AccountAccess");
         }
-        [CustomAuthorize("Admin", "Account Access")]
+        [CustomAuthorize("Admin,Provider", "Account Access")]
         /// <summary>
         /// It is a Get method for Edit Role page
         /// </summary>
@@ -1238,7 +1250,7 @@ namespace HalloDoc.Controllers
             }
             return Json(new { isEditted = isEditted });
         }
-        [CustomAuthorize("Admin", "Email Logs")]
+        [CustomAuthorize("Admin,Provider", "Email Logs")]
         /// <summary>
         /// It is a Get method for Email Log Page
         /// </summary>
@@ -1264,7 +1276,7 @@ namespace HalloDoc.Controllers
             EmailLogViewModel emailLogViewModel = _admin.GetEmailLogDetails(roleid,name,email,createddate,sentdate,page,pageSize);
             return PartialView("_EmailLogTable",emailLogViewModel);
         }
-        [CustomAuthorize("Admin", "SMS Logs")]
+        [CustomAuthorize("Admin,Provider", "SMS Logs")]
         /// <summary>
         /// It is a Get method for SMS Log Page
         /// </summary>
@@ -1290,7 +1302,7 @@ namespace HalloDoc.Controllers
             EmailLogViewModel emailLogViewModel = _admin.GetSMSLogDetails(roleid, name, phonenumber, createddate, sentdate, page, pageSize);
             return PartialView("_SMSLogTable", emailLogViewModel);
         }
-        [CustomAuthorize("Admin", "Partners")]
+        [CustomAuthorize("Admin,Provider", "Partners")]
         /// <summary>
         /// It is a Get method for Partners Page
         /// </summary>
@@ -1313,7 +1325,7 @@ namespace HalloDoc.Controllers
             PartnerViewModal partnerViewModal = _admin.GetPartnerDetails(name,id,page,pageSize);
             return PartialView("_PartnersTable", partnerViewModal);
         }
-        [CustomAuthorize("Admin", "Partners")]
+        [CustomAuthorize("Admin,Provider", "Partners")]
         /// <summary>
         /// It is a Get Method for Create Business
         /// </summary>
@@ -1347,7 +1359,7 @@ namespace HalloDoc.Controllers
             }
             return View("Business", businessViewModel);
         }
-        [CustomAuthorize("Admin", "Partners")]
+        [CustomAuthorize("Admin,Provider", "Partners")]
         /// <summary>
         /// It is a Get method for Edit Business
         /// </summary>
@@ -1404,7 +1416,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Partners");
         }
-        [CustomAuthorize("Admin", "Provider Location")]
+        [CustomAuthorize("Admin,Provider", "Provider Location")]
         /// <summary>
         /// It is a get method for Provider Location Page
         /// </summary>
@@ -1414,7 +1426,7 @@ namespace HalloDoc.Controllers
             ProviderLocationViewModel providerLocationViewModel = _admin.GetProviderLocation();
             return View(providerLocationViewModel);
         }
-        [CustomAuthorize("Admin", "Create Admin Account")]
+        [CustomAuthorize("Admin,Provider", "Create Admin Account")]
         /// <summary>
         /// It is a Get Method for Create Admin
         /// </summary>
@@ -1466,7 +1478,7 @@ namespace HalloDoc.Controllers
             return View(adminProfileViewModel);
 
         }
-        [CustomAuthorize("Admin", "User Access")]
+        [CustomAuthorize("Admin,Provider", "User Access")]
         /// <summary>
         /// It is a Get method for User Access Page
         /// </summary>
@@ -1488,7 +1500,7 @@ namespace HalloDoc.Controllers
             var useraccess = _admin.GetUserAccessDetails(roleid,page,pageSize);
             return PartialView("_UserAccessTable",useraccess);
         }
-        [CustomAuthorize("Admin", "User Access")]
+        [CustomAuthorize("Admin,Provider", "User Access")]
         /// <summary>
         /// It is a Get method for Edit Admin Page
         /// </summary>
@@ -1546,6 +1558,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("UserAccess");
         }
+        [CustomAuthorize("Admin,Provider", "Scheduling")]
         /// <summary>
         /// It is a get method for Scheduling
         /// </summary>
@@ -1555,7 +1568,11 @@ namespace HalloDoc.Controllers
             SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(-1);
             return View(schedulingViewModel);
         }
-
+        /// <summary>
+        /// It will return filtered shifts based on region id as Json
+        /// </summary>
+        /// <param name="regionid"></param>
+        /// <returns></returns>
         public IActionResult SchedulingTable(int regionid = -1)
         {
             SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(regionid);
@@ -1595,14 +1612,18 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult EditShift(SchedulingViewModel schedulingViewModel)
         {
-            bool isEditted = _admin.EditShift(schedulingViewModel);
-            if(isEditted)
+            int isEditted = _admin.EditShift(schedulingViewModel);
+            if (isEditted == 1)
             {
-                TempData["success"] = "Shift Editted Successfully!!";
+                TempData["error"] = "Physician is already scheduled in this slot!!";
+            }
+            else if (isEditted == 2)
+            {
+                TempData["error"] = "Shift could not be Editted!!";
             }
             else
             {
-                TempData["error"] = "Shift could not be Editted!!";
+                TempData["success"] = "Shift Editted Successfully!!";
             }
             return RedirectToAction("Scheduling");
         }
@@ -1624,12 +1645,154 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Scheduling");
         }
-
+        [CustomAuthorize("Admin,Provider", "Scheduling")]
+        /// <summary>
+        /// It is a get method for Providers on call page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MdOnCall()
         {
             MDOnCallViewModel mDOnCallViewModel = _admin.GetMdOnCallDetails();
-            return View();
+            return View(mDOnCallViewModel);
+        }
+        /// <summary>
+        /// It will return filtered physicians that are on and off duty based on region id as Partial View
+        /// </summary>
+        /// <param name="regionid"></param>
+        /// <returns></returns>
+        public IActionResult MdOnCallTable(int regionid = -1)
+        {
+            MDOnCallViewModel mDOnCallViewModel = _admin.GetMdOnCallDetails(regionid);
+            return PartialView("_MDOnCallPhysicians", mDOnCallViewModel);
+        }
+        [CustomAuthorize("Admin,Provider", "Scheduling")]
+        /// <summary>
+        /// It is a get method for Shifts for Review Page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ShiftsForReview()
+        {
+            ShiftsForReviewViewModel shiftsForReviewViewModel = _admin.GetRequestedShifts();
+            return View(shiftsForReviewViewModel);
+        }
+        /// <summary>
+        /// It will return filtered and paginated data for Shifts For Review Page as Partial View
+        /// </summary>
+        /// <param name="regionid"></param>
+        /// <param name="currMonth"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public IActionResult ShiftsForReviewTable(int regionid = -1, bool currMonth = false, int page = 1, int pageSize = 10)
+        {
+            ShiftsForReviewViewModel shiftsForReviewViewModel = _admin.GetRequestedShifts(regionid,currMonth,page,pageSize);
+            return PartialView("_ShiftsForReviewTable", shiftsForReviewViewModel);
+        }
+        /// <summary>
+        /// It will aproove all the selected shifts based on shiftdetailid
+        /// </summary>
+        /// <param name="shiftsForReviewViewModel"></param>
+        /// <returns></returns>
+        public IActionResult AprooveShifts(ShiftsForReviewViewModel shiftsForReviewViewModel)
+        {
+            bool isApproved = _admin.AprooveShifts(shiftsForReviewViewModel);
+            if(isApproved)
+            {
+                TempData["success"] = "Shifts Aprooved Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Shift could not be Aprooved!!";
+            }
+            return RedirectToAction("ShiftsForReview");
+        }
+        /// <summary>
+        /// It will deleted all the selected shifts based on shiftdetailid
+        /// </summary>
+        /// <param name="shiftsForReviewViewModel"></param>
+        /// <returns></returns>
+        public IActionResult DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel)
+        {
+            bool isDeleted = _admin.DeleteShifts(shiftsForReviewViewModel);
+            if (isDeleted)
+            {
+                TempData["success"] = "Shifts Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Shift could not be Deleted!!";
+            }
+            return RedirectToAction("ShiftsForReview");
+        }
+        /// <summary>
+        /// It will toggle shift status when admin clicks return button from view shift modal
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult ToggleShiftStatus(int? id)
+        {
+            bool isToggled = _admin.ToggleShiftStatus(id);
+            return Json(new { isToggled = isToggled });
         }
 
+        public IActionResult RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            Task<bool> isSent = _admin.RequestDTYSupport(adminDashboardViewModel);
+            if(isSent.Result)
+            {
+                TempData["success"] = "Mail Sent Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Mail Could not be sent!!";
+            }
+            return RedirectToAction("Dashboard");
+        }
+        [CustomAuthorize("Provider", "My Profile")]
+        public IActionResult DoctorProfile()
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "DoctorProfile",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(cookieModel.userId,adminNavbarViewModel);
+            return View("EditPhysician",physicianAccountViewModel);
+        }
+
+        public IActionResult AcceptCase(int id)
+        {
+            bool isAccepted = _admin.AcceptCase(id);
+            if(isAccepted)
+            {
+                TempData["success"] = "Case Accepted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Case Could not be Accepted!!";
+            }
+            return RedirectToAction("Dashboard");
+        }
+
+        public IActionResult RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            Task<bool> isSent = _admin.RequestAdmin(physicianAccountViewModel);
+            if (isSent.Result)
+            {
+                TempData["success"] = "Mail Sent Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Mail Could not be sent!!";
+            }
+            return RedirectToAction("Dashboard");
+        }
     }
 }

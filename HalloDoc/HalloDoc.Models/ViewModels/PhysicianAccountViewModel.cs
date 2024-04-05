@@ -114,5 +114,9 @@ namespace HalloDoc.ViewModels
         public int? AspId { get; set; }
 
         public string? signature_name { get; set; }
+
+        //Doctor Profile
+        public string? editReason { get; set; }
+
     }
 }
