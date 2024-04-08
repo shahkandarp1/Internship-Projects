@@ -1748,51 +1748,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-        [CustomAuthorize("Provider", "My Profile")]
-        public IActionResult DoctorProfile()
-        {
-            var requestt = _context.HttpContext.Request;
-            var token = requestt.Cookies["jwt"];
-            CookieModel cookieModel = _jwt.GetDetails(token);
+        
 
-            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
-            {
-                Name = cookieModel.name,
-                curr_active = "DoctorProfile",
-                menus = cookieModel.menus,
-                role = cookieModel.role
-            };
-
-            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(cookieModel.userId,adminNavbarViewModel);
-            return View("EditPhysician",physicianAccountViewModel);
-        }
-
-        public IActionResult AcceptCase(int id)
-        {
-            bool isAccepted = _admin.AcceptCase(id);
-            if(isAccepted)
-            {
-                TempData["success"] = "Case Accepted Successfully!!";
-            }
-            else
-            {
-                TempData["error"] = "Case Could not be Accepted!!";
-            }
-            return RedirectToAction("Dashboard");
-        }
-
-        public IActionResult RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel)
-        {
-            Task<bool> isSent = _admin.RequestAdmin(physicianAccountViewModel);
-            if (isSent.Result)
-            {
-                TempData["success"] = "Mail Sent Successfully!!";
-            }
-            else
-            {
-                TempData["error"] = "Mail Could not be sent!!";
-            }
-            return RedirectToAction("Dashboard");
-        }
     }
 }

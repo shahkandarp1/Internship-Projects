@@ -107,7 +107,7 @@
             <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Invoicing </a>
         </button>
         <button class="sidebar-tablinks @DscheduleM @Dschedulingrole @physician" onclick="clearStorage()">
-            <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> My Schedule </a>
+            <a class="mobile-sidebar-a" asp-action="MySchedule" asp-controller="Doctor"> My Schedule </a>
         </button>
         <button class="sidebar-tablinks @providerlocationM @providerlocationrole @admin" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="ProviderLocation" asp-controller="Admin"> Provider Location </a>
@@ -121,7 +121,7 @@
         else if (Model.role == "Provider")
         {
             <button class="sidebar-tablinks @DprofileM @profilerole" onclick="clearStorage()">
-                <a class="mobile-sidebar-a" asp-action="DoctorProfile" asp-controller="Admin"> My Profile </a>
+                <a class="mobile-sidebar-a" asp-action="DoctorProfile" asp-controller="Doctor"> My Profile </a>
             </button>
         }
         <button class="sidebar-tablinks accordion-mob-btn @providerM @providermainrole @admin" onclick="clearStorage()">Providers</button>
@@ -171,7 +171,7 @@
             <a asp-action ="ProviderLocation" asp-controller="Admin"> Invoicing </a>
         </button>
         <button class="navbar-btn bg-body @Dschedule @Dschedulingrole @physician" onclick="navbar(this)">
-            <a asp-action ="ProviderLocation" asp-controller="Admin"> My Schedule </a>
+            <a asp-action ="MySchedule" asp-controller="Doctor"> My Schedule </a>
         </button>
         @if (Model.role == "Admin")
         {
@@ -182,7 +182,7 @@
         else if (Model.role == "Provider")
         {
             <button class="navbar-btn bg-body @Dprofile @profilerole" onclick="navbar(this)">
-                <a asp-action="DoctorProfile" asp-controller="Admin"> My Profile </a>
+                <a asp-action="DoctorProfile" asp-controller="Doctor"> My Profile </a>
             </button>
         }
         <div class="dropdown navbar-dropdown">

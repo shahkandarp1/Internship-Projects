@@ -324,6 +324,55 @@
         </div>
     </form>
 
+    <!-- Doctor Encounter Modal -->
+    <div class="modal fade" id="myModalEncounterActive" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="exampleModalLongTitle">Select Type Of Care</div>
+                    <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                </div>
+                <form asp-action="TypeOfCare" asp-controller="Doctor" method="post">
+                    <input type="hidden" asp-for="typeOfCare" id="typeOfCare">
+                    <input type="hidden" asp-for="RequestId" id="reqId">
+                    <div class="modal-body">
+                        <div class="modal-flex">
+                            <div class="btn common-btn cancel-btn create-request-active" onclick="toggleButton(this,'HouseCall')"> House Call </div>
+                            <div class="btn common-btn cancel-btn" onclick="toggleButton(this,'Consult')"> Consult </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info continue-btn" data-bs-dismiss="modal">Save</button>
+                        <button type="button" class="btn cancel-btn" id="cancel-encounter">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finalized Encounter Modal -->
+    <div class="modal fade" id="myModalEncounterFinalized" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="exampleModalLongTitle">Encounter Form</div>
+                    <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                </div>
+                <form asp-action="TypeOfCare" asp-controller="Doctor" method="post">
+                    <input type="hidden" asp-for="RequestId" id="reqFinalizeId">
+                    <div class="modal-body">
+                        <div class="disclaimer-agreement-font assign-transfer-modal">Encounter form is finalized successfully!!</div>
+                        <div class="modal-flex finalize-encounter-download">
+                            <button type="submit" class="btn common-btn cancel-btn create-request-active"> Download </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!--Location Modal -->
 
     <div class="modal" id="myModal1">
@@ -703,6 +752,12 @@
             $("#myModalClear").modal("hide");
         });
     });
+    
+    $(document).ready(function () {
+        $("#cancel-encounter").click(function () {
+            $("#myModalEncounterActive").modal("hide");
+        });
+    });
 
     const submit = () => {
         const states = document.getElementsByClassName("req-filter")
@@ -870,6 +925,19 @@
         }
 
         
+    }
+
+    const toggleButton = (curr_btn, typeOfCare) => {
+        const buttons = document.getElementsByClassName("common-btn")
+        for (let i = 0; i < buttons.length; ++i) {
+            if (buttons[i] != curr_btn) {
+                buttons[i].classList.remove('create-request-active')
+            }
+            else {
+                buttons[i].classList.add('create-request-active')
+            }
+        }
+        document.getElementById("typeOfCare").value = typeOfCare
     }
 </script>
 <script src="~/js/admin-dashboard.js"></script>

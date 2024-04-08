@@ -400,6 +400,33 @@ textarea{
     color:#0dcaf0;
 }
 
+/*Doctor Profile*/
+.request-admin-content {
+    height: auto;
+}
+
+.request-admin-body {
+    width: 100% !important;
+    height: 85% !important;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.request-admin-send {
+    padding: 7px 14px;
+}
+.request-admin-cancel {
+    width: 61px;
+    padding: 7px 14px;
+    border-radius:0.375rem;
+}
+.request-to-admin-btn {
+    width: auto !important;
+    margin-top:0px!important;
+}
 
 @media screen and (max-width:769px) {
     .custom-file-upload {

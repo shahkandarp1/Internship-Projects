@@ -326,6 +326,7 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    cursor: pointer;
 }
 
 .action-img {
@@ -868,6 +869,9 @@ input[type="date" i] {
     cursor:pointer;
 }
 
+.finalize-encounter-download {
+    padding: 10px;
+}
 /* Safari */
 @-webkit-keyframes spin {
     0% {

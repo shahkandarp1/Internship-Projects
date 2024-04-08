@@ -191,6 +191,9 @@
 #dp-month {
     display: none;
 }
+.my-schedule{
+    display:block!important;
+}
 
 .test {
     background-color: #FEADF9;

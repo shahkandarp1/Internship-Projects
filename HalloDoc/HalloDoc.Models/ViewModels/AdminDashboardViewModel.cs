@@ -55,6 +55,10 @@ namespace HalloDoc.ViewModels
 
         //export
         public string? requestor { get; set; }
-        public string? search { get; set; } 
+        public string? search { get; set; }
+
+        //Provider Dashboard
+        public string? typeOfCare { get; set; }
+
     }
 }

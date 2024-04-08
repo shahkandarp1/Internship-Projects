@@ -24,25 +24,25 @@
 
 
     <!-- Request To Admin -->
-    <form asp-action="RequestAdmin" asp-controller="Admin" method="post">
+    <form asp-action="RequestAdmin" asp-controller="Doctor" method="post">
         <div class="modal fade" id="myModalRequest" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
+                <div class="modal-content request-admin-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Request To Administrator</div>
                         <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body request-admin-body">
                         <div class="disclaimer-agreement-font assign-transfer-modal">Need to send message to edit</div>
                         <div class="form-floating mt-3 inp col-sm-12 notes-text">
                             <textarea class="form-control text-area" id="request-reason" placeholder="name@example.com" required asp-for="editReason"></textarea>
                             <label for="admin_notes" class="form-label">Message</label>
                         </div>
                         <div class="lower-btn">
-                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Send</button>
-                            <a id="cancel-request" class="btn cancel-btn">Cancel</a>
+                            <button type="submit" class="btn btn-info continue-btn request-admin-send" id="confirm-btn">Send</button>
+                            <a id="cancel-request" class=" cancel-btn request-admin-cancel">Cancel</a>
                         </div>
                     </div>
 
@@ -78,8 +78,8 @@
                 <input type="hidden" asp-for="lat" id="lat" />
                 <input type="hidden" asp-for="lng" id="long" />
 
-                <div class="lower-btn @physician" id="request-to-edit">
-                    <a class="back-btn reset-btn"><span class="back-text">Request To Admin</span></a>
+                <div class="lower-btn @physician mb-2" id="request-to-edit">
+                    <a class="back-btn reset-btn request-to-admin-btn"><span class="back-text">Request To Admin</span></a>
                 </div>
 
                 <!-- Account Information  -->
@@ -173,7 +173,7 @@
                     </div>
                 </div>
 
-                <div class="lower-btn @admin" id="top-edit">
+                <div class="lower-btn @admin mb-2" id="top-edit">
                     <a class="lower-custom-btn submit-btn" onclick="top_edit()">Edit</a>
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>

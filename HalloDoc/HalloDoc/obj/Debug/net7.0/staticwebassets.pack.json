@@ -53,6 +53,10 @@
       "PackagePath": "staticwebassets\\css\\dark-theme.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\encounter-form.css",
+      "PackagePath": "staticwebassets\\css\\encounter-form.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\form.css",
       "PackagePath": "staticwebassets\\css\\form.css"
     },

@@ -186,8 +186,6 @@ namespace HalloDoc.Repository.Interface
         public bool DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
         public bool ToggleShiftStatus(int? id);
         public Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel);
-        public bool AcceptCase(int? id);
-        public Task<bool> RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel);
 
     }
 }

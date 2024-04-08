@@ -1,0 +1,19 @@
+﻿.lower-custom-btn {
+    width: auto;
+}
+.finalize-btn {
+    background-color: #9C27B0;
+    border: 1px solid #9C27B0;
+}
+.form-control {
+    height: auto !important;
+}
+@media screen and (max-width:360px)
+{
+    .lower-btn{
+        flex-direction:column;
+    }
+    .lower-custom-btn{
+        width:100%;
+    }
+}

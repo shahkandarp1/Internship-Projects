@@ -69,6 +69,7 @@ namespace HalloDoc.ViewModels
         public string? Procedures { get; set; }
 
         public string? FollowUp { get; set; }
+        public bool? isFinalized { get; set; } = false;
 
         public AdminNavbarViewModel? adminNavbarViewModel { get; set; }
 

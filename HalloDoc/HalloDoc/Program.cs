@@ -18,6 +18,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(720); // Set session timeout
 });
 builder.Services.AddScoped<IAdmin, HalloDoc.Repository.Repository.Admin>();
+builder.Services.AddScoped<IDoctor, Doctor>();
 builder.Services.AddScoped<IPatient, HalloDoc.Repository.Repository.Patient>();
 builder.Services.AddScoped<IJwtService, HalloDoc.Repository.Repository.JwtService>();
 

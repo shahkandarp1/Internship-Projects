@@ -1,0 +1,606 @@
+﻿@model SchedulingViewModel
+@{
+    ViewData["Title"] = "My Schedule";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/scheduling.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <!-- Add New Shift Modal -->
+    <form asp-action="CreateShift" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssign()")">
+        <div class="modal fade" id="myModalCreateShift" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Create Shift</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+
+                    <input type="hidden" asp-for="adminNavbarViewModel.Name" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.menus" />
+                    <input type="hidden" asp-for="adminNavbarViewModel.role" />
+
+                    @for (int i = 0; i < Model.checkboxViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Name)
+                        @Html.HiddenFor(m => m.checkboxViewModels[i].Id)
+                    }
+
+                    @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.regions[i].Name)
+                        @Html.HiddenFor(m => m.regions[i].RegionId)
+                    }
+                    @for (int i = 0; i < Model.physicians.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.physicians[i].PhysicianId)
+                        @Html.HiddenFor(m => m.physicians[i].FirstName)
+                        @Html.HiddenFor(m => m.physicians[i].LastName)
+                        @Html.HiddenFor(m => m.physicians[i].Photo)
+                        @Html.HiddenFor(m => m.physicians[i].Email)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessName)
+                        @Html.HiddenFor(m => m.physicians[i].BusinessWebsite)
+                    }
+                    @for (int i = 0; i < Model.shiftViewModels.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].PhysicianName)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionAbbreviation)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDate)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].EndTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].StartTime)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].Status)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].RegionId)
+                        @Html.HiddenFor(m => m.shiftViewModels[i].ShiftDetailId)
+                    }
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
+                                    @foreach (var items in Model.regions)
+                                    {
+                                        <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </div>
+                            <span id="warning-assign" class="text-danger hidden">Please Select Physician</span>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <input type="date" class="form-control dob" id="startdate" placeholder="name@example.com" asp-for="StartDate" value="yyyy-mm-dd">
+                                <label for="startdate" class="form-label dob-label">Start Date</label>
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control dob" id="starttime" placeholder="name@example.com" asp-for="StartTime" onchange="checkTime()">
+                                <label for="starttime" class="form-label dob-label">Start Time</label>
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control dob" id="endtime" placeholder="name@example.com" asp-for="EndTime" onchange="checkTime()">
+                                <label for="endtime" class="form-label dob-label">End Time</label>
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                            <span id="warning-time" class="text-danger hidden">Start and End time cannot be same</span>
+                            <div class="col-12 mt-3 repeat-btn">
+                                <span class="repeat-text">Repeat</span>
+                                <label class="switch">
+                                    <input type="checkbox" class="hidden-checkbox" id="hidden-checkbox" asp-for="IsRepeat">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="hidden" id="repeated-content">
+                                <div class="repeat-font">Repeat Days</div>
+                                <div class="mt-3 inp col-12">
+                                    @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" onchange="IsChecked()">
+                                            <label class="form-check-label repeat-font" for="flexCheckDefault@(i)">
+                                                Every @Model.checkboxViewModels[i].Name
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <span id="warning-repeat" class="text-danger hidden">Please Select Atleast One Day</span>
+                                <div class="form-floating mt-3 inp col-12 notes-text repeat-floating">
+                                    <select class="form-control physician-assign select-label editable" id="Select-repeat" placeholder="name@example.com" asp-for="Repeat" onchange="selectAssign(this)">
+                                        <option class="option-modal" value="2">2-times</option>
+                                        <option class="option-modal" value="3">3-times</option>
+                                        <option class="option-modal" value="4">4-times</option>
+                                        <option class="option-modal" value="5">5-times</option>
+                                    </select>
+                                    <label for="Select-repeat" class="form-label">Repeat End</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Save</button>
+                            <a id="cancel-shift" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- View Shift Modal -->
+    <form asp-action="EditShift" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssignV()")">
+        <div class="modal fade" id="myModalViewShift" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">View Shift</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-shiftV">&times;</span>
+                    </div>
+
+                    <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId" />
+                    <input type="hidden" asp-for="PhysicianId" id="physicianId" />
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control select " id="Select-regionV" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysicianV(this)" disabled>
+                                    @foreach (var items in Model.regions)
+                                    {
+                                        <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
+                                    }
+                                </select>
+                            </div>
+                            <span id="warning-assignV" class="text-danger hidden">Please Select Physician</span>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <input type="date" class="form-control editable dob" id="startdateV" placeholder="name@example.com" asp-for="StartDate" value="yyyy-mm-dd" disabled>
+                                <label for="startdateV" class="form-label dob-label">Start Date</label>
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control editable dob" id="starttimeV" placeholder="name@example.com" asp-for="StartTime" onchange="checkTimeV()" disabled>
+                                <label for="starttimeV" class="form-label dob-label">Start Time</label>
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mt-3 inp col-6 notes-text time">
+                                <input type="time" timeformat="24h" class="form-control editable dob" id="endtimeV" placeholder="name@example.com" asp-for="EndTime" onchange="checkTimeV()" disabled>
+                                <label for="endtimeV" class="form-label dob-label">End Time</label>
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                            <span id="warning-timeV" class="text-danger hidden">Start and End time cannot be same</span>
+
+                        </div>
+                        <div class="lower-btn" id="edit">
+                            <a class="lower-custom-btn submit-btn" onclick="Edit()" id="edit-btn">Edit</a>
+                            <button class="lower-custom-btn submit-btn hiddenn" id="save-btn" type="submit">Save</button>
+                            <a class="btn submit-btn btn-danger delete-btn mar-top" id="delete-btn">Delete</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">My Schedule</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="main-date mb-3" >
+                        <span>Schedule For: </span><span id="main-date">April 1 , 2023</span>
+                    </div>
+                    <div class="color-shift-flex mb-3">
+                        <div class="shift-color">
+                            <span class="shift-type-flex margin-right">
+                                <span class="shift pending-shift margin-right"></span>
+                                <span class="shift-text">Pending Shifts</span>
+                            </span>
+                            <span class="shift-type-flex">
+                                <span class="shift active-shift margin-right"></span>
+                                <span class="shift-text">Active Shifts</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="shift-date-handler mb-4">
+                        <div class="calendar-left-right">
+                            <img src="~/images/back.svg" class="back-direction-btn" id="previous" />
+                            <button id="DatePickerButton" class="datepicker-native-button btn btn-secondary btn-sm">
+                                <i class="bi bi-calendar3 date-calendar"></i>
+                                <input id="DatePickerButtonInput" type="date" class="datepicker-native-button-input"
+                                       onchange="changeStartDate(this.value)" />
+                            </button>
+                            <img src="~/images/next.svg" class="direction-btn" id="next" />
+                        </div>
+                        <div>
+                            <a class="btn btn-info text-white patient-text-btn" id="open-new-shift">
+                                <span>Add New Shift</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="dp-monthh"></div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="DeleteShift" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId1" />
+    <button type="submit" id="submit-delete"></button>
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        $("#open-new-shift").click(function () {
+            $("#myModalCreateShift").modal("show");
+            const selectphysician = document.getElementById("Select-physician");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            $.get('/Admin/GetPhysician', { regionid: 1 }, function (response) {
+                for (let i = 0; i < response.data.length; ++i) {
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-shift").click(function () {
+            $("#myModalCreateShift").modal("hide");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#cancel-shiftV").click(function () {
+            $("#myModalViewShift").modal("hide");
+            const editable = document.getElementsByClassName('editable')
+            for (let i = 0; i < editable.length; ++i) {
+                editable[i].disabled = true;
+            }
+            const btn = document.getElementsByClassName('lower-custom-btn')
+            document.getElementById("edit-btn").classList.remove("hiddenn")
+            document.getElementById("save-btn").classList.add("hiddenn")
+        });
+    });
+
+    const checkbox = document.getElementById('hidden-checkbox');
+
+    checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+            document.getElementById("repeated-content").style.display = "block";
+        } else {
+            document.getElementById("repeated-content").style.display = "none";
+        }
+    });
+
+    const changePhysician = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physician");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+    }
+
+    const changePhysicianV = (element) => {
+        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
+            const selectphysician = document.getElementById("Select-physicianV");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            for (let i = 0; i < response.data.length; ++i) {
+                const newOption = document.createElement("option");
+                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                newOption.value = response.data[i].physicianId
+                selectphysician.append(newOption);
+            }
+        });
+    }
+
+    const selectAssignV = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assignV").style.display = "none";
+        }
+    }
+
+    const selectAssign = (text) => {
+        if (text.value != -1) {
+            document.getElementById("warning-assign").style.display = "none";
+        }
+    }
+
+    const checkAssign = () => {
+        const select = document.getElementById("Select-physician")
+        if (select.value == -1) {
+            document.getElementById("warning-assign").style.display = "block";
+            return false;
+        }
+        const days = document.getElementsByClassName("form-check-input");
+
+        const starttime = document.getElementById("starttime");
+        const endtime = document.getElementById("endtime");
+
+        if (starttime.value == endtime.value) {
+            document.getElementById("warning-time").style.display = "block";
+            return false;
+        }
+
+        const checkbox = document.getElementById("hidden-checkbox");
+        if (checkbox.checked == true) {
+            let flag = 0
+            for (let i = 0; i < days.length; ++i) {
+                if (days[i].checked == true) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                document.getElementById("warning-repeat").style.display = "block";
+                return false;
+            }
+        }
+    }
+
+    const checkAssignV = () => {
+        const select = document.getElementById("Select-physicianV")
+        if (select.value == -1) {
+            document.getElementById("warning-assignV").style.display = "block";
+            return false;
+        }
+
+        const starttime = document.getElementById("starttimeV");
+        const endtime = document.getElementById("endtimeV");
+
+        if (starttime.value == endtime.value) {
+            document.getElementById("warning-timeV").style.display = "block";
+            return false;
+        }
+    }
+
+    const Edit = () => {
+        const editable = document.getElementsByClassName('editable')
+        for (let i = 0; i < editable.length; ++i) {
+            editable[i].disabled = false;
+        }
+        document.getElementById("edit-btn").classList.add("hiddenn")
+        document.getElementById("save-btn").classList.remove("hiddenn")
+    }
+
+    const Cancel = () => {
+        location.reload()
+    }
+
+    const IsChecked = () => {
+        const days = document.getElementsByClassName("form-check-input");
+        let flag = 0
+        for (let i = 0; i < days.length; ++i) {
+            if (days[i].checked == true) {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 1) {
+            document.getElementById("warning-repeat").style.display = "none";
+        }
+    }
+
+    const checkTime = () => {
+        const starttime = document.getElementById("starttime");
+        const endtime = document.getElementById("endtime");
+
+        if (starttime.value != endtime.value) {
+            document.getElementById("warning-time").style.display = "none";
+        }
+    }
+
+    const checkTimeV = () => {
+        const starttime = document.getElementById("starttimeV");
+        const endtime = document.getElementById("endtimeV");
+
+        if (starttime.value != endtime.value) {
+            document.getElementById("warning-timeV").style.display = "none";
+        }
+    }
+
+    window.onload = () => {
+        const inputDate = document.getElementById('startdate');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('min', today);
+
+        const inputDatee = document.getElementById('startdateV');
+        const todayy = new Date().toISOString().split('T')[0];
+        inputDatee.setAttribute('min', todayy);
+    }
+
+    $(document).ready(function () {
+        $("#delete-btn").click(function () {
+            document.getElementById("submit-delete").click()
+        });
+    });
+
+
+    //Daypilot js
+    @{
+        var list = System.Text.Json.JsonSerializer.Serialize(Model.physicians);
+        var events = System.Text.Json.JsonSerializer.Serialize(Model.shiftViewModels);
+    }
+
+            var resourcess = @Html.Raw(list);
+
+    var eventss = @Html.Raw(events);
+
+    var event = []
+
+    for (let i = 0; i < eventss.length; ++i) {
+        let obj = {
+            id: eventss[i].ShiftDetailId,
+            text: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].PhysicianName} , ${eventss[i].RegionAbbreviation}`,
+            start: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime,
+            end: eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime,
+            resource: eventss[i].PhysicianId,
+            regionid: eventss[i].RegionId,
+            backColor: eventss[i].Status == 0 ? "#FEADF9" : "#A5CEA4",
+            bubbleHtml: `${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].StartTime).toString("h:mm tt")} - ${new DayPilot.Date(eventss[i].ShiftDate.split("T")[0] + "T" + eventss[i].EndTime).toString("h:mm tt")} , ${eventss[i].PhysicianName} , ${eventss[i].RegionAbbreviation}`
+        }
+        event.push(obj)
+    }
+
+    const monthCalendar = new DayPilot.Month("dp-monthh", {
+        cellMarginBottom: 20,
+        startDate: DayPilot.Date.today(),
+        eventMoveHandling: "Disabled",
+        onEventResized: (args) => {
+            dp.message("Resized: " + args.e.text());
+        },
+        onEventClicked: (args) => {
+
+
+            const region = document.getElementById("Select-regionV")
+
+            for (let i = 0; i < region.options.length; ++i) {
+                if (region.options[i].value == args.e.data.regionid) {
+                    region.options[i].selected = true;
+                    break;
+                }
+            }
+
+            document.getElementById("endtimeV").value = args.e.data.end.split("T")[1]
+            document.getElementById("starttimeV").value = args.e.data.start.split("T")[1]
+            document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
+            document.getElementById("shiftDetailId").value = args.e.data.id
+            document.getElementById("shiftDetailId1").value = args.e.data.id
+            document.getElementById("physicianId").value = args.e.data.resource
+
+            const currentyear = new Date().getFullYear()
+            const currentmonth = new Date().getMonth() + 1
+            const currentdate = new Date().getDate()
+
+            const startyear = new Date(args.e.data.start).getFullYear()
+            const startmonth = new Date(args.e.data.start).getMonth() + 1
+            const startdate = new Date(args.e.data.start).getDate()
+
+            if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
+                document.getElementById("delete-btn").style.display = "none";
+                document.getElementById("edit-btn").style.display = "none";
+            }
+            else {
+                document.getElementById("delete-btn").style.display = "inline-block";
+                document.getElementById("edit-btn").style.display = "flex";
+            }
+
+            $("#myModalViewShift").modal("show");
+
+        },
+        events: event,
+        eventHeight: 35
+
+
+    });
+    monthCalendar.init();
+
+    const loadHeading = () => {
+        const heading = document.getElementsByClassName("scheduler_default_corner_inner")
+        for (let i = 0; i < heading.length; ++i) {
+            heading[0].innerHTML = "Staff";
+        }
+    }
+
+    loadHeading()
+
+    function changeStartDate(selectedDate) {
+        const startDate = new DayPilot.Date(selectedDate);
+        const mondayOfWeek = getMondayOfWeek(startDate);
+        monthCalendar.update({ startDate: startDate });
+
+        document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`;
+    }
+
+
+    function getMondayOfWeek(date) {
+        const dayOfWeek = date.dayOfWeek();
+        const difference = (dayOfWeek === 0) ? 0 : (0 - dayOfWeek);
+        const sunday = date.addDays(difference);
+        return sunday;
+    }
+
+    const app = {
+        elements: {
+            previous: document.getElementById("previous"),
+            next: document.getElementById("next")
+        },
+        init() {
+            app.elements.previous.addEventListener("click", (e) => {
+                e.preventDefault();
+                app.changeDate(monthCalendar.startDate.addMonths(-1));
+            });
+            app.elements.next.addEventListener("click", (e) => {
+                e.preventDefault();
+                app.changeDate(monthCalendar.startDate.addMonths(1));
+            });
+        },
+        changeDate(dateM) {
+            var startDate = dateM.firstDayOfMonth();
+
+            monthCalendar.startDate = startDate;
+            monthCalendar.update();
+
+            document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`;
+        }
+    }
+    app.init();
+
+    document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

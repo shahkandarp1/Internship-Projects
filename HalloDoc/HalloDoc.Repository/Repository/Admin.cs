@@ -42,6 +42,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Twilio.Rest.Trusthub.V1.TrustProducts;
 using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Drawing.Spreadsheet;
+using System.Diagnostics.Metrics;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -94,7 +95,7 @@ namespace HalloDoc.Repository.Repository
                 exp = r => r.Status == 9;
             }
 
-            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r => r.RequestStatusLogs).Where(exp).Where(r=>r.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
+            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r => r.RequestStatusLogs).Include(r=>r.EncounterForms).Where(exp).Where(r=>r.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
 
             if(_query == null)
             {
@@ -2082,6 +2083,10 @@ namespace HalloDoc.Repository.Repository
         {
             try
             {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
                 EncounterForm encounterForm = _db.EncounterForms.FirstOrDefault(r => r.RequestId == encounterFormViewModel.RequestId);
                 if (encounterForm == null)
                 {
@@ -2115,8 +2120,12 @@ namespace HalloDoc.Repository.Repository
                         FollowUp = encounterFormViewModel?.FollowUp,
                     };
 
+                    if (cookieModel.role == "Provider")
+                    {
+                        encounter.IsFinalized = encounterFormViewModel.isFinalized == true ? new BitArray(new[] { true }) : new BitArray(new[] { false });
+                    }
+
                     _db.EncounterForms.Add(encounter);
-                    _db.SaveChanges();
 
                 }
                 else
@@ -2147,9 +2156,36 @@ namespace HalloDoc.Repository.Repository
                     encounterForm.Procedures = encounterFormViewModel?.Procedures;
                     encounterForm.FollowUp = encounterFormViewModel?.FollowUp;
 
+                    if (cookieModel.role == "Provider")
+                    {
+                        encounterForm.IsFinalized = encounterFormViewModel.isFinalized == true ? new BitArray(new[] { true }) : new BitArray(new[] { false });
+                    }
+
                     _db.EncounterForms.Update(encounterForm);
-                    _db.SaveChanges();
                 }
+
+                if(cookieModel.role == "Provider")
+                {
+                    Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == encounterFormViewModel.RequestId);
+                    if(request == null)
+                    {
+                        return false;
+                    }
+                    RequestClient requestClient = _db.RequestClients.FirstOrDefault(r=>r.RequestClientId == request.RequestClientId);
+                    requestClient.FirstName = encounterFormViewModel?.FirstName ?? requestClient.FirstName;
+                    requestClient.LastName = encounterFormViewModel?.LastName ?? requestClient.LastName;
+                    requestClient.Street = encounterFormViewModel?.Location.Split(",")[0] ?? requestClient.Street;
+                    requestClient.City = encounterFormViewModel?.Location.Split(",")[1] ?? requestClient.City;
+                    requestClient.State = encounterFormViewModel?.Location.Split(",")[2] ?? requestClient.State;
+                    requestClient.ZipCode = encounterFormViewModel?.Location.Split(",")[3] ?? requestClient.ZipCode;
+                    requestClient.IntDate = encounterFormViewModel?.DateOfBirth.Value.Day ?? requestClient.IntDate;
+                    requestClient.IntYear = encounterFormViewModel?.DateOfBirth.Value.Year ?? requestClient.IntYear;
+                    requestClient.StrMonth = encounterFormViewModel?.DateOfBirth.Value.Month.ToString() ?? requestClient.StrMonth;
+                    requestClient.Email = encounterFormViewModel?.Email ?? requestClient.Email;
+                    requestClient.PhoneNumber = encounterFormViewModel?.PhoneNumber ?? requestClient.PhoneNumber;
+                    _db.RequestClients.Update(requestClient);
+                }
+                _db.SaveChanges();
 
                 return true;
             }
@@ -4402,6 +4438,17 @@ namespace HalloDoc.Repository.Repository
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
+            if (cookieModel.role == "Provider")
+            {
+                List<PhysicianRegion> physicianRegions = _db.PhysicianRegions.Where(r=>r.PhysicianId == cookieModel.userId).ToList();
+                List<Region> regionss = new List<Region>();
+                for (var i=0;i< physicianRegions.Count;++i)
+                {
+                    regionss.Add(_db.Regions.FirstOrDefault(r => r.RegionId == physicianRegions[i].RegionId));
+                }
+                regions = regionss;
+            }
+
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
@@ -4430,6 +4477,11 @@ namespace HalloDoc.Repository.Repository
                             Status = sd.Status,
                             ShiftDetailId = sd.ShiftDetailId
                         };
+
+            if(cookieModel.role == "Provider")
+            {
+                query = query.Where(q=>q.PhysicianId == cookieModel.userId);
+            }
 
             if(regionid!=null && regionid!=-1)
             {
@@ -4949,148 +5001,6 @@ namespace HalloDoc.Repository.Repository
                     success = false;
                 }
 
-                return true;
-            }
-            catch(Exception exp)
-            {
-                return false;
-            }
-        }
-
-        public bool AcceptCase(int? id)
-        {
-            try
-            {
-                Request request = _db.Requests.FirstOrDefault(r => r.RequestId == id);
-                if (request == null)
-                {
-                    return false;
-                }
-                request.Status = 2;
-                request.ModifiedDate = DateTime.Now;
-                request.AcceptedDate = DateTime.Now;
-                _db.Requests.Update(request);
-
-                var requestt = _context.HttpContext.Request;
-                var token = requestt.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.GetDetails(token);
-
-                RequestStatusLog requestStatusLog = new RequestStatusLog
-                {
-                    RequestId = (int)id,
-                    Status = 2,
-                    CreatedDate = DateTime.Now,
-                };
-                _db.RequestStatusLogs.Add(requestStatusLog);
-                _db.SaveChanges();
-                return true;
-            }
-            catch (Exception exp)
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel)
-        {
-            try
-            {
-                List<HalloDoc.Admin> admin = _db.Admins.Where(a => a.IsDeleted == false).ToList();
-                var retryCount = 1;
-                var success = false;
-                for (var i = 0; i < admin.Count; i++)
-                {
-                    while (retryCount <= 3 && !success) // Set retry limit
-                    {
-
-                        string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
-                        string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
-                        var platformTitle = "HalloDoc";
-                        var subject = "Request Profile Edit - HalloDoc";
-                        var body = $"Hello {admin[i].FirstName} {admin[i].LastName},<br />{physicianAccountViewModel.editReason}<br /><br />Regards,<br/>{platformTitle}<br/>";
-                        try
-                        {
-
-
-                            SmtpClient client = new SmtpClient("smtp.office365.com")
-                            {
-                                Port = 587,
-                                Credentials = new NetworkCredential(senderEmail, senderPassword),
-                                EnableSsl = true,
-                                DeliveryMethod = SmtpDeliveryMethod.Network,
-                                UseDefaultCredentials = false
-                            };
-
-                            MailMessage mailMessage = new MailMessage
-                            {
-                                From = new MailAddress(senderEmail, "HalloDoc"),
-                                Subject = subject,
-                                IsBodyHtml = true,
-                                Body = body
-                            };
-
-                            mailMessage.To.Add(admin[i].Email);
-
-
-                            await client.SendMailAsync(mailMessage);
-
-
-                            success = true;
-                            LogEmail(body, subject, admin[i].Email, null, -1, admin[i].AdminId, -1, true, retryCount, 2);
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-
-                            if (retryCount >= 3)
-                            {
-                                LogEmail(body, subject, admin[i].Email, null, -1, admin[i].AdminId, -1, false, retryCount, 2);
-                            }
-                            retryCount++;
-                        }
-                    }
-                    retryCount = 1;
-                    success = false;
-
-                    while (retryCount <= 3 && !success) // Set retry limit
-                    {
-                        var platformTitle = "HalloDoc";
-
-                        var accountSid = _configuration["Twilio:accountSid"];
-                        var authToken = _configuration["Twilio:authToken"];
-                        var twilionumber = _configuration["Twilio:twilioNumber"];
-
-                        var messageBody = $"Hello {admin[i].FirstName} {admin[i].LastName},\n{physicianAccountViewModel.editReason}\n\nRegards,\n{platformTitle}";
-                        try
-                        {
-
-                            TwilioClient.Init(accountSid, authToken);
-
-                            var message = MessageResource.Create(
-                                from: new Twilio.Types.PhoneNumber(twilionumber),
-                                body: messageBody,
-                                to: new Twilio.Types.PhoneNumber("+91" + admin[i].Mobile)
-                            );
-
-
-                            success = true;
-                            LogSMS(messageBody, admin[i].Mobile, null, -1, admin[i].AdminId, -1, true, retryCount, 2);
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-
-                            if (retryCount >= 3)
-                            {
-                                LogSMS(messageBody, admin[i].Mobile, null, -1, admin[i].AdminId, -1, false, retryCount, 2);
-                            }
-                            retryCount++;
-                        }
-                    }
-                    retryCount = 1;
-                    success = false;
-
-                }
                 return true;
             }
             catch(Exception exp)
