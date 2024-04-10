@@ -24,7 +24,16 @@
                     <td>@item.RoleName</td>
                     <td>@item.PhoneNumber</td>
                     <td>@item.CreatedDate?.ToString("MMMM dd,yyyy")</td>
-                    <td>@item.SentDate?.ToString("MMMM dd,yyyy")</td>
+                    <td>
+                        @if (item.Sent == "Yes")
+                        {
+                            <span>@item.SentDate?.ToString("MMMM dd,yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
                     <td>@item.Sent</td>
                     <td>@item.SentTries</td>
                     <td>@item.ConfirmationNumber</td>

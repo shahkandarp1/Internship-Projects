@@ -26,8 +26,10 @@ html {
     filter: blur(2px);
 }
 
+.bg-site-img{
+    display:none;
+}
 /* Upper part(Moon) */
-
 .top-right-moon {
     position: absolute;
     top: 15px;
@@ -279,6 +281,10 @@ input[type="password"]::-ms-clear {
     .bg-image {
         width: 300px;
         height: 80vh;
+    }
+
+    .bg-site-img {
+        display: block;
     }
 
     .back-to-login-text {

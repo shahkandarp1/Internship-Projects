@@ -417,6 +417,11 @@
 
     const getFileData = (myFile, id) => {
         var file = myFile.files[0];
+        if (file.type.split("/")[0] != "image") {
+            toastr.error("You can only upload image!!")
+            myFile.value = null
+            return;
+        }
         var filename = file.name;
         document.getElementById(id).innerHTML = `${filename}`;
     }
@@ -474,6 +479,11 @@
     const fileUpload = (element) => {
         var inputValue = element;
         var file = inputValue.files[0];
+        if (element.files[0].name.split(".")[1] != "pdf") {
+            toastr.error("You can only upload PDF!!")
+            element.value = null
+            return;
+        }
         var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
 
         var formData = new FormData();

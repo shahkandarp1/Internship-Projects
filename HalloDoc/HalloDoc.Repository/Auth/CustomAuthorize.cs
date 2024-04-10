@@ -1,4 +1,5 @@
 ﻿using HalloDoc.Repository.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
@@ -39,9 +40,22 @@ namespace HalloDoc.Repository.Auth
             var request = context.HttpContext.Request;
             var token = request.Cookies["jwt"];
 
+            HttpRequest request1 = context.HttpContext.Request;
+
+
             if (token == null || !jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
+                if (isAjaxRequest(request1))
+                {
+                    context.Result = new JsonResult(new { error = "Failed to Authenticate User" })
+                    {
+                        StatusCode = 401
+                    };
+                }
+                else
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Login", action = "PatientLogin" }));
+                }
                 return;
             }
 
@@ -68,6 +82,11 @@ namespace HalloDoc.Repository.Auth
                     return;
                 }
             }
+        }
+
+        private bool isAjaxRequest(HttpRequest request)
+        {
+            return request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
 
     }

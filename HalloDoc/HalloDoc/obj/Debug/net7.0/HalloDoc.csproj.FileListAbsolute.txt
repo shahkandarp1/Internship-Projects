@@ -73,3 +73,7 @@ C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\re
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.pdb
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\HalloDoc.genruntimeconfig.cache
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\obj\Debug\net7.0\ref\HalloDoc.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\BouncyCastle.Crypto.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\itextsharp.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\itextsharp.xmlworker.dll
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\Rotativa.AspNetCore.dll

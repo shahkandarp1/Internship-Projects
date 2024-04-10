@@ -166,6 +166,12 @@
                                     }
                                 </select>
                             </div>
+                            <div class="form-floating mt-3 inp col-12 notes-text">
+                                <select class="form-control physician-assign select-label " id="Select-physicianV" placeholder="name@example.com" asp-for="PhysicianId" onchange="selectAssignV(this)" disabled>
+                                    <option class="option-modal" value="-1">Select Physician</option>
+                                </select>
+                                <label for="Select-physicianV" class="form-label">Physician</label>
+                            </div>
                             <span id="warning-assignV" class="text-danger hidden">Please Select Physician</span>
                             <div class="form-floating mt-3 inp col-12 notes-text">
                                 <input type="date" class="form-control editable dob" id="startdateV" placeholder="name@example.com" asp-for="StartDate" value="yyyy-mm-dd" disabled>
@@ -490,7 +496,7 @@
 
     const monthCalendar = new DayPilot.Month("dp-monthh", {
         cellMarginBottom: 20,
-        startDate: DayPilot.Date.today(),
+        startDate: DayPilot.Date.today().firstDayOfMonth(),
         eventMoveHandling: "Disabled",
         onEventResized: (args) => {
             dp.message("Resized: " + args.e.text());
@@ -498,40 +504,67 @@
         onEventClicked: (args) => {
 
 
-            const region = document.getElementById("Select-regionV")
-
-            for (let i = 0; i < region.options.length; ++i) {
-                if (region.options[i].value == args.e.data.regionid) {
-                    region.options[i].selected = true;
-                    break;
+            const selectphysician = document.getElementById("Select-physicianV");
+            selectphysician.innerHTML = "";
+            const firstoption = document.createElement("option");
+            firstoption.textContent = "Select Physician"
+            firstoption.value = -1
+            selectphysician.append(firstoption);
+            $.get('/Admin/GetPhysician', { regionid: args.e.data.regionid }, function (response) {
+                for (let i = 0; i < response.data.length; ++i) {
+                    console.log(response.data)
+                    const newOption = document.createElement("option");
+                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
+                    newOption.value = response.data[i].physicianId
+                    selectphysician.append(newOption);
                 }
-            }
 
-            document.getElementById("endtimeV").value = args.e.data.end.split("T")[1]
-            document.getElementById("starttimeV").value = args.e.data.start.split("T")[1]
-            document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
-            document.getElementById("shiftDetailId").value = args.e.data.id
-            document.getElementById("shiftDetailId1").value = args.e.data.id
-            document.getElementById("physicianId").value = args.e.data.resource
+                const region = document.getElementById("Select-regionV")
 
-            const currentyear = new Date().getFullYear()
-            const currentmonth = new Date().getMonth() + 1
-            const currentdate = new Date().getDate()
+                for (let i = 0; i < region.options.length; ++i) {
+                    if (region.options[i].value == args.e.data.regionid) {
+                        region.options[i].selected = true;
+                        break;
+                    }
+                }
 
-            const startyear = new Date(args.e.data.start).getFullYear()
-            const startmonth = new Date(args.e.data.start).getMonth() + 1
-            const startdate = new Date(args.e.data.start).getDate()
+                for (let i = 0; i < selectphysician.options.length; ++i) {
+                    console.log(selectphysician.options[i].value)
+                    console.log(selectphysician.options[i].text)
+                    if (selectphysician.options[i].value == args.e.data.resource) {
+                        console.log("Hello")
+                        selectphysician.options[i].selected = true;
+                        break;
+                    }
+                }
 
-            if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
-                document.getElementById("delete-btn").style.display = "none";
-                document.getElementById("edit-btn").style.display = "none";
-            }
-            else {
-                document.getElementById("delete-btn").style.display = "inline-block";
-                document.getElementById("edit-btn").style.display = "flex";
-            }
+                document.getElementById("endtimeV").value = args.e.data.end.split("T")[1]
+                document.getElementById("starttimeV").value = args.e.data.start.split("T")[1]
+                document.getElementById("startdateV").value = args.e.data.start.split("T")[0]
+                document.getElementById("shiftDetailId").value = args.e.data.id
+                document.getElementById("shiftDetailId1").value = args.e.data.id
+                document.getElementById("physicianId").value = args.e.data.resource
 
-            $("#myModalViewShift").modal("show");
+                const currentyear = new Date().getFullYear()
+                const currentmonth = new Date().getMonth() + 1
+                const currentdate = new Date().getDate()
+
+                const startyear = new Date(args.e.data.start).getFullYear()
+                const startmonth = new Date(args.e.data.start).getMonth() + 1
+                const startdate = new Date(args.e.data.start).getDate()
+
+                if (startdate < currentdate && startmonth <= currentmonth && currentyear <= startyear) {
+                    document.getElementById("delete-btn").style.display = "none";
+                    document.getElementById("edit-btn").style.display = "none";
+                }
+                else {
+                    document.getElementById("delete-btn").style.display = "inline-block";
+                    document.getElementById("edit-btn").style.display = "flex";
+                }
+
+                $("#myModalViewShift").modal("show");
+
+            });
 
         },
         events: event,
@@ -553,9 +586,9 @@
     function changeStartDate(selectedDate) {
         const startDate = new DayPilot.Date(selectedDate);
         const mondayOfWeek = getMondayOfWeek(startDate);
-        monthCalendar.update({ startDate: startDate });
+        monthCalendar.update({ startDate: startDate.firstDayOfMonth() });
 
-        document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`;
+        document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM")} 1 - ${monthCalendar.startDate.toString("MMM")} ${monthCalendar.startDate.lastDayOfMonth().toString("d")}, ${monthCalendar.startDate.toString("yyyy")}`;
     }
 
 
@@ -587,12 +620,12 @@
             monthCalendar.startDate = startDate;
             monthCalendar.update();
 
-            document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`;
+            document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM")} 1 - ${monthCalendar.startDate.toString("MMM")} ${monthCalendar.startDate.lastDayOfMonth().toString("d")}, ${monthCalendar.startDate.toString("yyyy")}`;
         }
     }
     app.init();
 
-    document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM M")} - ${monthCalendar.startDate.addMonths(1).toString("MMM M, yyyy")}`
+    document.getElementById("main-date").innerHTML = `${monthCalendar.startDate.toString("MMM")} 1 - ${monthCalendar.startDate.toString("MMM")} ${monthCalendar.startDate.lastDayOfMonth().toString("d")}, ${monthCalendar.startDate.toString("yyyy")}`
 
 </script>
 

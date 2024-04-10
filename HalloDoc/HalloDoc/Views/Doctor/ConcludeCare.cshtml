@@ -1,0 +1,196 @@
+﻿@model ConcludeCareViewModel
+@{
+    ViewData["Title"] = "Conclude Care";
+    Layout = "_AdminLayout";
+}
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/view-document.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/close-case.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <div class="upload-main-container">
+        <div class="upload-inner-container">
+            <div class="top-part">
+                <span class="main-heading view-main dark-heading-text" id="main-heading">Conclude Care</span>
+                <a class="back-btn" asp-controller="Admin" asp-action="Dashboard">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="wrapper">
+
+                <div id="Dashboard" class="main-content bg-body">
+                    <div class="top-flex">
+                        <div>
+                            <span class="pt-name-text dark-text">Patient Name</span>
+                            <div class="pt-name">@Model.patient_name<span class="con_num dark-text">(@Model.confirmation_number)</span></div>
+                        </div>
+                    </div>
+                    <div class="middle-part top-flex top-conclude-flex">
+                        <span class="main-heading document-main dark-heading-text" id="main-heading">Encounter Forms</span>
+                        <label class="custom-file-upload conclude-care-upload">
+                            <input id="FileUpload" type="file" onchange="getFileData(this)" name="file" />
+                            <img src="../../images/cloud-upload-icon-blue.svg" alt="" class="file-upload-img">
+                            <span class="upload-text conclude-care-text">
+                                Upload
+                            </span>
+                        </label>
+                    </div>
+
+                </div>
+                <form class="desktop-table bg-body" asp-action="ConcludeCare" method="post">
+                    <input type="hidden" asp-for="patient_name" />
+                    <input type="hidden" asp-for="RequestId" />
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.requestWiseFiles)
+                            {
+                                <tr>
+                                    <td class="first-col">
+                                        <span class="document-combo close-doc">
+                                            @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                            {
+                                                <img src="~/images/file-x-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                            {
+                                                <img src="~/images/file-earmark-pdf-fill.svg" />
+                                            }
+                                            else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                            {
+                                                <img src="~/images/file-word-fill.svg" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/images/card-image.svg" />
+                                            }
+
+                                            <span class="document-name">@row.FileName</span>
+                                        </span>
+                                    </td>
+                                    <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
+                                    <td>
+                                        <div class="action-flex">
+                                            <div class="outerr-div">
+                                                <a class="downld-btn bg-body" download href="~/uploads/@(row.FileName)">
+                                                    <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="mob-documents">
+                        @foreach (var row in Model.requestWiseFiles)
+                        {
+                            <span class="mob-component">
+                                <div class="first-col">
+                                    <span class="document-combo mob-doc-name close-doc">
+                                        @if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xlsx" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "xls")
+                                        {
+                                            <img src="~/images/file-x-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "pdf")
+                                        {
+                                            <img src="~/images/file-earmark-pdf-fill.svg" />
+                                        }
+                                        else if (row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "doc" || row.FileName.Split(".")[row.FileName.Split(".").Length - 1] == "docx")
+                                        {
+                                            <img src="~/images/file-word-fill.svg" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/card-image.svg" />
+                                        }
+                                        <span class="document-name mob-text dark-text">@row.FileName</span>
+                                    </span>
+                                </div>
+                                <span class="document-name mob-text mob-date dark-text">@row.CreatedDate.ToString("MMMM dd,yyyy")</span>
+                                <div class="mob-action-flex">
+                                    <a class="downld-btn mob-download margin-right" download href="~/uploads/@(row.FileName)">
+                                        <img id="logout" src="~/images/cloud-arrow-down.svg" alt="" class="logout-img" />
+                                    </a>
+                                </div>
+                            </span>
+                        }
+                    </div>
+                    <div class="bottom-container">
+                        <div class="upper-text main-heading document-main dark-heading-text">
+                            Provider Notes
+                        </div>
+                        <div class="row symptoms-textarea">
+                            <div class="form-floating mt-3 inp col-sm-12">
+                                <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="ProviderNotes"></textarea>
+                                <label for="floatingInput" class="form-label">Provider Notes</label>
+                            </div>
+                            <span asp-validation-for="ProviderNotes" class="text-danger"></span>
+                        </div>
+                        <!-- Submit / Clear -->
+                        <div class="lower-btn">
+                            <button class="lower-custom-btn conclude-care-btn submit-btn" type="submit">Conclude Care</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<script src="~/js/admin-navbar.js"></script>
+@*<script src="~/js/patient-profile.js"></script>*@
+<script>
+
+    $(document).ready(function () {
+        $('#FileUpload').on('change', function () {
+            var inputValue = document.getElementById('FileUpload');
+            var file = inputValue.files[0];
+            var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
+
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("id", id);
+
+            $.ajax(
+                {
+                    url: "/Admin/FileUpload",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        location.reload();
+                    }
+                }
+            );
+        });
+    });
+
+</script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

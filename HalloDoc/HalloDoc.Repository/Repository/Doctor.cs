@@ -1,6 +1,7 @@
 ﻿using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
@@ -297,7 +298,7 @@ namespace HalloDoc.Repository.Repository
                             var message = MessageResource.Create(
                                 from: new Twilio.Types.PhoneNumber(twilionumber),
                                 body: messageBody,
-                                to: new Twilio.Types.PhoneNumber("+91" + admin[i].Mobile)
+                                to: new Twilio.Types.PhoneNumber(admin[i].Mobile[0] == '+' && admin[i].Mobile[1] == '9' && admin[i].Mobile[2] == '1' ? admin[i].Mobile : "+91" + admin[i].Mobile)
                             );
 
 
@@ -400,6 +401,136 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        public ConcludeCareViewModel GetConcludeCare(int id)
+        {
+            var request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestId == id);
+            if (request == null)
+            {
+                return null;
+            }
+            var documents = _db.RequestWiseFiles.Include(u => u.Admin).Include(u => u.Physician).Where(u => u.RequestId == id && u.IsDeleted.Equals(new BitArray(new[] { false }))).ToList();
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Dashboard",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            ConcludeCareViewModel concludeCareViewModel = new ConcludeCareViewModel()
+            {
+                RequestId = id,
+                patient_name = string.Concat(request.RequestClient.FirstName, ' ', request.RequestClient.LastName),
+                confirmation_number = request.ConfirmationNumber,
+                requestWiseFiles = documents,
+                uploader_name = string.Concat(request.FirstName, ' ', request.LastName),
+                adminNavbarViewModel = adminNavbarViewModel,
+            };
+            return concludeCareViewModel;
+        }
+
+        public int ConcludeCare(ConcludeCareViewModel concludeCareViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.Include(r => r.EncounterForms).FirstOrDefault(r => r.RequestId == concludeCareViewModel.RequestId);
+                if (request == null)
+                {
+                    return 3;
+                }
+                if (request.EncounterForms.ToList().Count == 0 || request.EncounterForms.ToList()[0].IsFinalized[0] == false)
+                {
+                    return 2;
+                }
+                request.Status = 8;
+                request.ModifiedDate = DateTime.Now;
+                _db.Requests.Update(request);
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    RequestId = request.RequestId,
+                    Status = 8,
+                    CreatedDate = DateTime.Now,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+
+                RequestNote requestNote = _db.RequestNotes.FirstOrDefault(r=>r.RequestId == request.RequestId);
+                if(requestNote == null)
+                {
+                    RequestNote requestNote1 = new RequestNote
+                    {
+                        RequestId = request.RequestId,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = cookieModel.aspId,
+                        PhysicianNotes = concludeCareViewModel.ProviderNotes
+                    };
+                    _db.RequestNotes.Add(requestNote1);
+                }
+                else
+                {
+                    requestNote.PhysicianNotes = concludeCareViewModel.ProviderNotes;
+                    requestNote.ModifiedBy = cookieModel.aspId;
+                    requestNote.ModifiedDate = DateTime.Now;
+                    _db.RequestNotes.Update(requestNote);
+                }
+                _db.SaveChanges();
+                return 1;
+            }
+            catch(Exception ex)
+            {
+                return 3;
+            }
+        }
+
+        public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r => r.RequestId == adminDashboardViewModel.RequestId);
+                if (request == null)
+                {
+                    return false;
+                }
+                request.Status = 1;
+                request.ModifiedDate = DateTime.Now;
+                request.PhysicianId = null;
+                _db.Requests.Update(request);
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                Physician physician = _db.Physicians.FirstOrDefault(p => p.PhysicianId == cookieModel.userId);
+                if (physician == null)
+                {
+                    return false;
+                }
+                RequestStatusLog requestStatusLog = new RequestStatusLog
+                {
+                    RequestId = (int)adminDashboardViewModel.RequestId,
+                    Status = 1,
+                    Notes = $"Dr. {physician.FirstName} transferred to Admin on {DateTime.Now.ToString("MMMM dd,yyyy")} at {string.Format("{0:hh:mm:ss tt}", DateTime.Now)} : {adminDashboardViewModel.BlockReason}",
+                    CreatedDate = DateTime.Now,
+                    TransToAdmin = new BitArray(new[] { true }),
+                    PhysicianId = adminDashboardViewModel.PhysicianId,
+                };
+                _db.RequestStatusLogs.Add(requestStatusLog);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception exp)
+            {
+                return false;
+            }
+        }
 
     }
 }

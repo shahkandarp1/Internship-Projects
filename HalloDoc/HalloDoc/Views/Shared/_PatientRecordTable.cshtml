@@ -34,7 +34,7 @@
                 <td class="position-relative">
                     @if (item.Status == 6 || item.Status == 7 || item.Status == 8 || item.Status == 9)
                     {
-                        <a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">View</span></a>
+                        <a class="back-btn reset-btn mt-3" id="reset-password" asp-action="DownloadEncounterForm" asp-controller="Admin" asp-route-id="@item.RequestId"><span class="back-text">View</span></a>
                     }
                     else
                     {

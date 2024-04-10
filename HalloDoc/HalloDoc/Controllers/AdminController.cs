@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.CompilerServices;
 using HalloDoc.Models;
 using Newtonsoft.Json.Linq;
+using Rotativa.AspNetCore;
 
 namespace HalloDoc.Controllers
 {
@@ -1586,8 +1587,17 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult CreateShift(SchedulingViewModel schedulingViewModel)
         {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
             if(ModelState.IsValid)
             {
+
+                if(cookieModel.role == "Provider")
+                {
+                    schedulingViewModel.PhysicianId = cookieModel.userId;
+                }
+
                 int isCreated = _admin.CreateShift(schedulingViewModel);
                 if(isCreated == 1)
                 {
@@ -1601,7 +1611,15 @@ namespace HalloDoc.Controllers
                 {
                     TempData["success"] = "Shift Created Successfully!!";
                 }
+                if (cookieModel.role == "Provider")
+                {
+                    return RedirectToAction("MySchedule","Doctor");
+                }
                 return RedirectToAction("Scheduling");
+            }
+            if (cookieModel.role == "Provider")
+            {
+                return View("/Views/Doctor/MySchedule.cshtml", schedulingViewModel);
             }
             return View("Scheduling", schedulingViewModel);
         }
@@ -1612,6 +1630,10 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult EditShift(SchedulingViewModel schedulingViewModel)
         {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
             int isEditted = _admin.EditShift(schedulingViewModel);
             if (isEditted == 1)
             {
@@ -1625,6 +1647,10 @@ namespace HalloDoc.Controllers
             {
                 TempData["success"] = "Shift Editted Successfully!!";
             }
+            if (cookieModel.role == "Provider")
+            {
+                return RedirectToAction("MySchedule", "Doctor");
+            }
             return RedirectToAction("Scheduling");
         }
         /// <summary>
@@ -1634,6 +1660,10 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult DeleteShift(SchedulingViewModel schedulingViewModel)
         {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
             bool isDeleted = _admin.DeleteShift(schedulingViewModel.ShiftDetailId);
             if (isDeleted)
             {
@@ -1642,6 +1672,10 @@ namespace HalloDoc.Controllers
             else
             {
                 TempData["error"] = "Shift could not be Deleted!!";
+            }
+            if (cookieModel.role == "Provider")
+            {
+                return RedirectToAction("MySchedule", "Doctor");
             }
             return RedirectToAction("Scheduling");
         }
@@ -1683,9 +1717,9 @@ namespace HalloDoc.Controllers
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public IActionResult ShiftsForReviewTable(int regionid = -1, bool currMonth = false, int page = 1, int pageSize = 10)
+        public IActionResult ShiftsForReviewTable(int regionid = -1, int page = 1, int pageSize = 10)
         {
-            ShiftsForReviewViewModel shiftsForReviewViewModel = _admin.GetRequestedShifts(regionid,currMonth,page,pageSize);
+            ShiftsForReviewViewModel shiftsForReviewViewModel = _admin.GetRequestedShifts(regionid,page,pageSize);
             return PartialView("_ShiftsForReviewTable", shiftsForReviewViewModel);
         }
         /// <summary>
@@ -1749,6 +1783,24 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Dashboard");
         }
         
+        public IActionResult ViewCurrentMonthShift()
+        {
+            TempData["Shift"] = "Month";
+            return RedirectToAction("Scheduling");
+        }
 
+        public async Task<IActionResult> DownloadEncounterForm(int id)
+        {
+            var model = _admin.GetEncounterFormDetails(id);
+
+            var request = _admin.GetRequest(id);
+
+            return new ViewAsPdf("../Shared/_EncounterForm", model)
+            {
+                FileName = $"EncounterReport-{request.ConfirmationNumber}.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageMargins = { Left = 20, Right = 20 }
+            };
+        }
     }
 }

@@ -233,7 +233,7 @@
                             }
                             @if (Model.status == "Pending")
                             {
-                                    <a class="dropdown-item transfer-case" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
+                                    <a class="dropdown-item transfer-case @admin" href="#" data-id="@item.RequestId" data-region-id="@item.RequestClient.RegionId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
                             }
                             @if (Model.status == "Pending" || Model.status == "ToClose")
                             {
@@ -262,22 +262,26 @@
                             }
                             @if (Model.status == "Conclude" && Model.adminNavbarViewModel.role == "Provider")
                             {
-                                <a class="dropdown-item" asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/heart-rate.png" alt="" class="action-img"><span>Conclude Care</span></div></a>
+                                <a class="dropdown-item" asp-action="ConcludeCare" asp-controller="Doctor" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/heart-rate.png" alt="" class="action-img"><span>Conclude Care</span></div></a>
                             }
                             @if ((Model.status == "Conclude" || Model.status == "Active") && Model.adminNavbarViewModel.role == "Provider")
                             {
-                                if (item.Status == 3)
+                                    if (item.Status == 3)
                                 {
                                     <a class="dropdown-item type-of-care" data-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                                 }
-                                else if ((item.Status == 4 || item.Status == 5) && (item.EncounterForms.ToList()[0] == null || (item.EncounterForms.ToList()[0] != null && item.EncounterForms.ToList()[0].IsFinalized[0] == false)))
+                                else if ((item.Status == 4 || item.Status == 5) && (item.EncounterForms.ToList().Count == 0 || (item.EncounterForms.ToList().Count > 0 && item.EncounterForms.ToList()[0].IsFinalized[0] == false)))
                                 {
                                     <a class="dropdown-item" asp-action="EncounterForm" asp-controller="Doctor" asp-route-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                                 }
-                                else if ((item.Status == 4 || item.Status == 5) && (item.EncounterForms.ToList()[0] != null && item.EncounterForms.ToList()[0].IsFinalized[0] == true))
+                                else if ((item.Status == 4 || item.Status == 5) && (item.EncounterForms.ToList().Count > 0 && item.EncounterForms.ToList()[0].IsFinalized[0] == true))
                                 {
                                     <a class="dropdown-item finalize-encounter" data-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                                 }
+                            }
+                            @if (Model.status == "Pending" && Model.adminNavbarViewModel.role == "Provider")
+                            {
+                                <a class="dropdown-item transfer-doctor-case" href="#" data-id="@item.RequestId"><div class="action-item"><img src="../../images/list.png" alt="" class="action-img"><span>Transfer</span></div></a>
                             }
 
                         </div>
@@ -539,7 +543,7 @@
                         }
                         @if (Model.status == "Pending")
                         {
-                                <a class="col-md-3 col-sm-6 col-6 transfer-case" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Transfer</div></a>
+                                <a class="col-md-3 col-sm-6 col-6 transfer-case @admin" data-id="@Model.requests[i].RequestId" data-region-id="@Model.requests[i].RequestClient.RegionId"><div class="action-mob-btn">Transfer</div></a>
                         }
                         @if (Model.status == "Pending" || Model.status == "ToClose")
                         {
@@ -575,7 +579,7 @@
                         }
                         @if (Model.status == "Conclude" && Model.adminNavbarViewModel.role == "Provider")
                         {
-                            <a class="col-md-3 col-sm-6 col-6" asp-action="Orders" asp-controller="Admin" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Conclude Care</div></a>
+                            <a class="col-md-3 col-sm-6 col-6" asp-action="ConcludeCare" asp-controller="Doctor" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Conclude Care</div></a>
                         }
                         @if ((Model.status == "Conclude" || Model.status == "Active") && Model.adminNavbarViewModel.role == "Provider")
                         {
@@ -583,14 +587,18 @@
                             {
                                 <a class="col-md-3 col-sm-6 col-6 type-of-care" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Encounter</div></a>
                             }
-                            else if ((Model.requests[i].Status == 4 || Model.requests[i].Status == 5) && ((Model.requests[i].EncounterForms.ToList()[0] == null) || (Model.requests[i].EncounterForms.ToList()[0] != null && Model.requests[i].EncounterForms.ToList()[0].IsFinalized[0] == false)))
+                                else if ((Model.requests[i].Status == 4 || Model.requests[i].Status == 5) && (Model.requests[i].EncounterForms.ToList().Count == 0 || (Model.requests[i].EncounterForms.ToList().Count > 0 && Model.requests[i].EncounterForms.ToList()[0].IsFinalized[0] == false)))
                             {
                                 <a class="col-md-3 col-sm-6 col-6" asp-action="EncounterForm" asp-controller="Doctor" asp-route-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Encounter</div></a>
                             }
-                            else if ((Model.requests[i].Status == 4 || Model.requests[i].Status == 5) && (Model.requests[i].EncounterForms.ToList()[0] != null && Model.requests[i].EncounterForms.ToList()[0].IsFinalized[0] == true))
+                                else if ((Model.requests[i].Status == 4 || Model.requests[i].Status == 5) && (Model.requests[i].EncounterForms.ToList().Count > 0 && Model.requests[i].EncounterForms.ToList()[0].IsFinalized[0] == true))
                             {
                                 <a class="col-md-3 col-sm-6 col-6 finalize-encounter" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Encounter</div></a>
                             }
+                        }
+                            @if (Model.status == "Pending" && Model.adminNavbarViewModel.role == "Provider")
+                        {
+                                <a class="col-md-3 col-sm-6 col-6 transfer-doctor-case" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Transfer</div></a>
                         }
                         <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
                     </div>
@@ -699,6 +707,19 @@
             var id = finalize[i].getAttribute("data-id");
             openFinalize(id);
         };
+    }
+    
+    var transferDoctor = document.getElementsByClassName("transfer-doctor-case")
+    for (let i = 0; i < transferDoctor.length; ++i) {
+        transferDoctor[i].onclick = function () {
+            var id = transferDoctor[i].getAttribute("data-id");
+            openTransferDoctor(id);
+        };
+    }
+
+    const openTransferDoctor = (id) => {
+        document.getElementById("reqTransferId").value = id
+        $("#myModalTransferDoctor").modal("show");
     }
 
     const openFinalize = (id) => {

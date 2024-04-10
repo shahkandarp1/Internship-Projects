@@ -218,7 +218,7 @@
             </div>
             <div class="bottom-main-container mt-3 mb-3 pb-3">
                 <!-- Filter Section -->
-
+                @Html.Hidden("TempMonth", TempData["Shift"])
                 <div class="filter-section">
                     <div class="inner-filter-flex mb-4">
                         <div class="inner-pt-container">
@@ -273,7 +273,7 @@
                             <img src="~/images/next.svg" class="direction-btn" id="next" />
                         </div>
                         <div>
-                            <a class="btn contact-btn contact-provider calendar-view-active" id="button-day">Day</a>
+                            <a class="btn contact-btn contact-provider" id="button-day">Day</a>
                             <a class="btn contact-btn contact-provider" id="button-week">Week</a>
                             <a class="btn contact-btn contact-provider" id="button-month">Month</a>
                         </div>
@@ -496,6 +496,9 @@
         const inputDatee = document.getElementById('startdateV');
         const todayy = new Date().toISOString().split('T')[0];
         inputDatee.setAttribute('min', todayy);
+
+        
+
     }
 
     $(document).ready(function () {
@@ -664,6 +667,29 @@
     dp.zoom.setActive(0);
     dp.bubble = new DayPilot.Bubble();
     dp.init();
+
+
+    const tempMonth = document.getElementById("TempMonth").value;
+    console.log(tempMonth)
+    debugger
+    if (tempMonth != "" && tempMonth == "Month") {
+        const schedulerElement = document.getElementById("dp");
+        const monthCalendarElement = document.getElementById("dp-month");
+
+        schedulerElement.style.display = "none";
+        monthCalendarElement.style.display = "block";
+
+        const buttons = document.getElementsByClassName("contact-provider");
+        for (let i = 0; i < buttons.length; ++i) {
+            buttons[i].classList.remove("calendar-view-active");
+        }
+
+        document.getElementById("button-month").classList.add("calendar-view-active");
+
+    }
+    else{
+        document.getElementById("button-day").classList.add("calendar-view-active");
+    }
 
     const monthCalendar = new DayPilot.Month("dp-month", {
         cellMarginBottom: 20,
@@ -1008,6 +1034,9 @@
                 }
                 monthCalendar.update()
                 dp.update()
+                if (dp.zoom.active == 2) {
+                    monthCalendarElement.style.display = "block";
+                }
                 $("#myModalViewShift").modal("hide");
                 toastr.success("Shift Status Changed Successfully!!")
             }
@@ -1018,6 +1047,8 @@
         });
         
     }
+
+    
 
 </script>
 

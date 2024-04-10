@@ -316,6 +316,40 @@ td.first-col {
 }
 
 
+/*Conclude Care*/
+.conclude-care-text {
+    color: #0dcaf0;
+}
+
+.conclude-care-upload {
+    background-color: white;
+    border-radius: 7px;
+    width: auto !important;
+    height: 35px;
+    flex-basis: 110px;
+}
+
+.conclude-care-btn{
+    width:auto;
+}
+
+@media screen and (max-width:570px) {
+    .top-conclude-flex {
+        flex-direction: row!important;
+        justify-content: space-between!important;
+        align-items: center!important;
+    }
+}
+
+@media screen and (max-width: 505px) {
+    .conclude-care-upload {
+        flex-basis: 40px!important;
+    }
+    .conclude-care-upload{
+        margin:0px;
+    }
+}
+
 @media screen and (max-width:1144px) {
     .custom-file-upload {
         width: 20%;

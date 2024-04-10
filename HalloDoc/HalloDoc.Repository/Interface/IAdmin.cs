@@ -181,7 +181,7 @@ namespace HalloDoc.Repository.Interface
         public int EditShift(SchedulingViewModel schedulingViewModel);
         public bool DeleteShift(int? id);
         public MDOnCallViewModel GetMdOnCallDetails(int regionid = -1);
-        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1, bool currMonth = false, int page = 1, int pageSize = 10);
+        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1, int page = 1, int pageSize = 10);
         public bool AprooveShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
         public bool DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
         public bool ToggleShiftStatus(int? id);

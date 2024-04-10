@@ -5,6 +5,7 @@ using HalloDoc.Repository.Middleware;
 using HalloDoc.Repository.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IAdmin, HalloDoc.Repository.Repository.Admin>();
 builder.Services.AddScoped<IDoctor, Doctor>();
 builder.Services.AddScoped<IPatient, HalloDoc.Repository.Repository.Patient>();
 builder.Services.AddScoped<IJwtService, HalloDoc.Repository.Repository.JwtService>();
+builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 var app = builder.Build();
 
@@ -31,6 +33,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseRotativa();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

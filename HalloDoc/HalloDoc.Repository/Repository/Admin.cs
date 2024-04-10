@@ -560,7 +560,7 @@ namespace HalloDoc.Repository.Repository
                     var message = MessageResource.Create(
                         from: new Twilio.Types.PhoneNumber(twilionumber),
                         body: messageBody,
-                        to: new Twilio.Types.PhoneNumber("+91" + dashboardViewModel.Mail_PhoneNumber)
+                        to: new Twilio.Types.PhoneNumber(dashboardViewModel.Mail_PhoneNumber[0] == '+' && dashboardViewModel.Mail_PhoneNumber[1] == '9' && dashboardViewModel.Mail_PhoneNumber[2] == '1' ? dashboardViewModel.Mail_PhoneNumber : "+91" + dashboardViewModel.Mail_PhoneNumber)
                     );
 
 
@@ -684,11 +684,27 @@ namespace HalloDoc.Repository.Repository
                         ConfirmationNumber = string.Concat(region.Abbreviation, modal.FirstName.Substring(0, 2).ToUpper(), modal.LastName.Substring(0, 2).ToUpper(), requests.ToString("D" + 4)),
 
                     };
-
+                    if(cookieModel.role == "Provider")
+                    {
+                        req.PhysicianId = cookieModel.userId;
+                        req.Status = 2;
+                    }
                     _db.Requests.Add(req);
                     _db.SaveChanges();
 
-                    if(modal.Admin_notes != null)
+                    if (cookieModel.role == "Provider")
+                    {
+                        RequestStatusLog requestStatusLog = new RequestStatusLog
+                        {
+                            RequestId = req.RequestId,
+                            Status = 2,
+                            CreatedDate = DateTime.Now
+                        };
+                        _db.RequestStatusLogs.Add(requestStatusLog);
+                        _db.SaveChanges();
+                    }
+
+                    if (modal.Admin_notes != null && cookieModel.role == "Admin")
                     {
                         RequestNote requestNote = new RequestNote
                         {
@@ -701,6 +717,22 @@ namespace HalloDoc.Repository.Repository
                         _db.RequestNotes.Add(requestNote);
                         _db.SaveChanges();
                     }
+
+                    if (modal.Physician_notes != null && cookieModel.role == "Provider")
+                    {
+                        RequestNote requestNote = new RequestNote
+                        {
+                            RequestId = req.RequestId,
+                            PhysicianNotes = modal.Physician_notes,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = cookieModel.aspId,
+                        };
+
+                        _db.RequestNotes.Add(requestNote);
+                        _db.SaveChanges();
+                    }
+
+
 
                     return true;
 
@@ -794,17 +826,48 @@ namespace HalloDoc.Repository.Repository
 
                     };
 
+                    if (cookieModel.role == "Provider")
+                    {
+                        req.PhysicianId = cookieModel.userId;
+                        req.Status = 2;
+                    }
                     _db.Requests.Add(req);
                     _db.SaveChanges();
 
-                    if (modal.Admin_notes != null)
+                    if (cookieModel.role == "Provider")
+                    {
+                        RequestStatusLog requestStatusLog = new RequestStatusLog
+                        {
+                            RequestId = req.RequestId,
+                            Status = 2,
+                            CreatedDate = DateTime.Now
+                        };
+                        _db.RequestStatusLogs.Add(requestStatusLog);
+                        _db.SaveChanges();
+                    }
+
+                    if (modal.Admin_notes != null && cookieModel.role == "Admin")
                     {
                         RequestNote requestNote = new RequestNote
                         {
                             RequestId = req.RequestId,
                             AdminNotes = modal.Admin_notes,
                             CreatedDate = DateTime.Now,
-                            CreatedBy = cookieModel.userId,
+                            CreatedBy = cookieModel.aspId,
+                        };
+
+                        _db.RequestNotes.Add(requestNote);
+                        _db.SaveChanges();
+                    }
+
+                    if (modal.Physician_notes != null && cookieModel.role == "Provider")
+                    {
+                        RequestNote requestNote = new RequestNote
+                        {
+                            RequestId = req.RequestId,
+                            PhysicianNotes = modal.Physician_notes,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = cookieModel.aspId,
                         };
 
                         _db.RequestNotes.Add(requestNote);
@@ -1104,6 +1167,11 @@ namespace HalloDoc.Repository.Repository
                     IsDeleted = new BitArray(new[] { false }),
                     AdminId = cookieModel.userId,
                 };
+                if(cookieModel.role == "Provider")
+                {
+                    requestWiseFile.AdminId = null;
+                    requestWiseFile.PhysicianId = cookieModel.userId;
+                }
                 _db.RequestWiseFiles.Add(requestWiseFile);
                 _db.SaveChanges();
                 return true;
@@ -1557,10 +1625,12 @@ namespace HalloDoc.Repository.Repository
 
                     TwilioClient.Init(accountSid, authToken);
 
+
+
                     var message = MessageResource.Create(
                         from: new Twilio.Types.PhoneNumber(twilionumber),
                         body: messageBody,
-                        to: new Twilio.Types.PhoneNumber("+91" + adminDashboardViewModel.Mail_PhoneNumber)
+                        to: new Twilio.Types.PhoneNumber(adminDashboardViewModel.Mail_PhoneNumber[0] == '+' && adminDashboardViewModel.Mail_PhoneNumber[1] == '9' && adminDashboardViewModel.Mail_PhoneNumber[2] == '1' ? adminDashboardViewModel.Mail_PhoneNumber : "+91" + adminDashboardViewModel.Mail_PhoneNumber)
                     );
 
 
@@ -2501,7 +2571,7 @@ namespace HalloDoc.Repository.Repository
                         var message = MessageResource.Create(
                             from: new Twilio.Types.PhoneNumber(twilionumber),
                             body: messageBody,
-                            to: new Twilio.Types.PhoneNumber("+91" + physician.Mobile)
+                            to: new Twilio.Types.PhoneNumber(physician.Mobile[0] == '+' && physician.Mobile[1] == '9' && physician.Mobile[2] == '1' ? physician.Mobile : "+91" + physician.Mobile)
                         );
 
 
@@ -4440,13 +4510,14 @@ namespace HalloDoc.Repository.Repository
 
             if (cookieModel.role == "Provider")
             {
-                List<PhysicianRegion> physicianRegions = _db.PhysicianRegions.Where(r=>r.PhysicianId == cookieModel.userId).ToList();
-                List<Region> regionss = new List<Region>();
-                for (var i=0;i< physicianRegions.Count;++i)
-                {
-                    regionss.Add(_db.Regions.FirstOrDefault(r => r.RegionId == physicianRegions[i].RegionId));
-                }
-                regions = regionss;
+                var regionss = from r in _db.Regions
+                            where _db.PhysicianRegions
+                                          .Where(pr => pr.PhysicianId == cookieModel.userId)
+                                          .Select(pr => pr.RegionId)
+                                          .Contains(r.RegionId)
+                            select r;
+
+                regions = regionss.ToList();
             }
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
@@ -4456,6 +4527,10 @@ namespace HalloDoc.Repository.Repository
                 menus = cookieModel.menus,
                 role = cookieModel.role
             };
+            if(cookieModel.role == "Provider")
+            {
+                adminNavbarViewModel.curr_active = "DoctorSchedule";
+            }
 
             List<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false })).ToList();
 
@@ -4549,6 +4624,12 @@ namespace HalloDoc.Repository.Repository
                     }
                 }
 
+                short status = 1;
+                if(cookieModel.role == "Provider")
+                {
+                    status = 0;
+                }
+
                 Shift shift = new Shift
                 {
                     PhysicianId = (int)schedulingViewModel.PhysicianId,
@@ -4570,7 +4651,7 @@ namespace HalloDoc.Repository.Repository
                     RegionId = schedulingViewModel.RegionId,
                     StartTime = schedulingViewModel.StartTime,
                     EndTime = schedulingViewModel.EndTime,
-                    Status = 1,
+                    Status = status,
                     IsDeleted = new BitArray(new[] { false }),
                 };
                 _db.ShiftDetails.Add(shiftDetail);
@@ -4597,7 +4678,7 @@ namespace HalloDoc.Repository.Repository
                                 RegionId = schedulingViewModel.RegionId,
                                 StartTime = schedulingViewModel.StartTime,
                                 EndTime = schedulingViewModel.EndTime,
-                                Status = 1,
+                                Status = status,
                                 IsDeleted = new BitArray(new[] { false }),
                             };
                             _db.ShiftDetails.Add(shiftDetail1);
@@ -4773,7 +4854,7 @@ namespace HalloDoc.Repository.Repository
             return mDOnCallViewModel;
         }
 
-        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1,bool currMonth = false,int page = 1,int pageSize = 10)
+        public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1,int page = 1,int pageSize = 10)
         {
 
             var requestt = _context.HttpContext.Request;
@@ -4810,10 +4891,6 @@ namespace HalloDoc.Repository.Repository
             if(regionid != -1)
             {
                 result = result.Where(r => r.RegionId == regionid);
-            }
-            if(currMonth)
-            {
-                result = result.Where(r => r.ShiftDate.Month == DateTime.Now.Month);
             }
 
             ShiftsForReviewViewModel shiftsForReviewViewModel = new ShiftsForReviewViewModel

@@ -53,7 +53,7 @@
                                 </select>
                             </span>
                             <div class="review-shift-btns">
-                                <a class="btn btn-success text-white patient-text-btn review-shift-btns-margin rs-margin" id="current-month">
+                                <a class="btn btn-success text-white patient-text-btn review-shift-btns-margin rs-margin" asp-action="ViewCurrentMonthShift" asp-controller="Admin">
                                     <span>View Current Month Shifts</span>
                                 </a>
                                 <form class="review-shift-btns-margin rs-margin" asp-action="AprooveShifts" asp-controller="Admin" method="post" id="aproove-form">
@@ -88,7 +88,6 @@
 </div>
 
 <script>
-    var currMonth = false
     const filter = (page,pageSize) => {
         document.getElementById("partial-container").style.display = "none";
         document.getElementsByClassName("loader-container")[0].style.display = "flex";
@@ -96,7 +95,7 @@
             url: `/Admin/ShiftsForReviewTable`,
             type: 'POST',
             dataType: 'html',
-            data: { regionid: document.getElementById("region").value,currMonth:currMonth,page:page,pageSize:pageSize },
+            data: { regionid: document.getElementById("region").value,page:page,pageSize:pageSize },
             // Pass your data here
             success: function (response) {
                 document.getElementsByClassName("loader-container")[0].style.display = "none";
@@ -108,13 +107,6 @@
             }
         });
     }
-
-    $(document).ready(function () {
-        $("#current-month").click(function () {
-            currMonth = true
-            filter(1,10)
-        });
-    });
 
     function goBack() {
         window.history.back();

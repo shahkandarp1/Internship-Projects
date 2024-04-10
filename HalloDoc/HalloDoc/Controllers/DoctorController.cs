@@ -1,7 +1,18 @@
-﻿using HalloDoc.Repository.Auth;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using HalloDoc.Repository.Auth;
 using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using iTextSharp.tool.xml.html;
+using iTextSharp.tool.xml.parser;
+using iTextSharp.tool.xml.pipeline.css;
+using iTextSharp.tool.xml.pipeline.end;
+using iTextSharp.tool.xml.pipeline.html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Rotativa.AspNetCore;
 
 namespace HalloDoc.Controllers
 {
@@ -13,14 +24,16 @@ namespace HalloDoc.Controllers
         private readonly IJwtService _jwt;
         private readonly IHttpContextAccessor _context;
         private readonly IDoctor _doctor;
+        private readonly IViewRenderService _viewRender;
 
-        public DoctorController(IAdmin admin, IJwtService jwt, IPatient patient, IHttpContextAccessor context,IDoctor doctor)
+        public DoctorController(IAdmin admin, IJwtService jwt, IPatient patient, IHttpContextAccessor context,IDoctor doctor, IViewRenderService viewRender)
         {
             _admin = admin;
             _jwt = jwt;
             _patient = patient;
             _context = context;
             _doctor = doctor;
+            _viewRender = viewRender;
         }
 
         [CustomAuthorize("Provider", "My Profile")]
@@ -129,6 +142,78 @@ namespace HalloDoc.Controllers
         {
             SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(-1);
             return View(schedulingViewModel);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult ConcludeCare(int id)
+        {
+            ConcludeCareViewModel concludeCareViewModel = _doctor.GetConcludeCare(id);
+            if (concludeCareViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(concludeCareViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        
+        public IActionResult ConcludeCare(ConcludeCareViewModel concludeCareViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                int isConcluded = _doctor.ConcludeCare(concludeCareViewModel);
+                if (isConcluded == 1)
+                {
+                    TempData["success"] = "Case Concluded Successfully!!";
+                    return RedirectToAction("Dashboard", "Admin");
+                }
+                else if(isConcluded == 2)
+                {
+                    TempData["error"] = "Encounter Form is not finalized yet!!";
+                }
+                else
+                {
+                    TempData["error"] = "Case could not be concluded!!";
+                }
+            }
+            return RedirectToAction("ConcludeCare", new { id = concludeCareViewModel.RequestId });
+        }
+
+        public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            bool isTransfered = _doctor.TransferCase(adminDashboardViewModel);
+            if (isTransfered)
+            {
+                TempData["success"] = "Request Transferred Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Request could not be transferred!!";
+            }
+            return RedirectToAction("Dashboard","Admin");
+        }
+
+        public async Task<IActionResult> DownloadEncounterForm(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            var model =  _admin.GetEncounterFormDetails((int)adminDashboardViewModel.RequestId);
+
+            var request = _admin.GetRequest((int)adminDashboardViewModel.RequestId);
+
+            return new ViewAsPdf("../Shared/_EncounterForm", model)
+            {
+                FileName = $"EncounterReport-{request.ConfirmationNumber}.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageMargins = { Left = 20, Right = 20 }
+            };
+        }
+
+        public IActionResult VModel(int id)
+        {
+            EncounterFormViewModel encounterFormViewModel = _admin.GetEncounterFormDetails((int)id);
+            return PartialView("_EncounterForm",encounterFormViewModel);
         }
     }
 }

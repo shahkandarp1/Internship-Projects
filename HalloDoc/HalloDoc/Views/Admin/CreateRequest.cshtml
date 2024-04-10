@@ -12,7 +12,10 @@
 }
 
 <div id="body">
-
+    @{
+        var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+        var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
+    }
     <!-- Navbar -->
 
     <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
@@ -76,7 +79,7 @@
                         <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth">
+                        <input type="date" class="form-control dob" id="dob" placeholder="name@example.com" asp-for="DateOfBirth" value="yyyy-mm-dd">
                         <label for="dob" class="form-label dob-label">Date Of Birth</label>
                         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
@@ -127,11 +130,18 @@
                     Notes
                 </div>
                 <div class="row symptoms-textarea">
-                    <div class="row symptoms-textarea">
+                    <div class="row symptoms-textarea @admin">
                         <div class="form-floating mt-3 inp col-sm-12">
                             <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Admin_notes"></textarea>
                             <label for="floatingInput" class="form-label">Admin Notes(Optional)</label>
                             <span asp-validation-for="Admin_notes" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row symptoms-textarea @physician">
+                        <div class="form-floating mt-3 inp col-sm-12">
+                            <textarea class="form-control text-area" id="floatingInput" placeholder="name@example.com" asp-for="Physician_notes"></textarea>
+                            <label for="floatingInput" class="form-label">Physician Notes(Optional)</label>
+                            <span asp-validation-for="Physician_notes" class="text-danger"></span>
                         </div>
                     </div>
                 </div>

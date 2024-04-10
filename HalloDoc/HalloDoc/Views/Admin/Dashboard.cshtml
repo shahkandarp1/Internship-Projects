@@ -351,6 +351,34 @@
         </div>
     </div>
 
+    <!-- Doctor Transfer Case -->
+    <form asp-action="TransferCase" asp-controller="Doctor" method="post">
+        <div class="modal fade" id="myModalTransferDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title" id="exampleModalLongTitle">Transfer Case</div>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    </div>
+                    <input type="hidden" asp-for="RequestId" id="reqTransferId">
+                    <div class="modal-body">
+                        <div class="disclaimer-agreement-font assign-transfer-modal">This request will transfered to admin.</div>
+                        <div class="form-floating mt-3 inp col-sm-12 notes-text">
+                            <textarea class="form-control text-area" id="request-doctor-reason" placeholder="name@example.com" required asp-for="BlockReason"></textarea>
+                            <label for="admin_notes" class="form-label">Description</label>
+                        </div>
+                        <div class="lower-btn">
+                            <button type="submit" class="btn btn-info continue-btn" id="confirm-btn">Submit</button>
+                            <a id="cancel-doctor-transfer" class="btn cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
     <!-- Finalized Encounter Modal -->
     <div class="modal fade" id="myModalEncounterFinalized" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
          aria-hidden="true">
@@ -360,7 +388,7 @@
                     <div class="modal-title" id="exampleModalLongTitle">Encounter Form</div>
                     <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
                 </div>
-                <form asp-action="TypeOfCare" asp-controller="Doctor" method="post">
+                <form asp-action="DownloadEncounterForm" asp-controller="Doctor" method="post">
                     <input type="hidden" asp-for="RequestId" id="reqFinalizeId">
                     <div class="modal-body">
                         <div class="disclaimer-agreement-font assign-transfer-modal">Encounter form is finalized successfully!!</div>
@@ -593,7 +621,7 @@
                     onkeyup="filter(1,10)"
                   />
                 </span>
-                <span class="search">
+                <span class="search @admin">
                   <img
                     class="search-image"
                     src="../../images/search.svg"
@@ -698,6 +726,13 @@
     $(document).ready(function () {
         $("#cancel-agreement").click(function () {
             $("#myModalAgreement").modal("hide");
+        });
+    });
+    
+    $(document).ready(function () {
+        $("#cancel-doctor-transfer").click(function () {
+            document.getElementById("request-doctor-reason").value = ""
+            $("#myModalTransferDoctor").modal("hide");
         });
     });
     
@@ -891,8 +926,11 @@
                     document.getElementsByClassName("loader-container")[0].style.display = "none";
                     $("#partial-container").html(response)
                 },
-                error: function () {
-                    alert('An error occurred.');
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        location.reload();
+                    }
+                    console.log(error);
                 }
             });
         }
@@ -917,8 +955,11 @@
                     document.getElementById("partial-container").style.display = "block";
                     $("#partial-container").html(response)
                 },
-                error: function () {
-                    alert('An error occurred.');
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        location.reload();
+                    }
+                    console.log(error);
                 }
             });
                 

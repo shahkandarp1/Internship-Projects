@@ -13,5 +13,9 @@ namespace HalloDoc.Repository.Interface
         public Task<bool> RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel);
         public bool TypeOfCare(AdminDashboardViewModel adminDashboardViewModel);
         public bool HouseCall(int? id);
+        public ConcludeCareViewModel GetConcludeCare(int id);
+        public int ConcludeCare(ConcludeCareViewModel concludeCareViewModel);
+        public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
+
     }
 }

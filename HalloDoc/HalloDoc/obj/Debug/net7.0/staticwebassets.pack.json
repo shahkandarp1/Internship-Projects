@@ -5,6 +5,22 @@
       "PackagePath": "staticwebassets\\HalloDoc.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\Rotativa\\help-wkhtmltoimage.txt",
+      "PackagePath": "staticwebassets\\Rotativa\\help-wkhtmltoimage.txt"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\Rotativa\\help-wkhtmltopdf.txt",
+      "PackagePath": "staticwebassets\\Rotativa\\help-wkhtmltopdf.txt"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\Rotativa\\wkhtmltoimage.exe",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltoimage.exe"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\Rotativa\\wkhtmltopdf.exe",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltopdf.exe"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\access-denied.css",
       "PackagePath": "staticwebassets\\css\\access-denied.css"
     },
@@ -785,6 +801,10 @@
       "PackagePath": "staticwebassets\\images\\cloud-arrow-down.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\cloud-upload-icon-blue.svg",
+      "PackagePath": "staticwebassets\\images\\cloud-upload-icon-blue.svg"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\cloud-upload-icon.svg",
       "PackagePath": "staticwebassets\\images\\cloud-upload-icon.svg"
     },
@@ -1445,6 +1465,10 @@
       "PackagePath": "staticwebassets\\uploads\\Data-Pending.xlsx"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000.pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000.pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Filtered-Data (3).xlsx",
       "PackagePath": "staticwebassets\\uploads\\Filtered-Data (3).xlsx"
     },
@@ -1537,6 +1561,10 @@
       "PackagePath": "staticwebassets\\uploads\\image_2024_02_14T07_14_17_099Z.png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\ishan schema design.xlsx",
+      "PackagePath": "staticwebassets\\uploads\\ishan schema design.xlsx"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\mid-sem-report-kandarp.pdf",
       "PackagePath": "staticwebassets\\uploads\\mid-sem-report-kandarp.pdf"
     },
@@ -1559,6 +1587,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\software-engineer.png",
       "PackagePath": "staticwebassets\\uploads\\software-engineer.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\test (8).pdf",
+      "PackagePath": "staticwebassets\\uploads\\test (8).pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\test.sql",
