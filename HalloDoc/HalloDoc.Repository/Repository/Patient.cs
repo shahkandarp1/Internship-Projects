@@ -197,7 +197,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, email, null, -1, -1, -1, true, retryCount, role.RoleId);
+                    LogEmail(body, subject, email, null, -1, -1, -1, true, retryCount, role.RoleId,1);
                     break;
                 }
                 catch (Exception ex)
@@ -205,7 +205,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, email, null, -1, -1, -1, false, retryCount, role.RoleId);
+                        LogEmail(body, subject, email, null, -1, -1, -1, false, retryCount, role.RoleId,1);
                     }
                     retryCount++;
                 }
@@ -213,7 +213,7 @@ namespace HalloDoc.Repository.Repository
             return true;
         }
 
-        public void LogEmail(string emailTemplate, string subject, string userEmail, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount, int role_id)
+        public void LogEmail(string emailTemplate, string subject, string userEmail, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount, int role_id,int action)
         {
             if (role_id == 1)
             {
@@ -229,7 +229,7 @@ namespace HalloDoc.Repository.Repository
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
                     SentDate = DateTime.Now,
-
+                    Action = action
                 };
                 _db.EmailLogs.Add(emailLog);
                 _db.SaveChanges();
@@ -247,8 +247,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
-
+                    SentDate = DateTime.Now,
+                    Action = action
                 };
                 _db.EmailLogs.Add(emailLog);
                 _db.SaveChanges();
@@ -266,7 +266,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -283,7 +284,8 @@ namespace HalloDoc.Repository.Repository
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -705,7 +707,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1,2);
                             break;
                         }
                         catch (Exception ex)
@@ -713,7 +715,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1,2);
                             }
                             retryCount++;
                         }
@@ -947,7 +949,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1, 2);
                             break;
                         }
                         catch (Exception ex)
@@ -955,7 +957,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1,2);
                             }
                             retryCount++;
                         }
@@ -1199,7 +1201,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1,2);
                             break;
                         }
                         catch (Exception ex)
@@ -1207,7 +1209,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1,2);
                             }
                             retryCount++;
                         }
@@ -1519,7 +1521,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1);
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, true, retryCount, 1, 2);
                             break;
                         }
                         catch (Exception ex)
@@ -1527,7 +1529,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1,2);
                             }
                             retryCount++;
                         }

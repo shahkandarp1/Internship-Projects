@@ -144,6 +144,8 @@ namespace HalloDoc.Controllers
                 if (isReseted)
                 {
                     TempData["success"] = "Password Reseted successfully!!!";
+                    return RedirectToAction("PatientLogin");
+
                 }
                 else
                 {
@@ -159,14 +161,14 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult Logout()
         {
-            var cookieOptions = new CookieOptions
+            if (Request.Cookies["jwt"] != null)
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                IsEssential = true
-            };
-            Response.Cookies.Delete("jwt", cookieOptions);
+                var myCookie = new CookieOptions
+                {
+                    Expires = DateTime.Now.AddDays(-1d) // Set the expiry date to yesterday
+                };
+                Response.Cookies.Append("jwt", "", myCookie);
+            }
             return Json(new { isLogout = true });
         }
         /// <summary>
@@ -197,6 +199,7 @@ namespace HalloDoc.Controllers
                 if (isRegistered)
                 {
                     TempData["success"] = "Registered successfully!!!";
+                    return RedirectToAction("PatientLogin");
                 }
                 else
                 {

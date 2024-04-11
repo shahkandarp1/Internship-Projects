@@ -1,5 +1,9 @@
 ﻿@model EmailLogViewModel
 
+@{
+    string[] Actions = { "Forgot Password", "Register Patient", "Documents Send To Patient", "Agreement Sent to Patient", "Contact Provider", "New Physician Account Credentials", "New Admin Account Credentials","Request Support From Unscheduled Physicians","Send Link Of Submit Request Page","Request Sent to Admin to edit Doctor's Profile" };
+}
+
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -19,24 +23,33 @@
         {
             <tbody>
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Action</td>
-                    <td>@item.RoleName</td>
-                    <td>@item.EmailId</td>
-                    <td>@item.CreatedDate?.ToString("MMMM dd,yyyy")</td>
+                    <td>@item.name</td>
                     <td>
-                        @if(item.Sent == "Yes")
+                        @if (item?.action == null)
                         {
-                            <span>@item.SentDate?.ToString("MMMM dd,yyyy")</span>
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@Actions[(int)item?.action - 1]</span>
+                        }
+                    </td>
+                    <td>@item.rolename</td>
+                    <td>@item.emailid</td>
+                    <td>@item.createddate?.ToString("MMMM dd,yyyy")</td>
+                    <td>
+                        @if(item.sent == "Yes")
+                        {
+                            <span>@item.sentdate?.ToString("MMMM dd,yyyy")</span>
                         }
                         else
                         {
                             <span>-</span>
                         }
                     </td>
-                    <td>@item.Sent</td>
-                    <td>@item.SentTries</td>
-                    <td>@item.ConfirmationNumber</td>
+                    <td>@item.sent</td>
+                    <td>@item.senttries</td>
+                    <td>@item.confirmationnumber</td>
                 </tr>
             </tbody>
         }
@@ -51,14 +64,23 @@
             <h2 class="accordion-header" id="flush-heading@(i)">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
-                    <div class="mb-3">@Model.logViewModels[i].Name</div>
+                    <div class="mb-3">@Model.logViewModels[i].name</div>
                     <span class="accordion-heading-inner mb-1">
                         Action Name :
-                        <span class="accordion-value-inner">@Model.logViewModels[i].Action</span>
+                        <span class="accordion-value-inner">
+                            @if (Model.logViewModels[i]?.action == null)
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                <span>@Actions[(int)Model.logViewModels[i]?.action - 1]</span>
+                            }
+                        </span>
                     </span>
                     <span class="accordion-heading-inner">
                         Email :
-                        <span class="accordion-value-inner">@Model.logViewModels[i].EmailId</span>
+                        <span class="accordion-value-inner">@Model.logViewModels[i].emailid</span>
                     </span>
                 </button>
             </h2>
@@ -71,7 +93,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Role Name :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].RoleName</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].rolename</span>
                         </span>
                     </div>
                     <div class="inner-flex">
@@ -80,7 +102,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Create Date :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].CreatedDate?.ToString("MMMM dd,yyyy")</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].createddate?.ToString("MMMM dd,yyyy")</span>
                         </span>
                     </div>
                     <div class="inner-flex">
@@ -89,7 +111,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Sent Date :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].SentDate?.ToString("MMMM dd,yyyy")</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].sentdate?.ToString("MMMM dd,yyyy")</span>
                         </span>
                     </div>
                     <div class="inner-flex">
@@ -98,7 +120,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Sent :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].Sent</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].sent</span>
                         </span>
                     </div>
                     <div class="inner-flex">
@@ -107,7 +129,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Sent Tries :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].SentTries</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].senttries</span>
                         </span>
                     </div>
                     <div class="inner-flex">
@@ -116,7 +138,7 @@
                         </div>
                         <span class="accordion-heading-inner">
                             Confirmation Number :
-                            <span class="accordion-value-inner">@Model.logViewModels[i].ConfirmationNumber</span>
+                            <span class="accordion-value-inner">@Model.logViewModels[i].confirmationnumber</span>
                         </span>
                     </div>
                 </div>

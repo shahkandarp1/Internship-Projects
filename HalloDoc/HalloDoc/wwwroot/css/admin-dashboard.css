@@ -872,6 +872,10 @@ input[type="date" i] {
 .finalize-encounter-download {
     padding: 10px;
 }
+
+.form-floating > .select-cancel-case:not(:placeholder-shown) {
+    padding-top: 1rem !important;
+}
 /* Safari */
 @-webkit-keyframes spin {
     0% {

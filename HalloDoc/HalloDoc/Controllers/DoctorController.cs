@@ -24,19 +24,21 @@ namespace HalloDoc.Controllers
         private readonly IJwtService _jwt;
         private readonly IHttpContextAccessor _context;
         private readonly IDoctor _doctor;
-        private readonly IViewRenderService _viewRender;
 
-        public DoctorController(IAdmin admin, IJwtService jwt, IPatient patient, IHttpContextAccessor context,IDoctor doctor, IViewRenderService viewRender)
+        public DoctorController(IAdmin admin, IJwtService jwt, IPatient patient, IHttpContextAccessor context,IDoctor doctor)
         {
             _admin = admin;
             _jwt = jwt;
             _patient = patient;
             _context = context;
             _doctor = doctor;
-            _viewRender = viewRender;
         }
 
         [CustomAuthorize("Provider", "My Profile")]
+        /// <summary>
+        /// It is the get method of Doctor Profile Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult DoctorProfile()
         {
             var requestt = _context.HttpContext.Request;
@@ -54,7 +56,11 @@ namespace HalloDoc.Controllers
             PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(cookieModel.userId, adminNavbarViewModel);
             return View("/Views/Admin/EditPhysician.cshtml", physicianAccountViewModel);
         }
-
+        /// <summary>
+        /// This method will accept the case of the specified request Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult AcceptCase(int id)
         {
             bool isAccepted = _doctor.AcceptCase(id);
@@ -68,7 +74,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard", "Admin");
         }
-
+        /// <summary>
+        /// This method will send the mail to all the admins for editing physicians profile
+        /// </summary>
+        /// <param name="physicianAccountViewModel"></param>
+        /// <returns></returns>
         public IActionResult RequestAdmin(PhysicianAccountViewModel physicianAccountViewModel)
         {
             Task<bool> isSent = _doctor.RequestAdmin(physicianAccountViewModel);
@@ -82,7 +92,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard","Admin");
         }
-
+        /// <summary>
+        /// This method will update type of care specified by physician
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult TypeOfCare(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isAssigned = _doctor.TypeOfCare(adminDashboardViewModel);
@@ -96,7 +110,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard","Admin");
         }
-
+        /// <summary>
+        /// This method will change status from MDOnSite to Conclude
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult HouseCall(int? id)
         {
             bool isUpdated = _doctor.HouseCall(id);
@@ -110,13 +128,21 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard", "Admin");
         }
-
+        /// <summary>
+        /// It is get method for Encounter Form
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult EncounterForm(int? id)
         {
             EncounterFormViewModel encounterFormViewModel = _admin.GetEncounterFormDetails((int)id);
             return View(encounterFormViewModel);
         }
-
+        /// <summary>
+        /// This method is the POST method for Encounter Form and will update Encounter Form
+        /// </summary>
+        /// <param name="encounterFormViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EncounterForm(EncounterFormViewModel encounterFormViewModel)
@@ -137,14 +163,17 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("EncounterForm", new { id = encounterFormViewModel.RequestId });
         }
-
+        /// <summary>
+        /// This method is get method for My Schedule Page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MySchedule()
         {
             SchedulingViewModel schedulingViewModel = _admin.GetAllShiftDetails(-1);
             return View(schedulingViewModel);
         }
         /// <summary>
-        /// 
+        /// It is get method for Conclude Care Page
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -157,9 +186,13 @@ namespace HalloDoc.Controllers
             }
             return View(concludeCareViewModel);
         }
+        /// <summary>
+        /// This method is the POST method for Conclude Care page
+        /// </summary>
+        /// <param name="concludeCareViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
         public IActionResult ConcludeCare(ConcludeCareViewModel concludeCareViewModel)
         {
             if(ModelState.IsValid)
@@ -181,7 +214,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("ConcludeCare", new { id = concludeCareViewModel.RequestId });
         }
-
+        /// <summary>
+        /// This method will transfer case back from physician to admin
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult TransferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             bool isTransfered = _doctor.TransferCase(adminDashboardViewModel);
@@ -195,7 +232,11 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard","Admin");
         }
-
+        /// <summary>
+        /// This method will download encounter form once it is finalized
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public async Task<IActionResult> DownloadEncounterForm(AdminDashboardViewModel adminDashboardViewModel)
         {
             var model =  _admin.GetEncounterFormDetails((int)adminDashboardViewModel.RequestId);
@@ -208,12 +249,6 @@ namespace HalloDoc.Controllers
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageMargins = { Left = 20, Right = 20 }
             };
-        }
-
-        public IActionResult VModel(int id)
-        {
-            EncounterFormViewModel encounterFormViewModel = _admin.GetEncounterFormDetails((int)id);
-            return PartialView("_EncounterForm",encounterFormViewModel);
         }
     }
 }

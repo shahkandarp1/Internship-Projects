@@ -1,6 +1,17 @@
 ﻿@model PhysicianAccountViewModel
 @{
-    ViewData["Title"] = "Edit Physician";
+    var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+    var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
+}
+@{
+    if(admin == "hidden")
+    {
+        ViewData["Title"] = "My Profile";
+    }
+    else
+    {
+        ViewData["Title"] = "Edit Physician";
+    }
     Layout = "_AdminLayout";
 }
 @section Styles {
@@ -17,10 +28,7 @@
 
 
 <div id="body">
-    @{
-        var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
-        var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
-    }
+    
 
 
     <!-- Request To Admin -->
@@ -78,8 +86,8 @@
                 <input type="hidden" asp-for="lat" id="lat" />
                 <input type="hidden" asp-for="lng" id="long" />
 
-                <div class="lower-btn @physician mb-2" id="request-to-edit">
-                    <a class="back-btn reset-btn request-to-admin-btn"><span class="back-text">Request To Admin</span></a>
+                <div class="lower-btn @physician mb-2">
+                    <a class="back-btn reset-btn request-to-admin-btn" id="request-to-edit"><span class="back-text">Request To Admin</span></a>
                 </div>
 
                 <!-- Account Information  -->

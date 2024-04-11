@@ -1557,6 +1557,10 @@
       "PackagePath": "staticwebassets\\uploads\\filetype-docx.svg"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\heart-rate.png",
+      "PackagePath": "staticwebassets\\uploads\\heart-rate.png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\image_2024_02_14T07_14_17_099Z.png",
       "PackagePath": "staticwebassets\\uploads\\image_2024_02_14T07_14_17_099Z.png"
     },

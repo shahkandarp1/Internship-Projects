@@ -37,7 +37,7 @@
                         <input type="hidden" asp-for="RequestId" id="req-id"/>
                         <span class="modal-head"><label for="floatingInput" class="form-label">Patient Name:</label><span class="pt-name" id="pt-name"></span></span>
                         <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
-                            <select class="form-control select editable" id="Select-cancel" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
+                            <select class="form-control select select-cancel-case editable" id="Select-cancel" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
                                 <option class="option-modal" value="-1">Reason For Cancellation</option>
                                 @foreach (var items in Model.caseTags)
                                 {
@@ -701,8 +701,11 @@
                         document.getElementById("partial-container").style.display = "block";
                         $("#partial-container").html(response)
                     },
-                    error: function () {
-                        alert('An error occurred.');
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            location.reload();
+                        }
+                        console.log(error);
                     }
                 });
             }

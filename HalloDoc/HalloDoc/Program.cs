@@ -22,7 +22,6 @@ builder.Services.AddScoped<IAdmin, HalloDoc.Repository.Repository.Admin>();
 builder.Services.AddScoped<IDoctor, Doctor>();
 builder.Services.AddScoped<IPatient, HalloDoc.Repository.Repository.Patient>();
 builder.Services.AddScoped<IJwtService, HalloDoc.Repository.Repository.JwtService>();
-builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 var app = builder.Build();
 
@@ -33,6 +32,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseRotativa();
 

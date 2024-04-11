@@ -1768,7 +1768,11 @@ namespace HalloDoc.Controllers
             bool isToggled = _admin.ToggleShiftStatus(id);
             return Json(new { isToggled = isToggled });
         }
-
+        /// <summary>
+        /// This method will send message specified by admin via email to all the unscheduled physicians
+        /// </summary>
+        /// <param name="adminDashboardViewModel"></param>
+        /// <returns></returns>
         public IActionResult RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel)
         {
             Task<bool> isSent = _admin.RequestDTYSupport(adminDashboardViewModel);
@@ -1782,13 +1786,20 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-        
+        /// <summary>
+        /// This method will redirect from Requested shifts page to Scheduling page with default view of Month Calendar
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ViewCurrentMonthShift()
         {
             TempData["Shift"] = "Month";
             return RedirectToAction("Scheduling");
         }
-
+        /// <summary>
+        /// This method will download encounter form for the specified request id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> DownloadEncounterForm(int id)
         {
             var model = _admin.GetEncounterFormDetails(id);

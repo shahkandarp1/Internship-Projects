@@ -1,5 +1,9 @@
 ﻿@model ViewNotesViewModel
 @{
+    var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+    var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
+}
+@{
     ViewData["Title"] = "View Notes";
     Layout = "_AdminLayout";
 }
@@ -96,10 +100,19 @@
                         </div>
                     }
                 </div>
-                <div class="save-changes bg-body">
+                <div class="save-changes bg-body @admin">
                     <div class="form-floating inp col-sm-12 notes-text">
                         <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" asp-for="Admin_Note"></textarea>
                         <label for="admin_notes" class="form-label">Admin Notes</label>
+                    </div>
+                    <div class="bottom-save-btn mt-3">
+                        <button type="submit" class="btn btn-info">Save Changes</button>
+                    </div>
+                </div>
+                <div class="save-changes bg-body @physician">
+                    <div class="form-floating inp col-sm-12 notes-text">
+                        <textarea class="form-control text-area" id="admin-notes" placeholder="name@example.com" asp-for="Physician_Note"></textarea>
+                        <label for="admin_notes" class="form-label">Physician Notes</label>
                     </div>
                     <div class="bottom-save-btn mt-3">
                         <button type="submit" class="btn btn-info">Save Changes</button>

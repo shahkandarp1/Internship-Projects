@@ -525,7 +525,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, true, retryCount, -1);
+                    LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, true, retryCount, -1,9);
                     break;
                 }
                 catch (Exception ex)
@@ -533,7 +533,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, false, retryCount, -1);
+                        LogEmail(body, subject, dashboardViewModel.Mail_Email, null, -1, -1, -1, false, retryCount, -1,9);
                     }
                     retryCount++;
                 }
@@ -565,7 +565,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, true, retryCount, -1);
+                    LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, true, retryCount, -1,3);
                     break;
                 }
                 catch (Exception ex)
@@ -573,7 +573,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, false, retryCount, -1);
+                        LogSMS(messageBody, dashboardViewModel.Mail_PhoneNumber, null, -1, -1, -1, false, retryCount, -1,3);
                     }
                     retryCount++;
                 }
@@ -911,7 +911,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber,req.RequestId , -1, -1, true, retryCount, 1);
+                            LogEmail(body, subject, modal.Email, req.ConfirmationNumber,req.RequestId , -1, -1, true, retryCount, 1,2);
                             break;
                         }
                         catch (Exception ex)
@@ -919,7 +919,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1);
+                                LogEmail(body, subject, modal.Email, req.ConfirmationNumber, req.RequestId, -1, -1, false, retryCount, 1,2);
                             }
                             retryCount++;
                         }
@@ -982,7 +982,14 @@ namespace HalloDoc.Repository.Repository
                 RequestNote requestNote = _db.RequestNotes.FirstOrDefault(r => r.RequestId == viewNotesViewModel.RequestId);
                 if (requestNote != null)
                 {
-                    requestNote.AdminNotes = viewNotesViewModel.Admin_Note;
+                    if(cookieModel.role == "Admin")
+                    {
+                        requestNote.AdminNotes = viewNotesViewModel.Admin_Note;
+                    }
+                    else
+                    {
+                        requestNote.PhysicianNotes = viewNotesViewModel.Physician_Note;
+                    }
                     requestNote.ModifiedDate = DateTime.Now;
                     _db.RequestNotes.Update(requestNote);
                     _db.SaveChanges();
@@ -992,11 +999,17 @@ namespace HalloDoc.Repository.Repository
                     RequestNote newRequestNote = new RequestNote
                     {
                         RequestId = viewNotesViewModel.RequestId,
-                        AdminNotes = viewNotesViewModel.Admin_Note,
                         CreatedDate = DateTime.Now,
                         CreatedBy = cookieModel.aspId,
                     };
-
+                    if (cookieModel.role == "Admin")
+                    {
+                        newRequestNote.AdminNotes = viewNotesViewModel.Admin_Note;
+                    }
+                    else
+                    {
+                        newRequestNote.PhysicianNotes = viewNotesViewModel.Physician_Note;
+                    }
                     _db.RequestNotes.Add(newRequestNote);
                     _db.SaveChanges();
                 }
@@ -1305,7 +1318,7 @@ namespace HalloDoc.Repository.Repository
 
                     
                     success = true;
-                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, true, retryCount,1);
+                    LogEmail(body, subject, user.Email, document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, true, retryCount,1,3);
                     break;
                 }
                 catch (Exception ex)
@@ -1313,7 +1326,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3) 
                     {
-                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, false, retryCount,1);
+                        LogEmail(body,subject, user.Email,document.Request.ConfirmationNumber, document.Request.RequestId, -1, -1, false, retryCount,1,3);
                     }
                     retryCount++;
                 }
@@ -1323,7 +1336,7 @@ namespace HalloDoc.Repository.Repository
             
         }
 
-        public void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id)
+        public void LogEmail(string emailTemplate,string subject,string userEmail,string confirmation_no,int request_id,int admin_id,int physician_id , bool success, int retryCount,int role_id,int action)
         {
             if(role_id == 1)
             {
@@ -1339,7 +1352,7 @@ namespace HalloDoc.Repository.Repository
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
                     SentDate = DateTime.Now,
-
+                    Action = action
                 };
                 _db.EmailLogs.Add(emailLog);
                 _db.SaveChanges();
@@ -1357,7 +1370,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -1376,7 +1390,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -1393,7 +1408,8 @@ namespace HalloDoc.Repository.Repository
                     IsEmailSent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.EmailLogs.Add(emailLog);
@@ -1588,7 +1604,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,-1, -1, true, retryCount,1);
+                    LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId,-1, -1, true, retryCount,1,4);
                     break;
                 }
                 catch (Exception ex)
@@ -1596,7 +1612,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1);
+                        LogEmail(body, subject, adminDashboardViewModel.Mail_Email, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1,4);
                     }
                     retryCount++;
                 }
@@ -1635,7 +1651,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, true, retryCount,1);
+                    LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, true, retryCount,1,1);
                     break;
                 }
                 catch (Exception ex)
@@ -1643,7 +1659,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1);
+                        LogSMS(messageBody, adminDashboardViewModel.Mail_PhoneNumber, user.ConfirmationNumber, user.RequestId, -1, -1, false, retryCount,1,1);
                     }
                     retryCount++;
                 }
@@ -1652,7 +1668,7 @@ namespace HalloDoc.Repository.Repository
             return success;
         }
 
-        public void LogSMS(string SmsTemplate, string userPhone, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount,int role_id)
+        public void LogSMS(string SmsTemplate, string userPhone, string confirmation_no, int request_id, int admin_id, int physician_id, bool success, int retryCount,int role_id,int action)
         {
             if (role_id == 1)
             {
@@ -1666,7 +1682,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.Smslogs.Add(smslog);
@@ -1684,7 +1701,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.Smslogs.Add(smslog);
@@ -1702,7 +1720,8 @@ namespace HalloDoc.Repository.Repository
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
                     RoleId = role_id,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.Smslogs.Add(smslog);
@@ -1718,7 +1737,8 @@ namespace HalloDoc.Repository.Repository
                     IsSmssent = new BitArray(new[] { success }),
                     SentTries = retryCount,
                     CreateDate = DateTime.Now,
-                    SentDate = DateTime.Now
+                    SentDate = DateTime.Now,
+                    Action = action
 
                 };
                 _db.Smslogs.Add(smslog);
@@ -2523,7 +2543,7 @@ namespace HalloDoc.Repository.Repository
 
 
                         success = true;
-                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount, 3);
+                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount, 3,5);
                         break;
                     }
                     catch (Exception ex)
@@ -2531,7 +2551,7 @@ namespace HalloDoc.Repository.Repository
 
                         if (retryCount >= 3)
                         {
-                            LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount, 3);
+                            LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount, 3,5);
                         }
                         retryCount++;
                     }
@@ -2576,7 +2596,7 @@ namespace HalloDoc.Repository.Repository
 
 
                         success = true;
-                        LogSMS(messageBody, physician.Mobile , null, -1, -1, physician.PhysicianId, true, retryCount, 3);
+                        LogSMS(messageBody, physician.Mobile , null, -1, -1, physician.PhysicianId, true, retryCount, 3,2);
                         break;
                     }
                     catch (Exception ex)
@@ -2584,7 +2604,7 @@ namespace HalloDoc.Repository.Repository
 
                         if (retryCount >= 3)
                         {
-                            LogSMS(messageBody, physician.Mobile, null, -1, -1, physician.PhysicianId, false, retryCount, 3);
+                            LogSMS(messageBody, physician.Mobile, null, -1, -1, physician.PhysicianId, false, retryCount, 3,2);
                         }
                         retryCount++;
                     }
@@ -2849,7 +2869,7 @@ namespace HalloDoc.Repository.Repository
 
 
                     success = true;
-                    LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount,3);
+                    LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, true, retryCount,3,6);
                     break;
                 }
                 catch (Exception ex)
@@ -2857,7 +2877,7 @@ namespace HalloDoc.Repository.Repository
 
                     if (retryCount >= 3)
                     {
-                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount,3);
+                        LogEmail(body, subject, physician.Email, null, -1, -1, physician.PhysicianId, false, retryCount,3,6);
                     }
                     retryCount++;
                 }
@@ -3796,102 +3816,28 @@ namespace HalloDoc.Repository.Repository
                 role = cookieModel.role
             };
 
-            IQueryable<EmailLog> emailLogs = _db.EmailLogs;
+            IQueryable<ELogViewModel> emailLogs = _db.ELogViewModels.FromSqlRaw($"SELECT * FROM EmailLog()");
 
-            if(roleid!=null && roleid!=-1)
-            {
-                emailLogs = emailLogs.Where(r => r.RoleId == roleid);
-            }
-            if(email!=null)
-            {
-                emailLogs = emailLogs.Where(r=>r.EmailId.ToLower().Contains(email.ToLower()));
-            }
-            if(createddate != null)
-            {
-                emailLogs = emailLogs.Where(r => r.CreateDate.Date == createddate.Value.Date);
-            }
-            if(sentdate != null)
-            {
-                emailLogs = emailLogs.Where(r => r.SentDate.Value.Date == sentdate.Value.Date);
-            }
 
-            List<LogViewModel> logViewModels = new List<LogViewModel>();
-
-            for(var i=0;i< emailLogs.Count();++i)
+            if (roleid != null && roleid != -1)
             {
-                var namee = "-";
-                if (emailLogs.ToList()[i].RoleId == 1)
-                {
-                    if (emailLogs.ToList()[i].RequestId != null)
-                    {
-                        Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == emailLogs.ToList()[i].RequestId);
-                        namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
-                    }
-                    else
-                    {
-                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
-                        User user = _db.Users.FirstOrDefault(u=>u.AspNetUserId == aspNetUser.Id);
-                        namee = string.Concat(user.FirstName, ", ", user.LastName);
-                    }
-                }
-                else if(emailLogs.ToList()[i].RoleId == 3)
-                {
-                    if(emailLogs.ToList()[i].PhysicianId != null)
-                    {
-                        Physician physician = _db.Physicians.FirstOrDefault(r => r.PhysicianId == emailLogs.ToList()[i].PhysicianId);
-                        namee = string.Concat(physician.FirstName, ", ", physician.LastName);
-                    }
-                    else
-                    {
-                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
-                        Physician physician = _db.Physicians.FirstOrDefault(r => r.AspNetUserId == aspNetUser.Id);
-                        namee = string.Concat(physician.FirstName, ", ", physician.LastName);
-                    }
-                }
-                else if(emailLogs.ToList()[i].RoleId == 2)
-                {
-                    if(emailLogs.ToList()[i].AdminId != null)
-                    {
-                        HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AdminId == emailLogs.ToList()[i].AdminId);
-                        namee = string.Concat(admin.FirstName, ", ", admin.LastName);
-                    }
-                    else
-                    {
-                        AspNetUser aspNetUser = _db.AspNetUsers.FirstOrDefault(a => a.Email == emailLogs.ToList()[i].EmailId);
-                        HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AspNetUserId == aspNetUser.Id);
-                        namee = string.Concat(admin.FirstName, ", ", admin.LastName);
-                    }
-                }
-                AspNetRole role = _db.AspNetRoles.FirstOrDefault(r=>r.Id == emailLogs.ToList()[i].RoleId);
-                logViewModels.Add(new LogViewModel
-                {
-                    Name = namee,
-                    EmailId = emailLogs.ToList()[i].EmailId,
-                    Action = "-",
-                    RoleName = role?.Name ?? "-",
-                    CreatedDate = emailLogs.ToList()[i].CreateDate,
-                    SentDate = emailLogs.ToList()[i].SentDate,
-                    Sent = emailLogs.ToList()[i].IsEmailSent[0] ? "Yes" : "No",
-                    SentTries = emailLogs.ToList()[i].SentTries,
-                    ConfirmationNumber = emailLogs.ToList()[i].ConfirmationNumber ?? "-"
-                });
+                emailLogs = emailLogs.Where(r => r.roleid == roleid);
             }
-
-            List<LogViewModel> filteredlogViewModels = new List<LogViewModel>();
-
+            if (email != null)
+            {
+                emailLogs = emailLogs.Where(r => r.emailid.ToLower().Contains(email.ToLower()));
+            }
+            if (createddate != null)
+            {
+                emailLogs = emailLogs.Where(r => r.createddate.Value.Date == createddate.Value.Date);
+            }
+            if (sentdate != null)
+            {
+                emailLogs = emailLogs.Where(r => r.sentdate.Value.Date == sentdate.Value.Date);
+            }
             if(name!=null)
             {
-                for (var i = 0; i < logViewModels.Count; ++i)
-                {
-                    if (logViewModels[i].Name.ToLower().Contains(name.ToLower()))
-                    {
-                        filteredlogViewModels.Add(logViewModels[i]);
-                    }
-                }
-            }
-            else
-            {
-                filteredlogViewModels = logViewModels;
+                emailLogs = emailLogs.Where(r => r.name.ToLower().Contains(name.ToLower()));
             }
 
             List<AspNetRole> roles = _db.AspNetRoles.ToList();
@@ -3900,14 +3846,15 @@ namespace HalloDoc.Repository.Repository
             {
                 roles = roles,
                 adminNavbarViewModel = adminNavbarViewModel,
-                logViewModels = filteredlogViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                logViewModels = emailLogs.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalItems = filteredlogViewModels.Count,
-                TotalPages = (int)Math.Ceiling((double)filteredlogViewModels.Count / pageSize)
+                TotalItems = emailLogs.Count(),
+                TotalPages = (int)Math.Ceiling((double)emailLogs.Count() / pageSize)
             };
             return emailLogViewModel;
         }
+
 
         public EmailLogViewModel GetSMSLogDetails(int? roleid, string? name, string? phonenumber, DateTime? createddate, DateTime? sentdate, int page = 1, int pageSize = 10)
         {
@@ -3924,76 +3871,27 @@ namespace HalloDoc.Repository.Repository
                 role = cookieModel.role
             };
 
-            IQueryable<Smslog> smslogs = _db.Smslogs;
+            IQueryable<SMSLogViewModel> smslogs = _db.SMSLogViewModels.FromSqlRaw($"SELECT * FROM SmsLog()");
 
-            if(roleid!=null && roleid!=-1)
+            if (roleid!=null && roleid!=-1)
             {
-                smslogs = smslogs.Where(r => r.RoleId == roleid);
+                smslogs = smslogs.Where(r => r.roleid == roleid);
             }
             if(phonenumber != null)
             {
-                smslogs = smslogs.Where(r=>r.MobileNumber.ToLower().Contains(phonenumber.ToLower()));
+                smslogs = smslogs.Where(r=>r.mobilenumber.ToLower().Contains(phonenumber.ToLower()));
             }
             if(createddate != null)
             {
-                smslogs = smslogs.Where(r => r.CreateDate.Date == createddate.Value.Date);
+                smslogs = smslogs.Where(r => r.createddate.Value.Date == createddate.Value.Date);
             }
             if(sentdate != null)
             {
-                smslogs = smslogs.Where(r => r.SentDate.Value.Date == sentdate.Value.Date);
+                smslogs = smslogs.Where(r => r.sentdate.Value.Date == sentdate.Value.Date);
             }
-
-            List<LogViewModel> logViewModels = new List<LogViewModel>();
-
-            for(var i=0;i< smslogs.Count();++i)
+            if (name != null)
             {
-                var namee = "-";
-                if (smslogs.ToList()[i].RoleId == 1)
-                {
-                    Request request = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(r => r.RequestId == smslogs.ToList()[i].RequestId);
-                    namee = string.Concat(request.RequestClient.FirstName, ", ", request.RequestClient.LastName);
-
-                }
-                else if (smslogs.ToList()[i].RoleId == 3)
-                {
-                    Physician physician = _db.Physicians.FirstOrDefault(r => r.PhysicianId == smslogs.ToList()[i].PhysicianId);
-                    namee = string.Concat(physician.FirstName, ", ", physician.LastName);
-                }
-                else if (smslogs.ToList()[i].RoleId == 2)
-                {
-                    HalloDoc.Admin admin = _db.Admins.FirstOrDefault(r => r.AdminId == smslogs.ToList()[i].AdminId);
-                    namee = string.Concat(admin.FirstName, ", ", admin.LastName);
-                }
-                AspNetRole role = _db.AspNetRoles.FirstOrDefault(r=>r.Id == smslogs.ToList()[i].RoleId);
-                logViewModels.Add(new LogViewModel
-                {
-                    Name = namee,
-                    PhoneNumber = smslogs.ToList()[i].MobileNumber,
-                    Action = "-",
-                    RoleName = role?.Name ?? "-",
-                    CreatedDate = smslogs.ToList()[i].CreateDate,
-                    SentDate = smslogs.ToList()[i].SentDate,
-                    Sent = smslogs.ToList()[i].IsSmssent[0] ? "Yes" : "No",
-                    SentTries = smslogs.ToList()[i].SentTries,
-                    ConfirmationNumber = smslogs.ToList()[i].ConfirmationNumber ?? "-"
-                });
-            }
-
-            List<LogViewModel> filteredlogViewModels = new List<LogViewModel>();
-
-            if(name!=null)
-            {
-                for (var i = 0; i < logViewModels.Count; ++i)
-                {
-                    if (logViewModels[i].Name.ToLower().Contains(name.ToLower()))
-                    {
-                        filteredlogViewModels.Add(logViewModels[i]);
-                    }
-                }
-            }
-            else
-            {
-                filteredlogViewModels = logViewModels;
+                smslogs = smslogs.Where(r => r.name.ToLower().Contains(name.ToLower()));
             }
 
             List<AspNetRole> roles = _db.AspNetRoles.ToList();
@@ -4002,11 +3900,11 @@ namespace HalloDoc.Repository.Repository
             {
                 roles = roles,
                 adminNavbarViewModel = adminNavbarViewModel,
-                logViewModels = filteredlogViewModels.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                smsLogViewModels = smslogs.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalItems = filteredlogViewModels.Count,
-                TotalPages = (int)Math.Ceiling((double)filteredlogViewModels.Count / pageSize)
+                TotalItems = smslogs.Count(),
+                TotalPages = (int)Math.Ceiling((double)smslogs.Count() / pageSize)
             };
             return emailLogViewModel;
         }
@@ -4389,7 +4287,7 @@ namespace HalloDoc.Repository.Repository
 
 
                         success = true;
-                        LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, true, retryCount, 2);
+                        LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, true, retryCount, 2,7);
                         break;
                     }
                     catch (Exception ex)
@@ -4397,7 +4295,7 @@ namespace HalloDoc.Repository.Repository
 
                         if (retryCount >= 3)
                         {
-                            LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, false, retryCount, 2);
+                            LogEmail(body, subject, admin.Email, null, -1, admin.AdminId, -1, false, retryCount, 2,7);
                         }
                         retryCount++;
                     }
@@ -5061,7 +4959,7 @@ namespace HalloDoc.Repository.Repository
 
 
                             success = true;
-                            LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, true, retryCount, 3);
+                            LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, true, retryCount, 3,8);
                             break;
                         }
                         catch (Exception ex)
@@ -5069,7 +4967,7 @@ namespace HalloDoc.Repository.Repository
 
                             if (retryCount >= 3)
                             {
-                                LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, false, retryCount, 3);
+                                LogEmail(body, subject, notactive.ToList()[i].Email, null, -1, -1, notactive.ToList()[i].PhysicianId, false, retryCount, 3,8);
                             }
                             retryCount++;
                         }

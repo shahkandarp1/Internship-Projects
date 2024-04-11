@@ -34,8 +34,11 @@
             document.getElementById("partial-container").style.display = "block";
             $("#partial-container").html(response)
         },
-        error: function () {
-            alert('An error occurred.');
+        error: function (xhr, status, error) {
+            if (xhr.status === 401) {
+                location.reload();
+            }
+            console.log(error);
         }
     });
 

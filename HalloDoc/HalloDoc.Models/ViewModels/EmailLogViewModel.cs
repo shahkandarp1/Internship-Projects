@@ -12,7 +12,8 @@ namespace HalloDoc.ViewModels
 
         public AdminNavbarViewModel adminNavbarViewModel { get; set; }
 
-        public List<LogViewModel> logViewModels { get; set; }
+        public List<ELogViewModel> ?logViewModels { get; set; }
+        public List<SMSLogViewModel> ?smsLogViewModels { get; set; }
 
         //pagination
         public int? CurrentPage { get; set; }
