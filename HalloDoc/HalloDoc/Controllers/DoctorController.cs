@@ -163,6 +163,7 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("EncounterForm", new { id = encounterFormViewModel.RequestId });
         }
+        [CustomAuthorize("Provider", "My Schedule")]
         /// <summary>
         /// This method is get method for My Schedule Page
         /// </summary>

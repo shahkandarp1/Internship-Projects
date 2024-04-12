@@ -1,6 +1,10 @@
 ﻿@using System.Diagnostics;
 @model ViewCaseViewModel
 @{
+    var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "hidden";
+    var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "hidden";
+}
+@{
     ViewData["Title"] = "View Case";
     Layout = "_AdminLayout";
 }
@@ -251,7 +255,7 @@
                 <div class="lower-btn">
                     @if(Model.Status == 1)
                     {
-                        <a class="btn btn-info" id="openBtnA">Assign</a>
+                        <a class="btn btn-info @admin" id="openBtnA">Assign</a>
                     }
                     <a class="btn btn-info" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@Model.id">View Notes</a>
                     <a class="btn btn-danger" id="openBtnC">Cancel</a>
