@@ -149,7 +149,6 @@
 
 
     <!-- View Shift Modal -->
-    <form asp-action="EditShift" asp-controller="Admin" method="post" onsubmit="@Html.Raw("return checkAssignV()")">
         <div class="modal fade" id="myModalViewShift" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -200,7 +199,7 @@
                         <div class="lower-btn" id="edit">
                             <a id="return-shift" class="btn submit-btn mar-top" onclick="changeShiftStatus()">Return</a>
                             <a class="lower-custom-btn submit-btn" onclick="Edit()" id="edit-btn">Edit</a>
-                            <button class="lower-custom-btn submit-btn hiddenn" id="save-btn" type="submit">Save</button>
+                        <button class="lower-custom-btn submit-btn hiddenn" id="save-btn" onclick="checkAssignV()">Save</button>
                             <a class="btn submit-btn btn-danger delete-btn mar-top" id="delete-btn">Delete</a>
                         </div>
                     </div>
@@ -208,7 +207,6 @@
                 </div>
             </div>
         </div>
-    </form>
 
 
     <div class="main-container">
@@ -291,10 +289,9 @@
     </div>
 </div>
 
-<form asp-action="DeleteShift" asp-controller="Admin" method="post">
-    <input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId1" />
-    <button type="submit" id="submit-delete"></button>
-</form>
+
+<input type="hidden" asp-for="ShiftDetailId" id="shiftDetailId1" />
+
 
 <script>
 
@@ -441,6 +438,7 @@
             document.getElementById("warning-timeV").style.display = "block";
             return false;
         }
+        EditShift()
     }
 
     const Edit = () => {
@@ -501,11 +499,7 @@
 
     }
 
-    $(document).ready(function () {
-        $("#delete-btn").click(function () {
-            document.getElementById("submit-delete").click()
-        });
-    });
+    
 
 
     //Daypilot js
@@ -671,7 +665,6 @@
 
     const tempMonth = document.getElementById("TempMonth").value;
     console.log(tempMonth)
-    debugger
     if (tempMonth != "" && tempMonth == "Month") {
         const schedulerElement = document.getElementById("dp");
         const monthCalendarElement = document.getElementById("dp-month");
@@ -1048,7 +1041,79 @@
         
     }
 
-    
+    $(document).ready(function () {
+        $("#delete-btn").click(function () {
+            $.post('/Admin/DeleteShift', { id: document.getElementById("shiftDetailId").value }, function (response) {
+                if(response.isDeleted)
+                {
+                    dp.events.list = dp.events.list.filter(data => data.id != document.getElementById("shiftDetailId1").value)
+                    dp.update()
+                    monthCalendar.events.list = monthCalendar.events.list.filter(data => data.id != document.getElementById("shiftDetailId1").value)
+                    monthCalendar.update()
+                    if (dp.zoom.active == 2) {
+                        monthCalendarElement.style.display = "block";
+                    }
+                    $("#myModalViewShift").modal("hide");
+                    toastr.success("Shift Deleted Successfully!!")
+                }
+                else
+                {
+                    $("#myModalViewShift").modal("hide");
+                    toastr.error("Shift could not be Deleted!!")
+                }
+            
+            });
+        });
+    });
+
+    const EditShift = () => {
+        $.post('/Admin/EditShift', { shiftdate: document.getElementById("startdateV").value, starttime: document.getElementById("starttimeV").value, endtime: document.getElementById("endtimeV").value, physicianid: document.getElementById("physicianId").value, shiftdetailid: document.getElementById("shiftDetailId").value }, function (response) {
+            if (response.isEditted == 3) {
+                const starttime = document.getElementById("starttimeV").value.split(":").length == 3 ? document.getElementById("starttimeV").value : document.getElementById("starttimeV").value + ":00"
+                const endtime = document.getElementById("endtimeV").value.split(":").length == 3 ? document.getElementById("endtimeV").value : document.getElementById("endtimeV").value + ":00"
+                for (let i = 0; i < monthCalendar.events.list.length; ++i) {
+                    if (monthCalendar.events.list[i].id == document.getElementById("shiftDetailId").value) {
+                        monthCalendar.events.list[i].start = document.getElementById("startdateV").value.split("T")[0] + "T" + starttime;
+                        monthCalendar.events.list[i].end = document.getElementById("startdateV").value.split("T")[0] + "T" + endtime;
+                        monthCalendar.events.list[i].text = `${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + starttime).toString("h:mm tt")} - ${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + endtime).toString("h:mm tt")} ,${monthCalendar.events.list[i].text.split(",")[1]} ,${monthCalendar.events.list[i].text.split(",")[2]} ,${monthCalendar.events.list[i].text.split(",")[3]}`;
+                        monthCalendar.events.list[i].bubbleHtml = `${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + starttime).toString("h:mm tt")} - ${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + endtime).toString("h:mm tt")} ,${monthCalendar.events.list[i].text.split(",")[1]} ,${monthCalendar.events.list[i].text.split(",")[2]} ,${monthCalendar.events.list[i].text.split(",")[3]}`;
+                    }
+                }
+                for (let i = 0; i < dp.events.list.length; ++i) {
+                    if (dp.events.list[i].id == document.getElementById("shiftDetailId").value) {
+                        dp.events.list[i].start = document.getElementById("startdateV").value.split("T")[0] + "T" + starttime;
+                        dp.events.list[i].end = document.getElementById("startdateV").value.split("T")[0] + "T" + endtime;
+                        dp.events.list[i].text = `${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + starttime).toString("h:mm tt")} - ${new DayPilot.Date(document.getElementById("startdateV").value.split("T")[0] + "T" + endtime).toString("h:mm tt")} ,${dp.events.list[i].text.split(",")[1]}`;
+                    }
+                }
+                dp.update()
+                monthCalendar.update()
+                if (dp.zoom.active == 2) {
+                    monthCalendarElement.style.display = "block";
+                }
+                $("#myModalViewShift").modal("hide");
+                toastr.success("Shift Editted Successfully!!")
+            }
+            else if (response.isEditted == 2) {
+                $("#myModalViewShift").modal("hide");
+                toastr.error("Shift could not be Editted!!")
+            }
+            else if (response.isEditted == 1) {
+                $("#myModalViewShift").modal("hide");
+                toastr.error("Physician is already scheduled in this slot!!")
+            }
+            const editable = document.getElementsByClassName('editable')
+            for (let i = 0; i < editable.length; ++i) {
+                editable[i].disabled = true;
+            }
+            const btn = document.getElementsByClassName('lower-custom-btn')
+            document.getElementById("edit-btn").classList.remove("hiddenn")
+            document.getElementById("save-btn").classList.add("hiddenn")
+
+        });
+
+        
+    }
 
 </script>
 

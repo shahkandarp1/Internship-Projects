@@ -132,19 +132,19 @@
                         @if (Model.status != "ToClose")
                         {
                             <td>
-                                <span class="phone-container">
+                                <a href="tel:@item.RequestClient.PhoneNumber" class="phone-container">
                                     <img src="../../images/telephone.svg"
                                          class=""
                                          alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
-                                </span><br />
+                                </a><br />
                                 (Patient)<br />
                                 @if (item.RequestTypeId != 2)
                                 {
-                                    <span class="phone-container mt-2">
+                                    <a href="tel:@item.PhoneNumber" class="phone-container mt-2">
                                         <img src="../../images/telephone.svg"
                                              class=""
                                              alt="" /><span class="phone-number">@item.PhoneNumber</span>
-                                    </span>
+                                    </a>
 
                                     <br />
                                     @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")
@@ -166,19 +166,19 @@
                     else if (Model.adminNavbarViewModel.role == "Provider")
                     {
                         <td>
-                            <span class="phone-container">
+                            <a href="tel:@item.RequestClient.PhoneNumber" class="phone-container">
                                 <img src="../../images/telephone.svg"
                                      class=""
                                      alt="" /><span class="phone-number">@item.RequestClient.PhoneNumber</span>
-                            </span><br />
+                            </a><br />
                             (Patient)<br />
                             @if (item.RequestTypeId != 2)
                             {
-                                <span class="phone-container mt-2">
+                                <a href="tel:@item.PhoneNumber" class="phone-container mt-2">
                                     <img src="../../images/telephone.svg"
                                          class=""
                                          alt="" /><span class="phone-number">@item.PhoneNumber</span>
-                                </span>
+                                </a>
 
                                 <br />
                                 @($"({statusClass.Substring(0, 1).ToUpper() + statusClass.Substring(1).ToLower()})")

@@ -33,6 +33,24 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PatientLogin(LoginViewModel model)
         {
+
+            var mappingDictionary = new Dictionary<string, string>();
+            mappingDictionary.Add("Provider Location","ProviderLocation");
+            mappingDictionary.Add("Providerr","Provider");
+            mappingDictionary.Add("Scheduling","Scheduling");
+            mappingDictionary.Add("Invoicing","Invoicing");
+            mappingDictionary.Add("Partners","Partners");
+            mappingDictionary.Add("Account Access","AccountAccess");
+            mappingDictionary.Add("User Access","UserAccess");
+            mappingDictionary.Add("Search Records", "SearchRecord");
+            mappingDictionary.Add("Email Logs", "EmailLog");
+            mappingDictionary.Add("SMS Logs", "SMSLog");
+            mappingDictionary.Add("Patient History", "PatientHistory");
+            mappingDictionary.Add("Block History", "BlockHistory");
+            mappingDictionary.Add("Create Admin Account", "CreateAdmin");
+            mappingDictionary.Add("My Schedule", "MySchedule");
+            
+
             if (ModelState.IsValid)
             {
                 var result = _patient.Login(model);
@@ -47,9 +65,29 @@ namespace HalloDoc.Controllers
                     {
                         return RedirectToAction("PatientDashboard","Patient");
                     }
-                    else
+                    else if(cookieModel.role == "Admin")
                     {
-                        return RedirectToAction("Dashboard", "Admin");
+                        mappingDictionary.Add("My Profile","Profile");
+                        if(cookieModel.menus.Contains("Dashboard"))
+                        {
+                            return RedirectToAction("Dashboard", "Admin");
+                        }
+                        else
+                        {
+                            return RedirectToAction(mappingDictionary[cookieModel.menus.Split(",")[0]], "Admin");
+                        }
+                    }
+                    else if(cookieModel.role == "Provider")
+                    {
+                        mappingDictionary.Add("My Profile", "DoctorProfile");
+                        if (cookieModel.menus.Contains("Dashboard"))
+                        {
+                            return RedirectToAction("Dashboard", "Admin");
+                        }
+                        else
+                        {
+                            return RedirectToAction(mappingDictionary[cookieModel.menus.Split(",")[0]], "Doctor");
+                        }
                     }
                 }
                 else if (result == 3)

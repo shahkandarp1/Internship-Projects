@@ -19,6 +19,7 @@ using System.Runtime.CompilerServices;
 using HalloDoc.Models;
 using Newtonsoft.Json.Linq;
 using Rotativa.AspNetCore;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace HalloDoc.Controllers
 {
@@ -1628,56 +1629,28 @@ namespace HalloDoc.Controllers
         /// </summary>
         /// <param name="schedulingViewModel"></param>
         /// <returns></returns>
-        public IActionResult EditShift(SchedulingViewModel schedulingViewModel)
+        public IActionResult EditShift(DateTime shiftdate,TimeOnly starttime,TimeOnly endtime, int physicianid, int shiftdetailid)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
-            int isEditted = _admin.EditShift(schedulingViewModel);
-            if (isEditted == 1)
-            {
-                TempData["error"] = "Physician is already scheduled in this slot!!";
-            }
-            else if (isEditted == 2)
-            {
-                TempData["error"] = "Shift could not be Editted!!";
-            }
-            else
-            {
-                TempData["success"] = "Shift Editted Successfully!!";
-            }
-            if (cookieModel.role == "Provider")
-            {
-                return RedirectToAction("MySchedule", "Doctor");
-            }
-            return RedirectToAction("Scheduling");
+            int isEditted = _admin.EditShift(shiftdate, starttime, endtime, physicianid, shiftdetailid);
+            return Json(new { isEditted = isEditted });
         }
         /// <summary>
         /// This method will delete shift of the specified Shift Detail Id
         /// </summary>
         /// <param name="schedulingViewModel"></param>
         /// <returns></returns>
-        public IActionResult DeleteShift(SchedulingViewModel schedulingViewModel)
+        public IActionResult DeleteShift(int id)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
-            bool isDeleted = _admin.DeleteShift(schedulingViewModel.ShiftDetailId);
-            if (isDeleted)
-            {
-                TempData["success"] = "Shift Deleted Successfully!!";
-            }
-            else
-            {
-                TempData["error"] = "Shift could not be Deleted!!";
-            }
-            if (cookieModel.role == "Provider")
-            {
-                return RedirectToAction("MySchedule", "Doctor");
-            }
-            return RedirectToAction("Scheduling");
+            bool isDeleted = _admin.DeleteShift(id);
+            return Json(new { isDeleted = isDeleted });
         }
         [CustomAuthorize("Admin,Provider", "Scheduling")]
         /// <summary>

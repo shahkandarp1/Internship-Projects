@@ -290,6 +290,8 @@ table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.
     border: 1px solid white;
     border-radius: 5px;
     display: inline-block;
+    text-decoration:none;
+    cursor:pointer;
 }
 
 #dtBasicExample_paginate {

@@ -178,7 +178,7 @@ namespace HalloDoc.Repository.Interface
         public SchedulingViewModel GetAllShiftDetails(int? regionid);
         public int CreateShift(SchedulingViewModel schedulingViewModel);
 
-        public int EditShift(SchedulingViewModel schedulingViewModel);
+        public int EditShift(DateTime shiftdate, TimeOnly starttime, TimeOnly endtime,int physicianid,int shiftdetailid);
         public bool DeleteShift(int? id);
         public MDOnCallViewModel GetMdOnCallDetails(int regionid = -1);
         public ShiftsForReviewViewModel GetRequestedShifts(int regionid = -1, int page = 1, int pageSize = 10);

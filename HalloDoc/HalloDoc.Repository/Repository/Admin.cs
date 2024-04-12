@@ -2411,7 +2411,7 @@ namespace HalloDoc.Repository.Repository
                 bool isActive = false;
                 foreach(var sh in shift)
                 {
-                    List<ShiftDetail> shiftDetail = _db.ShiftDetails.Where(p => p.ShiftId == sh.ShiftId && p.ShiftDate.Date == DateTime.Now.Date).ToList();
+                    List<ShiftDetail> shiftDetail = _db.ShiftDetails.Where(p => p.ShiftId == sh.ShiftId && p.ShiftDate.Date == DateTime.Now.Date && p.Status == 1).ToList();
                     if(shiftDetail.Count>0)
                     {
                         shiftDetails.AddRange(shiftDetail);
@@ -4565,32 +4565,53 @@ namespace HalloDoc.Repository.Repository
 
                 for (var i = 0; i < schedulingViewModel.checkboxViewModels.Count; ++i)
                 {
+                    var flag = 0;
                     if (schedulingViewModel.checkboxViewModels[i].isChecked)
                     {
                         for (var j = 0; j < schedulingViewModel.Repeat; ++j)
                         {
-                            ShiftDetail shiftDetail1 = new ShiftDetail
+                            DateTime? shiftdate = new DateTime();
+                            if ((int)schedulingViewModel.StartDate.DayOfWeek < (int)schedulingViewModel.checkboxViewModels[i].Id && flag == 0)
                             {
-                                ShiftId = shiftDetail.ShiftId,
-                                ShiftDate = schedulingViewModel.StartDate.AddDays(7 * (j + 1) - (int)schedulingViewModel.StartDate.DayOfWeek + (int)schedulingViewModel.checkboxViewModels[i].Id),
-                                RegionId = schedulingViewModel.RegionId,
-                                StartTime = schedulingViewModel.StartTime,
-                                EndTime = schedulingViewModel.EndTime,
-                                Status = status,
-                                IsDeleted = new BitArray(new[] { false }),
-                            };
-                            _db.ShiftDetails.Add(shiftDetail1);
-                            _db.SaveChanges();
+                                shiftdate = schedulingViewModel.StartDate.AddDays((int)schedulingViewModel.checkboxViewModels[i].Id - (int)schedulingViewModel.StartDate.DayOfWeek);
+                                flag = 1;
+                            }
+                            else if((int)schedulingViewModel.StartDate.DayOfWeek == (int)schedulingViewModel.checkboxViewModels[i].Id && flag == 0)
+                            {
+                                shiftdate = null;
+                                flag = 1;
+                            }
+                            else
+                            {
+                                shiftdate = schedulingViewModel.StartDate.AddDays(7 * (flag == 1?j:j + 1) - (int)schedulingViewModel.StartDate.DayOfWeek + (int)schedulingViewModel.checkboxViewModels[i].Id);
+                            }
 
-                            ShiftDetailRegion shiftDetailRegion1 = new ShiftDetailRegion
+                            if(shiftdate !=null)
                             {
-                                ShiftDetailId = shiftDetail1.ShiftDetailId,
-                                RegionId = (int)schedulingViewModel.RegionId
-                            };
-                            _db.ShiftDetailRegions.Add(shiftDetailRegion1);
-                            _db.SaveChanges();
+                                ShiftDetail shiftDetail1 = new ShiftDetail
+                                {
+                                    ShiftId = shiftDetail.ShiftId,
+                                    ShiftDate = shiftdate.Value,
+                                    RegionId = schedulingViewModel.RegionId,
+                                    StartTime = schedulingViewModel.StartTime,
+                                    EndTime = schedulingViewModel.EndTime,
+                                    Status = status,
+                                    IsDeleted = new BitArray(new[] { false }),
+                                };
+                                _db.ShiftDetails.Add(shiftDetail1);
+                                _db.SaveChanges();
+
+                                ShiftDetailRegion shiftDetailRegion1 = new ShiftDetailRegion
+                                {
+                                    ShiftDetailId = shiftDetail1.ShiftDetailId,
+                                    RegionId = (int)schedulingViewModel.RegionId
+                                };
+                                _db.ShiftDetailRegions.Add(shiftDetailRegion1);
+                                _db.SaveChanges();
+                            }
 
                         }
+                        flag = 0;
                     }
                 }
 
@@ -4603,14 +4624,14 @@ namespace HalloDoc.Repository.Repository
 
         }
 
-        public int EditShift(SchedulingViewModel schedulingViewModel)
+        public int EditShift(DateTime shiftdate, TimeOnly starttime, TimeOnly endtime, int physicianid, int shiftdetailid)
         {
             try
             {
-                List<Shift> shifts = _db.Shifts.Include(r => r.ShiftDetails).Where(r => r.PhysicianId == schedulingViewModel.PhysicianId && r.StartDate <= DateOnly.FromDateTime(schedulingViewModel.StartDate)).ToList();
+                List<Shift> shifts = _db.Shifts.Include(r => r.ShiftDetails).Where(r => r.PhysicianId == physicianid && r.StartDate <= DateOnly.FromDateTime(shiftdate)).ToList();
                 for (var i = 0; i < shifts.Count; ++i)
                 {
-                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == schedulingViewModel.StartDate && ((s.StartTime <= schedulingViewModel.StartTime && s.EndTime > schedulingViewModel.StartTime) || (s.StartTime < schedulingViewModel.EndTime && s.EndTime >= schedulingViewModel.EndTime)) && s.IsDeleted == new BitArray(new[] { false }) && schedulingViewModel.ShiftDetailId != s.ShiftDetailId).ToList();
+                    List<ShiftDetail> shiftDetails = _db.ShiftDetails.Where(s => s.ShiftId == shifts[i].ShiftId && s.ShiftDate == shiftdate && ((s.StartTime <= starttime && s.EndTime > starttime) || (s.StartTime < endtime && s.EndTime >= endtime)) && s.IsDeleted == new BitArray(new[] { false }) && shiftdetailid != s.ShiftDetailId).ToList();
                     if (shiftDetails.Count > 0)
                     {
                         return 1;
@@ -4621,14 +4642,14 @@ namespace HalloDoc.Repository.Repository
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
 
-                ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s=>s.ShiftDetailId == schedulingViewModel.ShiftDetailId);
+                ShiftDetail shiftDetail = _db.ShiftDetails.FirstOrDefault(s=>s.ShiftDetailId == shiftdetailid);
                 if(shiftDetail == null)
                 {
                     return 2;
                 }
-                shiftDetail.StartTime = schedulingViewModel.StartTime;
-                shiftDetail.EndTime = schedulingViewModel.EndTime;
-                shiftDetail.ShiftDate = schedulingViewModel.StartDate;
+                shiftDetail.StartTime = starttime;
+                shiftDetail.EndTime = endtime;
+                shiftDetail.ShiftDate = shiftdate;
                 shiftDetail.ModifiedBy = cookieModel.aspId;
                 shiftDetail.ModifiedDate = DateTime.Now;
 
@@ -4695,7 +4716,7 @@ namespace HalloDoc.Repository.Repository
                                                          _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
                                                                                        sd.ShiftDate.Date == currentDate &&
                                                                                        new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
-                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime && sd.Status == 1)) &&
                               p.IsDeleted == new BitArray(new[] { false })
                         select new MDOnCallPhysicians
                         {
@@ -4721,7 +4742,7 @@ namespace HalloDoc.Repository.Repository
                                                          _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
                                                                                        sd.ShiftDate.Date == currentDate &&
                                                                                        new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
-                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                                                                                       new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime && sd.Status == 1)) &&
                               p.IsDeleted == new BitArray(new[] { false })
                         select new MDOnCallPhysicians
                         {
@@ -4908,7 +4929,7 @@ namespace HalloDoc.Repository.Repository
                                                                  _db.ShiftDetails.Any(sd => s.ShiftId == sd.ShiftId &&
                                                                                                sd.ShiftDate.Date == currentDate &&
                                                                                                new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) >= sd.StartTime &&
-                                                                                               new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime)) &&
+                                                                                               new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds) <= sd.EndTime && sd.Status == 1)) &&
                                       p.IsDeleted == new BitArray(new[] { false })
                                 select new MDOnCallPhysicians
                                 {
