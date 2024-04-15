@@ -3323,22 +3323,20 @@ namespace HalloDoc.Repository.Repository
                 var requestid = blockRequest.RequestId;
                 _db.BlockRequests.Remove(blockRequest);
 
-                List<RequestStatusLog> requestStatusLogs = _db.RequestStatusLogs.Where(r=>r.RequestId == int.Parse(requestid)).OrderBy(r=>r.CreatedDate).ToList();
-
-                var status = requestStatusLogs[requestStatusLogs.Count - 2].Status;
+                var status = 1;
 
                 Request request = _db.Requests.FirstOrDefault(r=>r.RequestId == int.Parse(requestid));
                 if(request == null)
                 {
                     return false;
                 }
-                request.Status = status;
+                request.Status = (short)status;
                 request.ModifiedDate = DateTime.Now;
                 _db.Requests.Update(request);
 
                 RequestStatusLog requestStatusLog = new RequestStatusLog
                 {
-                    Status = status,
+                    Status = (short)status,
                     CreatedDate = DateTime.Now,
                     RequestId = int.Parse(requestid),
                 };

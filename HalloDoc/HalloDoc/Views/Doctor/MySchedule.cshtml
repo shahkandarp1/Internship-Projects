@@ -282,6 +282,19 @@
     $(document).ready(function () {
         $("#cancel-shift").click(function () {
             $("#myModalCreateShift").modal("hide");
+            document.getElementById("Select-repeat").value = 2
+            document.getElementById("Select-region").value = 1
+            document.getElementById("endtime").value = "00:00:00"
+            document.getElementById("starttime").value = "00:00:00"
+            document.getElementById("startdate").value = "yyyy-mm-dd"
+            const checkboxes = document.getElementsByClassName("form-check-input")
+            for (let i = 0; i < checkboxes.length; ++i) {
+                checkboxes[i].checked = false
+            }
+            document.getElementById("hidden-checkbox").checked = false
+            document.getElementById("repeated-content").style.display = "none"
+            document.getElementById("warning-time").style.display = "none";
+            document.getElementById("warning-assign").style.display = "none";
         });
     });
 
@@ -294,7 +307,8 @@
             }
             const btn = document.getElementsByClassName('lower-custom-btn')
             document.getElementById("edit-btn").classList.remove("hiddenn")
-            document.getElementById("save-btn").classList.add("hiddenn")
+            document.getElementById("edit-btn").classList.remove("hiddenn")
+            document.getElementById("warning-timeV").style.display = "none";
         });
     });
 
@@ -354,6 +368,17 @@
         }
     }
 
+    function isTime1GreaterThanTime2(time1, time2) {
+        const hours1 = parseInt(time1.slice(0, 2));
+        const minutes1 = parseInt(time1.slice(3));
+        const milliseconds1 = hours1 * 60 * 60 * 1000 + minutes1 * 60 * 1000;
+
+        const hours2 = parseInt(time2.slice(0, 2));
+        const minutes2 = parseInt(time2.slice(3));
+        const milliseconds2 = hours2 * 60 * 60 * 1000 + minutes2 * 60 * 1000;
+        return milliseconds1 > milliseconds2;
+    }
+
     const checkAssign = () => {
         const select = document.getElementById("Select-physician")
         if (select.value == -1) {
@@ -366,6 +391,13 @@
         const endtime = document.getElementById("endtime");
 
         if (starttime.value == endtime.value) {
+            document.getElementById("warning-time").innerHTML = "Start and End time cannot be same!!"
+            document.getElementById("warning-time").style.display = "block";
+            return false;
+        }
+
+        if (isTime1GreaterThanTime2(starttime.value, endtime.value)) {
+            document.getElementById("warning-time").innerHTML = "End time cannot be greater then start time!!"
             document.getElementById("warning-time").style.display = "block";
             return false;
         }
@@ -397,6 +429,13 @@
         const endtime = document.getElementById("endtimeV");
 
         if (starttime.value == endtime.value) {
+            document.getElementById("warning-timeV").innerHTML = "Start and End time cannot be same!!"
+            document.getElementById("warning-timeV").style.display = "block";
+            return false;
+        }
+
+        if (isTime1GreaterThanTime2(starttime.value, endtime.value)) {
+            document.getElementById("warning-timeV").innerHTML = "End time cannot be greater then start time!!"
             document.getElementById("warning-timeV").style.display = "block";
             return false;
         }
@@ -465,7 +504,7 @@
         var events = System.Text.Json.JsonSerializer.Serialize(Model.shiftViewModels);
     }
 
-            var resourcess = @Html.Raw(list);
+    var resourcess = @Html.Raw(list);
 
     var eventss = @Html.Raw(events);
 

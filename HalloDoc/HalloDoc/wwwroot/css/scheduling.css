@@ -157,13 +157,15 @@
 }
 
 .month_default_cell_inner {
-    background-color: white !important;
+    background-color: inherit !important;
 }
 
 .scheduler_default_cell {
-    background-color: white;
+    background-color: inherit;
 }
-
+.scheduler_default_cell.scheduler_default_cell_business {
+    background-color: inherit;
+}
 .month_default_cell_header {
     background-color: #FEADF9;
 }

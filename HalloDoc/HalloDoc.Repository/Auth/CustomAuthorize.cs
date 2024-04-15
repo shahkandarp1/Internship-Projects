@@ -69,8 +69,22 @@ namespace HalloDoc.Repository.Auth
                 var id = context.RouteData.Values["id"];
                 if (id != null)
                 {
-                    var isAllowed = _db.Requests.FirstOrDefault(r=>r.PhysicianId == cookieModel.userId && r.RequestId == Convert.ToInt32(id));
-                    if(isAllowed == null)
+                    var isAllowed = _db.Requests.FirstOrDefault(r=>r.RequestId == Convert.ToInt32(id));
+                    if(isAllowed != null && isAllowed.PhysicianId != cookieModel.userId)
+                    {
+                        context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "AccessDenied" }));
+                        return;
+                    }
+                }
+            }
+
+            if (cookieModel.role == "Patient")
+            {
+                var id = context.RouteData.Values["id"];
+                if (id != null)
+                {
+                    var isAllowed = _db.Requests.FirstOrDefault(r => r.RequestId == Convert.ToInt32(id));
+                    if (isAllowed != null && isAllowed.UserId != cookieModel.userId)
                     {
                         context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "AccessDenied" }));
                         return;
