@@ -115,7 +115,7 @@
                         }
                         @if (Model.status != "New")
                         {
-                            <td>Dr. @(item.Physician == null ? "" : item.Physician.FirstName)</td>
+                            <td>@(item.Physician == null ? "-" : "Dr." + item.Physician.FirstName)</td>
                         }
                         @if (Model.status == "New")
                         {
@@ -266,7 +266,7 @@
                             }
                             @if ((Model.status == "Conclude" || Model.status == "Active") && Model.adminNavbarViewModel.role == "Provider")
                             {
-                                    if (item.Status == 3)
+                                if (item.Status == 3)
                                 {
                                     <a class="dropdown-item type-of-care" data-id="@item.RequestId"><div class="action-item"><img src="../../images/document-symbol-with-text-lines.png" alt="" class="action-img"><span>Encounter</span></div></a>
                                 }
@@ -478,7 +478,7 @@
                                     <span class="accordion-heading-inner">
                                         Physician :
                                         <span class="accordion-value-inner">
-                                            Dr. @(Model.requests[i].Physician == null ? "" : Model.requests[i].Physician.FirstName)
+                                            @(Model.requests[i].Physician == null ? "-" : "Dr." + Model.requests[i].Physician.FirstName)
                                         </span>
                                     </span>
                                 </div>

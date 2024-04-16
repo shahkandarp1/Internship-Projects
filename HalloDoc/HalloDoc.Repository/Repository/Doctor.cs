@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using Twilio;
@@ -541,6 +542,29 @@ namespace HalloDoc.Repository.Repository
                 return true;
             }
             catch (Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool UpdatePhysicianLatitudeLongitude(decimal lat, decimal lng, string address)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                PhysicianLocation physicianLocation = _db.PhysicianLocations.FirstOrDefault(r=>r.PhysicianId == cookieModel.userId);
+                physicianLocation.Longitude = lng;
+                physicianLocation.Latitude = lat;
+                physicianLocation.Address = address;
+
+                _db.PhysicianLocations.Update(physicianLocation);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
             {
                 return false;
             }

@@ -39,7 +39,7 @@
                 <div class="modal-content request-admin-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Request To Administrator</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-request-x">&times;</span>
                     </div>
 
                     <div class="modal-body request-admin-body">
@@ -104,16 +104,16 @@
                         <label for="password" class="form-label">Password</label>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <select class="form-control select top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="Status" disabled>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12 @admin">
+                        <select class="form-control dropdownn select top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="Status" disabled>
                             <option value="1">Pending</option>
                             <option value="2">Active</option>
                             <option value="3">In-Active</option>
                         </select>
                         <label for="Select-status" class="form-label">Status</label>
                     </div>
-                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <select class="form-control select editable top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="role_id" disabled>
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12 @admin">
+                        <select class="form-control dropdownn select editable top-most-editable" id="Select-status" placeholder="name@example.com" asp-for="role_id" disabled>
                             @for (var i = 0; i < Model.roles.Count; ++i)
                             {
                                 <option value="@Model.roles[i].RoleId">@Model.roles[i].Name</option>
@@ -163,7 +163,7 @@
                         <label for="npi-number" class="form-label">NPI Number</label>
                         <span asp-validation-for="NPI_Number" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12 @admin">
                         <input type="text" class="form-control editable top-editable" id="Sync_Email" placeholder="name@example.com" asp-for="Sync_Email" disabled>
                         <label for="Sync_Email" class="form-label">Synchronization Email Address</label>
                         <span asp-validation-for="Sync_Email" class="text-danger"></span>
@@ -214,7 +214,7 @@
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                        <select class="form-control select editable bottom-editable" id="Select-state" placeholder="name@example.com" asp-for="RegionId" disabled>
+                        <select class="form-control dropdownn select editable bottom-editable" id="Select-state" placeholder="name@example.com" asp-for="RegionId" disabled>
                             @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
                             {
                                 <option value="@Model.checkboxViewModels[i].Id">@(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())</option>
@@ -284,7 +284,7 @@
                     <div class="form-floating mt-3 inp col-sm-12 mb-3">
                         <img src="@Url.Content($"~/provider_documents/{Model.PhysicianId}/{Model.signature_name}")" class="signature-img" />
                     </div>
-                    <div class="form-floating mt-3 inp col-sm-12 mb-3">
+                    <div class="form-floating mt-3 inp col-sm-12 mb-3 @admin">
                         <textarea class="form-control text-area bottom-most-editable" id="floatingInput" placeholder="name@example.com" asp-for="Admin_Notes" disabled></textarea>
                         <label for="floatingInput" class="form-label">Admin Notes(Optional)</label>
                         <span asp-validation-for="Admin_Notes" class="text-danger"></span>
@@ -460,7 +460,7 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-request").click(function () {
+        $(document).on("click", "#cancel-request, #cancel-request-x", function () {
             document.getElementById("request-reason").value = ""
             $("#myModalRequest").modal("hide");
         });

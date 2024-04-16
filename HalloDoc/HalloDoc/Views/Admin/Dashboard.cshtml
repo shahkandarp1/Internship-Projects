@@ -30,7 +30,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Confirm Cancellation</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -69,7 +69,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Confirm Block</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-block-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -98,7 +98,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Request Support</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-dty-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -126,7 +126,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Assign Request</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-assign-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -170,7 +170,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Transfer Request</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-transfer-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -215,7 +215,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Send Mail to patient for submitting request</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-link-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -255,7 +255,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Send Agreement</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-agreement-x">&times;</span>
                     </div>
 
                     <div class="modal-body">  
@@ -359,7 +359,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Transfer Case</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-doctor-transfer-x">&times;</span>
                     </div>
                     <input type="hidden" asp-for="RequestId" id="reqTransferId">
                     <div class="modal-body">
@@ -719,7 +719,7 @@
     });
 
     $(document).ready(function () {
-        $("#cancel").click(function () {
+        $(document).on("click", "#cancel, #cancel-x",function () {
             document.getElementById("admin-notes").value = ""
             document.getElementById("Select-cancel").value = -1
             $("#myModal").modal("hide");
@@ -727,33 +727,33 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-agreement").click(function () {
+        $(document).on("click", "#cancel-agreement, #cancel-agreement-x",function () {
             $("#myModalAgreement").modal("hide");
         });
     });
     
     $(document).ready(function () {
-        $("#cancel-doctor-transfer").click(function () {
+        $(document).on("click", "#cancel-doctor-transfer, #cancel-doctor-transfer-x", function () {
             document.getElementById("request-doctor-reason").value = ""
             $("#myModalTransferDoctor").modal("hide");
         });
     });
     
     $(document).ready(function () {
-        $("#request-dty-support").click(function () {
+        $(document).on("click", "#request-dty-support, #request-dty-support-x", function () {
             $("#myModalDTY").modal("show");
         });
     });
 
     $(document).ready(function () {
-        $("#cancel-dty").click(function () {
+        $(document).on("click", "#cancel-dty, #cancel-dty-x",function () {
             document.getElementById("request-reason").value = ""
             $("#myModalDTY").modal("hide");
         });
     });
 
     $(document).ready(function () {
-        $("#cancel-assign").click(function () {
+        $(document).on("click", "#cancel-assign, #cancel-assign-x", function () {
             document.getElementById("Select-physician").value = -1
             document.getElementById("transfer-notes").value = ""
             $("#myModalAssign").modal("hide");
@@ -761,7 +761,7 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-link").click(function () {
+        $(document).on("click", "#cancel-link, #cancel-link-x", function () {
             document.getElementById("business-phone").value = ""
             document.getElementById("business-email").value = ""
             document.getElementById("business-last-name").value = ""
@@ -771,14 +771,14 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-block").click(function () {
+        $(document).on("click", "#cancel-block, #cancel-block-x", function () {
             document.getElementById("block-reason").value = ""
             $("#myModalBlock").modal("hide");
         });
     });
 
     $(document).ready(function () {
-        $("#cancel-transfer").click(function () {
+        $(document).on("click", "#cancel-transfer, #cancel-transfer-x", function () {
             document.getElementById("Select-physician-t").value = -1
             document.getElementById("transfer-notes-t").value = ""
             $("#myModalTransfer").modal("hide");
@@ -786,13 +786,13 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-clear").click(function () {
+        $(document).on("click", "#cancel-clear", function () {
             $("#myModalClear").modal("hide");
         });
     });
     
     $(document).ready(function () {
-        $("#cancel-encounter").click(function () {
+        $(document).on("click", "#cancel-encounter, #cancel-encounter-x", function () {
             $("#myModalEncounterActive").modal("hide");
         });
     });
@@ -967,7 +967,37 @@
             });
                 
         }
+        @{
+            string role = Model.adminNavbarViewModel.role;
+        }
 
+            if (`@role` == "Provider") {
+            navigator.geolocation.getCurrentPosition(function (position) {
+
+                var Latitude = position.coords.latitude;
+                var Longitude = position.coords.longitude;
+
+
+                $.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${Latitude}&lon=${Longitude}`, function (data) {
+                    console.log(data.display_name);
+
+                    $.ajax({
+                        url: "/Doctor/UpdatePhysicianLatitudeLongitude",
+                        type: "POST",
+                        data: { lat: Latitude, lng: Longitude, address: data.display_name },
+                        success: function (response) {
+                            if (response.isUpdated) {
+                                console.log("Latitude and Longitude updated")
+                            }
+                        },
+                        error: function () {
+                            console.error("Error fetching data from the server.");
+                        },
+
+                    });
+                });
+            });
+        }
         
     }
 

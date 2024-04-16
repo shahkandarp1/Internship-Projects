@@ -33,14 +33,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title" id="exampleModalLongTitle">Confirm Cancellation</div>
-                    <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                    <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-x">&times;</span>
                 </div>
                 
                     <div class="modal-body">
                         <input type="hidden" asp-for="RequestId"/>
                         <span class="modal-head"><label for="floatingInput" class="form-label">Patient Name:</label><span class="pt-name">@(string.Concat(Model.FirstName, ' ', Model.LastName))</span></span>
                         <div class="form-floating mt-3 inp col-lg-2 col-md-2 col-sm-4 col-4">
-                            <select class="form-control select editable" id="Select" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
+                            <select class="form-control cancel-select select editable" id="Select-cancel" placeholder="name@example.com" onchange="selectChange(this)" asp-for="CaseTag">
                                 <option class="option-modal" value="-1">Reason For Cancellation</option>
                                 @foreach (var item in Model.caseTags)
                                 {
@@ -72,7 +72,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Assign Request</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-assign-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -205,7 +205,7 @@
                         <input type="tel" class="form-control phone editable" id="phone" asp-for="PhoneNumber" disabled>
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
-                    <a class="location col-lg-1 col-md-1 col-sm-2 mt-3">
+                    <a href="tel:@Model.PhoneNumber" class="location col-lg-1 col-md-1 col-sm-2 mt-3">
                         <img class="map-img" src="../../images/telephone-blue.svg" alt="">
                     </a>
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
@@ -213,7 +213,7 @@
                         <label for="emailInput" class="form-label">Email</label>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                    @if(Model.Status != 1)
+                    @if (Model.Status != 1 && Model.adminNavbarViewModel.role == "Admin")
                     {
                         <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
                             <a class="lower-custom-btn cancel-btn" onclick="Edit()">Edit</a>
@@ -258,7 +258,7 @@
                         <a class="btn btn-info @admin" id="openBtnA">Assign</a>
                     }
                     <a class="btn btn-info" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@Model.id">View Notes</a>
-                    <a class="btn btn-danger" id="openBtnC">Cancel</a>
+                    <a class="btn btn-danger @admin" id="openBtnC">Cancel</a>
                 </div>
             </form>
         </div>
@@ -327,7 +327,9 @@
         }
 
         $(document).ready(function () {
-            $("#cancel-assign").click(function () {
+            $(document).on("click", "#cancel-assign, #cancel-assign-x", function () {
+                document.getElementById("Select-physician").value = -1
+                document.getElementById("transfer-notes").value = ""
                 $("#myModalAssign").modal("hide");
             });
         });
@@ -369,7 +371,9 @@
         });
 
         $(document).ready(function () {
-            $("#cancel").click(function () {
+            $(document).on("click", "#cancel, #cancel-x", function () {
+                document.getElementById("admin-notes").value = ""
+                document.getElementById("Select-cancel").value = -1
                 $("#myModal").modal("hide");
             });
         });

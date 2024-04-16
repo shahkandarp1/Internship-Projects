@@ -16,6 +16,7 @@ using Irony.Parsing;
 using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System.IO.Compression;
+using Microsoft.Extensions.Configuration;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -24,12 +25,13 @@ namespace HalloDoc.Repository.Repository
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _context;
         private readonly IJwtService _jwt;
-
-        public Patient(ApplicationDbContext db, IHttpContextAccessor context, IJwtService jwt)
+        private readonly IConfiguration _configuration;
+        public Patient(ApplicationDbContext db, IHttpContextAccessor context, IJwtService jwt,IConfiguration configuration)
         {
             _db = db;
             _context = context;
             _jwt = jwt;
+            _configuration = configuration;
         }
 
         public int Login(LoginViewModel model)
@@ -169,7 +171,7 @@ namespace HalloDoc.Repository.Repository
                 };
                 _db.PasswordResets.Add(passwordReset);
                 _db.SaveChanges();
-                var inviteLink = $"https://localhost:7088/Login/ResetPassword/?token={Token}";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/ResetPassword/?token={Token}";
                 var subject = "Reset Password - HalloDoc";
                 var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                 try
@@ -679,7 +681,7 @@ namespace HalloDoc.Repository.Repository
                         string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                         string senderPassword = "shahkandarp2430";
                         var platformTitle = "HalloDoc";
-                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/Register/{aspuser.Id}";
                         var subject = "Register - HalloDoc";
                         var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                         try
@@ -921,7 +923,7 @@ namespace HalloDoc.Repository.Repository
                         string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                         string senderPassword = "shahkandarp2430";
                         var platformTitle = "HalloDoc";
-                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/Register/{aspuser.Id}";
                         var subject = "Register - HalloDoc";
                         var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                         try
@@ -1173,7 +1175,7 @@ namespace HalloDoc.Repository.Repository
                         string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                         string senderPassword = "shahkandarp2430";
                         var platformTitle = "HalloDoc";
-                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/Register/{aspuser.Id}";
                         var subject = "Register - HalloDoc";
                         var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                         try
@@ -1493,7 +1495,7 @@ namespace HalloDoc.Repository.Repository
                         string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                         string senderPassword = "shahkandarp2430";
                         var platformTitle = "HalloDoc";
-                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/Register/{aspuser.Id}";
                         var subject = "Register - HalloDoc";
                         var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                         try

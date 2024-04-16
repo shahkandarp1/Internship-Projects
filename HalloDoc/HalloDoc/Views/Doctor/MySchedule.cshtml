@@ -29,7 +29,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Create Shift</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-shift-x">&times;</span>
                     </div>
 
                     <input type="hidden" asp-for="adminNavbarViewModel.Name" />
@@ -280,7 +280,7 @@
     });
 
     $(document).ready(function () {
-        $("#cancel-shift").click(function () {
+        $(document).on("click", "#cancel-shift, #cancel-shift-x", function () {
             $("#myModalCreateShift").modal("hide");
             document.getElementById("Select-repeat").value = 2
             document.getElementById("Select-region").value = 1
@@ -599,9 +599,8 @@
         },
         events: event,
         eventHeight: 35
-
-
     });
+    monthCalendar.cellMode = true;
     monthCalendar.init();
 
     const loadHeading = () => {

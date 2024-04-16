@@ -380,7 +380,7 @@
 
     const getLatLong = () => {
         var geocoder = new google.maps.Geocoder();
-        const selectElement = document.getElementById("Select-state")
+        const selectElement = document.getElementById("Select-state") 
         for (let option of selectElement.options) {
             if (option.value == selectElement.value) {
                 const address = document.getElementById("address1").value + ',' + document.getElementById("city").value + ',' + option.text + ' ' + document.getElementById("zipcode").value

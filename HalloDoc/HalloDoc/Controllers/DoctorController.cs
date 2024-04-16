@@ -251,5 +251,17 @@ namespace HalloDoc.Controllers
                 PageMargins = { Left = 20, Right = 20 }
             };
         }
+        /// <summary>
+        /// This method will update doctors recent location i.e. lat and long once he/she logs into the system
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public IActionResult UpdatePhysicianLatitudeLongitude(decimal lat, decimal lng,string address)
+        {
+            bool isUpdated = _doctor.UpdatePhysicianLatitudeLongitude(lat, lng, address);
+            return Json(new { isUpdated = isUpdated });
+        }
     }
 }

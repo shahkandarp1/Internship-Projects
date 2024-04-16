@@ -572,6 +572,9 @@ a:hover {
     color: #adadad;
 }
 
+.form-floating > .cancel-select:not(:placeholder-shown) {
+    padding-top: 0.65rem !important;
+}
 
 @media screen and (max-width:769px) {
     .custom-file-upload {

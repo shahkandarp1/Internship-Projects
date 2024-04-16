@@ -1,4 +1,5 @@
 ﻿using HalloDoc.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace HalloDoc.Repository.Interface
         public ConcludeCareViewModel GetConcludeCare(int id);
         public int ConcludeCare(ConcludeCareViewModel concludeCareViewModel);
         public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool UpdatePhysicianLatitudeLongitude(decimal lat, decimal lng, string address);
 
     }
 }

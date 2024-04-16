@@ -28,7 +28,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title" id="exampleModalLongTitle">Contact Your Provider</div>
-                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn">&times;</span>
+                        <span aria-hidden="true" data-bs-dismiss="modal" class="cross-btn" id="cancel-provider-x">&times;</span>
                     </div>
 
                     <div class="modal-body">
@@ -136,8 +136,9 @@
         }
 
         $(document).ready(function () {
-            $("#cancel-provider").click(function () {
+            $(document).on("click", "#cancel-provider, #cancel-provider-x", function () {
                 document.getElementById("block-reason").value = "";
+                document.getElementById("flexRadioDefault1").checked = true;
                 $("#myModalProvider").modal("hide");
             });
         });

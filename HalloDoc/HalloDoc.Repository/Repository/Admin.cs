@@ -497,7 +497,7 @@ namespace HalloDoc.Repository.Repository
                 string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                 string senderPassword = "shahkandarp2430";
                 var platformTitle = "HalloDoc";
-                var inviteLink = "https://localhost:7088/CreateRequest/SubmitRequest";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/CreateRequest/SubmitRequest";
                 var subject = "Register - HalloDoc";
                 var body = $"Hello {dashboardViewModel.Mail_FirstName} {dashboardViewModel.Mail_LastName},<br />Click the following link to create new request in our portal,<br /><br /><a href='{inviteLink}'>Create Request</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                 try
@@ -545,7 +545,7 @@ namespace HalloDoc.Repository.Repository
             while (retryCount <= 3 && !success) // Set retry limit
             {
                 var platformTitle = "HalloDoc";
-                var inviteLink = "https://localhost:7088/CreateRequest/SubmitRequest";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/CreateRequest/SubmitRequest";
 
                 var accountSid = _configuration["Twilio:accountSid"];
                 var authToken = _configuration["Twilio:authToken"];
@@ -883,7 +883,7 @@ namespace HalloDoc.Repository.Repository
                         string senderEmail = "tatva.dotnet.kandarpshah@outlook.com";
                         string senderPassword = "shahkandarp2430";
                         var platformTitle = "HalloDoc";
-                        var inviteLink = $"https://localhost:7088/Login/Register/{aspuser.Id}";
+                        var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/Register/{aspuser.Id}";
                         var subject = "Register - HalloDoc";
                         var body = $"Hello <br />Click the following link to register to our portal,<br /><br /><a href='{inviteLink}'>Register</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                         try
@@ -1084,7 +1084,7 @@ namespace HalloDoc.Repository.Repository
                 };
                 _db.PasswordResets.Add(passwordReset);
                 _db.SaveChanges();
-                var inviteLink = $"https://localhost:7088/Login/ResetPassword/?token={Token}";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Login/ResetPassword/?token={Token}";
                 var subject = "Reset Password - HalloDoc";
                 var body = $"Hello <br />Click the following link to change your password,<br /><br /><a href='{inviteLink}'>Change Password</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                 MailMessage mailMessage = new MailMessage
@@ -1572,7 +1572,7 @@ namespace HalloDoc.Repository.Repository
                 string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
                 var platformTitle = "HalloDoc";
                 var subject = "Agreement - HalloDoc";
-                var inviteLink = $"https://localhost:7088/Agreement/Index/{adminDashboardViewModel.RequestId}";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Agreement/Index/{adminDashboardViewModel.RequestId}";
                 var body = $"Hello {user.RequestClient.FirstName} {user.RequestClient.LastName},<br />Please review agreement and accept it so that we can start your treatment,<br /><br /><a href='{inviteLink}'>Review Agreement</a><br /><br />Regards,<br/>{platformTitle}<br/>";
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
@@ -1626,7 +1626,7 @@ namespace HalloDoc.Repository.Repository
 
                 var user = _db.Requests.Include(r => r.RequestClient).FirstOrDefault(u => u.RequestClientId == adminDashboardViewModel.RequestId);
                 var platformTitle = "HalloDoc";
-                var inviteLink = $"https://localhost:7088/Agreement/Index/{adminDashboardViewModel.RequestId}";
+                var inviteLink = $"https://localhost:{_configuration["Port:number"]}/Agreement/Index/{adminDashboardViewModel.RequestId}";
 
                 var accountSid = _configuration["Twilio:accountSid"];
                 var authToken = _configuration["Twilio:authToken"];
@@ -2389,11 +2389,11 @@ namespace HalloDoc.Repository.Repository
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
-            IQueryable<Physician> physicians = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
+            IQueryable<Physician> physicians = _db.Physicians.Include(p=>p.PhysicianRegions).Where(p=>p.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
 
             if(id != -1 && id!=null)
             {
-                physicians = physicians.Where(p => p.RegionId == id);
+                physicians = physicians.Where(p => p.PhysicianRegions.Any(pr => pr.RegionId == id));
             }
 
             List<Physician> physician = physicians.Skip((page - 1) * pageSize).Take(pageSize).ToList();
