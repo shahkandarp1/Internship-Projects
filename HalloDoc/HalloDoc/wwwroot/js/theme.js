@@ -27,6 +27,18 @@ function setTheme(mode) {
         if (main) {
             main.style.backgroundColor = "#FAFAFA";
         }
+        const sidebar = document.getElementsByClassName("sidebar-tablinks");
+        if (sidebar!=null) {
+            for (let i = 0; i < sidebar.length; ++i) {
+                sidebar[i].style.color = "#3e3e3e";
+            }
+        }
+        const sidebar_links = document.querySelector(".sidebar a")
+        if (sidebar_links != null) {
+            for (let i = 0; i < sidebar_links.length; ++i) {
+                sidebar_links[i].style.color = "#3e3e3e";
+            }
+        }
     } else {
         butn.classList.remove('bi-moon');
         butn.classList.add('bi-sun');
@@ -35,6 +47,18 @@ function setTheme(mode) {
         btn.style.backgroundColor = "black";
         if (main) {
             main.style.backgroundColor = "#6c757d";
+        }
+        const sidebar = document.getElementsByClassName("sidebar-tablinks");
+        if (sidebar != null) {
+            for (let i = 0; i < sidebar.length; ++i) {
+                sidebar[i].style.color = "white";
+            }
+        }
+        const sidebar_links = document.querySelector(".sidebar a")
+        if (sidebar_links != null) {
+            for (let i = 0; i < sidebar_links.length; ++i) {
+                sidebar_links[i].style.color = "white";
+            }
         }
     }
 }

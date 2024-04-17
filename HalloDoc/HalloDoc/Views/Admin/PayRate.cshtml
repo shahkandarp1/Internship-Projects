@@ -1,0 +1,217 @@
+﻿@model PayRateViewModel
+@{
+    ViewData["Title"] = "Create Access";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/create-access.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/payrate.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Payrate</span>
+                <a class="back-btn" onclick="goBack()">
+                    &lt; <span class="back-text">Back</span>
+                </a>
+            </div>
+            <div class="bottom-main-container bg-body mt-3 mb-3 pb-3">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th class="payrate-input">Payrate</th>
+                                <th class="payrate-action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="payrate-category">NightShift_Weekend</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="NightShiftWeekend" placeholder="name@example.com" asp-for="NightShiftWeekend" readonly>
+                                        <label for="NightShiftWeekend" class="form-label">Payrate</label>
+                                        <span asp-validation-for="NightShiftWeekend" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="NightShiftWeekend-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="NightShiftWeekend-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="NightShiftWeekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">Shift</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="Shift" placeholder="name@example.com" asp-for="Shift" readonly>
+                                        <label for="Shift" class="form-label">Payrate</label>
+                                        <span asp-validation-for="Shift" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="Shift-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="Shift-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="Shift-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">Housecalls_Nights_Weekend</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="HouseCalls_Night_Weekend" placeholder="name@example.com" asp-for="HouseCalls_Night_Weekend" readonly>
+                                        <label for="HouseCalls_Night_Weekend" class="form-label">Payrate</label>
+                                        <span asp-validation-for="HouseCalls_Night_Weekend" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="HouseCalls_Night_Weekend-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="HouseCalls_Night_Weekend-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="HouseCalls_Night_Weekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">PhoneConsults</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="PhoneConsult" placeholder="name@example.com" asp-for="PhoneConsult" readonly>
+                                        <label for="PhoneConsult" class="form-label">Payrate</label>
+                                        <span asp-validation-for="PhoneConsult" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="PhoneConsult-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="PhoneConsult-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="PhoneConsult-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">PhoneConsults_Nights_Weekend</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="PhoneConsult_Night_Weekend" placeholder="name@example.com" asp-for="PhoneConsult_Night_Weekend" readonly>
+                                        <label for="PhoneConsult_Night_Weekend" class="form-label">Payrate</label>
+                                        <span asp-validation-for="PhoneConsult_Night_Weekend" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="PhoneConsult_Night_Weekend-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="PhoneConsult_Night_Weekend-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="PhoneConsult_Night_Weekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">BatchTesting</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="BatchTesting" placeholder="name@example.com" asp-for="BatchTesting" readonly>
+                                        <label for="BatchTesting" class="form-label">Payrate</label>
+                                        <span asp-validation-for="BatchTesting" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="BatchTesting-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="BatchTesting-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="BatchTesting-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="payrate-category">HouseCalls</td>
+                                <td>
+                                    <div class="form-floating pay-inp inp">
+                                        <input type="text" class="form-control" id="HouseCall" placeholder="name@example.com" asp-for="HouseCall" readonly>
+                                        <label for="HouseCall" class="form-label">Payrate</label>
+                                        <span asp-validation-for="HouseCall" class="text-danger"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="lower-btn table-action-btn" id="HouseCall-btn">
+                                        <a class="lower-custom-btn submit-btn table-action-btns" id="HouseCall-edit" onclick="edit(this)">Edit</a>
+                                        <button class="lower-custom-btn submit-btn hidden table-action-btns">Save</button>
+                                        <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="HouseCall-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    const edit = (element) => {
+        document.getElementById(element.id.split("-")[0]).removeAttribute("readonly")
+        const topbtn = document.getElementById(`${element.id.split("-")[0]}-btn`)
+        const btn = topbtn.getElementsByClassName('lower-custom-btn')
+        for (let i = 0; i < btn.length; ++i) {
+            if (btn[i].classList.length == 4) {
+                btn[i].classList.remove("hidden");
+            }
+            else {
+                btn[i].classList.add("hidden");
+            }
+        }
+    }
+
+    const Cancel = (element) => {
+        document.getElementById(element.id.split("-")[0]).setAttribute("readonly","true")
+        const topbtn = document.getElementById(`${element.id.split("-")[0]}-btn`)
+        const btn = topbtn.getElementsByClassName('lower-custom-btn')
+        for (let i = 0; i < btn.length; ++i) {
+            if (btn[i].classList.length == 4) {
+                btn[i].classList.remove("hidden");
+            }
+            else {
+                btn[i].classList.add("hidden");
+            }
+        }
+    }
+
+
+
+
+</script>
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

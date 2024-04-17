@@ -1927,7 +1927,8 @@ namespace HalloDoc.Repository.Repository
                 Name = cookieModel.name,
                 curr_active = active,
                 menus = cookieModel.menus,
-                role = cookieModel.role
+                role = cookieModel.role,
+                userId = cookieModel.userId
             };
 
             AdminProfileViewModel adminProfile = new AdminProfileViewModel()
@@ -1954,6 +1955,31 @@ namespace HalloDoc.Repository.Repository
 
             return adminProfile;
 
+        }
+
+        public int CheckAdminEmail(AdminProfileViewModel adminProfileViewModel)
+        {
+            try
+            {
+                HalloDoc.Admin admin = _db.Admins.FirstOrDefault(p => p.AdminId == (int)adminProfileViewModel.admin_id);
+                if (admin == null)
+                {
+                    return 1;
+                }
+                if (adminProfileViewModel.Email != null && adminProfileViewModel.Email != admin.Email)
+                {
+                    HalloDoc.Admin admin1 = _db.Admins.FirstOrDefault(p => p.Email == adminProfileViewModel.Email);
+                    if (admin1 != null)
+                    {
+                        return 3;
+                    }
+                }
+                return 2;
+            }
+            catch (Exception exp)
+            {
+                return 1;
+            }
         }
 
         public bool UpdateProfile(AdminProfileViewModel adminProfileViewModel)
@@ -3030,6 +3056,31 @@ namespace HalloDoc.Repository.Repository
             catch(Exception exp)
             {
                 return false;
+            }
+        }
+
+        public int CheckPhysicianEmail(PhysicianAccountViewModel physicianAccountViewModel)
+        {
+            try
+            {
+                Physician physician = _db.Physicians.FirstOrDefault(p => p.PhysicianId == physicianAccountViewModel.PhysicianId);
+                if (physician == null)
+                {
+                    return 1;
+                }
+                if(physicianAccountViewModel.Email != null && physicianAccountViewModel.Email != physician.Email)
+                {
+                    Physician physician1 = _db.Physicians.FirstOrDefault(p => p.Email == physicianAccountViewModel.Email);
+                    if(physician1!=null)
+                    {
+                        return 3;
+                    }
+                }
+                return 2; 
+            }
+            catch(Exception exp)
+            {
+                return 1;
             }
         }
 
@@ -5001,6 +5052,43 @@ namespace HalloDoc.Repository.Repository
             {
                 return false;
             }
+        }
+
+        public PayRateViewModel GetPayRate(int id)
+        {
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            Physician physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == id);
+            if(physician == null)
+            {
+                return null;
+            }
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Provider",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            Payrate payrate = _db.Payrates.FirstOrDefault(p=>p.PhysicianId == id);
+
+            PayRateViewModel payRateViewModel = new PayRateViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                NightShiftWeekend = payrate?.NightShiftWeekend ?? 0,
+                Shift = payrate?.Shift ?? 0,
+                HouseCalls_Night_Weekend = payrate?.HousecallNightWeekend ?? 0,
+                PhoneConsult_Night_Weekend = payrate?.PhoneconsultNightWeekend ?? 0,
+                BatchTesting = payrate?.BatchTesting ?? 0,
+                PhoneConsult = payrate?.Phoneconsult ?? 0,
+                HouseCall = payrate?.Housecall ?? 0
+            };
+            return payRateViewModel;
+
         }
 
     }

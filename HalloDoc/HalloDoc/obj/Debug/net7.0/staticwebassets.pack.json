@@ -113,6 +113,10 @@
       "PackagePath": "staticwebassets\\css\\patient-site.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\payrate.css",
+      "PackagePath": "staticwebassets\\css\\payrate.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\provider-location.css",
       "PackagePath": "staticwebassets\\css\\provider-location.css"
     },
@@ -1421,6 +1425,34 @@
       "PackagePath": "staticwebassets\\provider_documents\\7\\Agreement.pdf"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\8\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\8\\Agreement.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\8\\Background.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\8\\Background.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\8\\image_2024_04_02T04_54_48_649Z.png",
+      "PackagePath": "staticwebassets\\provider_documents\\8\\image_2024_04_02T04_54_48_649Z.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\8\\sun.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\8\\sun.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\9\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\9\\Agreement.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\9\\next.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\9\\next.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\9\\user (1).png",
+      "PackagePath": "staticwebassets\\provider_documents\\9\\user (1).png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\.net-Whole-Plane-2024.pdf",
       "PackagePath": "staticwebassets\\uploads\\.net-Whole-Plane-2024.pdf"
     },
@@ -1465,6 +1497,14 @@
       "PackagePath": "staticwebassets\\uploads\\Data-Pending.xlsx"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000 (1).pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000 (1).pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000 (2).pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000 (2).pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000.pdf",
       "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000.pdf"
     },
@@ -1479,6 +1519,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Filtered-Data (4).xlsx",
       "PackagePath": "staticwebassets\\uploads\\Filtered-Data (4).xlsx"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Filtered-Data (5).xlsx",
+      "PackagePath": "staticwebassets\\uploads\\Filtered-Data (5).xlsx"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\HalloDoc - DB (1).xlsx",

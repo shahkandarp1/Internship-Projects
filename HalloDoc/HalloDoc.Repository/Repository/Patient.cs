@@ -1656,10 +1656,7 @@ namespace HalloDoc.Repository.Repository
             var token = request.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
             var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
-            if(curr_user == null)
-            {
-                return null;
-            }
+             
             PatientRequestViewModel patientRequestViewModel = new PatientRequestViewModel
             {
                 FirstName = curr_user.FirstName,

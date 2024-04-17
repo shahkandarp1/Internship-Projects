@@ -86,6 +86,7 @@ namespace HalloDoc.Repository.Interface
         public AdminProfileViewModel GetAdmin(int id,string active);
 
         public bool UpdateProfile(AdminProfileViewModel adminProfileViewModel);
+        public int CheckAdminEmail(AdminProfileViewModel adminProfileViewModel);
 
         public bool ResetPasswordProfile(string password,int id);
 
@@ -121,6 +122,7 @@ namespace HalloDoc.Repository.Interface
         public Task<bool> FileUploadPhysician(IFormFile file, int id, string name);
 
         public Task<bool> UpdatePhysician(PhysicianAccountViewModel physicianAccountViewModel);
+        public int CheckPhysicianEmail(PhysicianAccountViewModel physicianAccountViewModel);
 
         public bool ResetPasswordPhysician(string password, int id);
 
@@ -186,6 +188,7 @@ namespace HalloDoc.Repository.Interface
         public bool DeleteShifts(ShiftsForReviewViewModel shiftsForReviewViewModel);
         public bool ToggleShiftStatus(int? id);
         public Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel);
+        public PayRateViewModel GetPayRate(int id);
 
     }
 }

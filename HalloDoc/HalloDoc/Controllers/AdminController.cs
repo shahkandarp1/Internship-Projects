@@ -31,6 +31,7 @@ namespace HalloDoc.Controllers
         private readonly IPatient _patient;
         private readonly IJwtService _jwt;
         private readonly IHttpContextAccessor _context;
+        private readonly Dictionary<string, string> mappingDictionary = new Dictionary<string, string>();
 
         public AdminController(IAdmin admin,IJwtService jwt, IPatient patient, IHttpContextAccessor context)
         {
@@ -38,6 +39,21 @@ namespace HalloDoc.Controllers
             _jwt = jwt;
             _patient = patient;
             _context = context;
+            mappingDictionary.Add("Provider Location", "ProviderLocation");
+            mappingDictionary.Add("Dashboard", "Dashboard");
+            mappingDictionary.Add("Providerr", "Provider");
+            mappingDictionary.Add("Scheduling", "Scheduling");
+            mappingDictionary.Add("Invoicing", "Invoicing");
+            mappingDictionary.Add("Partners", "Partners");
+            mappingDictionary.Add("Account Access", "AccountAccess");
+            mappingDictionary.Add("User Access", "UserAccess");
+            mappingDictionary.Add("Search Records", "SearchRecord");
+            mappingDictionary.Add("Email Logs", "EmailLog");
+            mappingDictionary.Add("SMS Logs", "SMSLog");
+            mappingDictionary.Add("Patient History", "PatientHistory");
+            mappingDictionary.Add("Block History", "BlockHistory");
+            mappingDictionary.Add("Create Admin Account", "CreateAdmin");
+            mappingDictionary.Add("My Schedule", "MySchedule");
         }
         [CustomAuthorize("Admin,Provider", "Dashboard")]
         /// <summary>
@@ -889,6 +905,10 @@ namespace HalloDoc.Controllers
             };
 
             PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(id,adminNavbarViewModel);
+            if(physicianAccountViewModel == null)
+            {
+                return NotFound();
+            }
             return View(physicianAccountViewModel);
         }
         /// <summary>
@@ -912,6 +932,17 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditPhysician(PhysicianAccountViewModel physicianAccountViewModel)
         {
+            int isAvailable = _admin.CheckPhysicianEmail(physicianAccountViewModel);
+            if(isAvailable == 3)
+            {
+                TempData["error"] = "This Email Already Exists!!";
+                return RedirectToAction("EditPhysician", new { id = physicianAccountViewModel.PhysicianId });
+            }
+            else if(isAvailable == 1)
+            {
+                TempData["error"] = "This Physician Does Not Exists!!";
+                return RedirectToAction("EditPhysician", new { id = physicianAccountViewModel.PhysicianId });
+            }
             Task<bool> isUpdated = _admin.UpdatePhysician(physicianAccountViewModel);
             if (isUpdated.Result)
             {
@@ -1470,7 +1501,7 @@ namespace HalloDoc.Controllers
                 if(isCreated.Result)
                 {
                     TempData["success"] = "Admin Created Successfully!!";
-                    return RedirectToAction("Dashboard");
+                    return RedirectToAction("UserAccess");
                 }
                 else
                 {
@@ -1525,6 +1556,17 @@ namespace HalloDoc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditAdmin(AdminProfileViewModel adminProfileViewModel) {
+            int isAvailable = _admin.CheckAdminEmail(adminProfileViewModel);
+            if (isAvailable == 3)
+            {
+                TempData["error"] = "This Email Already Exists!!";
+                return RedirectToAction("EditAdmin", new { id = adminProfileViewModel.admin_id });
+            }
+            else if (isAvailable == 1)
+            {
+                TempData["error"] = "This Admin Does Not Exists!!";
+                return RedirectToAction("EditAdmin", new { id = adminProfileViewModel.admin_id });
+            }
             bool isUpdated = _admin.UpdateProfile(adminProfileViewModel);
             if (isUpdated)
             {
@@ -1532,9 +1574,17 @@ namespace HalloDoc.Controllers
                 var requestt = _context.HttpContext.Request;
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
+
                 AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
                 string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
                 Response.Cookies.Append("jwt", jwtToken);
+
+                mappingDictionary.Add("My Profile", "Profile");
+                CookieModel cookieModelupdated = _jwt.GetDetails(jwtToken);
+                if (adminProfileViewModel.admin_id == cookieModelupdated.userId && !cookieModelupdated.menus.Contains("UserAccess"))
+                {
+                    return RedirectToAction(mappingDictionary[cookieModelupdated.menus.Split(",")[0]], "Admin");
+                }
             }
             else
             {
@@ -1785,6 +1835,16 @@ namespace HalloDoc.Controllers
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageMargins = { Left = 20, Right = 20 }
             };
+        }
+
+        public IActionResult PayRate(int id)
+        {
+            PayRateViewModel payRateViewModel = _admin.GetPayRate(id);
+            if(payRateViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(payRateViewModel);
         }
     }
 }

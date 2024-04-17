@@ -11,7 +11,7 @@
 .back-text {
     margin-right:0px;
 }
-.logout-img{
+.logoutt-img{
     display:none;
 }
 th,td{
@@ -33,6 +33,15 @@ th:last-child{
 
 .margin-right-action {
     margin-right: 20px;
+}
+
+.account-accordion-button{
+    color:inherit!important;
+    background-color:inherit;
+}
+
+.account-accordion-item {
+    background-color: inherit;
 }
 
 @media screen and (max-width: 810px) {
@@ -66,7 +75,7 @@ th:last-child{
         display: none;
     }
 
-    .logout-img {
+    .logoutt-img {
         display: block;
     }
 

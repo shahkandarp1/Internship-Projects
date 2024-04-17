@@ -35,6 +35,7 @@
                 <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
                 <input type="hidden" asp-for="adminNavbarViewModel.menus" />
                 <input type="hidden" asp-for="adminNavbarViewModel.role" />
+                <input type="hidden" asp-for="adminNavbarViewModel.userId" />
                 <input type="hidden" asp-for="admin_id" />
 
                 <!-- Account Information  -->
@@ -178,9 +179,12 @@
                     <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
                     <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
                 </div>
-                <div class="lower-btn">
-                    <a asp-action="DeleteAdmin" asp-controller="Admin" asp-route-id="@Model.admin_id" class="btn btn-danger delete-btn">Delete Account</a>
-                </div>
+                @if(Model.admin_id != Model.adminNavbarViewModel.userId)
+                {
+                    <div class="lower-btn">
+                        <a asp-action="DeleteAdmin" asp-controller="Admin" asp-route-id="@Model.admin_id" class="btn btn-danger delete-btn">Delete Account</a>
+                    </div>
+                }
             </form>
         </div>
     </div>

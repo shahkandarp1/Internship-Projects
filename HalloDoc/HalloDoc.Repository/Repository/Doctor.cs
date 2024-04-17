@@ -347,13 +347,16 @@ namespace HalloDoc.Repository.Repository
             try
             {
                 var status = 0;
+                short calltype = 0;
                 if (adminDashboardViewModel.typeOfCare == "Consult")
                 {
                     status = 5;
+                    calltype = 2;
                 }
                 else
                 {
                     status = 4;
+                    calltype = 1;
                 }
 
                 Request request = _db.Requests.FirstOrDefault(r => r.RequestId == adminDashboardViewModel.RequestId);
@@ -364,6 +367,7 @@ namespace HalloDoc.Repository.Repository
 
                 request.Status = (short)status;
                 request.ModifiedDate = DateTime.Now;
+                request.CallType = calltype;
 
                 _db.Requests.Update(request);
 
@@ -463,6 +467,7 @@ namespace HalloDoc.Repository.Repository
                 }
                 request.Status = 8;
                 request.ModifiedDate = DateTime.Now;
+                request.CompletedByPhysician = new BitArray(new[] { true });
                 _db.Requests.Update(request);
 
                 var requestt = _context.HttpContext.Request;

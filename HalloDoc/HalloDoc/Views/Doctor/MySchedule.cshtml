@@ -262,20 +262,6 @@
     $(document).ready(function () {
         $("#open-new-shift").click(function () {
             $("#myModalCreateShift").modal("show");
-            const selectphysician = document.getElementById("Select-physician");
-            selectphysician.innerHTML = "";
-            const firstoption = document.createElement("option");
-            firstoption.textContent = "Select Physician"
-            firstoption.value = -1
-            selectphysician.append(firstoption);
-            $.get('/Admin/GetPhysician', { regionid: 1 }, function (response) {
-                for (let i = 0; i < response.data.length; ++i) {
-                    const newOption = document.createElement("option");
-                    newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
-                    newOption.value = response.data[i].physicianId
-                    selectphysician.append(newOption);
-                }
-            });
         });
     });
 
@@ -322,23 +308,6 @@
         }
     });
 
-    const changePhysician = (element) => {
-        $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
-            const selectphysician = document.getElementById("Select-physician");
-            selectphysician.innerHTML = "";
-            const firstoption = document.createElement("option");
-            firstoption.textContent = "Select Physician"
-            firstoption.value = -1
-            selectphysician.append(firstoption);
-            for (let i = 0; i < response.data.length; ++i) {
-                const newOption = document.createElement("option");
-                newOption.textContent = response.data[i].firstName + " " + response.data[i].lastName
-                newOption.value = response.data[i].physicianId
-                selectphysician.append(newOption);
-            }
-        });
-    }
-
     const changePhysicianV = (element) => {
         $.get('/Admin/GetPhysician', { regionid: element.value }, function (response) {
             const selectphysician = document.getElementById("Select-physicianV");
@@ -380,11 +349,6 @@
     }
 
     const checkAssign = () => {
-        const select = document.getElementById("Select-physician")
-        if (select.value == -1) {
-            document.getElementById("warning-assign").style.display = "block";
-            return false;
-        }
         const days = document.getElementsByClassName("form-check-input");
 
         const starttime = document.getElementById("starttime");

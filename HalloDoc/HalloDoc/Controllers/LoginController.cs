@@ -10,11 +10,26 @@ namespace HalloDoc.Controllers
         private readonly IJwtService _jwt;
         private readonly IAdmin _admin;
         private readonly IPatient _patient;
+        private readonly Dictionary<string, string> mappingDictionary = new Dictionary<string, string>();
         public LoginController(IJwtService jwt,IAdmin admin,IPatient patient)
         {
             _jwt = jwt;
             _admin = admin;
             _patient = patient;
+            mappingDictionary.Add("Provider Location", "ProviderLocation");
+            mappingDictionary.Add("Providerr", "Provider");
+            mappingDictionary.Add("Scheduling", "Scheduling");
+            mappingDictionary.Add("Invoicing", "Invoicing");
+            mappingDictionary.Add("Partners", "Partners");
+            mappingDictionary.Add("Account Access", "AccountAccess");
+            mappingDictionary.Add("User Access", "UserAccess");
+            mappingDictionary.Add("Search Records", "SearchRecord");
+            mappingDictionary.Add("Email Logs", "EmailLog");
+            mappingDictionary.Add("SMS Logs", "SMSLog");
+            mappingDictionary.Add("Patient History", "PatientHistory");
+            mappingDictionary.Add("Block History", "BlockHistory");
+            mappingDictionary.Add("Create Admin Account", "CreateAdmin");
+            mappingDictionary.Add("My Schedule", "MySchedule");
         }
         /// <summary>
         /// It is Get Method for Login Page
@@ -33,22 +48,6 @@ namespace HalloDoc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PatientLogin(LoginViewModel model)
         {
-
-            var mappingDictionary = new Dictionary<string, string>();
-            mappingDictionary.Add("Provider Location","ProviderLocation");
-            mappingDictionary.Add("Providerr","Provider");
-            mappingDictionary.Add("Scheduling","Scheduling");
-            mappingDictionary.Add("Invoicing","Invoicing");
-            mappingDictionary.Add("Partners","Partners");
-            mappingDictionary.Add("Account Access","AccountAccess");
-            mappingDictionary.Add("User Access","UserAccess");
-            mappingDictionary.Add("Search Records", "SearchRecord");
-            mappingDictionary.Add("Email Logs", "EmailLog");
-            mappingDictionary.Add("SMS Logs", "SMSLog");
-            mappingDictionary.Add("Patient History", "PatientHistory");
-            mappingDictionary.Add("Block History", "BlockHistory");
-            mappingDictionary.Add("Create Admin Account", "CreateAdmin");
-            mappingDictionary.Add("My Schedule", "MySchedule");
             
 
             if (ModelState.IsValid)

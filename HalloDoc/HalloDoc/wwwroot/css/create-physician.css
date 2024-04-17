@@ -80,6 +80,19 @@
     width: 110px;
 }
 
+.payrate-btn {
+    margin-top: 20px;
+    width: auto !important;
+    padding: 7px;
+    height: 40px;
+    font-size: 13px;
+    padding-top: 9px;
+}
+
+.payrate-btn:hover {
+    background-color: #0dcaf0;
+}
+
 @media screen and (max-width: 426px) {
     .form-floating > .dropdownn:not(:placeholder-shown) {
         padding-top: 0.9rem!important;
@@ -125,5 +138,11 @@
     .bottom-upload-label {
         width: 140px;
         font-size: 14px;
+    }
+    
+}
+@media screen and (max-width:373px) {
+    .payrate-btn {
+        padding-top:11px;
     }
 }

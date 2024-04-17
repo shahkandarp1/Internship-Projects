@@ -1,0 +1,31 @@
+﻿.pay-inp > label {
+    top: -5px;
+    left: 1px;
+}
+
+.table-action-btns{
+    margin-top:0px;
+}
+
+.table-action-btn{
+    margin-top:6px;
+    justify-content:flex-start;
+}
+
+.payrate-action{
+    width:206px;
+}
+
+.payrate-input{
+    min-width:250px;
+}
+
+.payrate-category {
+    padding-top: 22px !important;
+}
+
+@media screen and (max-width: 810px) {
+    .table {
+        display: block;
+    }
+}
