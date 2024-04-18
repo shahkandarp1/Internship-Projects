@@ -64,10 +64,8 @@ namespace HalloDoc.ViewModels
         [Required]
         public string? BusinessWebsite { get; set; }
 
-        [Required]
         public IFormFile? Photo { get; set; }
 
-        [Required]
         public IFormFile? Signature { get; set; }
 
         public string? Admin_Notes { get; set; }

@@ -287,9 +287,12 @@
                             </span>
                         </label>
                     </div>
-                    <div class="form-floating mt-3 inp col-sm-12 mb-3">
-                        <img src="@Url.Content($"~/provider_documents/{Model.PhysicianId}/{Model.signature_name}")" class="signature-img" />
-                    </div>
+                    @if(Model.signature_name != null)
+                    {
+                        <div class="form-floating mt-3 inp col-sm-12 mb-3">
+                            <img src="@Url.Content($"~/provider_documents/{Model.PhysicianId}/{Model.signature_name}")" class="signature-img" />
+                        </div>                        
+                    }
                     <div class="form-floating mt-3 inp col-sm-12 mb-3 @admin">
                         <textarea class="form-control text-area bottom-most-editable" id="floatingInput" placeholder="name@example.com" asp-for="Admin_Notes" disabled></textarea>
                         <label for="floatingInput" class="form-label">Admin Notes(Optional)</label>

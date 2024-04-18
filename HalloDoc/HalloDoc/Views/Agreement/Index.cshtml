@@ -60,12 +60,12 @@
                 if (response.isAgreed)
                 {
                     toastr.success("Agreement Agreed successfully!!!");
+                    window.location.href = "/Login/PatientLogin"
                 }
                 else
                 {
                     toastr.error("Agreement Could not be agreed!!");
                 }
-                console.log(response)
             });
         });
     });
@@ -75,18 +75,15 @@
             var notes = document.getElementById("floatingInput").value;
             $.get('/Agreement/Disagree', { id: id ,notes:notes }, function (response) {
                 $("#myModal").modal("hide");
-                //document.getElementById("message").innerHTML = "Request Declined !!!"
-                //document.getElementById("message").classList.remove("text-success");
-                //document.getElementById("message").classList.add("text-danger");
                 if (response.isAgreed)
                 {
                     toastr.error("Agreement Disagreed!!!");
+                    window.location.href = "/Login/PatientLogin"
                 }
                 else
                 {
                     toastr.error("Agreement Could not be Disagreed!!");
                 }
-                console.log(response)
             });
         });
     });

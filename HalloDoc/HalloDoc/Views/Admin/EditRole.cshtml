@@ -151,8 +151,16 @@
         var id = window.location.href.split("/")[window.location.href.split("/").length - 1]
 
         $.post('/Admin/EditRole', { id: id, menus: document.getElementById("roles").value, role_name: document.getElementById("role-name").value, account_type: document.getElementById("account-type").value }, function (response) {
-            if (response.isEditted) {
+            if (response.isEditted == 2) {
                 window.location.href = `/Admin/AccountAccess`;
+            }
+            else if (response.isEditted == 3)
+            {
+                toastr.error("Role could not be Editted!!")
+            }
+            else if (response.isEditted == 1)
+            {
+                window.location.href = response.url;
             }
         });
 

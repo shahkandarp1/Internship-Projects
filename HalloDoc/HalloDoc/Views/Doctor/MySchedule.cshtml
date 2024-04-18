@@ -74,7 +74,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="form-floating mt-3 inp col-12 notes-text">
-                                <select class="form-control select editable" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
+                                <select class="form-control select" id="Select-region" placeholder="name@example.com" asp-for="RegionId" onchange="changePhysician(this)">
                                     @foreach (var items in Model.regions)
                                     {
                                         <option class="option-modal" value="@items.RegionId">@(items.Name.Substring(0, 1).ToUpper() + items.Name.Substring(1).ToLower())</option>
@@ -120,7 +120,7 @@
                                 </div>
                                 <span id="warning-repeat" class="text-danger hidden">Please Select Atleast One Day</span>
                                 <div class="form-floating mt-3 inp col-12 notes-text repeat-floating">
-                                    <select class="form-control physician-assign select-label editable" id="Select-repeat" placeholder="name@example.com" asp-for="Repeat" onchange="selectAssign(this)">
+                                    <select class="form-control physician-assign select-label" id="Select-repeat" placeholder="name@example.com" asp-for="Repeat" onchange="selectAssign(this)">
                                         <option class="option-modal" value="2">2-times</option>
                                         <option class="option-modal" value="3">3-times</option>
                                         <option class="option-modal" value="4">4-times</option>

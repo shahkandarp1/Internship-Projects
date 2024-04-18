@@ -1029,8 +1029,8 @@
       "PackagePath": "staticwebassets\\images\\upload.png"
     },
     {
-      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user (1).png",
-      "PackagePath": "staticwebassets\\images\\user (1).png"
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user(1).png",
+      "PackagePath": "staticwebassets\\images\\user(1).png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\images\\user.png",
@@ -1351,6 +1351,18 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\10\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\10\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\10\\image_2024_04_02T04_52_32_791Z.png",
+      "PackagePath": "staticwebassets\\provider_documents\\10\\image_2024_04_02T04_52_32_791Z.png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\12\\Background.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\12\\Background.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\1710246647876.JPEG",

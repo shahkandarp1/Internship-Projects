@@ -222,7 +222,7 @@
 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
+                        <input class="form-check-input doc-check" type="checkbox" id="agreement-check" asp-for="IsAgreementDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Independent Contractor Agreement
                         </label>
@@ -241,7 +241,7 @@
                 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
+                        <input class="form-check-input doc-check" type="checkbox" id="background-check" asp-for="IsBackgroundDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Background Check
                         </label>
@@ -260,7 +260,7 @@
                 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
+                        <input class="form-check-input doc-check" type="checkbox" id="hipaa-check" asp-for="IsCredentialDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             HIPAA Compliance
                         </label>
@@ -279,7 +279,7 @@
                 
                 <div class="mt-3 document-outer-flex">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
+                        <input class="form-check-input doc-check" type="checkbox" id="nondisclosure-check" asp-for="IsNonDisclosureDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             Non-Disclosure Agreement
                         </label>
@@ -298,7 +298,7 @@
                 
                 <div class="mt-3 document-outer-flex bottom-border">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
+                        <input class="form-check-input doc-check" type="checkbox" id="license-check" asp-for="IsLicenseDoc" onclick="return false">
                         <label class="form-check-label bottom-upload-label" for="flexCheckDefault1">
                             License Document
                         </label>
@@ -372,8 +372,7 @@
     const submitButton = document.getElementById("submit-physician");
     submitButton.addEventListener("click", function (event) {
         event.preventDefault(); // Prevent default form submission
-        getLatLong();// Call getLatLong function
-
+        getLatLong();
     });
 
     const changeRole = (element) => {
@@ -413,6 +412,13 @@
         }
         
     }
+
+        const documents = document.getElementsByClassName("doc-check")
+        for (let i = 0; i < documents.length;++i)
+        {
+            documents[i].checked = false;
+        }
+
 
 
 </script>

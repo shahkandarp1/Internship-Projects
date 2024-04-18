@@ -857,12 +857,6 @@ namespace HalloDoc.Controllers
                 ModelState.AddModelError("role_id", "Please Select Role");
                 return View(physicianAccountViewModel);
             }
-            if (physicianAccountViewModel.Signature == null || physicianAccountViewModel.Photo == null)
-            {
-                TempData["error"] = "Please upload neccessarry documents!!";
-                return View(physicianAccountViewModel);
-            }
-
             if (ModelState.IsValid)
             {
                 if(_patient.GetAspNetUser(physicianAccountViewModel.Email) != null)
@@ -912,6 +906,32 @@ namespace HalloDoc.Controllers
             return View(physicianAccountViewModel);
         }
         /// <summary>
+        /// It is Get method of Edit Physician From user access page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult EditPhysicianUserAccess(int id)
+        {
+            var request = _context.HttpContext.Request;
+            var token = request.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "Access",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            PhysicianAccountViewModel physicianAccountViewModel = _admin.GetPhysicianDetails(id,adminNavbarViewModel);
+            if(physicianAccountViewModel == null)
+            {
+                return NotFound();
+            }
+            return View("EditPhysician",physicianAccountViewModel);
+        }
+        /// <summary>
         /// It will upload files that are present in onboarding section in Edit Physician Page
         /// </summary>
         /// <param name="file"></param>
@@ -952,7 +972,14 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Information could not be Updated!!";
             }
-            return RedirectToAction("EditPhysician",new { id=physicianAccountViewModel.PhysicianId });
+            if(physicianAccountViewModel.adminNavbarViewModel.curr_active == "Access")
+            {
+                return RedirectToAction("EditPhysicianUserAccess", new { id=physicianAccountViewModel.PhysicianId });
+            }
+            else
+            {
+                return RedirectToAction("EditPhysician", new { id = physicianAccountViewModel.PhysicianId });
+            }
         }
         /// <summary>
         /// It will reset password in Edit Physician Page
@@ -1210,6 +1237,11 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult CreateRole(string? menus,string? role_name,int? account_type)
         {
+            bool isExist = _admin.CheckRole(role_name);
+            if(isExist)
+            {
+                return Json(new { isCreated = 1 });
+            }
             bool isCreated = _admin.CreateRole(menus, role_name, account_type);
             if(isCreated)
             {
@@ -1219,7 +1251,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Role could not be Created!!";
             }
-            return Json(new { isCreated  = isCreated });
+            return Json(new { isCreated  = isCreated == true ? 2 : 3 });
         }
         /// <summary>
         /// It will delete specific role from Account Access Page
@@ -1276,12 +1308,19 @@ namespace HalloDoc.Controllers
                 string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
                 Response.Cookies.Append("jwt", jwtToken);
 
+                mappingDictionary.Add("My Profile", "Profile");
+                CookieModel cookieModelupdated = _jwt.GetDetails(jwtToken);
+                if (!cookieModelupdated.menus.Contains("Account Access"))
+                {
+                    return Json(new { isEditted = 1,url = $"/Admin/{mappingDictionary[cookieModelupdated.menus.Split(",")[0]]}" });
+                }
+
             }
             else
             {
                 TempData["error"] = "Role could not be Editted!!";
             }
-            return Json(new { isEditted = isEditted });
+            return Json(new { isEditted = isEditted == true ? 2 : 3 });
         }
         [CustomAuthorize("Admin,Provider", "Email Logs")]
         /// <summary>
@@ -1449,17 +1488,23 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("Partners");
         }
-        [CustomAuthorize("Admin,Provider", "Provider Location")]
+        [CustomAuthorize("Admin", "Provider Location")]
         /// <summary>
         /// It is a get method for Provider Location Page
         /// </summary>
         /// <returns></returns>
         public IActionResult ProviderLocation()
         {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            if(token == null)
+            {
+                return RedirectToAction("PatientLogin","Login");
+            }
             ProviderLocationViewModel providerLocationViewModel = _admin.GetProviderLocation();
             return View(providerLocationViewModel);
         }
-        [CustomAuthorize("Admin,Provider", "Create Admin Account")]
+        [CustomAuthorize("Admin", "Create Admin Account")]
         /// <summary>
         /// It is a Get Method for Create Admin
         /// </summary>
@@ -1571,26 +1616,12 @@ namespace HalloDoc.Controllers
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
-                var requestt = _context.HttpContext.Request;
-                var token = requestt.Cookies["jwt"];
-                CookieModel cookieModel = _jwt.GetDetails(token);
-
-                AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
-                string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
-                Response.Cookies.Append("jwt", jwtToken);
-
-                mappingDictionary.Add("My Profile", "Profile");
-                CookieModel cookieModelupdated = _jwt.GetDetails(jwtToken);
-                if (adminProfileViewModel.admin_id == cookieModelupdated.userId && !cookieModelupdated.menus.Contains("UserAccess"))
-                {
-                    return RedirectToAction(mappingDictionary[cookieModelupdated.menus.Split(",")[0]], "Admin");
-                }
             }
             else
             {
                 TempData["error"] = "Information could not be Updated!!";
             }
-            return RedirectToAction("UserAccess");
+            return RedirectToAction("EditAdmin", new { id = adminProfileViewModel.admin_id });
         }
         /// <summary>
         /// It will delete specified Admin from Edit Admin Page

@@ -37,7 +37,7 @@
                     <td>
                         @if (item.AccountType == "Provider")
                         {
-                            <a class="btn contact-btn contact-provider mb-1" asp-action="EditPhysician" asp-controller="Admin" asp-route-id="@item.PhysicianId">Edit</a>
+                            <a class="btn contact-btn contact-provider mb-1" asp-action="EditPhysicianUserAccess" asp-controller="Admin" asp-route-id="@item.PhysicianId">Edit</a>
                         }
                         else
                         {
@@ -119,7 +119,7 @@
                     <div class="lower-btn-mob-flex">
                         @if (Model.userAccessData[i].AccountType == "Provider")
                         {
-                            <a class="btn contact-btn contact-provider" asp-action="EditPhysician" asp-controller="Admin" asp-route-id="@Model.userAccessData[i].PhysicianId">Edit</a>
+                            <a class="btn contact-btn contact-provider" asp-action="EditPhysicianUserAccess" asp-controller="Admin" asp-route-id="@Model.userAccessData[i].PhysicianId">Edit</a>
                         }
                         else
                         {

@@ -41,6 +41,14 @@ namespace HalloDoc.Controllers
         public IActionResult Agree(int id)
         {
             bool isAgreed = _admin.Agree(id);
+            if (isAgreed)
+            {
+                TempData["success"] = "Agreement Agreed Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Agreement could not be agreed!!";
+            }
             return Json(new { isAgreed = isAgreed });
         }
         /// <summary>
@@ -52,6 +60,14 @@ namespace HalloDoc.Controllers
         public IActionResult Disagree(int id,string notes)
         {
             bool isDiasagreed = _admin.Disagree(id,notes);
+            if (isDiasagreed)
+            {
+                TempData["success"] = "Agreement Disagreed!!";
+            }
+            else
+            {
+                TempData["error"] = "Agreement could not be disagreed!!";
+            }
             return Json(new { isAgreed = isDiasagreed });
         }
     }

@@ -151,6 +151,7 @@ namespace HalloDoc.Repository.Interface
         public List<Menu> GetMenus(int? id);
 
         public bool CreateRole(string? menus, string? role_name, int? account_type);
+        public bool CheckRole(string? role_name);
 
         public bool DeleteRole(int? id);
 

@@ -152,9 +152,16 @@
         }
 
         $.post('/Admin/CreateRole', { menus: document.getElementById("roles").value, role_name: document.getElementById("role-name").value, account_type : document.getElementById("account-type").value }, function (response) {
-            if (response.isCreated)
+            if (response.isCreated == 2)
             {
                 window.location.href = `/Admin/AccountAccess`;
+            }
+            else if(response.isCreated == 1)
+            {
+                toastr.error("Role with this name exists!!")
+            }
+            else if (response.isEditted == 3) {
+                toastr.error("Role could not be Created!!")
             }
         });
 

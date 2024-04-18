@@ -12,13 +12,13 @@
                 <th><span class="margin-right-action">Actions</span></th>
             </tr>
         </thead>
-        @foreach(var item in Model.roles)
+        @foreach (var item in Model.roles)
         {
             <tbody>
                 <tr>
                     <td>@item.Name</td>
                     <td>
-                        @if(item.AccountType == 1)
+                        @if (item.AccountType == 1)
                         {
                             <span>Admin</span>
                         }
@@ -42,14 +42,14 @@
 </div>
 
 <div class="accordion accordion-flush" id="accordionFlushExample">
-    @for (var i = 0; i < Model.roles.Count ;++i)
+    @for (var i = 0; i < Model.roles.Count; ++i)
     {
         <div class="accordion-item account-accordion-item">
             <h2 class="accordion-header" id="flush-heading@(i)">
-                <button class="account-accordion-button accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapse@(i)">
+                <div class="account-accordion-button accordion-button collapsed">
                     <div class="mb-3">Name : <span>@Model.roles[i].Name</span></div>
-                    <div class="mb-3">Account Type : 
+                    <div class="mb-3">
+                        Account Type :
                         <span>
                             @if (Model.roles[i].AccountType == 1)
                             {
@@ -69,7 +69,7 @@
                         <a class="btn contact-btn" asp-action="EditRole" asp-controller="Admin" asp-route-id="@Model.roles[i].RoleId">Edit</a>
                         <a class="btn contact-btn" asp-action="DeleteRole" asp-controller="Admin" asp-route-id="@Model.roles[i].RoleId">Delete</a>
                     </div>
-                </button>
+                </div>
             </h2>
         </div>
     }

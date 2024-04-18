@@ -71,9 +71,13 @@
                     </div>
                 </div>
                 <div class="lower-btn" id="top-most-edit">
-                    <a class="lower-custom-btn submit-btn" onclick="top_most_edit()">Edit</a>
-                    <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
-                    <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                    @if (Model.admin_id != Model.adminNavbarViewModel.userId)
+                    {
+                        <a class="lower-custom-btn submit-btn" onclick="top_most_edit()">Edit</a>
+                        <button class="lower-custom-btn submit-btn hidden" type="submit">Save</button>
+                        <a class="lower-custom-btn cancel-btn hidden" onclick="Cancel()">Cancel</a>
+                    }
+                    
                     <a class="back-btn reset-btn mt-3 reset-admin-btn" id="reset-password"><span class="back-text">Reset Password</span></a>
                 </div>
 
