@@ -89,6 +89,13 @@ namespace HaloDocMVC.NET.Controllers
                     return View(modal);
                 }
 
+                bool isValidRole = _admin.CheckUserRole(modal.Email);
+                if (!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
+                    return View(modal);
+                }
+
                 bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {

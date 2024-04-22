@@ -20,8 +20,10 @@ namespace HalloDoc.ViewModels
         public List<Role>? roles { get; set; }
 
         [Required]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string FirstName { get; set; }
         [Required]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string LastName { get; set; }
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Please enter valid Email")]
@@ -31,7 +33,7 @@ namespace HalloDoc.ViewModels
         [Compare("Email", ErrorMessage = "Email and Confirm Email should be same")]
         public string? ConfirmEmail { get; set; }
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string? PhoneNumber { get; set; }
 
         public List<CheckboxViewModel>? checkboxViewModels { get; set; }
@@ -48,10 +50,11 @@ namespace HalloDoc.ViewModels
         public int? RegionId { get; set; }
 
         [Required]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "ZipCode must be numeric.")]
         public string? ZipCode { get; set; }
 
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string? Alt_PhoneNumber { get; set; }
 
         public AdminNavbarViewModel adminNavbarViewModel { get; set; }

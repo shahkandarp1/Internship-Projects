@@ -895,11 +895,7 @@
         logElements.forEach(function (element) {
             element.addEventListener('click', function () {
 
-
-                $.get('/Login/Logout', function (response) {
-                    console.log(response)
-                });
-
+                document.cookie = 'jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                 clearStorage()
             });
         });
@@ -979,7 +975,6 @@
 
 
                 $.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${Latitude}&lon=${Longitude}`, function (data) {
-                    console.log(data.display_name);
 
                     $.ajax({
                         url: "/Doctor/UpdatePhysicianLatitudeLongitude",

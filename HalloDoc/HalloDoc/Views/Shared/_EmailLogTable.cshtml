@@ -156,7 +156,7 @@
 
     @for (int i = 1; i <= Model.TotalPages; i++)
     {
-        <a data-page="@i" href="#" class="@(i == Model.CurrentPage ? "pagination-active" : "")">@i</a>
+        <a data-page="@i" href="#" class="@(i == Model.CurrentPage ? "pagination-active" : "hidden")">@i</a>
     }
 
     @if (Model.CurrentPage < Model.TotalPages)

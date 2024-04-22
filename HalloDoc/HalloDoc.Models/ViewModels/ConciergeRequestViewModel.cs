@@ -13,9 +13,11 @@ namespace HalloDoc.ViewModels
         public string? Symptoms { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's first name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's last name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's date of birth")]
@@ -26,20 +28,23 @@ namespace HalloDoc.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string Phone { get; set; }
 
         public string? Room { get; set; }
 
         [Required(ErrorMessage = "First Name is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string ConciergeFirstName { get; set; }
         [Required(ErrorMessage = "Last Name is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string ConciergeLastName { get; set; }
         [Required(ErrorMessage = "Email is required")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
             ErrorMessage = "Please enter valid Email")]
         public string ConciergeEmail { get; set; }
         [Required(ErrorMessage = "Phone Number is required")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string ConciergePhoneNumber { get; set; }
         [Required(ErrorMessage = "Property Name is required")]
         public string ConciergePropertyName { get; set; }
@@ -50,6 +55,7 @@ namespace HalloDoc.ViewModels
         [Required(ErrorMessage = "State is required")]
         public string ConciergeState { get; set; }
         [Required(ErrorMessage = "Zip Code is required")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "ZipCode must be numeric.")]
         public string ConciergeZipcode { get; set; }
     }
 }

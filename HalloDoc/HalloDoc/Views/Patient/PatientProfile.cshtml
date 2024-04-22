@@ -103,6 +103,7 @@
                 </a>
             </div>
             <form class="main-form" asp-action="PatientProfile" method="post">
+                <input type="hidden" asp-for="Email"/>
 
                 <!-- General Information  -->
                 <div class="upper-text">
@@ -147,7 +148,7 @@
                     <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
                         <input type="email" class="form-control" id="emailInput" placeholder="name@example.com" asp-for="Email" disabled>
                         <label for="emailInput" class="form-label">Email</label>
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     
                 </div>

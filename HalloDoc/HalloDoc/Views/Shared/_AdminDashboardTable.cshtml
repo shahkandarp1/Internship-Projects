@@ -93,9 +93,9 @@
             <tr class="@statusClass">
                 <td>@(string.Concat(item.RequestClient.FirstName, ',', item.RequestClient.LastName))</td>
                 <td>
-                    <span class="img-container">
+                    <a class="img-container" href="mailto:@item.Email">
                         <img src="../../images/envelope.svg" alt="" />
-                    </span>
+                    </a>
                 </td>
                 @if(Model.adminNavbarViewModel.role == "Admin")
                 {
@@ -600,7 +600,7 @@
                         {
                                 <a class="col-md-3 col-sm-6 col-6 transfer-doctor-case" data-id="@Model.requests[i].RequestId"><div class="action-mob-btn">Transfer</div></a>
                         }
-                        <a class="col-md-3 col-sm-6 col-6"><div class="action-mob-btn">Email</div></a>
+                            <a class="col-md-3 col-sm-6 col-6" href="mailto:@Model.requests[i].Email"><div class="action-mob-btn">Email</div></a>
                     </div>
                 </div>
             </div>

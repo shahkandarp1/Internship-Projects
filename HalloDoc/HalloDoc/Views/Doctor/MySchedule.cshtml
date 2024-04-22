@@ -383,22 +383,16 @@
     }
 
     const checkAssignV = () => {
-        const select = document.getElementById("Select-physicianV")
-        if (select.value == -1) {
-            document.getElementById("warning-assignV").style.display = "block";
-            return false;
-        }
+        const starttime = document.getElementById("starttimeV").value.split(":").length == 3 ? document.getElementById("starttimeV").value : document.getElementById("starttimeV").value + ":00"
+        const endtime = document.getElementById("endtimeV").value.split(":").length == 3 ? document.getElementById("endtimeV").value : document.getElementById("endtimeV").value + ":00"
 
-        const starttime = document.getElementById("starttimeV");
-        const endtime = document.getElementById("endtimeV");
-
-        if (starttime.value == endtime.value) {
+        if (starttime == endtime) {
             document.getElementById("warning-timeV").innerHTML = "Start and End time cannot be same!!"
             document.getElementById("warning-timeV").style.display = "block";
             return false;
         }
 
-        if (isTime1GreaterThanTime2(starttime.value, endtime.value)) {
+        if (isTime1GreaterThanTime2(starttime, endtime)) {
             document.getElementById("warning-timeV").innerHTML = "End time cannot be greater then start time!!"
             document.getElementById("warning-timeV").style.display = "block";
             return false;

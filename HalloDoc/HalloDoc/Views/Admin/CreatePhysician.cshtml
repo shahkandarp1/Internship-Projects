@@ -31,7 +31,7 @@
                     &lt; <span class="back-text">Back</span>
                 </a>
             </div>
-            <form class="main-form bg-body" asp-action="CreatePhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form">
+            <form class="main-form bg-body" asp-action="CreatePhysician" asp-controller="Admin" method="post" enctype="multipart/form-data" id="main-form" onsubmit="@Html.Raw("return checkAssign()")">
 
                 <input type="hidden" asp-for="adminNavbarViewModel.Name" />
                 <input type="hidden" asp-for="adminNavbarViewModel.curr_active" />
@@ -52,7 +52,8 @@
                     <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
                         <input type="text" class="form-control" id="password" placeholder="name@example.com" asp-for="Password" onchange="changePassword(this)">
                         <label for="password" class="form-label">Password</label>
-                        <span asp-validation-for="Password" class="text-danger" id="delete-password-warning"></span>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <span class="text-danger" id="delete-password-warning"></span>
                     </div>
                     <div class="form-floating mt-3 inp col-lg-4 col-md-4 col-sm-12">
                         <select class="form-control select editable top-most-editable" id="role" placeholder="name@example.com" asp-for="role_id" onchange="changeRole(this)">
@@ -110,12 +111,13 @@
                         @for (var i = 0; i < Model.checkboxViewModels.Count; ++i)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked">
+                                <input class="form-check-input region-check" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" onchange="changeRegion()">
                                 <label class="form-check-label" for="flexCheckDefault@(i)">
                                     @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
                                 </label>
                             </div>
                         }
+                        <span id="delete-region-warning" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -330,6 +332,38 @@
 <script src="~/js/admin-profile.js"></script>
 <script>
 
+    const checkAssign = () => {
+        const password = document.getElementById("password")
+        const role = document.getElementById("role")
+        if (password.value == null || password.value == "") {
+            document.getElementById("delete-password-warning").innerHTML = "Password is required!!";
+            document.getElementById("delete-password-warning").style.display = "block";
+        }
+
+        if (role.value == -1)
+        {
+            document.getElementById("delete-role-warning").innerHTML = "Role is required!!";
+            document.getElementById("delete-role-warning").style.display = "block";
+        }
+        let flag = 0
+        const documents = document.getElementsByClassName("region-check")
+        for (let i = 0; i < documents.length; ++i) {
+            if(documents[i].checked == true)
+            {
+                flag = 1
+                break   
+            }
+        }
+        if(flag == 0)
+        {
+            document.getElementById("delete-region-warning").innerHTML = "Please Select alteast one region!!";
+            document.getElementById("delete-region-warning").style.display = "block";
+        }
+        if (flag == 0 || password.value == null || password.value == "" || role.value == -1) {
+            return false;
+        }
+    }
+
     const getFileData = (myFile,id) => {
         var file = myFile.files[0];
         console.log(file.type.split("/")[0])
@@ -369,11 +403,11 @@
             }
     }
 
-    const submitButton = document.getElementById("submit-physician");
-    submitButton.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default form submission
-        getLatLong();
-    });
+    //const submitButton = document.getElementById("submit-physician");
+    //submitButton.addEventListener("click", function (event) {
+    //    event.preventDefault(); 
+    //    getLatLong();
+    //});
 
     const changeRole = (element) => {
         if (element.value != -1) {
@@ -387,6 +421,19 @@
         }
     }
 
+    const changeRegion = () => {
+        let flag = 0
+        const documents = document.getElementsByClassName("region-check")
+        for (let i = 0; i < documents.length; ++i) {
+            if (documents[i].checked == true) {
+                flag = 1
+                break
+            }
+        }
+        if (flag == 1) {
+            document.getElementById("delete-region-warning").style.display = "none";
+        }
+    }
 
     const getLatLong = () => {
         var geocoder = new google.maps.Geocoder();

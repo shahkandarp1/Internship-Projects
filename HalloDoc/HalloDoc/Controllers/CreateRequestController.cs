@@ -60,6 +60,13 @@ namespace HalloDoc.Controllers
                     return View(modal);
                 }
 
+                bool isValidRole = _admin.CheckUserRole(modal.Email);
+                if(!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
+                    return View(modal);
+                }
+
                 bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {
@@ -137,6 +144,13 @@ namespace HalloDoc.Controllers
                     return View(modal);
                 }
 
+                bool isValidRole = _admin.CheckUserRole(modal.Email);
+                if (!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
+                    return View(modal);
+                }
+
                 bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {
@@ -176,6 +190,13 @@ namespace HalloDoc.Controllers
                     return View(modal);
                 }
 
+                bool isValidRole = _admin.CheckUserRole(modal.Email);
+                if (!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
+                    return View(modal);
+                }
+
                 bool isBlocked = _admin.VerifyBlock(modal.Email);
                 if (isBlocked)
                 {
@@ -211,6 +232,13 @@ namespace HalloDoc.Controllers
                 if (!isVerified)
                 {
                     TempData["error"] = "We are currently not serving this region!!!";
+                    return View(modal);
+                }
+
+                bool isValidRole = _admin.CheckUserRole(modal.Email);
+                if (!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
                     return View(modal);
                 }
 

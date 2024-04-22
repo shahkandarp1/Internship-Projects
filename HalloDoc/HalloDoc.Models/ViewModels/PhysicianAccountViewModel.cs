@@ -12,9 +12,11 @@ namespace HalloDoc.ViewModels
     public class PhysicianAccountViewModel
     {
         [Required]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string FirstName { get; set; }
         
         [Required]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string LastName { get; set; }
         
         [Required]
@@ -23,7 +25,7 @@ namespace HalloDoc.ViewModels
         public string? Email { get; set; }
 
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string? PhoneNumber { get; set; }
 
         [Required]
@@ -52,10 +54,11 @@ namespace HalloDoc.ViewModels
         public int? RegionId { get; set; }
         
         [Required]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "ZipCode must be numeric.")]
         public string? Zipcode { get; set; }
         
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string? AltPhone { get; set; }
         
         [Required]
@@ -97,6 +100,8 @@ namespace HalloDoc.ViewModels
         public decimal? lng { get; set; }
 
         //Edit Physician
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$",
+            ErrorMessage = "Password must have at least 8 characters, including 1 uppercase letter, 1 digit, and 1 special character.")]
         public string? Password { get; set; }
 
         public string? UserName { get; set; }

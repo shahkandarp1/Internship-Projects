@@ -13,9 +13,11 @@ namespace HalloDoc.ViewModels
         public string? Symptoms { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's first name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's last name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's date of birth")]
@@ -27,7 +29,7 @@ namespace HalloDoc.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's street address")]
@@ -40,6 +42,7 @@ namespace HalloDoc.ViewModels
         public string State { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's ZIP code")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "ZipCode must be numeric.")]
         public string ZipCode { get; set; }
 
         public string? Room { get; set; }
@@ -47,8 +50,10 @@ namespace HalloDoc.ViewModels
         public IFormFile? ImageContent { get; set; }
 
         [Required(ErrorMessage = "First Name is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string? FamilyFirstName { get; set; }
         [Required(ErrorMessage = "Last Name is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Name must contain only letters")]
         public string? FamilyLastName { get; set; }
         [Required(ErrorMessage = "Email is required")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
@@ -56,7 +61,7 @@ namespace HalloDoc.ViewModels
         public string? FamilyEmail { get; set; }
 
         [Required(ErrorMessage = "Please enter phone number")]
-        [Phone(ErrorMessage = "Please enter phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string? FamilyPhoneNumber { get; set; }
         [Required(ErrorMessage = "Relation is required")]
         public string ?FamilyRelation { get; set; }

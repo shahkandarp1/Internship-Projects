@@ -43,6 +43,7 @@ using Twilio.Rest.Trusthub.V1.TrustProducts;
 using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 using System.Diagnostics.Metrics;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace HalloDoc.Repository.Repository
 {
@@ -392,11 +393,6 @@ namespace HalloDoc.Repository.Repository
             var token = request.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
-            var admin = _db.Admins.FirstOrDefault(a => a.AdminId == cookieModel.userId);
-            if (admin == null)
-            {
-                return null;
-            }
             var regions = _db.Regions.ToList();
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
@@ -1869,11 +1865,6 @@ namespace HalloDoc.Repository.Repository
                 var token = request.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
 
-                var admin = _db.Admins.FirstOrDefault(a => a.AdminId == cookieModel.userId);
-                if (admin == null)
-                {
-                    return false;
-                }
                 OrderDetail orderDetail = new OrderDetail()
                 {
                     VendorId = ordersViewModel.business_id,
@@ -1884,7 +1875,7 @@ namespace HalloDoc.Repository.Repository
                     Prescription = ordersViewModel.prescription,
                     NoOfRefill = ordersViewModel.numberOfRefills == -1 ? null : ordersViewModel.numberOfRefills,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = string.Concat(admin.FirstName, " ", admin.LastName)
+                    CreatedBy = cookieModel.name
                 };
                 _db.OrderDetails.Add(orderDetail);
                 _db.SaveChanges();
@@ -2500,10 +2491,6 @@ namespace HalloDoc.Repository.Repository
                 PhysicianNotification physicianNotification = _db.PhysicianNotifications.FirstOrDefault(p => p.PhysicianId == id);
                 if (physicianNotification == null)
                 {
-                    return false;
-                }
-                if (physicianNotification == null)
-                {
                     PhysicianNotification physicianNotification1 = new PhysicianNotification()
                     {
                         PhysicianId = id,
@@ -3113,6 +3100,7 @@ namespace HalloDoc.Repository.Repository
                 physician.Npinumber = physicianAccountViewModel?.NPI_Number ?? physician.Npinumber;
                 physician.SyncEmailAddress = physicianAccountViewModel?.Sync_Email ?? physician.SyncEmailAddress;
                 physician.Address1 = physicianAccountViewModel?.Address1 ?? physician.Address1;
+                physician.Address2 = physicianAccountViewModel?.Address2 ?? physician.Address2;
                 physician.City = physicianAccountViewModel?.City ?? physician.City;
                 physician.RegionId = physicianAccountViewModel?.RegionId ?? physician.RegionId;
                 physician.Zip = physicianAccountViewModel?.Zipcode ?? physician.Zip;
@@ -5115,6 +5103,27 @@ namespace HalloDoc.Repository.Repository
             };
             return payRateViewModel;
 
+        }
+
+        public bool CheckUserRole(string email)
+        {
+            try
+            {
+                var user = _db.AspNetUsers.FirstOrDefault(u => u.Email == email);
+                if(user!=null)
+                {
+                    AspNetUserRole aspNetUserRole = _db.AspNetUserRoles.FirstOrDefault(a => a.UserId == user.Id);
+                    if ((aspNetUserRole == null) || (aspNetUserRole != null && aspNetUserRole.RoleId != 1))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
         }
 
     }

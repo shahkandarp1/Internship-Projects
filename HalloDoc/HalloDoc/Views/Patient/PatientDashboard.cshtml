@@ -140,10 +140,7 @@
         var logElements = document.querySelectorAll('.log');
         logElements.forEach(function (element) {
             element.addEventListener('click', function () {
-
-                $.get('/Login/Logout', function (response) {
-                    console.log(response)
-                });
+                document.cookie = 'jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             });
         });
     });

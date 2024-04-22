@@ -190,6 +190,7 @@ namespace HalloDoc.Repository.Interface
         public bool ToggleShiftStatus(int? id);
         public Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel);
         public PayRateViewModel GetPayRate(int id);
+        public bool CheckUserRole(string email);
 
     }
 }

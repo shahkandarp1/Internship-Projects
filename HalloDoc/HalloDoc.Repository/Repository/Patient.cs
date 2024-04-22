@@ -313,6 +313,7 @@ namespace HalloDoc.Repository.Repository
                 var region = _db.Regions.FirstOrDefault(u => u.Name == modal.State.Trim().ToLower().Replace(" ", ""));
                 if (user != null)
                 {
+
                     var curr_user = _db.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
 
                     RequestClient rc = new RequestClient
@@ -1686,15 +1687,6 @@ namespace HalloDoc.Repository.Repository
                 if(user == null)
                 {
                     return 4;
-                }
-
-                if (user.Email != modal.Email)
-                {
-                    var check_user_count = _db.AspNetUsers.Where(u => u.Email == modal.Email).Count();
-                    if (check_user_count == 1)
-                    {
-                        return 2;
-                    }
                 }
 
                 user.FirstName = modal.FirstName;

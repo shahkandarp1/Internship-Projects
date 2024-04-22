@@ -36,7 +36,7 @@ namespace HalloDoc.ViewModels
         public string? City { get; set; }
 
         public string? State { get; set; }
-
+        [RegularExpression("^[0-9]+$", ErrorMessage = "ZipCode must be numeric.")]
         public string? ZipCode { get; set; }
         public string? page { get; set; }
     }

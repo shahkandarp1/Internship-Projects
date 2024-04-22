@@ -107,12 +107,13 @@
                         @for(var i=0;i<Model.checkboxViewModels.Count;++i)
                         {
                             <div class="form-check">
-                                <input class="form-check-input top-editable" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" disabled>
+                                <input class="form-check-input top-editable region-check" type="checkbox" id="flexCheckDefault@(i)" asp-for="@Model.checkboxViewModels[i].isChecked" onchange="changeRegion()" disabled>
                                 <label class="form-check-label" for="flexCheckDefault@(i)">
                                     @(Model.checkboxViewModels[i].Name.Substring(0, 1).ToUpper() + Model.checkboxViewModels[i].Name.Substring(1).ToLower())
                                 </label>
                             </div>
                         }
+                        <span id="delete-region-warning" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -207,7 +208,35 @@
         });
     });
 
+    const changeRegion = () => {
+        let flag = 0
+        const documents = document.getElementsByClassName("region-check")
+        for (let i = 0; i < documents.length; ++i) {
+            if (documents[i].checked == true) {
+                flag = 1
+                break
+            }
+        }
+        if (flag == 1) {
+            document.getElementById("delete-region-warning").style.display = "none";
+        }
+    }
+
     const openCheckBox = () => {
+        let flag = 0
+        const documents = document.getElementsByClassName("region-check")
+        for (let i = 0; i < documents.length; ++i) {
+            if (documents[i].checked == true) {
+                flag = 1
+                break
+            }
+        }
+        if (flag == 0) {
+            document.getElementById("delete-region-warning").innerHTML = "Please Select alteast one region!!";
+            document.getElementById("delete-region-warning").style.display = "block";
+            return false;
+        }
+
         const check = document.getElementsByClassName("form-check-input")
         for (let i = 0; i < check.length; ++i) {
             check[i].disabled = false;

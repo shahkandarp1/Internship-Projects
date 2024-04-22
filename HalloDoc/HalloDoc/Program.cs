@@ -1,7 +1,6 @@
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using HalloDoc;
 using HalloDoc.Repository.Interface;
-using HalloDoc.Repository.Middleware;
 using HalloDoc.Repository.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -48,7 +47,7 @@ app.Use(async (context, next) =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseMiddleware<NoCacheMiddleware>();
+//app.UseMiddleware<NoCacheMiddleware>();
 
 app.UseRouting();
 

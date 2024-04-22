@@ -93,6 +93,11 @@
     background-color: #0dcaf0;
 }
 
+#delete-password-warning, #delete-region-warning, #delete-role-warning
+{
+    display:none;
+}
+
 @media screen and (max-width: 426px) {
     .form-floating > .dropdownn:not(:placeholder-shown) {
         padding-top: 0.9rem!important;

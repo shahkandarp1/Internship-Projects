@@ -418,6 +418,9 @@
         const starttime = document.getElementById("starttime");
         const endtime = document.getElementById("endtime");
 
+        console.log(starttime.value)
+        console.log(endtime.value)
+
         if(starttime.value == endtime.value)
         {
             document.getElementById("warning-time").innerHTML = "Start and End time cannot be same!!"
@@ -459,22 +462,18 @@
     }
 
     const checkAssignV = () => {
-        const select = document.getElementById("Select-physicianV")
-        if (select.value == -1) {
-            document.getElementById("warning-assignV").style.display = "block";
-            return false;
-        }
 
-        const starttime = document.getElementById("starttimeV");
-        const endtime = document.getElementById("endtimeV");
+        const starttime = document.getElementById("starttimeV").value.split(":").length == 3 ? document.getElementById("starttimeV").value : document.getElementById("starttimeV").value + ":00"
+        const endtime = document.getElementById("endtimeV").value.split(":").length == 3 ? document.getElementById("endtimeV").value : document.getElementById("endtimeV").value + ":00"
 
-        if (starttime.value == endtime.value) {
+        if (starttime == endtime) {
+            console.log("Hello from time")
             document.getElementById("warning-timeV").innerHTML = "Start and End time cannot be same!!"
             document.getElementById("warning-timeV").style.display = "block";
             return false;
         }
 
-        if (isTime1GreaterThanTime2(starttime.value, endtime.value)) {
+        if (isTime1GreaterThanTime2(starttime, endtime)) {
             document.getElementById("warning-timeV").innerHTML = "End time cannot be greater then start time!!"
             document.getElementById("warning-timeV").style.display = "block";
             return false;
@@ -657,11 +656,9 @@
                     }
                 }
 
+
                 for (let i = 0; i < selectphysician.options.length; ++i) {
-                    console.log(selectphysician.options[i].value)
-                    console.log(selectphysician.options[i].text)
                     if (selectphysician.options[i].value == args.e.data.resource) {
-                        console.log("Hello")
                         selectphysician.options[i].selected = true;
                         break;
                     }
@@ -673,6 +670,8 @@
                 document.getElementById("shiftDetailId").value = args.e.data.id
                 document.getElementById("shiftDetailId1").value = args.e.data.id
                 document.getElementById("physicianId").value = args.e.data.resource
+
+                
 
                 const currentyear = new Date().getFullYear()
                 const currentmonth = new Date().getMonth() + 1

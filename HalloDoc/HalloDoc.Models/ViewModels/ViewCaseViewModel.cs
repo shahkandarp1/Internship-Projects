@@ -19,7 +19,7 @@ namespace HalloDoc.ViewModels
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's phone number")]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please enter the patient's email address")]

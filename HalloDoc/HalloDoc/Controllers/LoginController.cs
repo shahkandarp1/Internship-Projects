@@ -191,23 +191,6 @@ namespace HalloDoc.Controllers
             }
             return View(modal);
         }
-
-        /// <summary>
-        /// It is method for logging out from an account
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Logout()
-        {
-            if (Request.Cookies["jwt"] != null)
-            {
-                var myCookie = new CookieOptions
-                {
-                    Expires = DateTime.Now.AddDays(-1d) // Set the expiry date to yesterday
-                };
-                Response.Cookies.Append("jwt", "", myCookie);
-            }
-            return Json(new { isLogout = true });
-        }
         /// <summary>
         /// It is Get method of Register Page
         /// </summary>
@@ -217,6 +200,10 @@ namespace HalloDoc.Controllers
         {
             RegisterViewModel modal = new RegisterViewModel();
             AspNetUser aspNetUser = _patient.GetAspNetUserById(id);
+            if(aspNetUser == null)
+            {
+                return NotFound();
+            }
             modal.Id = id;
             modal.Email = aspNetUser.Email;
             return View(modal);

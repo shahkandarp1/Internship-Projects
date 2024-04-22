@@ -303,6 +303,13 @@ namespace HalloDoc.Controllers
                     return View(patientRequestViewModel);
                 }
 
+                bool isValidRole = _admin.CheckUserRole(patientRequestViewModel.Email);
+                if (!isValidRole)
+                {
+                    TempData["error"] = "Only patients can create request!!!";
+                    return View(patientRequestViewModel);
+                }
+
                 bool isBlocked = _admin.VerifyBlock(patientRequestViewModel.Email);
                 if (isBlocked)
                 {
@@ -659,6 +666,12 @@ namespace HalloDoc.Controllers
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+                AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
+                string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
+                Response.Cookies.Append("jwt", jwtToken);
             }
             else
             {
@@ -847,16 +860,6 @@ namespace HalloDoc.Controllers
         {
             List<Role> roles = _admin.GetPhysicianRoles();
             physicianAccountViewModel.roles = roles;
-            if (physicianAccountViewModel.Password == null || physicianAccountViewModel.Password == "")
-            {
-                ModelState.AddModelError("Password", "Please Enter Password");
-                return View(physicianAccountViewModel);
-            }
-            if(physicianAccountViewModel.role_id == -1)
-            {
-                ModelState.AddModelError("role_id", "Please Select Role");
-                return View(physicianAccountViewModel);
-            }
             if (ModelState.IsValid)
             {
                 if(_patient.GetAspNetUser(physicianAccountViewModel.Email) != null)
@@ -929,6 +932,7 @@ namespace HalloDoc.Controllers
             {
                 return NotFound();
             }
+
             return View("EditPhysician",physicianAccountViewModel);
         }
         /// <summary>
@@ -1525,16 +1529,6 @@ namespace HalloDoc.Controllers
         {
             List<Role> roles = _admin.GetAdminRoles();
             adminProfileViewModel.roles = roles;
-            if (adminProfileViewModel.Password == null || adminProfileViewModel.Password == "")
-            {
-                ModelState.AddModelError("Password", "Please Enter Password");
-                return View(adminProfileViewModel);
-            }
-            if (adminProfileViewModel.role_id == -1)
-            {
-                ModelState.AddModelError("role_id", "Please Select Role");
-                return View(adminProfileViewModel);
-            }
             if(ModelState.IsValid)
             {
                 if (_patient.GetAspNetUser(adminProfileViewModel.Email) != null)
@@ -1616,6 +1610,12 @@ namespace HalloDoc.Controllers
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+                AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
+                string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
+                Response.Cookies.Append("jwt", jwtToken);
             }
             else
             {

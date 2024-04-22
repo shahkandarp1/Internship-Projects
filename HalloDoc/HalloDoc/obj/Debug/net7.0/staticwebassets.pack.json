@@ -1357,12 +1357,36 @@
       "PackagePath": "staticwebassets\\provider_documents\\10\\1710313071690.JPEG"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\10\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\10\\Agreement.pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\10\\image_2024_04_02T04_52_32_791Z.png",
       "PackagePath": "staticwebassets\\provider_documents\\10\\image_2024_04_02T04_52_32_791Z.png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\12\\Background.pdf",
       "PackagePath": "staticwebassets\\provider_documents\\12\\Background.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\12\\HIPAA.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\12\\HIPAA.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\12\\next.svg",
+      "PackagePath": "staticwebassets\\provider_documents\\12\\next.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\13\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\13\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\13\\Agreement.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\13\\Agreement.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\13\\Screenshot (9).png",
+      "PackagePath": "staticwebassets\\provider_documents\\13\\Screenshot (9).png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\1710246647876.JPEG",
@@ -1437,6 +1461,10 @@
       "PackagePath": "staticwebassets\\provider_documents\\7\\Agreement.pdf"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\7\\Background.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\7\\Background.pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\8\\Agreement.pdf",
       "PackagePath": "staticwebassets\\provider_documents\\8\\Agreement.pdf"
     },
@@ -1493,6 +1521,10 @@
       "PackagePath": "staticwebassets\\uploads\\Data-New (11).xlsx"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Data-New (16).xlsx",
+      "PackagePath": "staticwebassets\\uploads\\Data-New (16).xlsx"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Data-New (3).xlsx",
       "PackagePath": "staticwebassets\\uploads\\Data-New (3).xlsx"
     },
@@ -1519,6 +1551,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000.pdf",
       "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0002.pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0002.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0003.pdf",
@@ -1559,6 +1595,14 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-14Feb24.pdf",
       "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees-14Feb24.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-17April24-GoodToHave (1).pdf",
+      "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees-17April24-GoodToHave (1).pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-17April24-GoodToHave.pdf",
+      "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees-17April24-GoodToHave.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\SRS-23-24-Trainees-21Feb24.pdf",

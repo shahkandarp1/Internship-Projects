@@ -33,6 +33,10 @@
     width: 110px;
 }
 
+#delete-password-warning, #delete-region-warning, #delete-role-warning {
+    display: none;
+}
+
 @media screen and (max-width:426px)
 {
     .form-floating > .select:not(:placeholder-shown) {
