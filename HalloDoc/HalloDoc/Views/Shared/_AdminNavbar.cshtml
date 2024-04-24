@@ -69,29 +69,29 @@
     string dashboardrole, providerlocationrole, profilerole, providermainrole, providerrole, schedulingrole, invoicingrole, partnerrole, accessrole, accountaccessrole, useraccessrole,createadminaccount, recordrole, searchrecordrole, emailrole, smsrole, patienthistoryrole, blockhistoryrole;
     string admin, physician;
     string Dinvoicingrole, Dschedulingrole;
-    dashboardrole = Model.menus.Contains("Dashboard") ? "" : "hidden";
-    providerlocationrole = Model.menus.Contains("Provider Location") ? "" : "hidden";
-    profilerole = Model.menus.Contains("My Profile") ? "" : "hidden";
-    providerrole = Model.menus.Contains("Providerr") ? "" : "hidden";
-    schedulingrole = Model.menus.Contains("Scheduling") ? "" : "hidden";
-    invoicingrole = Model.menus.Contains("Invoicing") ? "" : "hidden";
-    providermainrole = Model.menus.Contains("Providerr") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "hidden";
-    partnerrole = Model.menus.Contains("Partners") ? "" : "hidden";
-    accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") || Model.menus.Contains("Create Admin Account") ? "" : "hidden";
-    accountaccessrole = Model.menus.Contains("Account Access") ? "" : "hidden";
-    useraccessrole = Model.menus.Contains("User Access") ? "" : "hidden";
-    createadminaccount = Model.menus.Contains("Create Admin Account") ? "" : "hidden";
-    recordrole = Model.menus.Contains("Search Records") || Model.menus.Contains("Email Logs") || Model.menus.Contains("SMS Logs") || Model.menus.Contains("Patient History") || Model.menus.Contains("Block History") ? "" : "hidden";
-    searchrecordrole = Model.menus.Contains("Search Records") ? "" : "hidden";
-    emailrole = Model.menus.Contains("Email Logs") ? "" : "hidden";
-    smsrole = Model.menus.Contains("SMS Logs") ? "" : "hidden";
-    patienthistoryrole = Model.menus.Contains("Patient History") ? "" : "hidden";
-    blockhistoryrole = Model.menus.Contains("Block History") ? "" : "hidden";
-    Dinvoicingrole = Model.menus.Contains("Invoicing") ? "" : "hidden";
-    Dschedulingrole = Model.menus.Contains("My Schedule") ? "" : "hidden";
+    dashboardrole = Model.menus.Contains("Dashboard") ? "" : "d-none";
+    providerlocationrole = Model.menus.Contains("Provider Location") ? "" : "d-none";
+    profilerole = Model.menus.Contains("My Profile") ? "" : "d-none";
+    providerrole = Model.menus.Contains("Providerr") ? "" : "d-none";
+    schedulingrole = Model.menus.Contains("Scheduling") ? "" : "d-none";
+    invoicingrole = Model.menus.Contains("Invoicing") ? "" : "d-none";
+    providermainrole = Model.menus.Contains("Providerr") || Model.menus.Contains("Scheduling") || Model.menus.Contains("Invoicing") ? "" : "d-none";
+    partnerrole = Model.menus.Contains("Partners") ? "" : "d-none";
+    accessrole = Model.menus.Contains("Account Access") || Model.menus.Contains("User Access") || Model.menus.Contains("Create Admin Account") ? "" : "d-none";
+    accountaccessrole = Model.menus.Contains("Account Access") ? "" : "d-none";
+    useraccessrole = Model.menus.Contains("User Access") ? "" : "d-none";
+    createadminaccount = Model.menus.Contains("Create Admin Account") ? "" : "d-none";
+    recordrole = Model.menus.Contains("Search Records") || Model.menus.Contains("Email Logs") || Model.menus.Contains("SMS Logs") || Model.menus.Contains("Patient History") || Model.menus.Contains("Block History") ? "" : "d-none";
+    searchrecordrole = Model.menus.Contains("Search Records") ? "" : "d-none";
+    emailrole = Model.menus.Contains("Email Logs") ? "" : "d-none";
+    smsrole = Model.menus.Contains("SMS Logs") ? "" : "d-none";
+    patienthistoryrole = Model.menus.Contains("Patient History") ? "" : "d-none";
+    blockhistoryrole = Model.menus.Contains("Block History") ? "" : "d-none";
+    Dinvoicingrole = Model.menus.Contains("Invoicing") ? "" : "d-none";
+    Dschedulingrole = Model.menus.Contains("My Schedule") ? "" : "d-none";
 
-    admin = Model.role.Contains("Admin") ? "" : "hidden";
-    physician = Model.role.Contains("Provider") ? "" : "hidden";
+    admin = Model.role.Contains("Admin") ? "" : "d-none";
+    physician = Model.role.Contains("Provider") ? "" : "d-none";
 
 }
 
@@ -161,29 +161,29 @@
 
 <div class="bottom-navbar bg-body" id="">
     <div>
-        <button class="navbar-btn bg-body @dashboard @dashboardrole" onclick="navbar(this)">
-            <a asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
-        </button>
-        <button class="navbar-btn bg-body @providerlocation @providerlocationrole @admin" onclick="navbar(this)">
-            <a asp-action ="ProviderLocation" asp-controller="Admin"> Provider Location </a>
-        </button>
-        <button class="navbar-btn bg-body @Dinvoice @Dinvoicingrole @physician" onclick="navbar(this)">
-            <a asp-action ="ProviderLocation" asp-controller="Admin"> Invoicing </a>
-        </button>
-        <button class="navbar-btn bg-body @Dschedule @Dschedulingrole @physician" onclick="navbar(this)">
-            <a asp-action ="MySchedule" asp-controller="Doctor"> My Schedule </a>
-        </button>
+        <a class="navbar-btn bg-body @dashboard @dashboardrole" asp-action="Dashboard" asp-controller="Admin" onclick="navbar(this)">
+            <span> Dashboard </span>
+        </a>
+        <a class="navbar-btn bg-body @providerlocation @providerlocationrole @admin" asp-action="ProviderLocation" asp-controller="Admin" onclick="navbar(this)">
+            <span> Provider Location </span>
+        </a>
+        <a class="navbar-btn bg-body @Dinvoice @Dinvoicingrole @physician" asp-action="ProviderLocation" asp-controller="Admin" onclick="navbar(this)">
+            <span> Invoicing </span>
+        </a>
+        <a class="navbar-btn bg-body @Dschedule @Dschedulingrole @physician" asp-action="MySchedule" asp-controller="Doctor" onclick="navbar(this)">
+            <span> My Schedule </span>
+        </a>
         @if (Model.role == "Admin")
         {
-            <button class="navbar-btn bg-body @profile @profilerole" onclick="navbar(this)">
-                <a asp-action="Profile" asp-controller="Admin"> My Profile </a>
-            </button>
+            <a class="navbar-btn bg-body @profile @profilerole" asp-action="Profile" asp-controller="Admin" onclick="navbar(this)">
+                <span> My Profile </span>
+            </a>
         }
         else if (Model.role == "Provider")
         {
-            <button class="navbar-btn bg-body @Dprofile @profilerole" onclick="navbar(this)">
-                <a asp-action="DoctorProfile" asp-controller="Doctor"> My Profile </a>
-            </button>
+            <a class="navbar-btn bg-body @Dprofile @profilerole" asp-action="DoctorProfile" asp-controller="Doctor" onclick="navbar(this)">
+                <span> My Profile </span>
+            </a>
         }
         <div class="dropdown navbar-dropdown">
             <button class="navbar-btn dropdown-toggle bg-body @provider @providermainrole @admin" type="button" id="provider" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
@@ -195,9 +195,9 @@
                 <li><a class="navbar-dropdown-item dropdown-item @invoicingrole" href="#">Invoicing</a></li>
             </ul>
         </div>
-        <button class="navbar-btn bg-body @partner @partnerrole @admin" onclick="navbar(this)">
-            <a asp-action ="Partners" asp-controller="Admin"> Partners </a>
-        </button>
+        <a class="navbar-btn bg-body @partner @partnerrole @admin" asp-action="Partners" asp-controller="Admin" onclick="navbar(this)">
+            <span > Partners </span>
+        </a>
         <div class="dropdown navbar-dropdown @admin">
             <button class="navbar-btn bg-body dropdown-toggle @access @accessrole @admin" type="button" id="access" data-bs-toggle="dropdown" aria-expanded="false" onclick="navbar(this)">
                 Access

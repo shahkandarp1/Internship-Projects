@@ -65,6 +65,8 @@ namespace HalloDoc.ViewModels
         public string? BusinessName { get; set; }
         
         [Required]
+        [RegularExpression(@"^(https?://)?(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}(/\S*)?$", ErrorMessage = "Invalid website URL.")]
+
         public string? BusinessWebsite { get; set; }
 
         public IFormFile? Photo { get; set; }

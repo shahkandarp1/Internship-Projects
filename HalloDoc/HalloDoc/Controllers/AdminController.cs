@@ -483,6 +483,12 @@ namespace HalloDoc.Controllers
         /// <returns></returns>
         public IActionResult AssignCase(AdminDashboardViewModel adminDashboardViewModel)
         {
+            bool isSame = _admin.SamePhysicianAssignCase(adminDashboardViewModel);
+            if(!isSame)
+            {
+                TempData["error"] = "Request is already assigned to this physician!!";
+                return RedirectToAction("Dashboard");
+            }
             bool isAssigned = _admin.AssignCase(adminDashboardViewModel);
             if(isAssigned)
             {
@@ -666,9 +672,11 @@ namespace HalloDoc.Controllers
             if (isUpdated)
             {
                 TempData["success"] = "Information Updated Successfully!!";
+
                 var requestt = _context.HttpContext.Request;
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
+
                 AspNetUser aspNetUser = _patient.GetAspNetUserById(cookieModel.aspId);
                 string jwtToken = _jwt.GenerateJWTAuthetication(aspNetUser);
                 Response.Cookies.Append("jwt", jwtToken);

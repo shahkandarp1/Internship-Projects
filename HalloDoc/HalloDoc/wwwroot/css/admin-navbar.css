@@ -368,6 +368,7 @@ a {
     background-color: white;
     border: 0px;
     line-height: 1.5;
+    display:inline-block;
 }
 
 .btn.show, .navbar-btn:active {

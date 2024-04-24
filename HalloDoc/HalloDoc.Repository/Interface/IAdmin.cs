@@ -64,6 +64,7 @@ namespace HalloDoc.Repository.Interface
         public List<RegionSpecificPhysician> GetPhysician(int regionid);
 
         public bool AssignCase(AdminDashboardViewModel adminDashboardViewModel);
+        public bool SamePhysicianAssignCase(AdminDashboardViewModel adminDashboardViewModel);
 
         public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
 

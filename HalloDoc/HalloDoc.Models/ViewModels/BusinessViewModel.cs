@@ -23,7 +23,7 @@ namespace HalloDoc.ViewModels
         [Required]
         public string FaxNumber { get; set; }
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number.")]
         public string PhoneNumber { get; set; }
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Please enter valid Email")]

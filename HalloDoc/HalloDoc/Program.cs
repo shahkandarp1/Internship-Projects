@@ -47,8 +47,6 @@ app.Use(async (context, next) =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-//app.UseMiddleware<NoCacheMiddleware>();
-
 app.UseRouting();
 
 app.UseSession();

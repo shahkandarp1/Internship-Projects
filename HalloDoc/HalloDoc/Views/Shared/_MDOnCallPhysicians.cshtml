@@ -4,11 +4,11 @@
     <div class="row physician-row">
         @foreach(var item in Model.activePhysicians)
         {
-            var url = item.Photo == null ? "/images/user (1).png" : $"/provider_documents/{item.PhysicianId}/{item.Photo}";
+            var url = item.Photo == null ? null : $"/provider_documents/{item.PhysicianId}/{item.Photo.Replace(" ", "%20")}";
 
             <div class="physician-main-card col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="physician-card">
-                    <img src=@(url) class="physician-image" />
+                    <img src=@(url == null ? $"/images/user(1).png" : url) class="physician-image" />
                     <div class="physician-name">Dr. @item.Name</div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
     <div class="row physician-row">
         @foreach (var item in Model.notActivePhysicians)
         {
-            var url = item.Photo == null ? null : $"/provider_documents/{item.PhysicianId}/{item.Photo}";
+            var url = item.Photo == null ? null : $"/provider_documents/{item.PhysicianId}/{item.Photo.Replace(" ", "%20")}";
 
             <div class="physician-main-card col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="physician-card">

@@ -1,0 +1,15 @@
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\bin\Debug\net7.0\Assignment.Repository.deps.json
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\bin\Debug\net7.0\Assignment.Repository.dll
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\bin\Debug\net7.0\Assignment.Repository.pdb
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\bin\Debug\net7.0\Assignment.Models.dll
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\bin\Debug\net7.0\Assignment.Models.pdb
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.csproj.AssemblyReference.cache
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.AssemblyInfoInputs.cache
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.AssemblyInfo.cs
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.csproj.CoreCompileInputs.cache
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.csproj.CopyComplete
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.dll
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\refint\Assignment.Repository.dll
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\Assignment.Repository.pdb
+C:\Users\pci41\Desktop\Assignment\Assignment\Assignment.Repository\obj\Debug\net7.0\ref\Assignment.Repository.dll

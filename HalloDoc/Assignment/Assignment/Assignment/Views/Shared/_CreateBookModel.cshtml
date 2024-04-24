@@ -1,0 +1,91 @@
+﻿@model AddBookViewModel
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <form method="post" id="main-form" onsubmit="@Html.Raw("return Validation()")">
+            <div class="modal-header">
+                <h5 class="modal-title mt-3" id="exampleModalLongTitle">Book Form</h5>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="book-name" placeholder="name@example.com" asp-for="BookName" onchange="removeValidation(this,1)">
+                                <label for="book-name" class="label">Book Name</label>
+                                <span id="book-name-val" class="text-danger d-none">Book Name is Required!!</span>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="author" placeholder="name@example.com" asp-for="Author" onchange="removeValidation(this,1)">
+                                <label for="author" class="label">Author</label>
+                                <span id="author-val" class="text-danger d-none">Author Is Required!!</span>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="borrower-name" placeholder="name@example.com" asp-for="BorrowerName" onchange="removeValidation(this,1)">
+                                <label for="borrower-name" class="label">Borrower Name</label>
+                                <span id="borrower-name-val" class="text-danger d-none">Borrower is Required!!</span>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="doi" placeholder="name@example.com" asp-for="DateOfIssue" onchange="removeValidation(this,2)">
+                                <label for="doi" class="form-label dob-label label">Date Of Issue</label>
+                                <span id="doi-val" class="text-danger d-none">Date Of Issue is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <select class="form-control dropdownn select top-most-editable" id="genre" placeholder="name@example.com" asp-for="Genre" onchange="removeValidation(this,3)">
+                                    <option value="-1">Genre</option>
+                                    <option value="1">Action</option>
+                                    <option value="2">Thrill</option>
+                                    <option value="3">Mystery</option>
+                                </select>
+                                <span id="genre-val" class="text-danger d-none">Genre is required!!</span>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="city" placeholder="name@example.com" asp-for="City" onchange="removeValidation(this,1)">
+                                <label for="city" class="label">City</label>
+                                <span id="city-val" class="text-danger d-none">City is required!!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                <input type="hidden" id="book-id" asp-for="BookId">
+            </div>
+            <div class="modal-footer">
+                <div class="btn modal-btn cancel-btn" id="cancel-btn">Cancel</div>
+                <button type="submit" class="btn modal-btn save-btn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#cancel-btn").click(function () {
+            document.getElementById("book-name").value = ""
+            document.getElementById("city").value = ""
+            document.getElementById("genre").value = -1
+            document.getElementById("doi").value = "yyyy-MM-dd"
+            document.getElementById("borrower-name").value = ""
+            document.getElementById("author").value = ""
+            $("#AddBookModal").modal("hide");
+        });
+    });
+
+    window.onload = () => {
+        const inputDate = document.getElementById('doi');
+        const today = new Date().toISOString().split('T')[0];
+        inputDate.setAttribute('max', today);
+    }
+</script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

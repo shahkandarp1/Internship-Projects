@@ -1,0 +1,84 @@
+﻿@model IndexViewModel
+@{
+    string[] genre = { "Action", "Thrill", "Mystery" };
+}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>BookId</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Borrower Name</th>
+                <th>Date Of Issue</th>
+                <th>City</th>
+                <th>Genre</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.books)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.BookName</td>
+                    <td>@item.Author</td>
+                    <td>@item.BorrowerName</td>
+                    <td>@item.DateOfIssue</td>
+                    <td>@item.City</td>
+                    <td>@genre[(int)item.Genre - 1]</td>
+                    <td>
+                        <button class="btn edit-btn" data-id="@item.Id">Edit</button>
+                        <a class="btn delete-btn" asp-action="DeleteBook" asp-controller="Book" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+            
+    </table>
+</div>
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a data-page="@(Model.CurrentPage - 1)" href="#">Previous</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a data-page="@i" href="#" class="@(i == Model.CurrentPage ? "pagination-active" : "d-none")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a data-page="@(Model.CurrentPage + 1)" href="#">Next</a>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $('.pagination a').click(function (e) {
+            e.preventDefault();
+            var page = $(this).attr('data-page');
+
+            filter(page, 10)
+        });
+    });
+
+    var edit = document.getElementsByClassName("edit-btn")
+    for (let i = 0; i < edit.length; ++i) {
+        edit[i].onclick = function () {
+            var id = edit[i].getAttribute("data-id");
+            $.post("/Book/GetBookDetails", { id: id }, function (data) {
+
+                if (data.canOpen == false) {
+                    taostr.error("Book could not be editted");
+                    return
+                }
+                $('#model-partial-container').html(data);
+                document.getElementById("main-form").setAttribute("action", "/Book/EditBook")
+                document.getElementById("book-id").value = id
+                $("#AddBookModal").modal("show");
+            });
+        };
+    }
+
+</script>

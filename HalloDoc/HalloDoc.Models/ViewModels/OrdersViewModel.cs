@@ -15,7 +15,6 @@ namespace HalloDoc.ViewModels
         public int? RequestId { get; set; }
 
         [Required]
-        [Phone(ErrorMessage = "Please enter a valid contact number")]
         public string Business_contact { get; set; }
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",

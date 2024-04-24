@@ -1,0 +1,155 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+@section Styles {
+    <link href="~/css/home.css" rel="stylesheet" type="text/css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div class="body">
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+    <!-- Modal -->
+    <div class="modal fade" id="AddBookModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div id="model-partial-container"></div>
+    </div>
+
+
+    <div class="main-container mt-2">
+        <div class="top-search mb-4">
+            <div class="form-floating search-inp">
+                <input type="text" class="form-control" id="search" placeholder="name@example.com" onkeyup="filter(1,10)">
+                <label for="search" class="label">Search</label>
+            </div>
+            <button class="btn add-btn" id="add-book">
+                ADD BOOK
+            </button>
+        </div>
+        
+        <!-- Dynamic Content -->
+
+        <div id="partial-container"></div>
+
+        <!--Loader-->
+
+        <div class="loader-container">
+            <div class="loader"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#add-book").click(function () {
+            $.get("/Book/AddBook", function (data) {
+                $('#model-partial-container').html(data);
+                document.getElementById("main-form").setAttribute("action", "/Book/AddBook")
+                $("#AddBookModal").modal("show");
+            });
+            
+        });
+    });
+
+    const filter = (page, pageSize) => {
+        document.getElementById("partial-container").style.display = "none";
+        document.getElementsByClassName("loader-container")[0].style.display = "flex";
+        $.ajax({
+            url: `/Book/GetAllBookData`,
+            type: 'POST',
+            dataType: 'html',
+            data: { search: document.getElementById("search").value, page: page, pageSize: pageSize },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 401) {
+                    location.reload();
+                }
+                console.log(error);
+            }
+        });
+    }
+
+    const Validation = () => {
+        const book = document.getElementById("book-name").value
+        const city = document.getElementById("city").value
+        const genre = document.getElementById("genre").value
+        const doi = document.getElementById("doi").value
+        const borrower = document.getElementById("borrower-name").value
+        const author = document.getElementById("author").value
+
+        if (book == null || book == "") {
+            document.getElementById("book-name-val").classList.remove("d-none")
+        }
+
+        if (city == null || city == "") {
+            document.getElementById("city-val").classList.remove("d-none")
+        }
+
+        if (genre == -1) {
+            document.getElementById("genre-val").classList.remove("d-none")
+        }
+
+        if (doi == "") {
+            document.getElementById("doi-val").classList.remove("d-none")
+        }
+
+        if (borrower == null || borrower == "") {
+            document.getElementById("borrower-name-val").classList.remove("d-none")
+        }
+
+        if (author == null || author == "") {
+            document.getElementById("author-val").classList.remove("d-none")
+        }
+        
+        if (book == null || book == "" || city == null || city == "" || genre == -1 || doi == "" || borrower == null || borrower == "" || author == null || author == "") {
+            console.log("Hello")
+            return false;
+        }
+    }
+
+    const removeValidation = (element, type) => {
+        if (type == 1 && element.value != "") {
+            document.getElementById(`${element.id}-val`).classList.add("d-none")
+        }
+        else if (type == 2 && element.value != "") {
+            document.getElementById(`${element.id}-val`).classList.add("d-none")
+        }
+        else if (type == 3 && element.value != -1) {
+            document.getElementById(`${element.id}-val`).classList.add("d-none")
+        }
+    }
+
+    window.onload = () => {
+
+        $.ajax({
+            url: `/Book/GetAllBookData`,
+            type: 'POST',
+            dataType: 'html',
+            data: { search: document.getElementById("search").value, page: 1, pageSize: 10 },
+            // Pass your data here
+            success: function (response) {
+                document.getElementsByClassName("loader-container")[0].style.display = "none";
+                document.getElementById("partial-container").style.display = "block";
+                $("#partial-container").html(response)
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 401) {
+                    location.reload();
+                }
+                console.log(error);
+            }
+        });
+    }
+</script>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

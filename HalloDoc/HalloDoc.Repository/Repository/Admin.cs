@@ -1270,7 +1270,7 @@ namespace HalloDoc.Repository.Repository
                 string senderPassword = "shahkandarp2430"; // Replace with your actual password (store securely)
                 var platformTitle = "HalloDoc";
                 var subject = "Documents - HalloDoc";
-                var body = $"Hello {user.FirstName} {user.FirstName},<br />We have attached few important documents in order to update about you with the progress of your request.<br /><br />Regards,<br/>{platformTitle}<br/>";
+                var body = $"Hello {user.FirstName} {user.LastName},<br />We have attached few important documents in order to update about you with the progress of your request.<br /><br />Regards,<br/>{platformTitle}<br/>";
                 var request = _context.HttpContext.Request;
                 var token = request.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
@@ -1497,6 +1497,28 @@ namespace HalloDoc.Repository.Repository
                 return false;
             }
         }
+        
+        public bool SamePhysicianAssignCase(AdminDashboardViewModel adminDashboardViewModel)
+        {
+            try
+            {
+                Request request = _db.Requests.FirstOrDefault(r => r.RequestId == adminDashboardViewModel.RequestId);
+                if (request == null)
+                {
+                    return true;
+                }
+                if(request.PhysicianId ==  adminDashboardViewModel.PhysicianId)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception exp)
+            {
+                return true;
+            }
+        }
+
         public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel)
         {
             try
