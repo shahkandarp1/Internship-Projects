@@ -104,7 +104,7 @@
             <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Dashboard </a>
         </button>
         <button class="sidebar-tablinks @DinvoiceM @Dinvoicingrole @physician" onclick="clearStorage()">
-            <a class="mobile-sidebar-a" asp-action="Dashboard" asp-controller="Admin"> Invoicing </a>
+            <a class="mobile-sidebar-a" asp-action="Invoicing" asp-controller="Doctor"> Invoicing </a>
         </button>
         <button class="sidebar-tablinks @DscheduleM @Dschedulingrole @physician" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="MySchedule" asp-controller="Doctor"> My Schedule </a>
@@ -167,7 +167,7 @@
         <a class="navbar-btn bg-body @providerlocation @providerlocationrole @admin" asp-action="ProviderLocation" asp-controller="Admin" onclick="navbar(this)">
             <span> Provider Location </span>
         </a>
-        <a class="navbar-btn bg-body @Dinvoice @Dinvoicingrole @physician" asp-action="ProviderLocation" asp-controller="Admin" onclick="navbar(this)">
+        <a class="navbar-btn bg-body @Dinvoice @Dinvoicingrole @physician" asp-action="Invoicing" asp-controller="Doctor" onclick="navbar(this)">
             <span> Invoicing </span>
         </a>
         <a class="navbar-btn bg-body @Dschedule @Dschedulingrole @physician" asp-action="MySchedule" asp-controller="Doctor" onclick="navbar(this)">

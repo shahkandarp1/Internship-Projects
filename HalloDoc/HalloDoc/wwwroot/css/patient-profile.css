@@ -428,6 +428,10 @@ textarea{
     margin-top:0px!important;
 }
 
+.submit-edit-btn {
+    text-align: center;
+}
+
 @media screen and (max-width:769px) {
     .custom-file-upload {
         flex-basis: 13%;

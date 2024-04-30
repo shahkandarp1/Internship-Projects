@@ -1,0 +1,75 @@
+﻿@model PhysicianInvoicingViewModel
+
+@if(Model.timesheetDetails == null)
+{
+    <div class="no-record-pad">No Record(s) Found</div>
+}
+else{
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Shift Date</th>
+                    <th>Shift</th>
+                    <th>NightShift Weekend</th>
+                    <th>Housecall</th>
+                    <th>Housecall Nights Weekend</th>
+                    <th>Phone Consults</th>
+                    <th>Phone Consults Night Weekend</th>
+                    <th>Batch Testing</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.timesheetDetails.TimesheetDetails)
+                {
+                    <tr>
+                        <td>@item.Shiftdate?.ToString("MMMM dd,yyyy")</td>
+                        <td>@item.ShiftHours</td>
+                        <td>0</td>
+                        <td>
+                            @if(item.IsWeekend == new System.Collections.BitArray(new[] { false }))
+                            {
+                                <span>@item.Housecall</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { true }))
+                            {
+                                <span>@item.Housecall</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { false }))
+                            {
+                                <span>@item.PhoneConsult</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { true }))
+                            {
+                                <span>@item.PhoneConsult</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>0</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

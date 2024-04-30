@@ -3653,7 +3653,7 @@ namespace HalloDoc.Repository.Repository
 
         public bool CheckRole(string? role_name)
         {
-            return _db.Roles.Where(r=>r.Name == role_name).Count() > 0 ? true : false;
+            return _db.Roles.Where(r=>r.Name.ToLower().Replace(" ","") == role_name.ToLower().Replace(" ", "") && r.IsDeleted == new BitArray(new[] { false })).Count() > 0 ? true : false;
         }
 
         public bool CreateRole(string? menus, string? role_name, int? account_type)
@@ -5121,7 +5121,8 @@ namespace HalloDoc.Repository.Repository
                 PhoneConsult_Night_Weekend = payrate?.PhoneconsultNightWeekend ?? 0,
                 BatchTesting = payrate?.BatchTesting ?? 0,
                 PhoneConsult = payrate?.Phoneconsult ?? 0,
-                HouseCall = payrate?.Housecall ?? 0
+                HouseCall = payrate?.Housecall ?? 0,
+                PhysicianId = id
             };
             return payRateViewModel;
 
@@ -5140,9 +5141,51 @@ namespace HalloDoc.Repository.Repository
                         return false;
                     }
                 }
-                return true;
+                return true; 
             }
             catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool UpdatePayRate(PayRateViewModel payRateViewModel)
+        {
+            try
+            {
+                Payrate payrate = _db.Payrates.FirstOrDefault(p => p.PhysicianId == payRateViewModel.PhysicianId);
+                if (payrate == null)
+                {
+                    Payrate payrate1 = new Payrate
+                    {
+                        PhysicianId = (int)payRateViewModel.PhysicianId,
+                        NightShiftWeekend = payRateViewModel?.NightShiftWeekend ?? 0,
+                        Shift = payRateViewModel?.Shift ?? 0,
+                        HousecallNightWeekend = payRateViewModel?.HouseCalls_Night_Weekend ?? 0,
+                        Phoneconsult = payRateViewModel?.PhoneConsult ?? 0,
+                        PhoneconsultNightWeekend = payRateViewModel?.PhoneConsult_Night_Weekend ?? 0,
+                        BatchTesting = payRateViewModel?.BatchTesting ?? 0,
+                        Housecall = payRateViewModel?.HouseCall ?? 0,
+                        CreatedDate = DateTime.Now
+                    };
+                    _db.Payrates.Add(payrate1);
+                }
+                else
+                {
+                    payrate.Housecall = payRateViewModel?.HouseCall ?? payrate.Housecall;
+                    payrate.BatchTesting = payRateViewModel?.BatchTesting ?? payrate.BatchTesting;
+                    payrate.PhoneconsultNightWeekend = payRateViewModel?.PhoneConsult_Night_Weekend ?? payrate.PhoneconsultNightWeekend;
+                    payrate.Phoneconsult = payRateViewModel?.PhoneConsult ?? payrate.Phoneconsult;
+                    payrate.HousecallNightWeekend = payRateViewModel?.HouseCalls_Night_Weekend ?? payrate.HousecallNightWeekend;
+                    payrate.Shift = payRateViewModel?.Shift ?? payrate.Shift;
+                    payrate.NightShiftWeekend = payRateViewModel?.NightShiftWeekend ?? payrate.NightShiftWeekend;
+                    payrate.ModifiedDate = DateTime.Now;
+                    _db.Payrates.Update(payrate);
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception exp)
             {
                 return false;
             }

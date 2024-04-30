@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/ydgf1cF1w3yukbWmmVpJxlEoLEmbQHtOx5fpZGcGxK5Ts1Lw0Wt/msWbxRbJppiQMPxvqrmywzQq2kEqUiIgw==",
+  "dgSpecHash": "5TNTqlIG3l5IF4s+I9Uhzbx48FG91QwW+g+4yxGJFCvIz3UJwFdhk5nynaAt10hfEygAyL7BToq0iwuc5HNeDg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
+  "projectFilePath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pci41\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.18\\microsoft.entityframeworkcore.7.0.18.nupkg.sha512",
     "C:\\Users\\pci41\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.18\\microsoft.entityframeworkcore.abstractions.7.0.18.nupkg.sha512",

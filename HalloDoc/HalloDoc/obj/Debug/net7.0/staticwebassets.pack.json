@@ -1389,6 +1389,14 @@
       "PackagePath": "staticwebassets\\provider_documents\\13\\Screenshot (9).png"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\14\\1710313071690.JPEG",
+      "PackagePath": "staticwebassets\\provider_documents\\14\\1710313071690.JPEG"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\14\\HIPAA.pdf",
+      "PackagePath": "staticwebassets\\provider_documents\\14\\HIPAA.pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\provider_documents\\2\\1710246647876.JPEG",
       "PackagePath": "staticwebassets\\provider_documents\\2\\1710246647876.JPEG"
     },
@@ -1541,6 +1549,10 @@
       "PackagePath": "staticwebassets\\uploads\\Data-Pending.xlsx"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJISBH0001.pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJISBH0001.pdf"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0000 (1).pdf",
       "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0000 (1).pdf"
     },
@@ -1617,8 +1629,24 @@
       "PackagePath": "staticwebassets\\uploads\\SRS-23-24-Trainees.pdf"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (1).png",
+      "PackagePath": "staticwebassets\\uploads\\Screenshot (1).png"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (2).png",
       "PackagePath": "staticwebassets\\uploads\\Screenshot (2).png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (6).png",
+      "PackagePath": "staticwebassets\\uploads\\Screenshot (6).png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (7).png",
+      "PackagePath": "staticwebassets\\uploads\\Screenshot (7).png"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Screenshot (8).png",
+      "PackagePath": "staticwebassets\\uploads\\Screenshot (8).png"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Test Instructions.pdf",

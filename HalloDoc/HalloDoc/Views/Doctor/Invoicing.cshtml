@@ -1,0 +1,153 @@
+﻿@model PhysicianInvoicingViewModel
+@{
+    ViewData["Title"] = "Invoicing";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/partners.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Timesheets</span>
+            </div>
+            <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container">
+                            <div class="search-flex">
+                                <span class="search">
+                                    <img class="search-image"
+                                         src="../../images/search.svg"
+                                         alt="" />
+                                    <select id="timesheet_period" class="search-inp" onchange="filter(this)">
+                                        <option value="-1">Search By Timesheet Period</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <a class="back-btn create-btn reset-btn d-none" id="finalize-btn" asp-action="CreateBusiness" asp-controller="Admin">
+                                <span class="back-text create-text">Finalize Timesheet</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Partial View-->
+                <div id="partial-container"></div>
+
+            </div>
+
+            <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
+                <div class="top-text filter-section">
+                    <span class="submit-text" id="submit-text">TimeSheet Reimbursement</span>
+                </div>
+                <!--Partial View-->
+                <div id="partial-container2"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const filter = (element) => {
+        if(element.value != -1)
+        {
+            document.getElementById("partial-container").style.display = "none";
+            $.ajax({
+                url: `/Doctor/InvoicingTimesheetTable`,
+                type: 'POST',
+                dataType: 'html',
+                data: { startdate: element.value.split("|")[0], enddate: element.value.split("|")[1] },
+                // Pass your data here
+                success: function (response) {
+                    document.getElementById("partial-container").style.display = "block";
+                    $("#partial-container").html(response)
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        location.reload();
+                    }
+                    console.log(error);
+                }
+            });
+
+            document.getElementById("partial-container2").style.display = "none";
+            $.ajax({
+                url: `/Doctor/InvoicingReimbursementTable`,
+                type: 'POST',
+                dataType: 'html',
+                data: { startdate: element.value.split("|")[0], enddate: element.value.split("|")[1] },
+                // Pass your data here
+                success: function (response) {
+                    document.getElementById("partial-container2").style.display = "block";
+                    $("#partial-container2").html(response)
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        location.reload();
+                    }
+                    console.log(error);
+                }
+            });
+
+            $.post("/Doctor/CheckFinalize", { startdate: element.value.split("|")[0], enddate: element.value.split("|")[1] }, (response) => {
+                if (response.isFinalized == true) {
+                    document.getElementById("finalize-btn").classList.add("d-none")
+                }
+                else {
+                    document.getElementById("finalize-btn").classList.remove("d-none")
+                }
+            })
+        }
+    }
+
+    function generateDateIntervals() {
+        const today = new Date();
+        const currentYear = today.getFullYear();
+
+        const dropdown = document.getElementById("timesheet_period");
+
+        for (let month = 0; month < today.getMonth() + 1; month++) {
+            const monthName = new Date(currentYear, month).toLocaleDateString('en-US', { month: 'long' });
+
+            const firstHalfOption = document.createElement('option');
+            firstHalfOption.value = `${month + 1 < 10 ? `0${month + 1}` : month + 1}/01/${currentYear}|${month + 1 < 10 ? `0${month + 1}` : month + 1}/14/${currentYear}`;
+            firstHalfOption.text = `${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/01 - ${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/14`;
+            dropdown.appendChild(firstHalfOption);
+
+            const lastDay = new Date(currentYear, month + 1, 0).getDate();
+            const secondHalfOption = document.createElement('option');
+            secondHalfOption.value = `${month + 1 < 10 ? `0${month + 1}` : month + 1}/15/${currentYear}|${month + 1 < 10 ? `0${month + 1}` : month + 1}/${lastDay}/${currentYear}`;
+            secondHalfOption.text = `${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/15 - ${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/${lastDay}`;
+            dropdown.appendChild(secondHalfOption);
+        }
+
+    }
+    generateDateIntervals();
+
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

@@ -263,5 +263,28 @@ namespace HalloDoc.Controllers
             bool isUpdated = _doctor.UpdatePhysicianLatitudeLongitude(lat, lng, address);
             return Json(new { isUpdated = isUpdated });
         }
+        public IActionResult Invoicing()
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(null, null);
+            return View(physicianInvoicingViewModel);
+        }
+
+        public IActionResult InvoicingTimesheetTable(DateTime startdate, DateTime enddate)
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(startdate, enddate);
+            return PartialView("_PhysicianInvoicingDetailTable", physicianInvoicingViewModel);
+        }
+
+        public IActionResult InvoicingReimbursementTable(DateTime startdate, DateTime enddate)
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(startdate, enddate);
+            return PartialView("_PhysicianInvoicingReimbursementTable", physicianInvoicingViewModel);
+        }
+
+        public IActionResult CheckFinalize(DateTime startdate, DateTime enddate)
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(startdate, enddate);
+            return Json(new { isFinalized = physicianInvoicingViewModel.timesheetReimbursement?.IsFinalized[0] ?? false });
+        }
     }
 }

@@ -32,38 +32,38 @@
             </div>
             <div class="bottom-main-container bg-body mt-3 mb-3 pb-3">
                 <!-- Filter Section -->
-
-                <div class="filter-section">
-                    <div class="inner-filter-flex">
-                        <div class="inner-pt-container">
-                            <div class="upper-text">
-                                Details
+                <form>
+                    <div class="filter-section">
+                        <div class="inner-filter-flex">
+                            <div class="inner-pt-container">
+                                <div class="upper-text">
+                                    Details
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <input type="hidden" id="roles" />
-                        <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                            <input type="text" class="form-control" id="role-name" placeholder="name@example.com">
-                            <label for="role-name" class="form-label">Role Name</label>
+                        <div class="row">
+                            <input type="hidden" id="roles" />
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" class="form-control" id="role-name" placeholder="name@example.com">
+                                <label for="role-name" class="form-label">Role Name</label>
+                            </div>
+                            <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
+                                <select class="form-control select " id="account-type" placeholder="name@example.com" onchange="changeAccountType(this)">
+                                    <option value="-1">All</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Provider</option>
+                                    <option value="3">Patient</option>
+                                </select>
+                                <label for="account-type" class="form-label">Account Type</label>
+                            </div>
                         </div>
-                        <div class="form-floating mt-3 inp col-lg-6 col-md-6 col-sm-12">
-                            <select class="form-control select " id="account-type" placeholder="name@example.com" onchange="changeAccountType(this)">
-                                <option value="-1">All</option>
-                                <option value="1">Admin</option>
-                                <option value="2">Provider</option>
-                                <option value="3">Patient</option>
-                            </select>
-                            <label for="account-type" class="form-label">Account Type</label>
+                        <div id="checkboxes"></div>
+                        <div class="lower-btn" id="bottom-edit">
+                            <a class="lower-custom-btn submit-btn submit-edit-btn" id="submit-btn" onclick="createRole()">Save</a>
+                            <button type="reset" class="lower-custom-btn cancel-btn bg-body">Cancel</button>
                         </div>
                     </div>
-                    <div id="checkboxes"></div>
-                    <div class="lower-btn" id="bottom-edit">
-                        <button class="lower-custom-btn submit-btn" id="submit-btn" onclick="createRole()">Save</button>
-                        <a class="lower-custom-btn cancel-btn bg-body">Cancel</a>
-                    </div>
-                </div>
-
+                </form>
             </div>
             
         </div>

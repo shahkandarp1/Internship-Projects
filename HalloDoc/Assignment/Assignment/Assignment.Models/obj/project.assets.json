@@ -678,11 +678,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
+      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
       "projectName": "Assignment.Models",
-      "projectPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
+      "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj",
       "packagesPath": "C:\\Users\\pci41\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\obj\\",
+      "outputPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci41\\AppData\\Roaming\\NuGet\\NuGet.Config",

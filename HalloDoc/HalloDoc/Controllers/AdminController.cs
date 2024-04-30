@@ -1309,6 +1309,11 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public IActionResult EditRole(int? id, string? menus, string? role_name, int? account_type)
         {
+            bool isExist = _admin.CheckRole(role_name);
+            if (isExist)
+            {
+                return Json(new { isEditted = 4 });
+            }
             bool isEditted = _admin.EditRoleDetails(id,menus,role_name,account_type);
             if(isEditted)
             {
@@ -1884,6 +1889,20 @@ namespace HalloDoc.Controllers
                 return NotFound();
             }
             return View(payRateViewModel);
+        }
+        [HttpPost]
+        public IActionResult UpdatePayRate(PayRateViewModel payRateViewModel)
+        {
+            bool isUpdated = _admin.UpdatePayRate(payRateViewModel);
+            if (isUpdated)
+            {
+                TempData["success"] = "Pay Rate Updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Pay Rate could not be Updated!!";
+            }
+            return RedirectToAction("PayRate", new { id = payRateViewModel.PhysicianId });
         }
     }
 }

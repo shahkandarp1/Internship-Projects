@@ -1073,11 +1073,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment\\Assignment.csproj",
+      "projectUniqueName": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment\\Assignment.csproj",
       "projectName": "Assignment",
-      "projectPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment\\Assignment.csproj",
+      "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment\\Assignment.csproj",
       "packagesPath": "C:\\Users\\pci41\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment\\obj\\",
+      "outputPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci41\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1095,11 +1095,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj": {
-              "projectPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj"
+            "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj": {
+              "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Models\\Assignment.Models.csproj"
             },
-            "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Repository\\Assignment.Repository.csproj": {
-              "projectPath": "C:\\Users\\pci41\\Desktop\\Assignment\\Assignment\\Assignment.Repository\\Assignment.Repository.csproj"
+            "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Repository\\Assignment.Repository.csproj": {
+              "projectPath": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\Assignment\\Assignment\\Assignment.Repository\\Assignment.Repository.csproj"
             }
           }
         }

@@ -18,6 +18,6 @@ namespace HalloDoc.Repository.Interface
         public int ConcludeCare(ConcludeCareViewModel concludeCareViewModel);
         public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
         public bool UpdatePhysicianLatitudeLongitude(decimal lat, decimal lng, string address);
-
+        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate);
     }
 }

@@ -9,6 +9,7 @@ namespace HalloDoc.ViewModels
     public class PayRateViewModel
     {
         public AdminNavbarViewModel? adminNavbarViewModel { get; set; }
+        public int? PhysicianId { get; set; }
         public decimal? NightShiftWeekend { get; set; }
         public decimal? Shift { get; set; }
         public decimal? HouseCalls_Night_Weekend { get; set; }

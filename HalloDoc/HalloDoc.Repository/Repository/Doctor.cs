@@ -575,5 +575,37 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate)
+        {
+
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "DoctorInvoice",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = new PhysicianInvoicingViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+            };
+
+            if (startdate != null)
+            {
+                physicianInvoicingViewModel.timesheetDetails = _db.Timesheets.Include(t => t.TimesheetDetails).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+            }
+            if (enddate != null)
+            {
+                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+            }
+
+            return physicianInvoicingViewModel;
+        }
+
     }
 }

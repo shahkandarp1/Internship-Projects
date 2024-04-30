@@ -414,6 +414,9 @@ a {
     border-radius: 5px;
 }
 
+.no-record-pad {
+    margin-left: 20px;
+}
 @media screen and (max-height: 450px) {
     .sidebar {
         padding-top: 15px;

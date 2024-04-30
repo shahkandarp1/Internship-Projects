@@ -192,6 +192,7 @@ namespace HalloDoc.Repository.Interface
         public Task<bool> RequestDTYSupport(AdminDashboardViewModel adminDashboardViewModel);
         public PayRateViewModel GetPayRate(int id);
         public bool CheckUserRole(string email);
+        public bool UpdatePayRate(PayRateViewModel payRateViewModel);
 
     }
 }

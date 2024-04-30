@@ -55,17 +55,22 @@ namespace HalloDoc.Controllers
                 var result = _patient.Login(model);
                 if (result == 2)
                 {
-                    TempData["success"] = "Loged in Successfully!!";
                     AspNetUser user = _patient.GetAspNetUserLogin(model.Email);
                     var jwtToken = _jwt.GenerateJWTAuthetication(user);
                     CookieModel cookieModel = _jwt.GetDetails(jwtToken);
                     Response.Cookies.Append("jwt", jwtToken);
                     if(cookieModel.role == "Patient")
                     {
+                        TempData["success"] = "Loged in Successfully!!";
                         return RedirectToAction("PatientDashboard","Patient");
+                    }
+                    else if(cookieModel.menus == "" || cookieModel.menus == null)
+                    {
+                        TempData["error"] = "You are not having any role!!";
                     }
                     else if(cookieModel.role == "Admin")
                     {
+                        TempData["success"] = "Loged in Successfully!!";
                         mappingDictionary.Add("My Profile","Profile");
                         if(cookieModel.menus.Contains("Dashboard"))
                         {
@@ -78,6 +83,7 @@ namespace HalloDoc.Controllers
                     }
                     else if(cookieModel.role == "Provider")
                     {
+                        TempData["success"] = "Loged in Successfully!!";
                         mappingDictionary.Add("My Profile", "DoctorProfile");
                         if (cookieModel.menus.Contains("Dashboard"))
                         {

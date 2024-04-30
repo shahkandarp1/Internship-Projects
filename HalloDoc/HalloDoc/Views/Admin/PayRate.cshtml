@@ -41,6 +41,7 @@
                                 <th class="payrate-action">Action</th>
                             </tr>
                         </thead>
+                        <form asp-action="UpdatePayRate" asp-controller="Admin" method="post">
                         <tbody>
                             <tr>
                                 <td class="payrate-category">NightShift_Weekend</td>
@@ -52,10 +53,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="NightShiftWeekend-btn">
+                                    <div class="lower-btn table-action-btn @(Model.NightShiftWeekend == 0 ? "hidden" : "")" id="NightShiftWeekend-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="NightShiftWeekend-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="NightShiftWeekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.NightShiftWeekend == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -69,10 +73,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="Shift-btn">
+                                    <div class="lower-btn table-action-btn @(Model.Shift == 0 ? "hidden" : "")" id="Shift-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="Shift-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="Shift-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.Shift == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -86,10 +93,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="HouseCalls_Night_Weekend-btn">
+                                    <div class="lower-btn table-action-btn @(Model.HouseCalls_Night_Weekend == 0 ? "hidden" : "")" id="HouseCalls_Night_Weekend-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="HouseCalls_Night_Weekend-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="HouseCalls_Night_Weekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.HouseCalls_Night_Weekend == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -103,10 +113,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="PhoneConsult-btn">
+                                    <div class="lower-btn table-action-btn @(Model.PhoneConsult == 0 ? "hidden" : "")" id="PhoneConsult-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="PhoneConsult-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="PhoneConsult-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.PhoneConsult == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -120,10 +133,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="PhoneConsult_Night_Weekend-btn">
+                                    <div class="lower-btn table-action-btn @(Model.PhoneConsult_Night_Weekend == 0 ? "hidden" : "")" id="PhoneConsult_Night_Weekend-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="PhoneConsult_Night_Weekend-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="PhoneConsult_Night_Weekend-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.PhoneConsult_Night_Weekend == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -137,10 +153,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="BatchTesting-btn">
+                                    <div class="lower-btn table-action-btn @(Model.BatchTesting == 0 ? "hidden" : "")" id="BatchTesting-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="BatchTesting-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns" type="submit">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="BatchTesting-cancel" onclick="Cancel(this)">Cancel</a>
+                                    </div>
+                                    <div class="lower-btn table-action-btn @(Model.BatchTesting == 0 ? "" : "hidden")">
+                                        <button class="lower-custom-btn submit-btn table-action-btns" type="submit">Submit</button>
                                     </div>
                                 </td>
                             </tr>
@@ -154,14 +173,19 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="lower-btn table-action-btn" id="HouseCall-btn">
+                                    <div class="lower-btn table-action-btn @(Model.HouseCall == 0 ? "hidden" : "")" id="HouseCall-btn">
                                         <a class="lower-custom-btn submit-btn table-action-btns" id="HouseCall-edit" onclick="edit(this)">Edit</a>
                                         <button class="lower-custom-btn submit-btn hidden table-action-btns">Save</button>
                                         <a class="lower-custom-btn cancel-btn hidden table-action-btns" id="HouseCall-cancel" onclick="Cancel(this)">Cancel</a>
                                     </div>
+                                    <div class="lower-btn table-action-btn @(Model.HouseCall == 0 ? "" : "hidden")" id="HouseCall-btn">
+                                        <button class="lower-custom-btn submit-btn table-action-btns">Submit</button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
+                        <input type="hidden" asp-for="PhysicianId" />
+                        </form>
                     </table>
                 </div>
             </div>
@@ -190,7 +214,7 @@
     }
 
     const Cancel = (element) => {
-        document.getElementById(element.id.split("-")[0]).setAttribute("readonly","true")
+        document.getElementById(element.id.split("-")[0]).setAttribute("readonly", "true")
         const topbtn = document.getElementById(`${element.id.split("-")[0]}-btn`)
         const btn = topbtn.getElementsByClassName('lower-custom-btn')
         for (let i = 0; i < btn.length; ++i) {
@@ -203,7 +227,65 @@
         }
     }
 
+    window.onload = () => {
 
+        const housecall = document.getElementById("HouseCall")
+        if (housecall.value == 0) {
+            housecall.removeAttribute("readonly")
+        }
+        else {
+            housecall.setAttribute("readonly", "true")
+        }
+
+        const BatchTesting = document.getElementById("BatchTesting")
+        if (BatchTesting.value == 0) {
+            BatchTesting.removeAttribute("readonly")
+        }
+        else {
+            BatchTesting.setAttribute("readonly", "true")
+        }
+
+        const PhoneConsult_Night_Weekend = document.getElementById("PhoneConsult_Night_Weekend")
+        if (PhoneConsult_Night_Weekend.value == 0) {
+            PhoneConsult_Night_Weekend.removeAttribute("readonly")
+        }
+        else {
+            PhoneConsult_Night_Weekend.setAttribute("readonly", "true")
+        }
+
+        const PhoneConsult = document.getElementById("PhoneConsult")
+        if (PhoneConsult.value == 0) {
+            PhoneConsult.removeAttribute("readonly")
+        }
+        else {
+            PhoneConsult.setAttribute("readonly", "true")
+        }
+
+        const HouseCalls_Night_Weekend = document.getElementById("HouseCalls_Night_Weekend")
+        if (HouseCalls_Night_Weekend.value == 0) {
+            HouseCalls_Night_Weekend.removeAttribute("readonly")
+        }
+        else {
+            HouseCalls_Night_Weekend.setAttribute("readonly", "true")
+        }
+
+        const Shift = document.getElementById("Shift")
+        if (Shift.value == 0) {
+            Shift.removeAttribute("readonly")
+        }
+        else {
+            Shift.setAttribute("readonly", "true")
+        }
+
+        const NightShiftWeekend = document.getElementById("NightShiftWeekend")
+        if (NightShiftWeekend.value == 0) {
+            NightShiftWeekend.removeAttribute("readonly")
+        }
+        else {
+            NightShiftWeekend.setAttribute("readonly", "true")
+        }
+
+    }
 
 
 </script>
