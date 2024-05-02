@@ -8,8 +8,10 @@ namespace HalloDoc.ViewModels
 {
     public class PhysicianInvoicingViewModel
     {
-        public AdminNavbarViewModel adminNavbarViewModel { get; set; }
-        public Timesheet timesheetDetails { get; set; }
-        public Timesheet timesheetReimbursement { get; set; }
+        public AdminNavbarViewModel? adminNavbarViewModel { get; set; }
+        public Timesheet? timesheetDetails { get; set; }
+        public Timesheet? timesheetReimbursement { get; set; }
+        public DateTime? startDate { get; set; }
+        public DateTime? endDate { get; set; }
     }
 }

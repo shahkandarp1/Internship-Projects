@@ -523,9 +523,11 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.UserModifiedByNavigations).HasConstraintName("User_ModifiedBy_fkey");
         });
+
         modelBuilder.Entity<RequestViewModel>().HasNoKey();
         modelBuilder.Entity<ELogViewModel>().HasNoKey();
         modelBuilder.Entity<SMSLogViewModel>().HasNoKey();
+
         OnModelCreatingPartial(modelBuilder);
     }
 

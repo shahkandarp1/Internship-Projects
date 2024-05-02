@@ -1,6 +1,10 @@
-﻿using HalloDoc.Repository.Interface;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Wordprocessing;
+using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -601,10 +605,295 @@ namespace HalloDoc.Repository.Repository
             }
             if (enddate != null)
             {
-                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
             }
 
             return physicianInvoicingViewModel;
+        }
+
+        public PhysicianTimesheetViewModel GetTimesheetDetails(DateTime? startdate, DateTime? enddate)
+        {
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+
+            AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
+            {
+                Name = cookieModel.name,
+                curr_active = "DoctorInvoice",
+                menus = cookieModel.menus,
+                role = cookieModel.role
+            };
+
+            List<TimeSheetViewModel> timesheetDetails = new List<TimeSheetViewModel>();
+            List<TimeSheetReimbursementViewModel> timeSheetReimbursementViewModels = new List<TimeSheetReimbursementViewModel>();
+
+            Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+            if(timesheet!=null && timesheet?.TimesheetDetails.Count != 0)
+            {
+                for(var i=0;i< timesheet.TimesheetDetails.ToList().Count;++i)
+                {
+                    timesheetDetails.Add(new TimeSheetViewModel()
+                    {
+                        Shiftdate = timesheet.TimesheetDetails.ToList()[i].Shiftdate,
+                        ShiftHours = timesheet.TimesheetDetails.ToList()[i].ShiftHours,
+                        Housecall = timesheet.TimesheetDetails.ToList()[i].Housecall,
+                        PhoneConsult = timesheet.TimesheetDetails.ToList()[i].PhoneConsult,
+                        IsWeekend = timesheet.TimesheetDetails.ToList()[i].IsWeekend[0],
+                        TimesheetId = timesheet.TimesheetDetails.ToList()[i].TimesheetId,
+                        TimesheetDetailId = timesheet.TimesheetDetails.ToList()[i].TimesheetDetailId,
+                    });
+                }                
+            }
+            else
+            {
+                for(var i= startdate.Value.Date;i<= enddate.Value.Date;i= i.AddDays(1))
+                {
+                    var hours = (from s in _db.Shifts
+                                              join sd in _db.ShiftDetails on s.ShiftId equals sd.ShiftId
+                                              where s.PhysicianId == cookieModel.userId && sd.ShiftDate == i && sd.IsDeleted == new BitArray(new[] { false })
+                                              select Math.Ceiling((sd.EndTime - sd.StartTime).TotalSeconds / 3600)).Sum();
+
+                    timesheetDetails.Add(new TimeSheetViewModel()
+                    {
+                        Shiftdate = i,
+                        ShiftHours = (int)hours,
+                        IsWeekend = false
+                    });
+
+                }
+
+            }
+
+            for (var i = startdate.Value.Date; i <= enddate.Value.Date; i = i.AddDays(1))
+            {
+                var timesheetreimbursement = timesheet?.TimesheetReimbursements.FirstOrDefault(t => t.Date.Value.Date == i);
+
+                if (timesheetreimbursement != null)
+                {
+                    timeSheetReimbursementViewModels.Add(new TimeSheetReimbursementViewModel()
+                    {
+                        TimesheetId = timesheetreimbursement.TimesheetId,
+                        TimesheetReimbursementId = timesheetreimbursement.TimesheetReimbursementId,
+                        IsDeleted = timesheetreimbursement.IsDeleted,
+                        Item = timesheetreimbursement.Item,
+                        Amount = timesheetreimbursement.Amount,
+                        Bill = timesheetreimbursement.Bill,
+                        Date = timesheetreimbursement.Date,
+                    });
+                }
+                else
+                {
+                    timeSheetReimbursementViewModels.Add(new TimeSheetReimbursementViewModel()
+                    {
+                        IsDeleted = false,
+                        Amount = 0,
+                        Date = i,
+                        TimesheetReimbursementId = 0
+                    });
+                }
+            }
+
+            PhysicianTimesheetViewModel physicianTimesheetViewModel = new PhysicianTimesheetViewModel
+            {
+                adminNavbarViewModel = adminNavbarViewModel,
+                timesheetDetails = timesheetDetails,
+                startDate = startdate,
+                endDate = enddate,
+                timeSheetReimbursementViewModels = timeSheetReimbursementViewModels
+            };
+            return physicianTimesheetViewModel;
+        }
+
+        public bool UpdateTimeSheet(PhysicianTimesheetViewModel physicianTimesheetViewModel)
+        {
+            try
+            {
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == physicianTimesheetViewModel.startDate.Value.Date && t.Enddate.Value.Date == physicianTimesheetViewModel.endDate.Value.Date && t.PhysicianId == cookieModel.userId);
+
+                if (physicianTimesheetViewModel.timesheetDetails[0].TimesheetDetailId <= 0)
+                {
+                    if (timesheet != null)
+                    {
+                        for (var i = 0; i < physicianTimesheetViewModel.timesheetDetails.Count; ++i)
+                        {
+                            _db.TimesheetDetails.Add(new TimesheetDetail()
+                            {
+                                Shiftdate = physicianTimesheetViewModel.timesheetDetails[i].Shiftdate,
+                                ShiftHours = physicianTimesheetViewModel.timesheetDetails[i].ShiftHours,
+                                Housecall = physicianTimesheetViewModel.timesheetDetails[i].Housecall,
+                                PhoneConsult = physicianTimesheetViewModel.timesheetDetails[i].PhoneConsult,
+                                IsWeekend = new BitArray(new[] { physicianTimesheetViewModel.timesheetDetails[i]?.IsWeekend ?? false }),
+                                TimesheetId = timesheet.TimesheetId
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Timesheet timesheet1 = new Timesheet
+                        {
+                            PhysicianId = cookieModel.userId,
+                            Startdate = physicianTimesheetViewModel.startDate,
+                            Enddate = physicianTimesheetViewModel.endDate,
+                            Status = "Not Accepted",
+                            IsFinalized = new BitArray(new[] { false })
+                        };
+                        _db.Timesheets.Add(timesheet1);
+                        for (var i = 0; i < physicianTimesheetViewModel.timesheetDetails.Count; ++i)
+                        {
+                            _db.TimesheetDetails.Add(new TimesheetDetail()
+                            {
+                                Shiftdate = physicianTimesheetViewModel.timesheetDetails[i].Shiftdate,
+                                ShiftHours = physicianTimesheetViewModel.timesheetDetails[i].ShiftHours,
+                                Housecall = physicianTimesheetViewModel.timesheetDetails[i].Housecall,
+                                PhoneConsult = physicianTimesheetViewModel.timesheetDetails[i].PhoneConsult,
+                                IsWeekend = new BitArray(new[] { physicianTimesheetViewModel.timesheetDetails[i]?.IsWeekend ?? false }),
+                                Timesheet = timesheet1
+                            });
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    for (var i = 0; i < physicianTimesheetViewModel.timesheetDetails.Count; ++i)
+                    {
+                        TimesheetDetail timesheetDetail = _db.TimesheetDetails.FirstOrDefault(t=>t.TimesheetDetailId == physicianTimesheetViewModel.timesheetDetails[i].TimesheetDetailId);
+                        timesheetDetail.Shiftdate = physicianTimesheetViewModel.timesheetDetails[i].Shiftdate;
+                        timesheetDetail.ShiftHours = physicianTimesheetViewModel.timesheetDetails[i].ShiftHours;
+                        timesheetDetail.Housecall = physicianTimesheetViewModel.timesheetDetails[i].Housecall;
+                        timesheetDetail.PhoneConsult = physicianTimesheetViewModel.timesheetDetails[i].PhoneConsult;
+                        timesheetDetail.IsWeekend = new BitArray(new[] { physicianTimesheetViewModel.timesheetDetails[i]?.IsWeekend ?? false });
+
+                        _db.TimesheetDetails.Update(timesheetDetail);
+                    }
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateTimeSheetReimbursement(IFormFile file, DateTime? date, int? id, string? item, int? amount, DateTime? startdate, DateTime? enddate)
+        {
+            try
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file.FileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+
+                var requestt = _context.HttpContext.Request;
+                var token = requestt.Cookies["jwt"];
+                CookieModel cookieModel = _jwt.GetDetails(token);
+
+                if (id <= 0)
+                {
+                    Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+                    if(timesheet != null)
+                    {
+                        TimesheetReimbursement timesheetReimbursement = new TimesheetReimbursement
+                        {
+                            Item = item,
+                            Amount = (int)amount,
+                            Bill = file!=null ? file.FileName : null,
+                            TimesheetId = timesheet.TimesheetId,
+                            IsDeleted = false,
+                            Date = date
+                        };
+                        _db.TimesheetReimbursements.Add(timesheetReimbursement);
+                    }
+                    else
+                    {
+                        Timesheet timesheet1 = new Timesheet
+                        {
+                            PhysicianId = cookieModel.userId,
+                            Startdate = startdate,
+                            Enddate = enddate,
+                            Status = "Not Accepted",
+                            IsFinalized = new BitArray(new[] { false })
+                        };
+                        _db.Timesheets.Add(timesheet1);
+
+                        TimesheetReimbursement timesheetReimbursement = new TimesheetReimbursement
+                        {
+                            Item = item,
+                            Amount = (int)amount,
+                            Bill = file != null ? file.FileName : null,
+                            Timesheet = timesheet1,
+                            IsDeleted = false,
+                            Date = date
+                        };
+                        _db.TimesheetReimbursements.Add(timesheetReimbursement);
+                    }
+                }
+                else
+                {
+                    TimesheetReimbursement timesheetReimbursement = _db.TimesheetReimbursements.FirstOrDefault(t => t.TimesheetReimbursementId == id);
+                    timesheetReimbursement.Amount = (int)amount;
+                    timesheetReimbursement.Item = item;
+                    timesheetReimbursement.Bill = file != null ? file.FileName : timesheetReimbursement.Bill;
+
+                    _db.TimesheetReimbursements.Update(timesheetReimbursement);
+                }
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteTimesheetReimbursement(int id)
+        {
+            try
+            {
+                TimesheetReimbursement timesheetReimbursement = _db.TimesheetReimbursements.FirstOrDefault(t=>t.TimesheetReimbursementId == id);
+                if(timesheetReimbursement == null)
+                {
+                    return false;
+                }
+                timesheetReimbursement.IsDeleted = true;
+                _db.TimesheetReimbursements.Update(timesheetReimbursement);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+        public bool FinalizeTimesheet(int id)
+        {
+            try
+            {
+                Timesheet timesheet = _db.Timesheets.FirstOrDefault(t=>t.TimesheetId == id);
+                if(timesheet == null)
+                {
+                    return false;
+                }
+                timesheet.IsFinalized = new BitArray(new[] { true });
+                timesheet.ModifiedDate = DateTime.Now;
+                _db.Timesheets.Update(timesheet);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
         }
 
     }

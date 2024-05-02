@@ -1,13 +1,13 @@
 ﻿@model PhysicianInvoicingViewModel
 
-@if (Model.timesheetReimbursement == null)
+@if ((Model.timesheetReimbursement != null && Model.timesheetReimbursement.TimesheetReimbursements.Count == 0) || Model.timesheetReimbursement == null)
 {
     <div class ="no-record-pad">No Record(s) Found</div>
 }
 else
 {
     <div class="table-responsive">
-        <table>
+        <table class="timesheet-table">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -18,14 +18,19 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.timesheetDetails.TimesheetReimbursements)
+                @foreach (var item in Model.timesheetReimbursement.TimesheetReimbursements)
                 {
                     <tr>
                         <td>@item.Date?.ToString("MMMM dd,yyyy")</td>
                         <td>@item.Item</td>
                         <td>@item.Amount</td>
-                        <td>@item.Bill</td>
-                        <td><a class="back-btn reset-btn mt-3" id="reset-password"><span class="back-text">View</span></a></td>
+                        <td>@(item.Bill ?? "-")</td>
+                        <td>
+                            @if(item.Bill!=null)
+                            {
+                                <a class="back-btn reset-btn db" id="reset-password" onclick="viewDoc('@item.Bill')">View</a>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>

@@ -417,6 +417,23 @@ a {
 .no-record-pad {
     margin-left: 20px;
 }
+
+.timesheet-table{
+    width:100%;
+}
+
+.timesheet-flex-container{
+    width:80%!important;
+}
+.timesheet-back{
+    justify-content:flex-end!important;
+}
+.timesheet-reverse-low-btn {
+    justify-content: flex-start !important;
+}
+.timesheet-upload-form{
+    flex-basis:auto;
+}
 @media screen and (max-height: 450px) {
     .sidebar {
         padding-top: 15px;

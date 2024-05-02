@@ -137,6 +137,10 @@
       "PackagePath": "staticwebassets\\css\\submit-request.css"
     },
     {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\timesheet.css",
+      "PackagePath": "staticwebassets\\css\\timesheet.css"
+    },
+    {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\css\\view-case.css",
       "PackagePath": "staticwebassets\\css\\view-case.css"
     },
@@ -1571,6 +1575,10 @@
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0003.pdf",
       "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0003.pdf"
+    },
+    {
+      "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\EncounterReport-GJKASH0004.pdf",
+      "PackagePath": "staticwebassets\\uploads\\EncounterReport-GJKASH0004.pdf"
     },
     {
       "Id": "C:\\Users\\pci41\\Desktop\\Internship-Projects\\HalloDoc\\HalloDoc\\wwwroot\\uploads\\Filtered-Data (3).xlsx",

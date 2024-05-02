@@ -22,6 +22,8 @@ public partial class TimesheetReimbursement
 
     public DateTime? Date { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     [ForeignKey("TimesheetId")]
     [InverseProperty("TimesheetReimbursements")]
     public virtual Timesheet Timesheet { get; set; } = null!;

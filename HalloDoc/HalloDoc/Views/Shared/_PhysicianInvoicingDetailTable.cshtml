@@ -1,12 +1,12 @@
 ﻿@model PhysicianInvoicingViewModel
 
-@if(Model.timesheetDetails == null)
+@if ((Model.timesheetDetails != null && Model.timesheetDetails.TimesheetDetails.Count == 0) || Model.timesheetDetails == null)
 {
     <div class="no-record-pad">No Record(s) Found</div>
 }
 else{
     <div class="table-responsive">
-        <table>
+        <table class="timesheet-table">
             <thead>
                 <tr>
                     <th>Shift Date</th>
@@ -27,7 +27,7 @@ else{
                         <td>@item.ShiftHours</td>
                         <td>0</td>
                         <td>
-                            @if(item.IsWeekend == new System.Collections.BitArray(new[] { false }))
+                            @if(item.IsWeekend[0] == false)
                             {
                                 <span>@item.Housecall</span>
                             }
@@ -37,7 +37,7 @@ else{
                             }
                         </td>
                         <td>
-                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { true }))
+                            @if (item.IsWeekend[0] == true)
                             {
                                 <span>@item.Housecall</span>
                             }
@@ -47,7 +47,7 @@ else{
                             }
                         </td>
                         <td>
-                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { false }))
+                            @if (item.IsWeekend[0] == false)
                             {
                                 <span>@item.PhoneConsult</span>
                             }
@@ -57,7 +57,7 @@ else{
                             }
                         </td>
                         <td>
-                            @if (item.IsWeekend == new System.Collections.BitArray(new[] { true }))
+                            @if (item.IsWeekend[0] == true)
                             {
                                 <span>@item.PhoneConsult</span>
                             }

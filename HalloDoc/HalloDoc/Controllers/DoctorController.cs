@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Repository.Auth;
 using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
@@ -285,6 +286,67 @@ namespace HalloDoc.Controllers
         {
             PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(startdate, enddate);
             return Json(new { isFinalized = physicianInvoicingViewModel.timesheetReimbursement?.IsFinalized[0] ?? false });
+        }
+        public IActionResult Timesheet(DateTime startdate, DateTime enddate)
+        {
+            PhysicianTimesheetViewModel physicianTimesheetViewModel = _doctor.GetTimesheetDetails(startdate, enddate);
+            return View(physicianTimesheetViewModel);
+        }
+        [HttpPost]
+        public IActionResult TimeSheet(PhysicianTimesheetViewModel physicianTimesheetViewModel)
+        {
+            bool isUpdated = _doctor.UpdateTimeSheet(physicianTimesheetViewModel);
+            if(isUpdated)
+            {
+                TempData["success"] = "Timesheet updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Timesheet could not be updated!!";
+            }
+            return RedirectToAction("Invoicing");
+        }
+
+        public IActionResult TimeSheetReimbursement(IFormFile file,DateTime? date,int? id,string? item,int? amount, DateTime? startdate, DateTime? enddate)
+        {
+            Task<bool> isCreated = _doctor.UpdateTimeSheetReimbursement(file, date, id, item, amount,startdate,enddate);
+            if (isCreated.Result)
+            {
+                TempData["success"] = "Timesheet updated Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Timesheet could not be updated!!";
+            }
+            return RedirectToAction("TimeSheet",new { startdate = startdate,enddate = enddate });
+        }
+
+        public IActionResult DeleteTimesheetReimbursement(int id)
+        {
+            bool isDeleted = _doctor.DeleteTimesheetReimbursement(id);
+            if(isDeleted)
+            {
+                TempData["success"] = "Timesheet Deleted Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Timesheet could not be deleted!!";
+            }
+            return Json(new { isDeleted });
+        }
+
+        public IActionResult FinalizeTimesheet(int id)
+        {
+            bool isFinalized = _doctor.FinalizeTimesheet(id);
+            if(isFinalized)
+            {
+                TempData["success"] = "Timesheet Finalized Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Timesheet could not be Finalized!!";
+            }
+            return Json(new { isFinalized });
         }
     }
 }

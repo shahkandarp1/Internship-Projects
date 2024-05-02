@@ -10,6 +10,7 @@
     <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
     <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
     <link href="~/css/partners.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/timesheet.css" rel="stylesheet" type="text/css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 }
@@ -43,7 +44,7 @@
                                     </select>
                                 </span>
                             </div>
-                            <a class="back-btn create-btn reset-btn d-none" id="finalize-btn" asp-action="CreateBusiness" asp-controller="Admin">
+                            <a class="back-btn create-btn reset-btn d-none" id="finalize-btn" href="#">
                                 <span class="back-text create-text">Finalize Timesheet</span>
                             </a>
                         </div>
@@ -118,6 +119,8 @@
                     document.getElementById("finalize-btn").classList.remove("d-none")
                 }
             })
+
+            document.getElementById("finalize-btn").setAttribute("href", `/Doctor/Timesheet?startdate=${element.value.split("|")[0]}&enddate=${element.value.split("|")[1]}`)
         }
     }
 
@@ -145,6 +148,11 @@
     }
     generateDateIntervals();
 
+    const viewDoc = (filename) => {
+        var pdfPath = "@Url.Content($"~/uploads/")";
+        pdfPath += filename
+        window.open(pdfPath, '_blank');
+    }
 
 </script>
 

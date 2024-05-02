@@ -1,0 +1,275 @@
+﻿@model PhysicianTimesheetViewModel
+@{
+    ViewData["Title"] = "TimeSheet";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/partners.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/timesheet.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+            <div class="flex-container timesheet-flex-container">
+                <form asp-action="TimeSheet" asp-controller="Doctor" method="post">
+                    <div class="top-text timesheet-back">
+                        <a class="back-btn" asp-action="Invoicing" asp-controller="Doctor">
+                            &lt; <span class="back-text">Back</span>
+                        </a>
+                    </div>
+                    <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
+                        <div class="table-responsive">
+                            <table class="timesheet-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>On-Call Hours</th>
+                                        <th>Total Hours</th>
+                                        <th>Weekend/Holiday</th>
+                                        <th>Number of Housecalls</th>
+                                        <th>Number of Phone Consults</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(var i=0;i<Model.timesheetDetails.Count;++i )
+                                    {
+                                        <tr>
+                                            <td>@Model.timesheetDetails[i].Shiftdate?.ToString("MM/dd/yyyy")</td>
+                                            <td>@Model.timesheetDetails[i].ShiftHours</td>
+                                            <td><input class="form-control" type="text" asp-for="@Model.timesheetDetails[i].ShiftHours" /></td>
+                                            <td><input class="form-check-input region-check" type="checkbox" asp-for="@Model.timesheetDetails[i].IsWeekend" /></td>
+                                            <td><input class="form-control" type="text" asp-for="@Model.timesheetDetails[i].Housecall" /></td>
+                                            <td><input class="form-control" type="text" asp-for="@Model.timesheetDetails[i].PhoneConsult" /></td>
+                                        </tr>
+                                    }
+                                    @for (int i = 0; i < Model.timesheetDetails.Count; i++)
+                                    {
+                                        @Html.HiddenFor(m => m.timesheetDetails[i].Shiftdate)
+                                        @Html.HiddenFor(m => m.timesheetDetails[i].TimesheetDetailId)
+                                    }
+
+                                    <input type="hidden" asp-for="startDate"/>
+                                    <input type="hidden" asp-for="endDate"/>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="lower-btn">
+                            <button class="lower-custom-btn submit-btn" type="submit">Save</button>
+                        </div>
+                    </div>
+                </form>
+            <div class="lower-btn timesheet-reverse-low-btn">
+                <button class="lower-custom-btn submit-btn timesheet-add-btn" id="add-receipt" onclick="toggleReimbursement()">Add Receipts</button>
+            </div>
+            
+                <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body d-none" id="reimbursement-section">
+                    <div class="table-responsive">
+                        <table class="timesheet-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th style ="min-width:100px;">Item</th>
+                                    <th style="min-width:100px;">Amount</th>
+                                    <th style="min-width:250px;">Bill</th>
+                                    <th style="min-width:300px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.timeSheetReimbursementViewModels.Count; ++i)
+                                {
+                                    <form asp-action="TimeSheetReimbursement" asp-controller="Doctor" method="post" enctype="multipart/form-data">
+                                        <tr>
+                                            @if(Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId > 0)
+                                            {
+                                                <td class="not-editable">@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")</td>
+                                                <td class="not-editable">@Model.timeSheetReimbursementViewModels[i].Item</td>
+                                                <td class="not-editable">@Model.timeSheetReimbursementViewModels[i].Amount</td>
+                                                <td class="not-editable">@(Model.timeSheetReimbursementViewModels[i].Bill ?? "-")</td>
+                                                <td class="not-editable">
+                                                    <a class="back-btn reset-btn db" id="edit-btn" onclick="editReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")','@Model.timeSheetReimbursementViewModels[i].Bill')">Edit</a>
+                                                    <a class="back-btn reset-btn db" id="delete-btn" onclick="deleteReimbursement('@Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId')">Delete</a>
+                                                    @if (Model.timeSheetReimbursementViewModels[i].Bill!=null)
+                                                    {
+                                                        <a class="back-btn reset-btn db" id="View-btn" onclick="viewDoc('@Model.timeSheetReimbursementViewModels[i].Bill')">View</a>
+                                                    }
+                                                </td>
+                                                <td class="editable d-none">@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")</td>
+                                                <td class="editable d-none"><input id="item@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="item" value="@Model.timeSheetReimbursementViewModels[i].Item" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
+                                                <td class="editable d-none"><input id="amount@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="amount" value="@Model.timeSheetReimbursementViewModels[i].Amount" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
+                                                <td class="editable d-none">
+                                                    <div class="file-upload">
+                                                        <div class="form-floating inp upload-form timesheet-upload-form">
+                                                            <input type="text" class="form-control" id="file-upload" disabled>
+                                                            <label for="file-upload" class="upload-label dob-label" id="form-label@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Select File</label>
+                                                        </div>
+                                                        <label class="custom-file-upload">
+                                                            <input type="file" onchange="getFileData(this,'@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" name="file" />
+                                                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                                                            <span class="upload-text">
+                                                                Upload
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td class="editable d-none">
+                                                    <button type="submit" class="back-btn reset-btn db d-none" id="save-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Save</button>
+                                                    <a class="back-btn reset-btn db d-none" id="cancel-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" onclick="clearEditReimbursement()">Cancel</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")</td>
+                                                <td><input id="item@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="item" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
+                                                <td><input id="amount@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="amount" value="@Model.timeSheetReimbursementViewModels[i].Amount" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
+                                                <td>
+                                                    <div class="file-upload">
+                                                        <div class="form-floating inp upload-form timesheet-upload-form">
+                                                            <input type="text" class="form-control" id="file-upload" disabled>
+                                                            <label for="file-upload" class="upload-label dob-label" id="form-label@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Select File</label>
+                                                        </div>
+                                                        <label class="custom-file-upload">
+                                                            <input type="file" onchange="getFileData(this,'@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" name="file" />
+                                                            <img src="../../images/cloud-upload-icon.svg" alt="" class="file-upload-img">
+                                                            <span class="upload-text">
+                                                                Upload
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                <button type="submit" class="back-btn reset-btn db d-none" id="save-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Save</button>
+                                                <a class="back-btn reset-btn db d-none" id="cancel-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" onclick="clearReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')">Cancel</a>
+                                                </td>
+                                            
+                                            }
+                                            <input type="hidden" name="date" value="@Model.timeSheetReimbursementViewModels[i].Date" />
+                                            <input type="hidden" name="id" value="@Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId" />
+                                            <input type="hidden" name="startdate" value="@Model.startDate" />
+                                            <input type="hidden" name="enddate" value="@Model.endDate" />
+                                        </tr>
+                                    </form>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+            <div class="lower-btn">
+                <button class="lower-custom-btn submit-btn" id="finalize" onclick="finalizeTimeSheet()">Finalize</button>
+            </div>
+            </div>
+    </div>
+</div>
+
+<script>
+
+    const toggleReimbursement = () => {
+        document.getElementById("reimbursement-section").classList.toggle("d-none")
+    }
+
+    const canSave = (date) => {
+        const item = document.getElementById(`item${date}`)
+        const amount = document.getElementById(`amount${date}`)
+
+        if(item.value!="" && amount.value>0)
+        {
+            document.getElementById(`save-new${date}`).classList.remove("d-none")
+            document.getElementById(`cancel-new${date}`).classList.remove("d-none")
+        }
+        else{
+            document.getElementById(`save-new${date}`).classList.add("d-none")
+            document.getElementById(`cancel-new${date}`).classList.add("d-none")
+        }
+    }
+
+    const getFileData = (myFile,date) => {
+        var file = myFile.files[0];
+        var filename = file.name;
+        document.getElementById(`form-label${date}`).innerHTML = `${filename}`;
+    }
+
+    const viewDoc = (filename) => {
+        var pdfPath = "@Url.Content($"~/uploads/")";
+        pdfPath += filename
+        window.open(pdfPath, '_blank');
+    }
+
+    const clearReimbursement = (date) => {
+        const item = document.getElementById(`item${date}`)
+        const amount = document.getElementById(`amount${date}`)
+
+        item.value = ""
+        amount.value = 0
+
+        document.getElementById(`save-new${date}`).classList.add("d-none")
+        document.getElementById(`cancel-new${date}`).classList.add("d-none")
+        document.getElementById(`form-label${date}`).innerHTML = "Select File"
+    }
+
+    const deleteReimbursement = (id) => {
+        $.post("/Doctor/DeleteTimesheetReimbursement", { id:id }, (response) => {
+            if (response.isDeleted == true) {
+                window.location.href = "/Doctor/TimeSheet?startdate=@Model.startDate&enddate=@Model.endDate";
+            }
+        })
+    }
+
+    const editReimbursement = (date,name) => {
+        const editables = document.getElementsByClassName("editable")
+        for(let i=0;i<editables.length;++i)
+        {
+            editables[i].classList.remove("d-none")
+        }
+
+        const noteditables = document.getElementsByClassName("not-editable")
+        for (let i = 0; i < noteditables.length; ++i) {
+            noteditables[i].classList.add("d-none")
+        }
+
+        document.getElementById(`save-new${date}`).classList.remove("d-none")
+        document.getElementById(`cancel-new${date}`).classList.remove("d-none")
+        document.getElementById(`form-label${date}`).innerHTML = name
+
+    }
+
+    const clearEditReimbursement = () => {
+        const editables = document.getElementsByClassName("editable")
+        for (let i = 0; i < editables.length; ++i) {
+            editables[i].classList.add("d-none")
+        }
+
+        const noteditables = document.getElementsByClassName("not-editable")
+        for (let i = 0; i < noteditables.length; ++i) {
+            noteditables[i].classList.remove("d-none")
+        }
+    }
+
+    const finalizeTimeSheet = () => {
+        if (@Model.timesheetDetails[0].TimesheetId == 0) {
+            toastr.error("Please save Timesheet details atleast once before finalizing!!");
+            return;
+        }
+        $.post("/Doctor/FinalizeTimesheet", { id: @Model.timesheetDetails[0].TimesheetId }, (response) => {
+            window.location.href = "/Doctor/Invoicing";
+        })
+    }
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>
