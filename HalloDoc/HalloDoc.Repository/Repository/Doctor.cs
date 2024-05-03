@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Repository.Interface;
 using HalloDoc.ViewModels;
@@ -579,17 +580,19 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate)
+        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate,int id=0)
         {
 
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
 
+            var physicianId = cookieModel.role == "Admin" ? id : cookieModel.userId;
+
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
                 Name = cookieModel.name,
-                curr_active = "DoctorInvoice",
+                curr_active = cookieModel.role == "Admin" ? "Provider" : "DoctorInvoice",
                 menus = cookieModel.menus,
                 role = cookieModel.role
             };
@@ -599,23 +602,37 @@ namespace HalloDoc.Repository.Repository
                 adminNavbarViewModel = adminNavbarViewModel,
             };
 
+            if(cookieModel.role == "Admin")
+            {
+                var physician = _db.Physicians.Where(p=>p.IsDeleted == new BitArray(new[] { false }) && p.Status == 2 );
+                physicianInvoicingViewModel.physicians = physician.ToList();
+            }
+
+            if(id!=0)
+            {
+                var physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == id);
+                physicianInvoicingViewModel.physician = physician;
+            }
+
             if (startdate != null)
             {
-                physicianInvoicingViewModel.timesheetDetails = _db.Timesheets.Include(t => t.TimesheetDetails).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+                physicianInvoicingViewModel.timesheetDetails = _db.Timesheets.Include(t => t.TimesheetDetails).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             }
             if (enddate != null)
             {
-                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             }
 
             return physicianInvoicingViewModel;
         }
 
-        public PhysicianTimesheetViewModel GetTimesheetDetails(DateTime? startdate, DateTime? enddate)
+        public PhysicianTimesheetViewModel GetTimesheetDetails(DateTime? startdate, DateTime? enddate,int id=0)
         {
             var requestt = _context.HttpContext.Request;
             var token = requestt.Cookies["jwt"];
             CookieModel cookieModel = _jwt.GetDetails(token);
+
+            var physicianId = cookieModel.role == "Admin" ? id : cookieModel.userId;
 
             AdminNavbarViewModel adminNavbarViewModel = new AdminNavbarViewModel
             {
@@ -628,7 +645,7 @@ namespace HalloDoc.Repository.Repository
             List<TimeSheetViewModel> timesheetDetails = new List<TimeSheetViewModel>();
             List<TimeSheetReimbursementViewModel> timeSheetReimbursementViewModels = new List<TimeSheetReimbursementViewModel>();
 
-            Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+            Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             if(timesheet!=null && timesheet?.TimesheetDetails.Count != 0)
             {
                 for(var i=0;i< timesheet.TimesheetDetails.ToList().Count;++i)
@@ -651,7 +668,7 @@ namespace HalloDoc.Repository.Repository
                 {
                     var hours = (from s in _db.Shifts
                                               join sd in _db.ShiftDetails on s.ShiftId equals sd.ShiftId
-                                              where s.PhysicianId == cookieModel.userId && sd.ShiftDate == i && sd.IsDeleted == new BitArray(new[] { false })
+                                              where s.PhysicianId == physicianId && sd.ShiftDate == i && sd.IsDeleted == new BitArray(new[] { false })
                                               select Math.Ceiling((sd.EndTime - sd.StartTime).TotalSeconds / 3600)).Sum();
 
                     timesheetDetails.Add(new TimeSheetViewModel()
@@ -700,8 +717,40 @@ namespace HalloDoc.Repository.Repository
                 timesheetDetails = timesheetDetails,
                 startDate = startdate,
                 endDate = enddate,
-                timeSheetReimbursementViewModels = timeSheetReimbursementViewModels
+                timeSheetReimbursementViewModels = timeSheetReimbursementViewModels,
+                physicianId = physicianId
             };
+            if(cookieModel.role == "Admin")
+            {
+                var payrate = _db.Payrates.FirstOrDefault(p=>p.PhysicianId == physicianId);
+                var weekendCountQuery = (from t in _db.Timesheets
+                                         join td in _db.TimesheetDetails on t.TimesheetId equals td.TimesheetId
+                                         where t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId && td.IsWeekend == new BitArray(new[] { true })
+                                         select t).Count();
+
+                var result = (from tt in _db.Timesheets
+                              join tdt in _db.TimesheetDetails on tt.TimesheetId equals tdt.TimesheetId
+                              where tt.Startdate.Value.Date == startdate.Value.Date && tt.Enddate.Value.Date == enddate.Value.Date && tt.PhysicianId == physicianId
+                              group tdt by 1 into g
+                              select new InvoiceTotalViewModal
+                              {
+                                  TotalHours = g.Sum(x => x.ShiftHours),
+                                  TotalWeekend = weekendCountQuery,
+                                  TotalHousecall = g.Sum(x => x.Housecall),
+                                  TotalPhoneconsult = g.Sum(x => x.PhoneConsult)
+                              }).FirstOrDefault();
+
+                result.TotalHousecall *= payrate.Housecall;
+                result.TotalPhoneconsult *= payrate.Phoneconsult;
+                result.TotalWeekend *= payrate.NightShiftWeekend;
+                result.TotalHours *= payrate.Shift;
+
+                physicianTimesheetViewModel.payrate = payrate;
+                physicianTimesheetViewModel.invoiceTotalViewModal = result;
+                physicianTimesheetViewModel.BonusAmount = 0;
+                physicianTimesheetViewModel.TotalAmount = result.TotalHousecall + result.TotalPhoneconsult + result.TotalWeekend + result.TotalHours;
+
+            }
             return physicianTimesheetViewModel;
         }
 
@@ -713,7 +762,9 @@ namespace HalloDoc.Repository.Repository
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
 
-                Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == physicianTimesheetViewModel.startDate.Value.Date && t.Enddate.Value.Date == physicianTimesheetViewModel.endDate.Value.Date && t.PhysicianId == cookieModel.userId);
+                var physicianId = cookieModel.role == "Admin" ? physicianTimesheetViewModel.physicianId : cookieModel.userId;
+
+                Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == physicianTimesheetViewModel.startDate.Value.Date && t.Enddate.Value.Date == physicianTimesheetViewModel.endDate.Value.Date && t.PhysicianId == physicianId);
 
                 if (physicianTimesheetViewModel.timesheetDetails[0].TimesheetDetailId <= 0)
                 {
@@ -736,7 +787,7 @@ namespace HalloDoc.Repository.Repository
                     {
                         Timesheet timesheet1 = new Timesheet
                         {
-                            PhysicianId = cookieModel.userId,
+                            PhysicianId = (int)physicianId,
                             Startdate = physicianTimesheetViewModel.startDate,
                             Enddate = physicianTimesheetViewModel.endDate,
                             Status = "Not Accepted",
@@ -781,7 +832,7 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
-        public async Task<bool> UpdateTimeSheetReimbursement(IFormFile file, DateTime? date, int? id, string? item, int? amount, DateTime? startdate, DateTime? enddate)
+        public async Task<bool> UpdateTimeSheetReimbursement(IFormFile file, DateTime? date, int? id, string? item, int? amount, DateTime? startdate, DateTime? enddate, int? physicianId)
         {
             try
             {
@@ -798,9 +849,11 @@ namespace HalloDoc.Repository.Repository
                 var token = requestt.Cookies["jwt"];
                 CookieModel cookieModel = _jwt.GetDetails(token);
 
+                var PhysicianId = cookieModel.role == "Admin" ? physicianId : cookieModel.userId;
+
                 if (id <= 0)
                 {
-                    Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == cookieModel.userId);
+                    Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == PhysicianId);
                     if(timesheet != null)
                     {
                         TimesheetReimbursement timesheetReimbursement = new TimesheetReimbursement
@@ -818,7 +871,7 @@ namespace HalloDoc.Repository.Repository
                     {
                         Timesheet timesheet1 = new Timesheet
                         {
-                            PhysicianId = cookieModel.userId,
+                            PhysicianId = (int)PhysicianId,
                             Startdate = startdate,
                             Enddate = enddate,
                             Status = "Not Accepted",

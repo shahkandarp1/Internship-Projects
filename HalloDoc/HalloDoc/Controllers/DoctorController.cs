@@ -307,9 +307,9 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Invoicing");
         }
 
-        public IActionResult TimeSheetReimbursement(IFormFile file,DateTime? date,int? id,string? item,int? amount, DateTime? startdate, DateTime? enddate)
+        public IActionResult TimeSheetReimbursement(IFormFile file,DateTime? date,int? id,string? item,int? amount, DateTime? startdate, DateTime? enddate,int? physicianId)
         {
-            Task<bool> isCreated = _doctor.UpdateTimeSheetReimbursement(file, date, id, item, amount,startdate,enddate);
+            Task<bool> isCreated = _doctor.UpdateTimeSheetReimbursement(file, date, id, item, amount,startdate,enddate,physicianId);
             if (isCreated.Result)
             {
                 TempData["success"] = "Timesheet updated Successfully!!";

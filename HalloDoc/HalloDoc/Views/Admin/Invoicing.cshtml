@@ -1,0 +1,138 @@
+﻿@model PhysicianInvoicingViewModel
+@{
+    ViewData["Title"] = "Invoicing";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link href="~/css/admin-navbar.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/patient-profile.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/admin-provider.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/partners.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/timesheet.css" rel="stylesheet" type="text/css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+}
+
+<div id="body">
+    <!-- Navbar -->
+    <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
+
+    <!-- Toaster -->
+    <partial name="Toast" />
+
+
+    <div class="main-container">
+        <div class="flex-container">
+            <div class="top-text">
+                <span class="submit-text" id="submit-text">Timesheets</span>
+            </div>
+            <div class="bottom-main-container mt-3 pb-3 bg-body">
+                <!-- Filter Section -->
+
+                <div class="filter-section">
+                    <div class="inner-filter-flex">
+                        <div class="inner-pt-container timesheet-top-filter">
+                            <div class="search-flex">
+                                <span class="search">
+                                    <img class="search-image"
+                                         src="../../images/search.svg"
+                                         alt="" />
+                                    <select id="timesheet_physician" class="search-inp" onchange="filter()">
+                                        <option value="-1">Search By Physician</option>
+                                        @foreach (var item in Model.physicians)
+                                        {
+                                            <option value="@item.PhysicianId">@string.Concat(item.FirstName," ",item.LastName)</option>
+                                        }
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="search-flex">
+                                <span class="search">
+                                    <img class="search-image"
+                                         src="../../images/search.svg"
+                                         alt="" />
+                                    <select id="timesheet_period" class="search-inp" onchange="filter()">
+                                        <option value="-1">Search By Timesheet Period</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--Partial View-->
+            <div id="partial-container"></div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const filter = () => {
+        var date = document.getElementById("timesheet_period")
+        var physician = document.getElementById("timesheet_physician")
+        if (date.value != -1 && physician.value != -1) {
+            document.getElementById("partial-container").style.display = "none";
+            $.ajax({
+                url: `/Admin/InvoicingTable`,
+                type: 'POST',
+                dataType: 'html',
+                data: { startdate: date.value.split("|")[0], enddate: date.value.split("|")[1], id: physician.value },
+                // Pass your data here
+                success: function (response) {
+                    document.getElementById("partial-container").style.display = "block";
+                    $("#partial-container").html(response)
+                    document.getElementById("approve-btn").setAttribute("href", `/Admin/TimeSheet?startdate=${date.value.split("|")[0]}&enddate=${date.value.split("|")[1]}&id=${physician.value}`)
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 401) {
+                        location.reload();
+                    }
+                    console.log(error);
+                }
+
+            });
+            
+        }
+    }
+
+    function generateDateIntervals() {
+        const today = new Date();
+        const currentYear = today.getFullYear();
+
+        const dropdown = document.getElementById("timesheet_period");
+
+        for (let month = 0; month < today.getMonth() + 1; month++) {
+            const monthName = new Date(currentYear, month).toLocaleDateString('en-US', { month: 'long' });
+
+            const firstHalfOption = document.createElement('option');
+            firstHalfOption.value = `${month + 1 < 10 ? `0${month + 1}` : month + 1}/01/${currentYear}|${month + 1 < 10 ? `0${month + 1}` : month + 1}/14/${currentYear}`;
+            firstHalfOption.text = `${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/01 - ${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/14`;
+            dropdown.appendChild(firstHalfOption);
+
+            const lastDay = new Date(currentYear, month + 1, 0).getDate();
+            const secondHalfOption = document.createElement('option');
+            secondHalfOption.value = `${month + 1 < 10 ? `0${month + 1}` : month + 1}/15/${currentYear}|${month + 1 < 10 ? `0${month + 1}` : month + 1}/${lastDay}/${currentYear}`;
+            secondHalfOption.text = `${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/15 - ${currentYear}/${month + 1 < 10 ? `0${month + 1}` : month + 1}/${lastDay}`;
+            dropdown.appendChild(secondHalfOption);
+        }
+
+    }
+    generateDateIntervals();
+
+    const viewDoc = (filename) => {
+        var pdfPath = "@Url.Content($"~/uploads/")";
+        pdfPath += filename
+        window.open(pdfPath, '_blank');
+    }
+
+</script>
+
+
+<script src="~/js/admin-navbar.js"></script>
+<script src="~/js/admin-dashboard.js"></script>

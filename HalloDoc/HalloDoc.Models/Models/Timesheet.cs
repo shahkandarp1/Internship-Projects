@@ -32,6 +32,13 @@ public partial class Timesheet
     [Column(TypeName = "timestamp without time zone")]
     public DateTime? ModifiedDate { get; set; }
 
+    public decimal? TotalAmount { get; set; }
+
+    [Column("Bonus Amount")]
+    public decimal? BonusAmount { get; set; }
+
+    public string? AdminDescription { get; set; }
+
     [ForeignKey("PhysicianId")]
     [InverseProperty("Timesheets")]
     public virtual Physician Physician { get; set; } = null!;

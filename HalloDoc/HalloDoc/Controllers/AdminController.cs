@@ -20,6 +20,7 @@ using HalloDoc.Models;
 using Newtonsoft.Json.Linq;
 using Rotativa.AspNetCore;
 using DocumentFormat.OpenXml.Wordprocessing;
+using HalloDoc.Repository.Repository;
 
 namespace HalloDoc.Controllers
 {
@@ -30,15 +31,17 @@ namespace HalloDoc.Controllers
         private readonly IAdmin _admin;
         private readonly IPatient _patient;
         private readonly IJwtService _jwt;
+        private readonly IDoctor _doctor;
         private readonly IHttpContextAccessor _context;
         private readonly Dictionary<string, string> mappingDictionary = new Dictionary<string, string>();
 
-        public AdminController(IAdmin admin,IJwtService jwt, IPatient patient, IHttpContextAccessor context)
+        public AdminController(IAdmin admin,IJwtService jwt, IPatient patient, IHttpContextAccessor context, IDoctor doctor)
         {
             _admin = admin;
             _jwt = jwt;
             _patient = patient;
             _context = context;
+            _doctor = doctor;
             mappingDictionary.Add("Provider Location", "ProviderLocation");
             mappingDictionary.Add("Dashboard", "Dashboard");
             mappingDictionary.Add("Providerr", "Provider");
@@ -1903,6 +1906,22 @@ namespace HalloDoc.Controllers
                 TempData["error"] = "Pay Rate could not be Updated!!";
             }
             return RedirectToAction("PayRate", new { id = payRateViewModel.PhysicianId });
+        }
+        public IActionResult Invoicing()
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(null, null);
+            return View(physicianInvoicingViewModel);
+        }
+        public IActionResult InvoicingTable(DateTime startdate, DateTime enddate,int id)
+        {
+            PhysicianInvoicingViewModel physicianInvoicingViewModel = _doctor.GetPhysicianInvoicingDetails(startdate, enddate,id);
+            return PartialView("_AdminInvoicingTable", physicianInvoicingViewModel);
+        }
+
+        public IActionResult TimeSheet(DateTime startdate, DateTime enddate,int id)
+        {
+            PhysicianTimesheetViewModel physicianTimesheetViewModel = _doctor.GetTimesheetDetails(startdate, enddate,id);
+            return View("/Views/Doctor/TimeSheet.cshtml", physicianTimesheetViewModel);
         }
     }
 }

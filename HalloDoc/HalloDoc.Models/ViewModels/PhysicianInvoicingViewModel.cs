@@ -13,5 +13,7 @@ namespace HalloDoc.ViewModels
         public Timesheet? timesheetReimbursement { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
+        public List<Physician>? physicians { get; set; }
+        public Physician? physician { get; set; }
     }
 }

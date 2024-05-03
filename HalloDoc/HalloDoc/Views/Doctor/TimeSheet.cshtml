@@ -15,6 +15,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 }
 
+@{
+    var admin = Model.adminNavbarViewModel.role == "Admin" ? "" : "d-none";
+    var physician = Model.adminNavbarViewModel.role == "Provider" ? "" : "d-none";
+}
+
 <div id="body">
     <!-- Navbar -->
     <partial name="_AdminNavbar" model="@Model.adminNavbarViewModel" />
@@ -42,6 +47,7 @@
                                         <th>Weekend/Holiday</th>
                                         <th>Number of Housecalls</th>
                                         <th>Number of Phone Consults</th>
+                                        <th class="@admin">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,6 +62,23 @@
                                             <td><input class="form-control" type="text" asp-for="@Model.timesheetDetails[i].PhoneConsult" /></td>
                                         </tr>
                                     }
+                                    <tr class="@admin">
+                                        <td>Payrate</td>
+                                        <td></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.payrate.Shift" disabled/></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.payrate.NightShiftWeekend" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.payrate.Housecall" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.payrate.Phoneconsult" disabled /></td>
+                                    </tr>
+                                    <tr class="@admin">
+                                        <td>Invoice Total</td>
+                                        <td></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalHours" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalWeekend" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalHousecall" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalPhoneconsult" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.TotalAmount" disabled /></td>
+                                    </tr>
                                     @for (int i = 0; i < Model.timesheetDetails.Count; i++)
                                     {
                                         @Html.HiddenFor(m => m.timesheetDetails[i].Shiftdate)
@@ -64,6 +87,7 @@
 
                                     <input type="hidden" asp-for="startDate"/>
                                     <input type="hidden" asp-for="endDate"/>
+                                    <input type="hidden" asp-for="physicianId"/>
                                 </tbody>
                             </table>
                         </div>
@@ -100,8 +124,8 @@
                                                 <td class="not-editable">@Model.timeSheetReimbursementViewModels[i].Amount</td>
                                                 <td class="not-editable">@(Model.timeSheetReimbursementViewModels[i].Bill ?? "-")</td>
                                                 <td class="not-editable">
-                                                    <a class="back-btn reset-btn db" id="edit-btn" onclick="editReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")','@Model.timeSheetReimbursementViewModels[i].Bill')">Edit</a>
-                                                    <a class="back-btn reset-btn db" id="delete-btn" onclick="deleteReimbursement('@Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId')">Delete</a>
+                                                    <a class="back-btn reset-btn db @physician" id="edit-btn" onclick="editReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")','@Model.timeSheetReimbursementViewModels[i].Bill')">Edit</a>
+                                                    <a class="back-btn reset-btn db @physician" id="delete-btn" onclick="deleteReimbursement('@Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId')">Delete</a>
                                                     @if (Model.timeSheetReimbursementViewModels[i].Bill!=null)
                                                     {
                                                         <a class="back-btn reset-btn db" id="View-btn" onclick="viewDoc('@Model.timeSheetReimbursementViewModels[i].Bill')">View</a>
@@ -136,7 +160,7 @@
                                                 <td><input id="item@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="item" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
                                                 <td><input id="amount@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" class="form-control" type="text" name="amount" value="@Model.timeSheetReimbursementViewModels[i].Amount" onchange="canSave('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')" /></td>
                                                 <td>
-                                                    <div class="file-upload">
+                                                    <div class="file-upload @physician">
                                                         <div class="form-floating inp upload-form timesheet-upload-form">
                                                             <input type="text" class="form-control" id="file-upload" disabled>
                                                             <label for="file-upload" class="upload-label dob-label" id="form-label@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Select File</label>
@@ -149,6 +173,7 @@
                                                             </span>
                                                         </label>
                                                     </div>
+                                                    <input type="text" class="form-control @admin" disabled />
                                                 </td>
                                                 <td>
                                                 <button type="submit" class="back-btn reset-btn db d-none" id="save-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Save</button>
@@ -160,6 +185,7 @@
                                             <input type="hidden" name="id" value="@Model.timeSheetReimbursementViewModels[i].TimesheetReimbursementId" />
                                             <input type="hidden" name="startdate" value="@Model.startDate" />
                                             <input type="hidden" name="enddate" value="@Model.endDate" />
+                                            <input type="hidden" name="physicianId" value="@Model.physicianId" />
                                         </tr>
                                     </form>
                                 }
@@ -169,8 +195,19 @@
                     </div>
                 </div>
             
-            <div class="lower-btn">
+            <div class="lower-btn @physician">
                 <button class="lower-custom-btn submit-btn" id="finalize" onclick="finalizeTimeSheet()">Finalize</button>
+            </div>
+            <div class="lower-btn @admin">
+                <div class="form-floating bonus-inp inp col-lg-4 col-md-4 col-sm-12">
+                    <input type="text" class="form-control" id="bonus-amount" placeholder="name@example.com" asp-for="BonusAmount">
+                    <label for="username" class="form-label">Bonus Amount</label>
+                </div>
+                <div class="form-floating admin-desc-inp inp col-lg-4 col-md-4 col-sm-12">
+                    <input type="text" class="form-control" id="admin-description" placeholder="name@example.com" asp-for="AdminDescription">
+                    <label for="username" class="form-label">Admin Description</label>
+                </div>
+                <button class="lower-custom-btn approve-timesheet-btn submit-btn">Approve</button>
             </div>
             </div>
     </div>

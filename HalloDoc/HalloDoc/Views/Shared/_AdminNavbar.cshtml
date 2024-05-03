@@ -128,7 +128,7 @@
         <div class="panel">
             <a class="mobile-sidebar-a accord-inner @providerrole" asp-action="Provider" asp-controller="Admin"> Provider </a>
             <a class="mobile-sidebar-a accord-inner @schedulingrole" asp-action="Scheduling" asp-controller="Admin"> Scheduling </a>
-            <a class="mobile-sidebar-a accord-inner @admin @invoicingrole"> Invoicing </a>
+            <a class="mobile-sidebar-a accord-inner @admin @invoicingrole" asp-action="Invoicing" asp-controller="Admin"> Invoicing </a>
         </div>
         <button class="sidebar-tablinks @partnerM @partnerrole @admin" onclick="clearStorage()">
             <a class="mobile-sidebar-a" asp-action="Partners" asp-controller="Admin"> Partners </a>
@@ -192,7 +192,7 @@
             <ul class="dropdown-menu" aria-labelledby="provider">
                 <li><a class="navbar-dropdown-item dropdown-item @providerrole" asp-action="Provider" asp-controller="Admin">Provider</a></li>
                 <li><a class="navbar-dropdown-item dropdown-item @schedulingrole" asp-action="Scheduling" asp-controller="Admin">Scheduling</a></li>
-                <li><a class="navbar-dropdown-item dropdown-item @invoicingrole" href="#">Invoicing</a></li>
+                <li><a class="navbar-dropdown-item dropdown-item @invoicingrole" asp-action="Invoicing" asp-controller="Admin">Invoicing</a></li>
             </ul>
         </div>
         <a class="navbar-btn bg-body @partner @partnerrole @admin" asp-action="Partners" asp-controller="Admin" onclick="navbar(this)">

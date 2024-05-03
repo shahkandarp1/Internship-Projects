@@ -10,3 +10,20 @@
 .back-btn{
     background-color:white;
 }
+.admin-no-record-pad {
+    padding-top: 20px;
+}
+.timesheet-top-filter{
+    justify-content:flex-start;
+}
+.admin-desc-inp{
+    width:250px;
+    margin-right:10px;
+}
+.bonus-inp {
+    width: 150px;
+    margin-right: 10px;
+}
+.approve-timesheet-btn{
+    margin:0px;
+}

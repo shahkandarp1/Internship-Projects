@@ -19,10 +19,10 @@ namespace HalloDoc.Repository.Interface
         public int ConcludeCare(ConcludeCareViewModel concludeCareViewModel);
         public bool TransferCase(AdminDashboardViewModel adminDashboardViewModel);
         public bool UpdatePhysicianLatitudeLongitude(decimal lat, decimal lng, string address);
-        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate);
-        public PhysicianTimesheetViewModel GetTimesheetDetails(DateTime? startdate, DateTime? enddate);
+        public PhysicianInvoicingViewModel GetPhysicianInvoicingDetails(DateTime? startdate, DateTime? enddate,int id=0);
+        public PhysicianTimesheetViewModel GetTimesheetDetails(DateTime? startdate, DateTime? enddate,int id=0);
         public bool UpdateTimeSheet(PhysicianTimesheetViewModel physicianTimesheetViewModel);
-        public Task<bool> UpdateTimeSheetReimbursement(IFormFile file, DateTime? date, int? id, string? item, int? amount, DateTime? startdate, DateTime? enddate);
+        public Task<bool> UpdateTimeSheetReimbursement(IFormFile file, DateTime? date, int? id, string? item, int? amount, DateTime? startdate, DateTime? enddate, int? physicianId);
         public bool DeleteTimesheetReimbursement(int id);
         public bool FinalizeTimesheet(int id);
     }
