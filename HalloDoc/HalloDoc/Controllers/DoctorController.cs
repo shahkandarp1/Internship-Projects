@@ -17,7 +17,7 @@ using Rotativa.AspNetCore;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Provider")]
+    [CustomAuthorize("Admin,Provider")]
     public class DoctorController : Controller
     {
         private readonly IAdmin _admin;
@@ -289,7 +289,19 @@ namespace HalloDoc.Controllers
         }
         public IActionResult Timesheet(DateTime startdate, DateTime enddate)
         {
+            if(startdate.Date.ToString("MM/dd/yyyy") == "01/01/0001" || enddate.Date.ToString("MM/dd/yyyy") == "01/01/0001")
+            {
+                return NotFound();
+            }
+            if(startdate.Date.ToString("yyyy") != DateTime.Today.ToString("yyyy") || enddate.Date.ToString("yyyy") != DateTime.Today.ToString("yyyy"))
+            {
+                return NotFound();
+            }
             PhysicianTimesheetViewModel physicianTimesheetViewModel = _doctor.GetTimesheetDetails(startdate, enddate);
+            if (physicianTimesheetViewModel == null)
+            {
+                return NotFound();
+            }
             return View(physicianTimesheetViewModel);
         }
         [HttpPost]
@@ -304,7 +316,17 @@ namespace HalloDoc.Controllers
             {
                 TempData["error"] = "Timesheet could not be updated!!";
             }
-            return RedirectToAction("Invoicing");
+            var requestt = _context.HttpContext.Request;
+            var token = requestt.Cookies["jwt"];
+            CookieModel cookieModel = _jwt.GetDetails(token);
+            if (cookieModel.role == "Admin")
+            {
+                return RedirectToAction("Invoicing","Admin");
+            }
+            else
+            {
+                return RedirectToAction("Invoicing", "Doctor");
+            }
         }
 
         public IActionResult TimeSheetReimbursement(IFormFile file,DateTime? date,int? id,string? item,int? amount, DateTime? startdate, DateTime? enddate,int? physicianId)

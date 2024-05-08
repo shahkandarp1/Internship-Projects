@@ -32,22 +32,31 @@
             <div class="flex-container timesheet-flex-container">
                 <form asp-action="TimeSheet" asp-controller="Doctor" method="post">
                     <div class="top-text timesheet-back">
-                        <a class="back-btn" asp-action="Invoicing" asp-controller="Doctor">
-                            &lt; <span class="back-text">Back</span>
-                        </a>
-                    </div>
+                        @if(Model.adminNavbarViewModel.role == "Admin")
+                        {
+                            <a class="back-btn" asp-action="Invoicing" asp-controller="Admin">
+                                &lt; <span class="back-text">Back</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="back-btn" asp-action="Invoicing" asp-controller="Doctor">
+                                &lt; <span class="back-text">Back</span>
+                            </a>
+                        }
+                </div>
                     <div class="bottom-main-container mt-3 mb-3 pb-3 bg-body">
                         <div class="table-responsive">
                             <table class="timesheet-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>On-Call Hours</th>
-                                        <th>Total Hours</th>
-                                        <th>Weekend/Holiday</th>
-                                        <th>Number of Housecalls</th>
-                                        <th>Number of Phone Consults</th>
-                                        <th class="@admin">Total</th>
+                                        <th style="min-width:100px;">Date</th>
+                                        <th style="min-width:100px;">On-Call Hours</th>
+                                        <th style="min-width:100px;">Total Hours</th>
+                                        <th style="min-width:100px;">Weekend/Holiday</th>
+                                        <th style="min-width:100px;">Number of Housecalls</th>
+                                        <th style="min-width:100px;">Number of Phone Consults</th>
+                                        <th style="min-width:100px;" class="@admin">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,7 +86,7 @@
                                         <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalWeekend" disabled /></td>
                                         <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalHousecall" disabled /></td>
                                         <td><input class="form-control" type="text" asp-for="@Model.invoiceTotalViewModal.TotalPhoneconsult" disabled /></td>
-                                        <td><input class="form-control" type="text" asp-for="@Model.TotalAmount" disabled /></td>
+                                        <td><input class="form-control" type="text" asp-for="@Model.TotalAmount" id="total-amount" disabled /></td>
                                     </tr>
                                     @for (int i = 0; i < Model.timesheetDetails.Count; i++)
                                     {
@@ -176,8 +185,8 @@
                                                     <input type="text" class="form-control @admin" disabled />
                                                 </td>
                                                 <td>
-                                                <button type="submit" class="back-btn reset-btn db d-none" id="save-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Save</button>
-                                                <a class="back-btn reset-btn db d-none" id="cancel-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" onclick="clearReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')">Cancel</a>
+                                                    <button type="submit" class="back-btn reset-btn db d-none" id="save-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))">Save</button>
+                                                    <a class="back-btn reset-btn db d-none" id="cancel-new@(Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy"))" onclick="clearReimbursement('@Model.timeSheetReimbursementViewModels[i].Date?.ToString("MM/dd/yyyy")')">Cancel</a>
                                                 </td>
                                             
                                             }
@@ -199,21 +208,36 @@
                 <button class="lower-custom-btn submit-btn" id="finalize" onclick="finalizeTimeSheet()">Finalize</button>
             </div>
             <div class="lower-btn @admin">
-                <div class="form-floating bonus-inp inp col-lg-4 col-md-4 col-sm-12">
-                    <input type="text" class="form-control" id="bonus-amount" placeholder="name@example.com" asp-for="BonusAmount">
+                <div class="form-floating bonus-timesheet bonus-inp inp col-lg-4 col-md-4 col-sm-12">
+                    <input type="text" class="form-control" id="bonus-amount" placeholder="name@example.com" onchange="enableAprooveBtn()" asp-for="BonusAmount">
                     <label for="username" class="form-label">Bonus Amount</label>
                 </div>
-                <div class="form-floating admin-desc-inp inp col-lg-4 col-md-4 col-sm-12">
-                    <input type="text" class="form-control" id="admin-description" placeholder="name@example.com" asp-for="AdminDescription">
+                <div class="form-floating bonus-timesheet admin-desc-inp inp col-lg-4 col-md-4 col-sm-12">
+                    <input type="text" class="form-control" id="admin-description" placeholder="name@example.com" onchange="enableAprooveBtn()" asp-for="AdminDescription">
                     <label for="username" class="form-label">Admin Description</label>
                 </div>
-                <button class="lower-custom-btn approve-timesheet-btn submit-btn">Approve</button>
+                <button class="lower-custom-btn approve-timesheet-btn submit-btn disabled-label" id="approve-timesheet-btn" onclick="approveTimesheet()">Approve</button>
             </div>
             </div>
     </div>
 </div>
 
 <script>
+
+    const enableAprooveBtn = () => {
+        const bonus = document.getElementById("bonus-amount")
+        const description = document.getElementById("admin-description")
+
+        if(bonus.value != 0 && description.value !=""){
+            document.getElementById("approve-timesheet-btn").classList.remove("disabled-label")
+        }
+        else
+        {
+            if(!document.getElementById("approve-timesheet-btn").classList.contains("disabled-label")){
+                document.getElementById("approve-timesheet-btn").classList.add("disabled-label")
+            }
+        }
+    }
 
     const toggleReimbursement = () => {
         document.getElementById("reimbursement-section").classList.toggle("d-none")
@@ -223,7 +247,7 @@
         const item = document.getElementById(`item${date}`)
         const amount = document.getElementById(`amount${date}`)
 
-        if(item.value!="" && amount.value>0)
+        if(item.value!="" && amount.value>0 && `@admin` == "d-none")
         {
             document.getElementById(`save-new${date}`).classList.remove("d-none")
             document.getElementById(`cancel-new${date}`).classList.remove("d-none")
@@ -303,6 +327,12 @@
         }
         $.post("/Doctor/FinalizeTimesheet", { id: @Model.timesheetDetails[0].TimesheetId }, (response) => {
             window.location.href = "/Doctor/Invoicing";
+        })
+    }
+
+    const approveTimesheet = () => {
+        $.post("/Admin/ApproveTimesheet", { id: @Model.timesheetDetails[0].TimesheetId, totalamount: document.getElementById("total-amount")?.value, bonusamount: document.getElementById("bonus-amount").value, desc: document.getElementById("admin-description").value }, (response) => {
+            window.location.href = "/Admin/Invoicing";
         })
     }
 </script>

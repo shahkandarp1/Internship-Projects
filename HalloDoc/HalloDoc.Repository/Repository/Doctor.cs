@@ -611,16 +611,20 @@ namespace HalloDoc.Repository.Repository
             if(id!=0)
             {
                 var physician = _db.Physicians.FirstOrDefault(p=>p.PhysicianId == id);
+                if(physician == null)
+                {
+                    return null;
+                }
                 physicianInvoicingViewModel.physician = physician;
             }
 
             if (startdate != null)
             {
-                physicianInvoicingViewModel.timesheetDetails = _db.Timesheets.Include(t => t.TimesheetDetails).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
+                physicianInvoicingViewModel.timesheetDetails = _db.Timesheets.Include(t => t.TimesheetDetails.OrderBy(t=>t.Shiftdate)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             }
             if (enddate != null)
             {
-                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
+                physicianInvoicingViewModel.timesheetReimbursement = _db.Timesheets.Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false).OrderBy(t=>t.Date)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             }
 
             return physicianInvoicingViewModel;
@@ -645,7 +649,7 @@ namespace HalloDoc.Repository.Repository
             List<TimeSheetViewModel> timesheetDetails = new List<TimeSheetViewModel>();
             List<TimeSheetReimbursementViewModel> timeSheetReimbursementViewModels = new List<TimeSheetReimbursementViewModel>();
 
-            Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
+            Timesheet timesheet = _db.Timesheets.Include(t => t.TimesheetDetails.OrderBy(t=>t.Shiftdate)).Include(t => t.TimesheetReimbursements.Where(tr => tr.IsDeleted == false).OrderBy(t=>t.Date)).FirstOrDefault(t => t.Startdate.Value.Date == startdate.Value.Date && t.Enddate.Value.Date == enddate.Value.Date && t.PhysicianId == physicianId);
             if(timesheet!=null && timesheet?.TimesheetDetails.Count != 0)
             {
                 for(var i=0;i< timesheet.TimesheetDetails.ToList().Count;++i)

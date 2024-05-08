@@ -193,6 +193,7 @@ namespace HalloDoc.Repository.Interface
         public PayRateViewModel GetPayRate(int id);
         public bool CheckUserRole(string email);
         public bool UpdatePayRate(PayRateViewModel payRateViewModel);
+        public bool ApproveTimesheet(decimal totalamount, decimal bonusamount, string desc, int id);
 
     }
 }

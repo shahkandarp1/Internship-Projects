@@ -87,7 +87,7 @@
                 success: function (response) {
                     document.getElementById("partial-container").style.display = "block";
                     $("#partial-container").html(response)
-                    document.getElementById("approve-btn").setAttribute("href", `/Admin/TimeSheet?startdate=${date.value.split("|")[0]}&enddate=${date.value.split("|")[1]}&id=${physician.value}`)
+                    document.getElementById("approve-btn")?.setAttribute("href", `/Admin/TimeSheet?startdate=${date.value.split("|")[0]}&enddate=${date.value.split("|")[1]}&id=${physician.value}`)
                 },
                 error: function (xhr, status, error) {
                     if (xhr.status === 401) {

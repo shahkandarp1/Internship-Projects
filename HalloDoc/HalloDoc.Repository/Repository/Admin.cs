@@ -5191,5 +5191,29 @@ namespace HalloDoc.Repository.Repository
             }
         }
 
+        public bool ApproveTimesheet(decimal totalamount, decimal bonusamount, string desc, int id)
+        {
+            try
+            {
+                Timesheet timesheet = _db.Timesheets.FirstOrDefault(t=>t.TimesheetId == id);
+                if(timesheet == null)
+                {
+                    return false;
+                }
+                timesheet.TotalAmount = totalamount;
+                timesheet.BonusAmount = bonusamount;
+                timesheet.AdminDescription = desc;
+                timesheet.Status = "Accepted";
+                timesheet.ModifiedDate = DateTime.Now;
+                _db.Timesheets.Update(timesheet);
+                _db.SaveChanges();
+                return true;
+            }
+            catch(Exception exp)
+            {
+                return false;
+            }
+        }
+
     }
 }

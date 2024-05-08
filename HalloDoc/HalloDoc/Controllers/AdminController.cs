@@ -1920,8 +1920,33 @@ namespace HalloDoc.Controllers
 
         public IActionResult TimeSheet(DateTime startdate, DateTime enddate,int id)
         {
+            if (startdate.Date.ToString("MM/dd/yyyy") == "01/01/0001" || enddate.Date.ToString("MM/dd/yyyy") == "01/01/0001")
+            {
+                return NotFound();
+            }
+            if (startdate.Date.ToString("yyyy") != DateTime.Today.ToString("yyyy") || enddate.Date.ToString("yyyy") != DateTime.Today.ToString("yyyy"))
+            {
+                return NotFound();
+            }
             PhysicianTimesheetViewModel physicianTimesheetViewModel = _doctor.GetTimesheetDetails(startdate, enddate,id);
+            if (physicianTimesheetViewModel == null)
+            {
+                return NotFound();
+            }
             return View("/Views/Doctor/TimeSheet.cshtml", physicianTimesheetViewModel);
+        }
+        public IActionResult ApproveTimesheet(decimal totalamount,decimal bonusamount,string desc, int id)
+        {
+            bool isApproved = _admin.ApproveTimesheet(totalamount, bonusamount, desc, id);
+            if(isApproved)
+            {
+                TempData["success"] = "Timesheet Aprooved Successfully!!";
+            }
+            else
+            {
+                TempData["error"] = "Timesheet could not be Aprooved!!";
+            }
+            return Json(new { isApproved = isApproved });
         }
     }
 }

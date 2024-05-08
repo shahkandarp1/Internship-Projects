@@ -27,3 +27,12 @@
 .approve-timesheet-btn{
     margin:0px;
 }
+.bonus-timesheet > label {
+    top: -5px;
+    left: 2px;
+}
+.disabled-label {
+    background-color: #7AD8EE;
+    pointer-events: none;
+    border-color: #7AD8EE;
+}
