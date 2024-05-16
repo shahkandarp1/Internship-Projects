@@ -194,6 +194,7 @@ namespace HalloDoc.Repository.Interface
         public bool CheckUserRole(string email);
         public bool UpdatePayRate(PayRateViewModel payRateViewModel);
         public bool ApproveTimesheet(decimal totalamount, decimal bonusamount, string desc, int id);
+        public List<AspNetUser> getAllAspNetUsers();
 
     }
 }

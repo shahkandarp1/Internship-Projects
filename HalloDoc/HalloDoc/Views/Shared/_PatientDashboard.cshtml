@@ -9,6 +9,7 @@
                 <tr>
                     <th class="heading">Created date</th>
                     <th class="heading">Current Status</th>
+                    <th class="heading">Chat With</th>
                     <th class="heading">Document</th>
                 </tr>
             </thead>
@@ -19,6 +20,54 @@
                         <td>@row.CreatedDate.ToString("MMMM dd,yyyy")</td>
                         <td>@Enum.GetName(typeof(Status), @row.Status)</td>
                         <td>
+                            <span class="chat-section">
+                                <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-Admin-@(row.RequestId)" aria-controls="offcanvasRight-Admin-@(row.RequestId)" data-reqid="@row.RequestId" data-aspid="@row.aspid">
+                                    <img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
+                                    <span class="text-info">Admin</span>
+                                </span>
+                                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-Admin-@(row.RequestId)" aria-labelledby="offcanvasRight-Admin-@(row.RequestId)Label">
+                                    <div class="offcanvas-header">
+                                    <h5 id="offcanvasRight-Admin-@(row.RequestId)Label">Admin</h5>
+                                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                    </div>
+                                    <div class="offcanvas-body">
+                                        <div class="main-chat-body" id="Admin-@(row.RequestId)">
+                                        </div>
+                                        <div class="send-section d-flex">
+                                        <input type="text" class="chat-msg" id="message-input-admin-@(row.RequestId)" placeholder="Type a message">
+                                            <div class="btn btn-info text-white patient-text-btn" onclick="sendToAdmin()">
+                                                <i class="bi bi-send"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(row.aspid!=null)
+                                {
+                                    <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-Provider-@(row.RequestId)-@(row.aspid)" aria-controls="offcanvasRight-Provider-@(row.RequestId)-@(row.aspid)" data-reqid="@row.RequestId" data-aspid="@row.aspid">
+                                        <img src="../../images/person-circle.svg" alt="" class="accordion-img-inner">
+                                        <span class="text-info">Provider</span>
+                                    </span>
+                                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-Provider-@(row.RequestId)-@(row.aspid)" aria-labelledby="offcanvasRight-Provider-@(row.RequestId)-@(row.aspid)Label">
+                                        <div class="offcanvas-header">
+                                            <h5 id="offcanvasRight-Provider-@(row.RequestId)-@(row.aspid)Label">Dr. @row.Name</h5>
+                                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                        </div>
+                                        <div class="offcanvas-body">
+                                            <div class="main-chat-body" id="Provider-@(row.RequestId)-@(row.aspid)">
+                                            </div>
+                                            <div class="send-section d-flex">
+                                            <input type="text" class="chat-msg" id="message-input-provider-@(row.RequestId)-@(row.aspid)" placeholder="Type a message">
+                                                <div class="btn btn-info text-white patient-text-btn" onclick="sendToPhysician()">
+                                                    <i class="bi bi-send"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </span>
+                           
+                        </td>
+                        <td>
                             @if (row.Status == 6 || row.Status == 7 || row.Status == 8 || row.Status == 9)
                             {
                                 <a class="document" asp-controller="Patient" asp-action="ViewDocument" asp-route-id="@(row.RequestId)">
@@ -28,9 +77,11 @@
                         </td>
                     </tr>
                 }
-
             </tbody>
         </table>
+
+        <input type="hidden" id="req-id"/>
+        <input type="hidden" id="asp-id"/>
 
         <!-- Table Mobile - Accordian -->
         <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -124,8 +175,8 @@
         </div>
 
 
-
-
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/patient-chat.js"></script>
 <script>
     $(document).ready(function () {
         $('.pagination a').click(function (e) {
@@ -135,4 +186,7 @@
             filter(page, 10)
         });
     });
+
+    
+
 </script>

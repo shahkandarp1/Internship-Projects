@@ -54,6 +54,7 @@
                         <th>Status</th>
                     }
                 }
+                <th>Chat With</th>
                 <th>Actions</th>
             </tr>
     </thead>
@@ -199,6 +200,98 @@
                         }
                     }
                     <td>
+                        @if (Model.adminNavbarViewModel.role == "Provider")
+                        {
+                            <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-Admin-@(item.RequestId)" aria-controls="offcanvasRight-Admin-@(item.RequestId)" data-reqid="@item.RequestId" data-aspid="">
+                                <i class="bi bi-person-circle white-person"></i>
+                                <span class="text-white">Admin</span>
+                            </span>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-Admin-@(item.RequestId)" aria-labelledby="offcanvasRight-Admin-@(item.RequestId)Label">
+                                <div class="offcanvas-header">
+                                    <h5 id="offcanvasRight-Admin-@(item.RequestId)Label">Admin</h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <div class="main-chat-body" id="Admin-@(item.RequestId)">
+                                    </div>
+                                    <div class="send-section d-flex">
+                                        <input type="text" class="chat-msg" id="message-input-admin-@(item.RequestId)" placeholder="Type a message">
+                                        <div class="btn btn-info text-white patient-text-btn" onclick="sendToAdminByDoctor()">
+                                            <i class="bi bi-send"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-DPatient-@(item.RequestId)-@(item.User.AspNetUserId)" aria-controls="offcanvasRight-DPatient-@(item.RequestId)-@(item.User.AspNetUserId)" data-reqid="@item.RequestId" data-aspid="@(item.User.AspNetUserId)">
+                                <i class="bi bi-person-circle white-person"></i>
+                                <span class="text-white">Patient</span>
+                            </span>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-DPatient-@(item.RequestId)-@(item.User.AspNetUserId)" aria-labelledby="offcanvasRight-DPatient-@(item.RequestId)-@(item.User.AspNetUserId)Label">
+                                <div class="offcanvas-header">
+                                    <h5 id="offcanvasRight-DPatient-@(item.RequestId)-@(item.User.AspNetUserId)Label">@(string.Concat(item.RequestClient.FirstName, " ", item.RequestClient.LastName))</h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <div class="main-chat-body" id="DPatient-@(item.RequestId)-@(item.User.AspNetUserId)">
+                                    </div>
+                                    <div class="send-section d-flex">
+                                        <input type="text" class="chat-msg" id="message-input-dpatient-@(item.RequestId)-@(item.User.AspNetUserId)" placeholder="Type a message">
+                                        <div class="btn btn-info text-white patient-text-btn" onclick="sendToPatient()">
+                                            <i class="bi bi-send"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if(Model.adminNavbarViewModel.role == "Admin")
+                        {
+                            if(item.Physician?.AspNetUserId!=null)
+                            {
+                                <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-Provider-@(item.RequestId)-@(item.Physician?.AspNetUserId)" aria-controls="offcanvasRight-Provider-@(item.RequestId)-@(item.Physician.AspNetUserId)" data-reqid="@item.RequestId" data-aspid="@(item.Physician.AspNetUserId)">
+                                    <i class="bi bi-person-circle white-person"></i>
+                                    <span class="text-white">Provider</span>
+                                </span>
+                                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-Provider-@(item.RequestId)-@(item.Physician.AspNetUserId)" aria-labelledby="offcanvasRight-Provider-@(item.RequestId)-@(item.Physician.AspNetUserId)Label">
+                                    <div class="offcanvas-header">
+                                        <h5 id="offcanvasRight-Provider-@(item.RequestId)-@(item.Physician.AspNetUserId)Label">Dr. @(string.Concat(item.Physician.FirstName," ",item.Physician.LastName))</h5>
+                                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                    </div>
+                                    <div class="offcanvas-body">
+                                        <div class="main-chat-body" id="Provider-@(item.RequestId)-@(item.Physician.AspNetUserId)">
+                                        </div>
+                                        <div class="send-section d-flex">
+                                            <input type="text" class="chat-msg" id="message-input-provider-@(item.RequestId)-@(item.Physician.AspNetUserId)" placeholder="Type a message">
+                                            <div class="btn btn-info text-white patient-text-btn" onclick="sendToDoctorByAdmin()">
+                                                <i class="bi bi-send"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            }
+                            <span class="chat-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight-Patient-@(item.RequestId)-@(item.User.AspNetUserId)" aria-controls="offcanvasRight-Patient-@(item.RequestId)-@(item.User.AspNetUserId)" data-reqid="@item.RequestId" data-aspid="@(item.User.AspNetUserId)">
+                                <i class="bi bi-person-circle white-person"></i>
+                                <span class="text-white">Patient</span>
+                            </span>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-Patient-@(item.RequestId)-@(item.User.AspNetUserId)" aria-labelledby="offcanvasRight-Patient-@(item.RequestId)-@(item.User.AspNetUserId)Label">
+                                <div class="offcanvas-header">
+                                    <h5 id="offcanvasRight-Patient-@(item.RequestId)-@(item.User.AspNetUserId)Label">@(string.Concat(item.RequestClient.FirstName, " ", item.RequestClient.LastName))</h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <div class="main-chat-body" id="Patient-@(item.RequestId)-@(item.User.AspNetUserId)">
+                                    </div>
+                                    <div class="send-section d-flex">
+                                        <input type="text" class="chat-msg" id="message-input-patient-@(item.RequestId)-@(item.User.AspNetUserId)" placeholder="Type a message">
+                                        <div class="btn btn-info text-white patient-text-btn" onclick="sendToPatientByAdmin()">
+                                            <i class="bi bi-send"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        
+                    </td>
+                    <td>
                     <div class="dropdown show">
                         <button class="btn action-btn"
                                 role="button"
@@ -291,6 +384,9 @@
         }
     </tbody>
 </table>
+
+<input type="hidden" id="reque-id"/>
+<input type="hidden" id="aspp-id"/>
 
 @for(var i=0;i<Model.requests.Count;++i)
 {
@@ -626,6 +722,8 @@
     </div>
 </form>
 
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/admin-chat.js"></script>
 <script>
     var divs = document.getElementsByClassName("cancel-case")
 
@@ -855,4 +953,60 @@
             filter(page,10)
         });
     });
+
+    connection.on("ReceiveMessageInGroup", function (reciever, requestId, message, timestamp, chatwith, sentby) {
+        debugger
+        if (`@Model.adminNavbarViewModel.role` == "Provider")
+        {
+            const container = document.getElementById(`Admin-${requestId}`);
+            const newChatMessage = document.createElement("div");
+            newChatMessage.classList.add("chat-message");
+            if (sentby == "Admin") {
+                newChatMessage.classList.add("recieved");
+            }
+            newChatMessage.innerHTML = `
+                  <div class="message-box">
+                    <p class="message-content">${message}</p>
+                  </div>
+                  <p class="message-time">${timestamp}</p>
+                `;
+            container.appendChild(newChatMessage);
+        }
+        else if(`@Model.adminNavbarViewModel.role` == "Admin")
+        {
+            if(chatwith == "Patient")
+            {
+                const container = document.getElementById(`Patient-${requestId}-${reciever}`);
+                const newChatMessage = document.createElement("div");
+                newChatMessage.classList.add("chat-message");
+                if (sentby == "Patient") {
+                    newChatMessage.classList.add("recieved");
+                }
+                newChatMessage.innerHTML = `
+                      <div class="message-box">
+                        <p class="message-content">${message}</p>
+                      </div>
+                      <p class="message-time">${timestamp}</p>
+                    `;
+                container.appendChild(newChatMessage);
+            }
+            else if(chatwith == "Doctor")
+            {
+                const container = document.getElementById(`Provider-${requestId}-${reciever}`);
+                const newChatMessage = document.createElement("div");
+                newChatMessage.classList.add("chat-message");
+                if (sentby == "Doctor") {
+                    newChatMessage.classList.add("recieved");
+                }
+                newChatMessage.innerHTML = `
+                          <div class="message-box">
+                            <p class="message-content">${message}</p>
+                          </div>
+                          <p class="message-time">${timestamp}</p>
+                        `;
+                container.appendChild(newChatMessage);
+            }
+        }
+    });
+
 </script>

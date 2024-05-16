@@ -1,5 +1,6 @@
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using HalloDoc;
+using HalloDoc.Hubs;
 using HalloDoc.Repository.Interface;
 using HalloDoc.Repository.Repository;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
@@ -56,6 +59,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=CreateRequest}/{action=PatientSite}/{id?}");
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
 

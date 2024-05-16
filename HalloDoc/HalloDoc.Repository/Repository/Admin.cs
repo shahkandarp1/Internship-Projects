@@ -96,7 +96,7 @@ namespace HalloDoc.Repository.Repository
                 exp = r => r.Status == 9;
             }
 
-            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r => r.RequestStatusLogs).Include(r => r.EncounterForms).Where(exp).Where(r => r.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
+            IQueryable<Request> _query = _db.Requests.Include(r => r.RequestClient).Include(r => r.Physician).Include(r=>r.User).Include(r => r.RequestStatusLogs).Include(r => r.EncounterForms).Where(exp).Where(r => r.IsDeleted == new BitArray(new[] { false })).OrderByDescending(e => e.CreatedDate);
 
             if (_query == null)
             {
@@ -154,7 +154,8 @@ namespace HalloDoc.Repository.Repository
                 Name = cookieModel.name,
                 curr_active = "Dashboard",
                 menus = cookieModel.menus,
-                role = cookieModel.role
+                role = cookieModel.role,
+                userId = cookieModel.aspId
             };
 
 
@@ -5213,6 +5214,11 @@ namespace HalloDoc.Repository.Repository
             {
                 return false;
             }
+        }
+
+        public List<AspNetUser> getAllAspNetUsers()
+        {
+            return _db.AspNetUsers.ToList();
         }
 
     }

@@ -1,5 +1,6 @@
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\appsettings.json
+C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\libman.json
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.staticwebassets.runtime.json
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.exe
 C:\Users\pci41\Desktop\Internship-Projects\HalloDoc\HalloDoc\bin\Debug\net7.0\HalloDoc.deps.json

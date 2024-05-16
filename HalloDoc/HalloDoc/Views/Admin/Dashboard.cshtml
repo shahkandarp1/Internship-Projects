@@ -1008,6 +1008,82 @@
         }
         document.getElementById("typeOfCare").value = typeOfCare
     }
+
+    const sendToPatient = () => {
+        var reciever = document.getElementById("aspp-id").value;
+        var requestId = document.getElementById("reque-id").value;
+        var message = document.getElementById(`message-input-dpatient-${requestId}-${reciever}`).value;
+        const currentTime = new Date();
+        const timestamp = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+
+        connection.invoke("SendMessage", reciever, requestId, message, timestamp).then(()=>{
+            const container = document.getElementById(`DPatient-${requestId}-${reciever}`);
+            const newChatMessage = document.createElement("div");
+            newChatMessage.classList.add("chat-message");
+            newChatMessage.innerHTML = `
+                                      <div class="message-box">
+                                          <p class="message-content">${message}</p>
+                                      </div>
+                                          <p class="message-time">${timestamp}</p>
+                                    `;
+            container.appendChild(newChatMessage);
+            document.getElementById(`message-input-dpatient-${requestId}-${reciever}`).value = "";
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+    const sendToPatientByAdmin = () => {
+        var reciever = document.getElementById("aspp-id").value;
+        var requestId = document.getElementById("reque-id").value;
+        var message = document.getElementById(`message-input-patient-${requestId}-${reciever}`).value;
+        const currentTime = new Date();
+        const timestamp = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+        connection.invoke("SendMessageToGroup", reciever, requestId, message, timestamp, "Patient", "Admin").catch(function (err) {
+            return console.error(err.toString());
+        });
+        document.getElementById(`message-input-patient-${requestId}-${reciever}`).value = "";
+    }
+
+    const sendToAdminByDoctor = () => {
+        var reciever = `@Model.adminNavbarViewModel.userId`;
+        var requestId = document.getElementById("reque-id").value;
+        var message = document.getElementById(`message-input-admin-${requestId}`).value;
+        const currentTime = new Date();
+        const timestamp = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+        connection.invoke("SendMessageToGroup", reciever, requestId, message, timestamp, "Doctor", "Doctor").catch(function (err) {
+            return console.error(err.toString());
+        });
+        document.getElementById(`message-input-admin-${requestId}`).value = "";
+    }
+
+    const sendToDoctorByAdmin = () => {
+        var reciever = document.getElementById("aspp-id").value;
+        var requestId = document.getElementById("reque-id").value;
+        var message = document.getElementById(`message-input-provider-${requestId}-${reciever}`).value;
+        const currentTime = new Date();
+        const timestamp = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+        connection.invoke("SendMessageToGroup", reciever, requestId, message, timestamp, "Doctor", "Admin").catch(function (err) {
+            return console.error(err.toString());
+        });
+        document.getElementById(`message-input-provider-${requestId}-${reciever}`).value = "";
+    }
 </script>
 <script src="~/js/admin-dashboard.js"></script>
 <script src="~/js/admin-navbar.js"></script>

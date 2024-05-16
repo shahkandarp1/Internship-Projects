@@ -1248,10 +1248,11 @@ namespace HalloDoc.Repository.Repository
             int count = _db.Requests.Where(u => u.UserId == cookieModel.userId).Count();
             List<RequestViewModel> data = _db.RequestViewModels.FromSqlRaw($"SELECT * FROM PatientDashboardData({cookieModel.userId},{pageSize},{((page - 1) * pageSize)})").ToList();
             var curr_user = _db.Users.FirstOrDefault(u => u.UserId == cookieModel.userId);
-            DashboardViewModel dashboardViewModel = new DashboardViewModel
+           DashboardViewModel dashboardViewModel = new DashboardViewModel
             {
                 requests = data,
                 name = string.Concat(curr_user.FirstName, ' ', curr_user.LastName),
+                aspid = cookieModel.aspId,
                 CurrentPage = page,
                 PageSize = pageSize,
                 TotalItems = count,

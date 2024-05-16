@@ -168,4 +168,53 @@
         });
     }
 
+
+    const sendToPhysician = () => {
+        var reciever = document.getElementById("asp-id").value;
+        var requestid = document.getElementById("req-id").value;
+        var message = document.getElementById(`message-input-provider-${requestid}-${reciever}`).value;
+        const currentTime = new Date();
+        const formattedTime = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+
+        connection.invoke("SendMessage", reciever, requestid, message, formattedTime).then(()=>{
+            const container = document.getElementById(`Provider-${requestid}-${reciever}`);
+            const newChatMessage = document.createElement("div");
+            newChatMessage.classList.add("chat-message");
+            newChatMessage.innerHTML = `
+                                  <div class="message-box">
+                                      <p class="message-content">${message}</p>
+                                  </div>
+                                  <p class="message-time">${formattedTime}</p>
+                                `;
+            container.appendChild(newChatMessage);
+            document.getElementById(`message-input-provider-${requestid}-${reciever}`).value = "";
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        
+    }
+
+    const sendToAdmin = () => {
+        var reciever = `@Model.aspid.ToString()`;
+        var requestid = document.getElementById("req-id").value;
+        var message = document.getElementById(`message-input-admin-${requestid}`).value; 
+        const currentTime = new Date();
+        const formattedTime = currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+        connection.invoke("SendMessageToGroup", reciever, requestid, message, formattedTime,"Patient","Patient").catch(function (err) {
+            return console.error(err.toString());
+        });
+        document.getElementById(`message-input-admin-${requestid}`).value = "";
+    }
+
+
+
 </script>

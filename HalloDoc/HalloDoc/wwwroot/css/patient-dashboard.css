@@ -612,10 +612,80 @@ a:hover
     color: white;
 }
 
+.chat-btn {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #0dcaf0;
+    border-radius: 5px;
+    margin-right:5px;
+    cursor:pointer;
+}
+.chat-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.offcanvas-header{
+    background-color:#0dcaf0;
+    color:white;
+}
+h5{
+    margin-bottom:0px!important;
+}
+.chat-msg {
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: none;
+    border: 1px solid grey;
+    height: 38px;
+    width: 310px;
+    margin-right: 10px;
+}
+
+.main-chat-body {
+    height: 94%;
+}
+
+.message-box {
+    background-color: #F0F0F0;
+    padding: 10px;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+.message-content {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.message-time {
+    font-size: 0.8em;
+    color: #999;
+    margin-bottom: 0px;
+}
+
+.recieved .message-box {
+    background-color: #EBFAFD;
+}
+
+.chat-message {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.recieved {
+    align-items: flex-start;
+}
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-  .sidebar {
+    .sidebar {
     padding-top: 15px;
   }
 

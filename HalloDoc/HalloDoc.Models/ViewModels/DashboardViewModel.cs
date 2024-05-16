@@ -10,6 +10,7 @@ namespace HalloDoc.ViewModels
     public class DashboardViewModel
     {
         public string name { get; set; }
+        public int? aspid { get; set; }
 
         public List<RequestViewModel> requests { get; set; }
 

@@ -15,6 +15,7 @@ namespace HalloDoc.ViewModels
         public DateTime CreatedDate { get; set; }
         public short Status { get; set; }
         public string Name { get; set; }
+        public int? aspid { get; set; }
         public DateTime? ConcludedDate { get; set; }
         public long? Count { get; set; }
     }
